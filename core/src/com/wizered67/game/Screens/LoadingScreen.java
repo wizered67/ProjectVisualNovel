@@ -2,6 +2,8 @@ package com.wizered67.game.Screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.wizered67.game.GameManager;
 
 /**
@@ -18,7 +20,11 @@ public class LoadingScreen implements Screen {
     }
 
     public void loadDefault() {
-        
+        assetManager.load("Sounds/talksoundmale.wav", Sound.class);
+        assetManager.load("Sounds/talksoundfemale.wav", Sound.class);
+        assetManager.load("Sounds/sfxblipmale.wav", Sound.class);
+        assetManager.load("Sounds/intense.wav", Sound.class);
+        assetManager.load("Music/crossexamination.mp3", Music.class);
     }
 
     @Override

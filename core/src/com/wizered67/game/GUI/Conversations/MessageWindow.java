@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
@@ -18,11 +19,13 @@ public class MessageWindow implements Controllable{
     private int numLines = 0;
     private final int LEFT_PADDING = 10;
     private boolean dummyTagAdded = false;
-    private int textTimerDelay = 1;
+    private int textTimerDelay = 2;
     private Label textboxLabel;
     private Label speakerLabel;
     private Queue<ConversationCommand> currentBranch;
     private boolean waitingForInput = false;
+    private boolean playSoundNow = true;
+    private String currentSpeakerSound;
 
     public MessageWindow(Label textbox, Label speaker) {
         System.out.println(numNewLineTags("\ntest\n"));
@@ -38,10 +41,12 @@ public class MessageWindow implements Controllable{
         branchOne.add(new Message("Adam", "Yo bruh, this is a message that we're currently 'testing' here at the lab. " +
                 "Our top text scientists are attempting to determine if it properly scrolls. We are taking " +
                 "notes and keeping our observations in a top secret log!           "));
+        branchOne.add(new PlayMusicCommand("Music/crossexamination.mp3", true));
         branchOne.add(new Message("Donald", "Yep, that's right! I'll tell you folks, we have the best scrolling text boxes. The best!"));
-        branchOne.add(new Message("Christine", "Wait... why is Donald Trump here? Adam wtf, really? Really?"));
+        branchOne.add(new PlaySoundCommand("Sounds/intense.wav"));
+        branchOne.add(new Message("Christine", "Wait... why is Donald Trump here? Adam wtf, really? Really?", "talksoundfemale"));
         branchOne.add(new Message("Adam", "I thought you invited him!"));
-        branchOne.add(new Message("Christine", "......."));
+        branchOne.add(new Message("Christine", ".......", "talksoundfemale"));
         branchOne.add(new DebugCommand("This is a test 1."));
         branchOne.add(new Message("Adam", "......."));
         branchOne.add(new DebugCommand("This is another test."));
@@ -54,9 +59,15 @@ public class MessageWindow implements Controllable{
         LinkedList<ConversationCommand> branchTwo = new LinkedList<ConversationCommand>();
         branchTwo.add(new Message("Narrator", "So you're probably wondering what just happened. Why is there a narrator guy now? Well there's a simple explanation for that!"));
         branchTwo.add(new DebugCommand("yoooo branch 2 whattup yer boiii"));
-        branchTwo.add(new Message("Christine", "We really weren't..."));
+        branchTwo.add(new Message("Christine", "We really weren't...", "talksoundfemale"));
        // branchTwo.add(new Message("Narrator", "It's because you've entered... [\n][\n][\n]     BRANCH TWO"));
         branchTwo.add(new Message("Adam", "Can we just go back to the first one now please?"));
+        CommandSequence cs = new CommandSequence();
+        cs.addCommand(new DebugCommand("Test sequence 1"));
+        cs.addCommand(new PlaySoundCommand("Sounds/intense.wav"));
+        cs.addCommand(new PlayMusicCommand(1));
+        cs.addCommand(new DebugCommand("Test sequence end"));
+        branchTwo.add(cs);
         branchTwo.add(new Message("Narrator", "Fine! But I'll be back!"));
         branchTwo.add(new ChangeBranchCommand(testConversation, "Main Branch"));
         testConversation.addBranch("Branch 2", branchTwo);
@@ -104,7 +115,11 @@ public class MessageWindow implements Controllable{
                         newText = newText + "\n";
                     }
                     if (remainingText.length() != 0) {
-                        newText += remainingText.charAt(0);
+                        char nextChar = remainingText.charAt(0);
+                        newText += nextChar;
+                        if (nextChar != ' ') {
+                            playTextSound();
+                        }
                         remainingText = remainingText.substring(1);
                         remainingTextNoTags = remainingTextNoTags.substring(1);
                     }
@@ -140,6 +155,18 @@ public class MessageWindow implements Controllable{
             numLines = textboxLabel.getGlyphLayout().runs.size;
             textboxLabel.invalidate();
         }
+    }
+
+    public void setCurrentSpeakerSound(String sound) {
+        currentSpeakerSound = sound;
+    }
+
+    private void playTextSound() {
+        if (playSoundNow) {
+            Sound s = GameManager.assetManager().get("Sounds/" + currentSpeakerSound + ".wav", Sound.class);
+            s.play();
+        }
+        playSoundNow = !playSoundNow;
     }
 
     private int numNewLineTags(String word) {

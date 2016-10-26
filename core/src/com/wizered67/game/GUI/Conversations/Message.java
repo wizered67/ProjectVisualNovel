@@ -6,10 +6,16 @@ package com.wizered67.game.GUI.Conversations;
 public class Message implements ConversationCommand {
     private String text;
     private String speaker;
+    private String speakerSound;
 
     public Message(String s, String t) {
+        this(s, t, "talksoundmale");
+    }
+
+    public Message(String s, String t, String ss) {
         speaker = s;
         text = t;
+        speakerSound = ss;
     }
 
     public String getText() {
@@ -23,6 +29,7 @@ public class Message implements ConversationCommand {
     public void execute(MessageWindow messageWindow) {
         messageWindow.setRemainingText(text);
         messageWindow.setSpeaker(speaker);
+        messageWindow.setCurrentSpeakerSound(speakerSound);
     }
 
     @Override

@@ -29,4 +29,8 @@ public class GameManager {
 	public static AssetManager assetManager() {
 		return game.assetManager;
 	}
+
+    public static MusicManager musicManager() {
+        return game.musicManager;
+    }
 }
