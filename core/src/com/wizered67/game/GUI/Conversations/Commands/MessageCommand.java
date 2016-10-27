@@ -1,18 +1,20 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.Commands;
+
+import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 /**
  * Created by Adam on 10/24/2016.
  */
-public class Message implements ConversationCommand {
+public class MessageCommand implements ConversationCommand {
     private String text;
     private String speaker;
     private String speakerSound;
 
-    public Message(String s, String t) {
+    public MessageCommand(String s, String t) {
         this(s, t, "talksoundmale");
     }
 
-    public Message(String s, String t, String ss) {
+    public MessageCommand(String s, String t, String ss) {
         speaker = s;
         text = t;
         speakerSound = ss;

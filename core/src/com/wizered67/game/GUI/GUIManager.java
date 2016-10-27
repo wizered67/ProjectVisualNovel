@@ -24,8 +24,10 @@ public class GUIManager {
 	private static Skin skin = new Skin();
 	private static Label textboxLabel;
     private static Label speakerLabel;
+	private static TextButton[] choiceButtons;
 	private static Stage stage;
 	private final static Vector2 TEXTBOX_SIZE = new Vector2(360, 50);
+    private final static Vector2 CHOICES_SIZE = new Vector2(300, 22);
     private final static int LEFT_PADDING = 10;
     private static MessageWindow messageWindow;
 
@@ -56,13 +58,14 @@ public class GUIManager {
 	     TextButtonStyle textButtonStyle = new TextButtonStyle();
 			textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
 			textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-			textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+			textButtonStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
 			textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 			textButtonStyle.font = skin.getFont("default");
 			skin.add("default", textButtonStyle);
 			final TextButton button = new TextButton("Click me!", skin);
 			button.setPosition(40, 40);
 			button.setSize(60, 60);
+            button.setVisible(false);
 			//table.add(button).pad(20).expand().bottom().left();
 			stage.addActor(button);
 			// Add a listener to the button. ChangeListener is fired when the button's checked state changes, eg when clicked,
@@ -75,6 +78,22 @@ public class GUIManager {
 					((TextButton)actor).setText("Good job!");
 				}
 			});
+
+        choiceButtons = new TextButton[4];
+        for (int i = 0; i < choiceButtons.length; i += 1) {
+            TextButton tb = new TextButton("", skin);
+            tb.setUserObject(new Integer(i));
+            tb.addListener(new ChangeListener() {
+                public void changed (ChangeEvent event, Actor actor) {
+                    System.out.println("Clicked button " + actor.getUserObject());
+                    messageWindow.processChoice((Integer) actor.getUserObject());
+                    event.cancel();
+                }
+            });
+            tb.setVisible(false);
+            choiceButtons[i] = tb;
+            stage.addActor(tb);
+        }
 
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = skin.getFont("default");
@@ -103,12 +122,12 @@ public class GUIManager {
         speakerLabel.setAlignment(Align.center);
         stage.addActor(speakerLabel);
 
-        messageWindow = new MessageWindow(textboxLabel, speakerLabel);
+        messageWindow = new MessageWindow(textboxLabel, speakerLabel, choiceButtons);
 
         //System.out.println(remainingTextNoTags);
         //remainingText = "this is a new message just so you know.";
 		//textboxLabel.setText("TESTING A MESSAGE BRO");
-		//textboxLabel = new Label("this is a really long test message and I want to see if word wrap is doing anything? Test Message!", labelStyle);
+		//textboxLabel = new Label("this is a really long test message and I want to see if word wrap is doing anything? Test MessageCommand!", labelStyle);
 
 		//textboxLabel.setPosition(200, 400);
 		//textboxLabel.setSize(350, 60);
@@ -155,7 +174,21 @@ public class GUIManager {
         //numLines = textboxLabel.getGlyphLayout().runs.size;
         speakerLabel.setPosition(textboxLabel.getX(), textboxLabel.getY() + textboxLabel.getHeight());
         speakerLabel.invalidate();
+
+        resizeChoices(width, height);
 	}
+
+    private static void resizeChoices(int width, int height) {
+        for (int i = 0; i < choiceButtons.length; i += 1) {
+            TextButton tb = choiceButtons[i];
+            tb.setSize(CHOICES_SIZE.x * width / Constants.VIRTUAL_WIDTH, CHOICES_SIZE.y * height / Constants.VIRTUAL_HEIGHT);
+            float textBoxTop = textboxLabel.getTop();
+            float gap = (height - textBoxTop - choiceButtons.length * tb.getHeight()) / (choiceButtons.length + 1);
+            float yPos = textBoxTop + (gap + tb.getHeight() / 2) * ((choiceButtons.length - i - 1) + 1);
+            tb.setPosition((width - tb.getWidth()) / 2, yPos);
+            tb.invalidate();
+        }
+    }
 
 	public static void setRemainingText(String text){
 		messageWindow.setRemainingText(text);

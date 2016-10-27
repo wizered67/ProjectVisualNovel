@@ -1,6 +1,6 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.Commands;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.wizered67.game.GUI.Conversations.MessageWindow;
 import com.wizered67.game.GameManager;
 
 /**
@@ -28,6 +28,7 @@ public class PreloadCommand implements ConversationCommand {
         if (load) {
             if (!alreadyLoaded) {
                 GameManager.assetManager().load(file, type);
+                System.out.println("Now loading " + file);
             }
         } else {
             if (alreadyLoaded) {

@@ -1,8 +1,8 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+import com.wizered67.game.GUI.Conversations.MessageWindow;
 import com.wizered67.game.GameManager;
 
 /**
@@ -43,7 +43,7 @@ public class PlayMusicCommand implements ConversationCommand {
         if (GameManager.assetManager().isLoaded(music)) {
             Music m = GameManager.assetManager().get(music, Music.class);
             GameManager.musicManager().playMusic(m, music, loops);
-            GameManager.musicManager().setVolume(0.65f);
+            GameManager.musicManager().setVolume(0.8f);
         } else {
             Gdx.app.log("Asset Error", "No sound loaded: " + music);
         }

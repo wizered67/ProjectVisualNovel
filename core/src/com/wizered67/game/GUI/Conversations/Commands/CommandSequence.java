@@ -1,4 +1,6 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.Commands;
+
+import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 import java.util.LinkedList;
 
@@ -10,6 +12,13 @@ public class CommandSequence implements ConversationCommand{
 
     public CommandSequence(LinkedList<ConversationCommand> com) {
         commands = com;
+    }
+
+    public CommandSequence(ConversationCommand... coms) {
+        this();
+        for (ConversationCommand command : coms) {
+            commands.addLast(command);
+        }
     }
 
     public CommandSequence() {

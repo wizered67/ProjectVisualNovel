@@ -1,4 +1,7 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.Commands;
+
+import com.wizered67.game.GUI.Conversations.Conversation;
+import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 /**
  * Created by Adam on 10/24/2016.

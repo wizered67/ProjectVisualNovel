@@ -1,7 +1,8 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.wizered67.game.GUI.Conversations.MessageWindow;
 import com.wizered67.game.GameManager;
 
 /**
