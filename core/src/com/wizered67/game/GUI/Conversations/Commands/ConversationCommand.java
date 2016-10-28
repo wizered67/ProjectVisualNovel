@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 /**
@@ -7,5 +8,6 @@ import com.wizered67.game.GUI.Conversations.MessageWindow;
  */
 public interface ConversationCommand {
     void execute(MessageWindow messageWindow);
-    boolean waitForInput();
+    boolean waitToProceed();
+    void complete(CompleteEvent c);
 }

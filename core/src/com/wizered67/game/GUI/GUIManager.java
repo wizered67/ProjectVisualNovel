@@ -190,6 +190,10 @@ public class GUIManager {
         }
     }
 
+    public static float getTextboxTop() {
+        return textboxLabel.getTop();
+    }
+
 	public static void setRemainingText(String text){
 		messageWindow.setRemainingText(text);
 	}

@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 /**
@@ -9,10 +10,12 @@ public class ShowChoicesCommand implements ConversationCommand {
 
     private String[] choicesText;
     private ConversationCommand[] choicesCommands;
+    private boolean done;
 
     public ShowChoicesCommand(String[] text, ConversationCommand[] commands) {
         choicesText = text;
         choicesCommands = commands;
+        done = false;
     }
 
     @Override
@@ -22,10 +25,18 @@ public class ShowChoicesCommand implements ConversationCommand {
             messageWindow.setChoiceCommand(i, choicesCommands[i]);
         }
         messageWindow.setChoiceShowing(true);
+        done = false;
     }
 
     @Override
-    public boolean waitForInput() {
-        return true;
+    public boolean waitToProceed() {
+        return !done;
+    }
+
+    @Override
+    public void complete(CompleteEvent c) {
+        if (c.type == CompleteEvent.Type.CHOICE) {
+            done = true;
+        }
     }
 }

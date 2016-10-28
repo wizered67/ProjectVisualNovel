@@ -2,6 +2,7 @@ package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 import com.wizered67.game.GameManager;
 
@@ -26,7 +27,12 @@ public class PlaySoundCommand implements ConversationCommand {
     }
 
     @Override
-    public boolean waitForInput() {
+    public boolean waitToProceed() {
         return false;
+    }
+
+    @Override
+    public void complete(CompleteEvent c) {
+
     }
 }

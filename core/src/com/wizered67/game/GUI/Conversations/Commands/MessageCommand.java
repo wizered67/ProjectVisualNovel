@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 /**
@@ -9,6 +10,7 @@ public class MessageCommand implements ConversationCommand {
     private String text;
     private String speaker;
     private String speakerSound;
+    private boolean done;
 
     public MessageCommand(String s, String t) {
         this(s, t, "talksoundmale");
@@ -18,6 +20,7 @@ public class MessageCommand implements ConversationCommand {
         speaker = s;
         text = t;
         speakerSound = ss;
+        done = false;
     }
 
     public String getText() {
@@ -32,10 +35,18 @@ public class MessageCommand implements ConversationCommand {
         messageWindow.setRemainingText(text);
         messageWindow.setSpeaker(speaker);
         messageWindow.setCurrentSpeakerSound(speakerSound);
+        done = false;
     }
 
     @Override
-    public boolean waitForInput() {
-        return true;
+    public boolean waitToProceed() {
+        return !done;
+    }
+
+    @Override
+    public void complete(CompleteEvent c) {
+        if (c.type == CompleteEvent.Type.INPUT) {
+            done = true;
+        }
     }
 }

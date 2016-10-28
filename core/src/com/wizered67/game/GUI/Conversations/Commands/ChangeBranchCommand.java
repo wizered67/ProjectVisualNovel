@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 
@@ -22,8 +23,13 @@ public class ChangeBranchCommand implements ConversationCommand {
     }
 
     @Override
-    public boolean waitForInput() {
+    public boolean waitToProceed() {
         return false;
+    }
+
+    @Override
+    public void complete(CompleteEvent c) {
+
     }
 
     public String toString() {

@@ -2,8 +2,12 @@ package com.wizered67.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.wizered67.game.Inputs.MyInputProcessor;
 import com.wizered67.game.Screens.GameScreen;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameManager {
 	public static MainGame game;
@@ -29,6 +33,10 @@ public class GameManager {
 	public static AssetManager assetManager() {
 		return game.assetManager;
 	}
+
+    public static Map<String, Map<String, Animation>> loadedAnimations() {
+        return game.loadedAnimations;
+    }
 
     public static MusicManager musicManager() {
         return game.musicManager;
