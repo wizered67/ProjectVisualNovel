@@ -1,0 +1,87 @@
+<branch name="string">
+specifies a branch with name NAME.
+
+<changebranch newbranch="string"/>
+ChangeBranchCommand that switches branch to NEWBRANCH.
+
+<addcharacter name="string" (optional)animations="string" (optional)sound="string"/>
+CharacterAddCommand that adds character with name NAME, animations named ANIMATIONS, and speaking sound SOUND.
+
+<setanimation name="string" animation="string" wait="boolean"/>
+CharacterAnimationCommand that sets character NAME to have animation ANIMATION. Waits to go on to next command iff WAIT.
+
+<setdirection name="string" direction="int"/>
+CharacterDirectionCommand that sets character NAME to have direction DIRECTION.
+
+<setname name="string" newname="string"/>
+CharacterNameCommand that sets character NAME to have display name NEWNAME.
+
+<setposition name="string" position="string"/>
+CharacterPositionCommand that sets character NAME to have the position mapped to POSITION.
+
+<setvisible name="string" visible="boolean"/>
+CharacterVisibleCommand that sets character NAME to have visibility VISIBLE.
+
+<sequence>
+    <command/>
+    <command/>
+    <command/>
+</sequence>
+CommandSequence with a series of COMMANDS.
+
+<debug message="string"/>
+DebugCommand that prints MESSAGE.
+    
+#OUTDATED
+<message speaker="string" text="string" (optional)sound="string"/>
+MessageCommand with speaker SPEAKER, text TEXT, and optional sound SOUND.
+    
+#NEW
+<messages speaker="string" (optional)sound="string">
+    <message>
+        <text>
+
+        </text>
+        <command>
+        <text>
+
+        </text>
+    </message>
+    <message>
+        <text>
+
+        </text>
+        <command>
+        <text>
+
+        </text>
+    </message>
+</messages>
+
+<playmusic name="string" loop="boolean"/>
+PlayMusicCommand that plays music with name NAME and sets looping to LOOP.
+
+<pausemusic/>
+PlayMusicCommand that pauses music.
+
+<resumemusic/>
+PlayMusicCommand that resumes music.
+
+<playsound name="string"/>
+PlaySoundCommand that plays sound with name NAME.
+
+<preload > #TODO
+
+<choices>
+    <choice name="string">
+        <command/>
+    </choice>
+    <choice name="string">
+            <command/>
+    </choice>
+</choices>
+ShowChoicesCommand with text array of each choices NAME and command array of the commands.
+
+
+
+

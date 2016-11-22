@@ -1,6 +1,7 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.wizered67.game.Inputs.MyInputProcessor;
@@ -37,6 +38,10 @@ public class GameManager {
     public static Map<String, Map<String, Animation>> loadedAnimations() {
         return game.loadedAnimations;
     }
+
+	public static void error(String error) {
+		Gdx.app.log("ERROR", error);
+	}
 
     public static MusicManager musicManager() {
         return game.musicManager;

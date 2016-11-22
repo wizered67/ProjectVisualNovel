@@ -5,6 +5,7 @@ import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Adam on 10/24/2016.
@@ -23,4 +24,10 @@ public class Conversation {
     public LinkedList<ConversationCommand> getBranch(String name) {
         return branches.get(name);
     }
+
+    public Set<String> getAllBranches() {
+        return branches.keySet();
+    }
+
+
 }

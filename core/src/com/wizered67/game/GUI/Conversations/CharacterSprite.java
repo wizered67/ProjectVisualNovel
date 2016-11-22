@@ -1,12 +1,10 @@
 package com.wizered67.game.GUI.Conversations;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +21,24 @@ public class CharacterSprite {
     private boolean isVisible;
     private boolean looping;
     private float stateTime;
-    private AnimationManager manager;
+    private SceneManager manager;
     private float scale;
     private boolean wasFinished;
+    private boolean isSpeaking;
+    private String knownName;
+    private String speakingSound;
+    private int direction;
+    private static final String DEFAULT_SPEAKING_SOUND = "talksoundmale";
 
-    public CharacterSprite(AnimationManager m) {
-        this(m, new HashMap<String, Animation>());
+    public CharacterSprite(SceneManager m) {
+        this(m, new HashMap<String, Animation>(), DEFAULT_SPEAKING_SOUND);
     }
 
-    public CharacterSprite(AnimationManager m, Map<String, Animation> animations) {
+    public CharacterSprite(SceneManager m, Map<String, Animation> animations) {
+        this(m, animations, DEFAULT_SPEAKING_SOUND);
+    }
+
+    public CharacterSprite(SceneManager m, Map<String, Animation> animations, String sound) {
         allAnimations = animations;
         manager = m;
         isVisible = true;
@@ -39,6 +46,29 @@ public class CharacterSprite {
         stateTime = 0;
         scale = 2f;
         wasFinished = false;
+        isSpeaking = false;
+        direction = 1;
+        if (sound != null) {
+            speakingSound = sound;
+        } else {
+            speakingSound = DEFAULT_SPEAKING_SOUND;
+        }
+    }
+
+    public String getSpeakingSound() {
+        return speakingSound;
+    }
+
+    public void setSpeakingSound(String newSound) {
+        speakingSound = newSound;
+    }
+
+    public String getKnownName() {
+        return knownName;
+    }
+
+    public void setKnownName(String newName) {
+        knownName = newName;
     }
 
     public void addAnimation(String name, Animation anim) {
@@ -52,7 +82,7 @@ public class CharacterSprite {
     }
 
     public boolean setCurrentAnimation(String name) {
-        if (animationName != name) {
+        if (!animationName.equalsIgnoreCase(name)) {
             stateTime = 0;
             animationName = name;
         }
@@ -85,7 +115,8 @@ public class CharacterSprite {
         if (!isVisible || currentSprite == null) {
             return;
         }
-        batch.draw(currentSprite, position.x, position.y, currentSprite.getRegionWidth() * scale,
+        batch.draw(currentSprite, position.x + (direction == -1 ? currentSprite.getRegionWidth() * scale : 0), position.y,
+                currentSprite.getRegionWidth() * scale * direction,
                 currentSprite.getRegionHeight() * scale);
     }
 
@@ -103,5 +134,13 @@ public class CharacterSprite {
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    public void setSpeaking(boolean speaking) {
+        isSpeaking = speaking;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 }

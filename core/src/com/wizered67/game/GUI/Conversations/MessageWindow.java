@@ -1,10 +1,12 @@
 package com.wizered67.game.GUI.Conversations;
 
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.wizered67.game.GUI.Conversations.Commands.*;
+import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
+import com.wizered67.game.GUI.Conversations.XmlIO.ConversationWriter;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
 
@@ -14,7 +16,7 @@ import java.util.Queue;
 /**
  * Created by Adam on 10/23/2016.
  */
-public class MessageWindow implements Controllable{
+public class MessageWindow implements Controllable {
     private String remainingText = "";
     private String remainingTextNoTags = "";
     private int textTimer = 4;
@@ -31,22 +33,34 @@ public class MessageWindow implements Controllable{
     private boolean playSoundNow = true;
     private String currentSpeakerSound;
     private boolean choiceShowing = false;
-    private AnimationManager animationManager;
+    private SceneManager sceneManager;
+    private ConversationLoader conversationLoader;
 
     public MessageWindow(Label textbox, Label speaker, TextButton[] choices) {
+        conversationLoader = new ConversationLoader();
+        /*
         System.out.println(numNewLineTags("\ntest\n"));
         System.out.println(numNewLineTags("\nte\nst\n"));
         System.out.println(numNewLineTags("\n\ntest\n\n"));
         System.out.println(numNewLineTags("test\nthis\n\nis\na\ntest"));
         System.out.println(numNewLineTags("test"));
+        */
         textboxLabel = textbox;
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new ConversationCommand[choiceButtons.length];
-        animationManager = new AnimationManager(this);
+        sceneManager = new SceneManager(this);
+        /*
         Conversation testConversation = new Conversation();
         LinkedList<ConversationCommand> branchOne = new LinkedList<ConversationCommand>();
         //branchOne.add(new MessageCommand("Test", "This is a [\n] test so [\n] allow me to test it [\n] please. [\n][\n] please."));
+        branchOne.add(new CharacterAddCommand("Narrator", "Edgeworth"));
+        branchOne.add(new CharacterVisibleCommand("Narrator", false));
+        branchOne.add(new CharacterDirectionCommand("Narrator", -1));
+        branchOne.add(new CharacterAddCommand("Adam", "Edgeworth"));
+        branchOne.add(new CharacterPositionCommand("Adam", new Vector2(100, 160)));
+        branchOne.add(new CharacterAnimationCommand("Adam", "Idle", false));
+        branchOne.add(new CharacterVisibleCommand("Adam", true));
         branchOne.add(new MessageCommand("Adam", "Yo bruh, this is a message that we're currently 'testing' here at the lab. " +
                 "Our top text scientists are attempting to determine if it properly scrolls. We are taking " +
                 "notes and keeping our observations in a top secret log!           "));
@@ -66,17 +80,20 @@ public class MessageWindow implements Controllable{
         testConversation.addBranch("Main Branch", branchOne);
 
         LinkedList<ConversationCommand> branchTwo = new LinkedList<ConversationCommand>();
+        branchTwo.add(new CharacterPositionCommand("Narrator", new Vector2(400, 160)));
+        branchTwo.add(new CharacterAnimationCommand("Narrator", "Idle", false));
+        branchTwo.add(new CharacterVisibleCommand("Narrator", true));
         branchTwo.add(new MessageCommand("Narrator", "So you're probably wondering what just happened. Why is there a narrator guy now? Well there's a simple explanation for that!"));
         branchTwo.add(new DebugCommand("yoooo branch 2 whattup yer boiii"));
         branchTwo.add(new MessageCommand("Christine", "We really weren't...", "talksoundfemale"));
         branchTwo.add(new MessageCommand("Narrator", "It's because you've entered... BRANCH TWO!"));
-        branchTwo.add(new PreloadCommand("Music/Pursuit.mp3", Music.class));
+        //branchTwo.add(new PreloadCommand("Music/Pursuit.mp3", Music.class));
         String[] text = new String[] {"Ask to return", "Beg to return", "Let Christine handle it", "Accuse of murder"};
         ConversationCommand[] commands = new ConversationCommand[4];
         commands[0] = new ChangeBranchCommand(testConversation, "Ask Branch");
         commands[1] = new ChangeBranchCommand(testConversation, "Beg Branch");
         commands[2] = new ChangeBranchCommand(testConversation, "Christine Branch");
-        commands[3] = new CommandSequence(new PlaySoundCommand("Sounds/intense.wav"), new PlayMusicCommand("Music/Pursuit.mp3", true),
+        commands[3] = new CommandSequence(new PlaySoundCommand("Sounds/intense.wav"), //new PlayMusicCommand("Music/Pursuit.mp3", true),
                 new ChangeBranchCommand(testConversation, "Accuse Branch"));
         ShowChoicesCommand choice = new ShowChoicesCommand(text, commands);
         branchTwo.add(choice);
@@ -100,30 +117,40 @@ public class MessageWindow implements Controllable{
         testConversation.addBranch("Christine Branch", christineBranch);
 
         LinkedList<ConversationCommand> accuseBranch = new LinkedList<ConversationCommand>();
-        accuseBranch.add(new SetAnimationCommand("Think", true));
+        accuseBranch.add(new CharacterAnimationCommand("Adam", "Think", true));
         accuseBranch.add(new MessageCommand("Adam", "Finally, everything's fallen into place... the real murderer..."));
         accuseBranch.add(new PlaySoundCommand("Sounds/intense.wav"));
-        accuseBranch.add(new SetAnimationCommand("Point", false));
+        accuseBranch.add(new CharacterAnimationCommand("Adam", "Confront", false));
         accuseBranch.add(new MessageCommand("Adam", "WAS YOU!"));
+        accuseBranch.add(new CharacterAnimationCommand("Narrator", "Confront", false));
         accuseBranch.add(new MessageCommand("Narrator", "Wha... What! No way!"));
         accuseBranch.add(new MessageCommand("Christine", "What tipped you off Adam?", "talksoundfemale"));
         accuseBranch.add(new MessageCommand("Adam", "I started having suspicions as soon as Donald Trump appeared. As we both said earlier, neither of us invited him. " +
-                "So then how did he end up here? There's only one person with the power to do that. And that's you! The narrator!"));
+                "So then how did he end up here? There's only one person with the power to do that."));
+        accuseBranch.add(new CharacterAnimationCommand("Adam", "Accuse", false));
+        accuseBranch.add(new PlaySoundCommand("Sounds/intense.wav"));
+        accuseBranch.add(new MessageCommand("Adam", "And that's you! The narrator!"));
         accuseBranch.add(new MessageCommand("Narrator", "Hahahahaha... Oh how right you are! I do possess power. More than you could possibly imagine! Now begone! I banish you to the main branch!"));
         accuseBranch.add(new PlaySoundCommand("Sounds/intense.wav"));
-        accuseBranch.add(new SetAnimationCommand("Idle", false));
+        accuseBranch.add(new CharacterAnimationCommand("Narrator", "Accuse", true));
+        accuseBranch.add(new CharacterAnimationCommand("Adam", "Idle", false));
         accuseBranch.add(new PlayMusicCommand("", false));
         accuseBranch.add(new ChangeBranchCommand(testConversation, "Main Branch"));
         testConversation.addBranch("Accuse Branch", accuseBranch);
 
         setBranch(branchOne);
+
+        ConversationWriter.writeConversation(testConversation, "Conversations/testConversation.conv");
+        */
+        Conversation conversation = conversationLoader.loadConversation("testConversation4.conv");
+        setBranch(conversation.getBranch("default"));
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
     }
 
-    public AnimationManager animationManager() {
-        return animationManager;
+    public SceneManager sceneManager() {
+        return sceneManager;
     }
 
     public void update(float deltaTime) {
@@ -135,7 +162,7 @@ public class MessageWindow implements Controllable{
             nextCommand();
         }
         updateText(deltaTime);
-        animationManager.update(deltaTime);
+        sceneManager.update(deltaTime);
     }
 
     public void updateText(float deltaTime) {
@@ -230,7 +257,7 @@ public class MessageWindow implements Controllable{
         if (currentBranch.size() != 0) {
             ConversationCommand command = currentBranch.remove();
             command.execute(this);
-            System.out.println("Executed command: " + command.toString());
+            //System.out.println("Executed command: " + command.toString());
             currentCommand = command;
         } else {
             setTextBoxShowing(false);
@@ -345,7 +372,9 @@ public class MessageWindow implements Controllable{
                 textboxLabel.setText(textboxLabel.getText().toString() + remainingText);
                 remainingText = "";
             } else {
-                currentCommand.complete(new CompleteEvent(CompleteEvent.Type.INPUT));
+                if (currentCommand != null) {
+                    currentCommand.complete(new CompleteEvent(CompleteEvent.Type.INPUT));
+                }
             }
             //} else if (waitingForInput && !choiceShowing) {
             //    nextCommand();

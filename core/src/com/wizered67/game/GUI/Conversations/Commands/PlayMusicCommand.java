@@ -2,9 +2,14 @@ package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
+import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 import com.wizered67.game.GameManager;
+
+import java.io.IOException;
 
 /**
  * Created by Adam on 10/26/2016.
@@ -58,5 +63,29 @@ public class PlayMusicCommand implements ConversationCommand {
     @Override
     public void complete(CompleteEvent c) {
 
+    }
+
+    @Override
+    public void writeXml(XmlWriter xmlWriter) {
+        try {
+            if (pause == 0) {
+                xmlWriter.element("playmusic")
+                        .attribute("name", music)
+                        .attribute("loop", loops)
+                        .pop();
+            } else if (pause == 1) {
+                xmlWriter.element("pausemusic").pop();
+            } else if (pause == 2) {
+                xmlWriter.element("resumemusic").pop();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static PlayMusicCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+        String name = element.getAttribute("name");
+        boolean loop = element.getBoolean("loop", false);
+        return new PlayMusicCommand(name, loop);
     }
 }

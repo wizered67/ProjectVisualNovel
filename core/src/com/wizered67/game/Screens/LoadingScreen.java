@@ -41,15 +41,18 @@ public class LoadingScreen implements Screen {
         Array<TextureAtlas.AtlasRegion> idle = atlas.findRegions("Static");
         Array<TextureAtlas.AtlasRegion> confront = atlas.findRegions("Confront");
         Array<TextureAtlas.AtlasRegion> point = atlas.findRegions("Point");
+        Array<TextureAtlas.AtlasRegion> accuse = atlas.findRegions("Accuse");
         Animation thinkAnim = new Animation(0.3f, think);
         Animation idleAnim = new Animation(1, idle);
         Animation confrontAnim = new Animation(1, confront);
         Animation pointAnim = new Animation(1, point);
+        Animation accuseAnim = new Animation(0.05f, accuse);
         HashMap<String, Animation> edgeworthAnimations = new HashMap<String, Animation>();
         edgeworthAnimations.put("Think", thinkAnim);
         edgeworthAnimations.put("Idle", idleAnim);
         edgeworthAnimations.put("Confront", confrontAnim);
         edgeworthAnimations.put("Point", pointAnim);
+        edgeworthAnimations.put("Accuse", accuseAnim);
         GameManager.loadedAnimations().put("Edgeworth", edgeworthAnimations);
     }
 

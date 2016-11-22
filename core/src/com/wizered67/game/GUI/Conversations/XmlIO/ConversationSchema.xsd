@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="urn:Test.Namespace"
+           xmlns="urn:Test.Namespace"
+           xmlns:r="urn:Test.Namespace"
+           attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="conversation">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="branchType" name="branch" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+
+    </xs:element>
+
+
+    <xs:group name="commands">
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element type="changebranchType" name="changebranch" maxOccurs="unbounded"/>
+                <xs:element type="addcharacterType" name="addcharacter" maxOccurs="unbounded"/>
+                <xs:element type="setanimationType" name="setanimation" maxOccurs="unbounded"/>
+                <xs:element type="setdirectionType" name="setdirection" maxOccurs="unbounded"/>
+                <xs:element type="setnameType" name="setname" maxOccurs="unbounded"/>
+                <xs:element type="setpositionType" name="setposition" maxOccurs="unbounded"/>
+                <xs:element type="setvisibleType" name="setvisible" maxOccurs="unbounded"/>
+                <xs:element type="sequenceType" name="sequence" maxOccurs="unbounded"/>
+                <xs:element type="debugType" name="debug" maxOccurs="unbounded"/>
+                <xs:element type="playmusicType" name="playmusic" maxOccurs="unbounded"/>
+                <xs:element type="xs:string" name="pausemusic" maxOccurs="unbounded"/>
+                <xs:element type="xs:string" name="resumemusic" maxOccurs="unbounded"/>
+                <xs:element type="playsoundType" name="playsound" maxOccurs="unbounded"/>
+                <xs:element type="choicesType" name="choices" maxOccurs="unbounded"/>
+                <xs:element type="messageType" name="message" maxOccurs="unbounded"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:group>
+
+
+    <xs:complexType name="choicesType">
+        <xs:sequence>
+            <xs:element type="choiceType" name="choice" maxOccurs="4" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="choiceType">
+        <xs:group ref="commands"/>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="debugType">
+        <xs:attribute type="xs:string" name="message" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setnameType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="newname" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="sequenceType">
+        <xs:group ref="commands"/>
+    </xs:complexType>
+
+    <xs:complexType name="addcharacterType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="animations" use="optional"/>
+        <xs:attribute type="xs:string" name="sound" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="playmusicType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:boolean" name="loop" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="playsoundType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setvisibleType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:boolean" name="visible" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="changebranchType">
+            <xs:attribute type="xs:string" name="newbranch" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setanimationType">
+            <xs:attribute type="xs:string" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="animation" use="required"/>
+            <xs:attribute type="xs:boolean" name="wait" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="messageType">
+        <xs:sequence>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                <xs:element type="localAssignType" name="assign" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+            <xs:element type="xs:string" name="text" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="speaker" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="localAssignType">
+        <xs:group ref="commands"/>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setdirectionType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:integer" name="direction" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="branchType">
+        <xs:group ref="commands"/>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setpositionType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:float" name="x" use="required"/>
+        <xs:attribute type="xs:float" name="y" use="required"/>
+    </xs:complexType>
+
+</xs:schema>

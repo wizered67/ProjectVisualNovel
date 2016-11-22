@@ -82,7 +82,7 @@ public class GUIManager {
         choiceButtons = new TextButton[4];
         for (int i = 0; i < choiceButtons.length; i += 1) {
             TextButton tb = new TextButton("", skin);
-            tb.setUserObject(new Integer(i));
+            tb.setUserObject(i);
             tb.addListener(new ChangeListener() {
                 public void changed (ChangeEvent event, Actor actor) {
                     System.out.println("Clicked button " + actor.getUserObject());
