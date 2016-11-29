@@ -70,10 +70,7 @@ public class MessageCommand implements ConversationCommand {
      * that is being waited on.
      */
     public boolean shouldUpdate() {
-        if (currentSubcommand == null) {
-            return true;
-        }
-        return !currentSubcommand.waitToProceed();
+        return currentSubcommand == null || !currentSubcommand.waitToProceed();
     }
     /** Sets the current subcommand to the one contained in COMMAND STRING. */
     public void setSubcommand(String commandString) {

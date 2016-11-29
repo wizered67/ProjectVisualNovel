@@ -194,6 +194,7 @@ public class MessageWindow implements Controllable {
                 }
                 if (tagAdded) {
                     String closeTag = getTag(remainingText);
+                    /*
                     if (closeTag != null) {
                         //newText += closeTag;
                         //remainingText = remainingText.substring(closeTag.length());
@@ -202,6 +203,8 @@ public class MessageWindow implements Controllable {
                         dummyTagAdded = true;
                         //newText += "[]";
                     }
+                    */
+                    dummyTagAdded = (closeTag == null);
                 }
                 textTimer = textTimerDelay;
                 textboxLabel.setText(newText);
@@ -301,8 +304,8 @@ public class MessageWindow implements Controllable {
      * the current command. */
     public void processChoice(int choice) {
         choiceShowing = false;
-        for (int i = 0; i < choiceButtons.length; i += 1) {
-            choiceButtons[i].setVisible(false);
+        for (TextButton b : choiceButtons) {
+            b.setVisible(false);
         }
         ConversationCommand command = choiceCommands[choice];
         if (command != null) {

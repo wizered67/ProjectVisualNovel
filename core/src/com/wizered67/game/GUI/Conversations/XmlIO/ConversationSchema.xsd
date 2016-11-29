@@ -2,7 +2,6 @@
 <!--XML Schema for all conversations. Used to help autocompletion when writing conversations. -->
 <xs:schema targetNamespace="urn:Test.Namespace"
            xmlns="urn:Test.Namespace"
-           xmlns:r="urn:Test.Namespace"
            attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="conversation">

@@ -59,8 +59,7 @@ public class GUIManager {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
-        int fontSize = Math.round(densityIndependentSize );
-        parameter.size = fontSize;
+        parameter.size = Math.round(densityIndependentSize);
 		defaultFont = generator.generateFont(parameter); // font size 12 pixels
         defaultFont.getData().markupEnabled = true;
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
