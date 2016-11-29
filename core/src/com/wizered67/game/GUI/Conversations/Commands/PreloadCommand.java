@@ -63,8 +63,8 @@ public class PreloadCommand implements ConversationCommand {
     public void writeXml(XmlWriter xmlWriter) {
         //TODO Add this
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static PreloadCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static PreloadCommand makeCommand(XmlReader.Element element) {
         //TODO Add this
         return null;
     }

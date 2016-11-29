@@ -50,6 +50,8 @@ public class MessageWindow implements Controllable {
     private Queue<ConversationCommand> currentBranch;
     /** The ConversationCommand currently being executed. */
     private ConversationCommand currentCommand;
+    /** The current Conversation containing all possible branches. */
+    private Conversation currentConversation;
     /** Whether the speaking sound should be played this frame. */
     private boolean playSoundNow = true;
     /** Name of the sound used for the current speaker. */
@@ -64,6 +66,7 @@ public class MessageWindow implements Controllable {
     private CharacterSprite currentSpeaker;
     /** Whether all text should be displayed at once without slowly scrolling. */
     private boolean displayAll = false;
+
     /** Initializes the MessageWindow with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
     public MessageWindow(Label textbox, Label speaker, TextButton[] choices) {
@@ -73,8 +76,8 @@ public class MessageWindow implements Controllable {
         choiceButtons = choices;
         choiceCommands = new ConversationCommand[choiceButtons.length];
         sceneManager = new SceneManager(this);
-        Conversation conversation = conversationLoader.loadConversation("testConversation4.conv");
-        setBranch(conversation.getBranch("default"));
+        currentConversation = conversationLoader.loadConversation("testConversation4.conv");
+        setBranch("default");
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
@@ -242,9 +245,11 @@ public class MessageWindow implements Controllable {
             setTextBoxShowing(false);
         }
     }
-    /** Sets the current branch to a copy of the list of ConversationCommands BRANCH. */
+    /** Sets the current branch to a copy of the list of ConversationCommands
+     * corresponding to the branch in Conversation named BRANCH. */
     @SuppressWarnings("unchecked")
-    public void setBranch(LinkedList<ConversationCommand> branch) {
+    public void setBranch(String branchName) {
+        LinkedList<ConversationCommand> branch = currentConversation.getBranch(branchName);
         Object b = branch.clone();
         if (b instanceof LinkedList) {
             currentBranch = (LinkedList<ConversationCommand>) b;

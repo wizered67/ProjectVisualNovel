@@ -37,8 +37,8 @@ public class TextSpeedCommand implements ConversationCommand {
     public void complete(CompleteEvent c) {
 
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static TextSpeedCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static TextSpeedCommand makeCommand(XmlReader.Element element) {
         int time = element.getIntAttribute("time");
         return new TextSpeedCommand(time);
     }

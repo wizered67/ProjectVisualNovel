@@ -44,8 +44,8 @@ public class DelayCommand implements ConversationCommand {
     public void complete(CompleteEvent c) {
 
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static DelayCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static DelayCommand makeCommand(XmlReader.Element element) {
         float time = element.getFloatAttribute("time", 0f);
         return new DelayCommand(time);
     }

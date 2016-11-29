@@ -15,20 +15,17 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class ChangeBranchCommand implements ConversationCommand {
-    /** The Conversation this command is part of. */
-    private Conversation conversation;
     /** The name of the new branch to switch to. */
     private String newBranch;
     /** Creates a new ChangeBranchCommand with Conversation C that
      * changes the branch to BRANCH when executed. */
-    public ChangeBranchCommand(Conversation c, String branch) {
-        conversation = c;
+    public ChangeBranchCommand(String branch) {
         newBranch = branch;
     }
     /** Executes the command on the MESSAGE WINDOW. */
     @Override
     public void execute(MessageWindow messageWindow) {
-        messageWindow.setBranch(conversation.getBranch(newBranch));
+        messageWindow.setBranch(newBranch);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -56,12 +53,12 @@ public class ChangeBranchCommand implements ConversationCommand {
     public String toString() {
         return "Change branch to " + newBranch + ".";
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static ChangeBranchCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static ChangeBranchCommand makeCommand(XmlReader.Element element) {
         String newBranch = element.getAttribute("newbranch", null);
         if (newBranch == null) {
             throw new GdxRuntimeException("No new branch specified for new branch command.");
         }
-        return new ChangeBranchCommand(conversation, newBranch);
+        return new ChangeBranchCommand(newBranch);
     }
 }

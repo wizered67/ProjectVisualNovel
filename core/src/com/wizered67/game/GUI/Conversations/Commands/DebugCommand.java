@@ -46,8 +46,8 @@ public class DebugCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static DebugCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static DebugCommand makeCommand(XmlReader.Element element) {
         String text = element.getAttribute("message");
         return new DebugCommand(text);
     }

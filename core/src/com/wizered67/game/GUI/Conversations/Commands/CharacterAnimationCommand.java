@@ -79,8 +79,8 @@ public class CharacterAnimationCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static CharacterAnimationCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static CharacterAnimationCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("name");
         String animation = element.getAttribute("animation", name);
         boolean wait = element.getBoolean("wait", false);

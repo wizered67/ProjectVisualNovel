@@ -123,8 +123,8 @@ public class MessageCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static MessageCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static MessageCommand makeCommand(XmlReader.Element element) {
         String speaker = element.getAttribute("speaker");
         //String message = element.getAttribute("text");
         MessageCommand message = new MessageCommand(speaker);
@@ -139,7 +139,7 @@ public class MessageCommand implements ConversationCommand {
                 message.storedText.addLast(text);
             } else if (e.getName().equalsIgnoreCase("assign")) {
                 message.assignments.put(e.getAttribute("name", ""),
-                        ConversationLoader.getCommand(conversation, e.getChild(0)));
+                        ConversationLoader.getCommand(e.getChild(0)));
             }
         }
         return message;

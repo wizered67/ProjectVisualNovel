@@ -60,12 +60,12 @@ public class CharacterPositionCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static CharacterPositionCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static CharacterPositionCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("name");
         //String position = element.getAttribute("position");
         float x = element.getFloatAttribute("x");
         float y = element.getFloatAttribute("y");
-        return new CharacterPositionCommand(name, new Vector2(x, y)); //TODO fix this
+        return new CharacterPositionCommand(name, new Vector2(x, y)); //TODO fix this to use String names
     }
 }

@@ -76,12 +76,12 @@ public class CommandSequence implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static CommandSequence makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static CommandSequence makeCommand(XmlReader.Element element) {
         CommandSequence cs = new CommandSequence();
         for (int i = 0; i < element.getChildCount(); i += 1) {
             XmlReader.Element c = element.getChild(i);
-            ConversationCommand command = ConversationLoader.getCommand(conversation, c);
+            ConversationCommand command = ConversationLoader.getCommand(c);
             cs.addCommand(command);
         }
         return cs;

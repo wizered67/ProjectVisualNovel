@@ -67,15 +67,15 @@ public class ShowChoicesCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static ShowChoicesCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static ShowChoicesCommand makeCommand(XmlReader.Element element) {
         int numChoices = element.getChildCount();
         String[] textChoices = new String[numChoices];
         ConversationCommand[] commandChoices = new ConversationCommand[numChoices];
         for (int i = 0; i < numChoices; i += 1) {
             XmlReader.Element c = element.getChild(i);
             textChoices[i] = c.getAttribute("name");
-            ConversationCommand command = ConversationLoader.getCommand(conversation, c.getChild(0));
+            ConversationCommand command = ConversationLoader.getCommand(c.getChild(0));
             commandChoices[i] = command;
         }
         return new ShowChoicesCommand(textChoices, commandChoices);

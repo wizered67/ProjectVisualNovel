@@ -50,7 +50,7 @@ public class ConversationLoader {
         String name = root.getAttribute("name");
         LinkedList<ConversationCommand> commands = new LinkedList<ConversationCommand>();
         for (int i = 0; i < root.getChildCount(); i += 1) {
-            commands.add(getCommand(conversation, root.getChild(i)));
+            commands.add(getCommand(root.getChild(i)));
         }
         conversation.addBranch(name, commands);
     }
@@ -58,47 +58,46 @@ public class ConversationLoader {
     /** Static method to return a ConversationCommand given the XML Element ROOT.
      * Passes in the current CONVERSATION for commands to reference as necessary.
      */
-    public static ConversationCommand getCommand(Conversation conversation, Element root) {
+    public static ConversationCommand getCommand(Element root) {
         String name = root.getName();
         ConversationCommand command = null;
         if (name.equals("changebranch")) {
-            command = ChangeBranchCommand.makeCommand(conversation, root);
+            command = ChangeBranchCommand.makeCommand(root);
         } else if (name.equals("addcharacter")) {
-            command = CharacterAddCommand.makeCommand(conversation, root);
+            command = CharacterAddCommand.makeCommand(root);
         } else if (name.equals("setanimation")) {
-            command = CharacterAnimationCommand.makeCommand(conversation, root);
+            command = CharacterAnimationCommand.makeCommand(root);
         } else if (name.equals("setdirection")) {
-            command = CharacterDirectionCommand.makeCommand(conversation, root);
+            command = CharacterDirectionCommand.makeCommand(root);
         } else if (name.equals("setname")) {
-            command = CharacterNameCommand.makeCommand(conversation, root);
+            command = CharacterNameCommand.makeCommand(root);
         } else if (name.equals("setposition")) {
-            command = CharacterPositionCommand.makeCommand(conversation, root);
+            command = CharacterPositionCommand.makeCommand(root);
         } else if (name.equals("setvisible")) {
-            command = CharacterVisibleCommand.makeCommand(conversation, root);
+            command = CharacterVisibleCommand.makeCommand(root);
         } else if (name.equals("sequence")) {
-            command = CommandSequence.makeCommand(conversation, root);
+            command = CommandSequence.makeCommand(root);
         } else if (name.equals("debug")) {
-            command = DebugCommand.makeCommand(conversation, root);
+            command = DebugCommand.makeCommand(root);
         } else if (name.equals("message")) {
-            command = MessageCommand.makeCommand(conversation, root);
+            command = MessageCommand.makeCommand(root);
         } else if (name.equals("playmusic")) {
-            command = PlayMusicCommand.makeCommand(conversation, root);
+            command = PlayMusicCommand.makeCommand(root);
         } else if (name.equals("pausemusic")) {
             command = new PlayMusicCommand(1);
         } else if (name.equals("resumemusic")) {
             command = new PlayMusicCommand(2);
         } else if (name.equals("playsound")) {
-            command = PlaySoundCommand.makeCommand(conversation, root);
+            command = PlaySoundCommand.makeCommand(root);
         } else if (name.equals("preload")) {
             command = null; //TODO
         } else if (name.equals("choices")) {
-            command = ShowChoicesCommand.makeCommand(conversation, root);
+            command = ShowChoicesCommand.makeCommand(root);
         } else if (name.equals("delay")) {
-            command = DelayCommand.makeCommand(conversation, root);
+            command = DelayCommand.makeCommand(root);
         } else if (name.equals("textspeed")) {
-            command = TextSpeedCommand.makeCommand(conversation, root);
+            command = TextSpeedCommand.makeCommand(root);
         }
-
         return command;
     }
 }

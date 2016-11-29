@@ -58,8 +58,8 @@ public class CharacterVisibleCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static CharacterVisibleCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static CharacterVisibleCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("name");
         boolean visible = element.getBoolean("visible", false);
         return new CharacterVisibleCommand(name, visible);

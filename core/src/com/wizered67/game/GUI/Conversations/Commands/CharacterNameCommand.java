@@ -58,8 +58,8 @@ public class CharacterNameCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static CharacterNameCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static CharacterNameCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("name");
         String newName = element.getAttribute("displayname");
         return new CharacterNameCommand(name, newName);

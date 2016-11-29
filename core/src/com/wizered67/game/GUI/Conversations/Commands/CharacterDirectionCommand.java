@@ -59,8 +59,8 @@ public class CharacterDirectionCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static CharacterDirectionCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+    /** Static method to create a new command from XML Element ELEMENT. */
+    public static CharacterDirectionCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("name");
         int direction = element.getInt("direction", 1);
         return new CharacterDirectionCommand(name, direction);
