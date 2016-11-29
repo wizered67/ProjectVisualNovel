@@ -15,11 +15,16 @@ import java.io.Writer;
 import java.util.LinkedList;
 
 /**
- * Created by Adam on 11/15/2016.
+ * A class used to load and parse XML files into Conversations with
+ * the commands in the XML file.
+ * @author Adam Victor
  */
 public class ConversationLoader {
     private XmlReader xml = new XmlReader();
 
+    /** Returns the Conversation created by parsing the XML file
+     * with the name NAME.
+     */
     public Conversation loadConversation(String name) {
         try {
             Conversation conversation = new Conversation();
@@ -38,6 +43,9 @@ public class ConversationLoader {
         }
     }
 
+    /** Adds the branch contained in the XML Element ROOT to CONVERSATION by
+     * parsing each command's XML tag.
+     */
     private void addBranch(Conversation conversation, Element root) {
         String name = root.getAttribute("name");
         LinkedList<ConversationCommand> commands = new LinkedList<ConversationCommand>();
@@ -47,6 +55,9 @@ public class ConversationLoader {
         conversation.addBranch(name, commands);
     }
 
+    /** Static method to return a ConversationCommand given the XML Element ROOT.
+     * Passes in the current CONVERSATION for commands to reference as necessary.
+     */
     public static ConversationCommand getCommand(Conversation conversation, Element root) {
         String name = root.getName();
         ConversationCommand command = null;
@@ -82,6 +93,10 @@ public class ConversationLoader {
             command = null; //TODO
         } else if (name.equals("choices")) {
             command = ShowChoicesCommand.makeCommand(conversation, root);
+        } else if (name.equals("delay")) {
+            command = DelayCommand.makeCommand(conversation, root);
+        } else if (name.equals("textspeed")) {
+            command = TextSpeedCommand.makeCommand(conversation, root);
         }
 
         return command;

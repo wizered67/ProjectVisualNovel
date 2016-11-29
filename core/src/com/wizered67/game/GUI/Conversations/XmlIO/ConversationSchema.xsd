@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--XML Schema for all conversations. Used to help autocompletion when writing conversations. -->
 <xs:schema targetNamespace="urn:Test.Namespace"
            xmlns="urn:Test.Namespace"
            xmlns:r="urn:Test.Namespace"
@@ -33,6 +34,8 @@
                 <xs:element type="playsoundType" name="playsound" maxOccurs="unbounded"/>
                 <xs:element type="choicesType" name="choices" maxOccurs="unbounded"/>
                 <xs:element type="messageType" name="message" maxOccurs="unbounded"/>
+                <xs:element type="delayType" name="delay" maxOccurs="unbounded"/>
+                <xs:element type="textSpeedType" name="textspeed" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -55,7 +58,7 @@
 
     <xs:complexType name="setnameType">
         <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="newname" use="required"/>
+        <xs:attribute type="xs:string" name="displayname" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="sequenceType">
@@ -121,6 +124,14 @@
         <xs:attribute type="xs:string" name="name" use="required"/>
         <xs:attribute type="xs:float" name="x" use="required"/>
         <xs:attribute type="xs:float" name="y" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="delayType">
+        <xs:attribute type="xs:float" name="time" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="textSpeedType">
+        <xs:attribute type="xs:integer" name="time" use="required"/>
     </xs:complexType>
 
 </xs:schema>

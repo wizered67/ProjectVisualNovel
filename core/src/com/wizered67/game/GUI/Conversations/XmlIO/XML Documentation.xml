@@ -31,32 +31,16 @@ CommandSequence with a series of COMMANDS.
 
 <debug message="string"/>
 DebugCommand that prints MESSAGE.
-    
-#OUTDATED
-<message speaker="string" text="string" (optional)sound="string"/>
-MessageCommand with speaker SPEAKER, text TEXT, and optional sound SOUND.
-    
-#NEW
-<messages speaker="string" (optional)sound="string">
-    <message>
-        <text>
 
-        </text>
-        <command>
-        <text>
-
-        </text>
-    </message>
-    <message>
-        <text>
-
-        </text>
-        <command>
-        <text>
-
-        </text>
-    </message>
-</messages>
+<message>
+    <assign name="string">
+        <command/>
+    </assign>
+    ...
+    <text>
+    ...
+</message>
+Message command that assigns commands to shortcuts to be used in text.
 
 <playmusic name="string" loop="boolean"/>
 PlayMusicCommand that plays music with name NAME and sets looping to LOOP.
@@ -81,6 +65,14 @@ PlaySoundCommand that plays sound with name NAME.
     </choice>
 </choices>
 ShowChoicesCommand with text array of each choices NAME and command array of the commands.
+
+<delay time="float"/>
+DelayCommand with delay time TIME.
+
+<textspeed time="integer"/>
+TextSpeedCommand with waiting time TIME.
+
+
 
 
 

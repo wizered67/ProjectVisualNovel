@@ -40,7 +40,7 @@ public class GameManager {
     }
 
 	public static void error(String error) {
-		Gdx.app.log("ERROR", error);
+		Gdx.app.error("ERROR", error);
 	}
 
     public static MusicManager musicManager() {

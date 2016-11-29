@@ -1,7 +1,10 @@
 package com.wizered67.game.GUI.Conversations;
 
-/**
- * Created by Adam on 10/27/2016.
+/** Contains information to be passed to the current ConversationCommand
+ * about an event that has occurred that could lead to its completion.
+ * Contains a TYPE enum and some DATA, if extra information is necessary,
+ * such as what choice a player selected.
+ * @author Adam Victor
  */
 public class CompleteEvent {
     public Object data;

@@ -11,15 +11,21 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 /**
- * Created by Adam on 10/26/2016.
+ * A ConversationCommand that contains a sequence of ConversationCommands
+ * to be executed consecutively.
+ * @author Adam Victor
  */
-public class CommandSequence implements ConversationCommand{
+public class CommandSequence implements ConversationCommand {
+    /** A list of the ConversationCommands to be executed in sequence. */
     private LinkedList<ConversationCommand> commands;
-
+    /** Creates a new CommandSequence with commands COM. */
     public CommandSequence(LinkedList<ConversationCommand> com) {
         commands = com;
     }
 
+    /** Creates a new CommandSequence with an empty list of
+     * ConversationCommands and then adds all of the COMS to the list.
+     */
     public CommandSequence(ConversationCommand... coms) {
         this();
         for (ConversationCommand command : coms) {
@@ -27,31 +33,37 @@ public class CommandSequence implements ConversationCommand{
         }
     }
 
+    /** Creates a new CommandSequence with an empty list of
+     * ConversationCommands. */
     public CommandSequence() {
         commands = new LinkedList<ConversationCommand>();
     }
 
+    /** Adds the ConversationCommand COMMAND to the list of ConversationCommands
+     * to be executed when this CommandSequence is.
+     */
     public void addCommand(ConversationCommand command) {
         commands.add(command);
     }
-
+    /** Executes the command on the MESSAGE WINDOW. */
     @Override
     public void execute(MessageWindow messageWindow) {
         for (ConversationCommand c : commands) {
             c.execute(messageWindow);
         }
     }
-
+    /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
         return false;
     }
-
+    /** Checks whether the CompleteEvent C completes this command,
+     * and if so acts accordingly. */
     @Override
     public void complete(CompleteEvent c) {
 
     }
-
+    /** Outputs XML to the XML WRITER for this command. */
     @Override
     public void writeXml(XmlWriter xmlWriter) {
         try {
@@ -64,7 +76,7 @@ public class CommandSequence implements ConversationCommand{
             e.printStackTrace();
         }
     }
-
+    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
     public static CommandSequence makeCommand(Conversation conversation, XmlReader.Element element) {
         CommandSequence cs = new CommandSequence();
         for (int i = 0; i < element.getChildCount(); i += 1) {

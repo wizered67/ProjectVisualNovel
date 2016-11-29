@@ -14,145 +14,80 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Created by Adam on 10/23/2016.
+ * Updates all of the GUI elements and the SceneManager by
+ * executing a series of ConversationCommands.
+ * @author Adam Victor
  */
 public class MessageWindow implements Controllable {
+    /** Text left to be displayed. May include some tags. */
     private String remainingText = "";
+    /** Text left to be displayed, ignoring Color tags. */
     private String remainingTextNoTags = "";
+    /** Number of frames until message text is updated. */
     private int textTimer = 4;
+    /** Number of lines currently in the textbox label. */
     private int numLines = 0;
+    /** Padding between text and the left side of the textbox label. */
     private final int LEFT_PADDING = 10;
+    /** Whether a dummy tag has just been added. */
     private boolean dummyTagAdded = false;
+    /** Number of frames between each message text update. */
     private int textTimerDelay = 2;
+    /** Label for the main textbox. Displays text when spoken by characters.
+     * A reference to the one in GUIManager.*/
     private Label textboxLabel;
+    /** Label to display the name of the current speaker.
+     * A reference to the one in GUIManager. */
     private Label speakerLabel;
+    /** Array containing TextButtons to be displayed when the player is offered a choice.
+     * A reference to the one in GUIManager. */
     private TextButton[] choiceButtons;
+    /** Array containing ConversationCommands that would be executed when the
+     * corresponding choice is made. */
     private ConversationCommand[] choiceCommands;
+    /** A Queue containing the ConversationCommands in the current branch, to be
+     * executed in sequence. */
     private Queue<ConversationCommand> currentBranch;
+    /** The ConversationCommand currently being executed. */
     private ConversationCommand currentCommand;
+    /** Whether the speaking sound should be played this frame. */
     private boolean playSoundNow = true;
+    /** Name of the sound used for the current speaker. */
     private String currentSpeakerSound;
+    /** Whether choices are currently being shown to the player. */
     private boolean choiceShowing = false;
+    /** Reference to the SceneManager that contains and updates all CharacterSprites. */
     private SceneManager sceneManager;
+    /** A loader used to parse XML into a Conversation. */
     private ConversationLoader conversationLoader;
-
+    /** The CharacterSprite of the current speaker. */
+    private CharacterSprite currentSpeaker;
+    /** Whether all text should be displayed at once without slowly scrolling. */
+    private boolean displayAll = false;
+    /** Initializes the MessageWindow with the GUI elements passed in from GUIManager.
+     * Also loads and begins a default conversation for testing purposes. */
     public MessageWindow(Label textbox, Label speaker, TextButton[] choices) {
         conversationLoader = new ConversationLoader();
-        /*
-        System.out.println(numNewLineTags("\ntest\n"));
-        System.out.println(numNewLineTags("\nte\nst\n"));
-        System.out.println(numNewLineTags("\n\ntest\n\n"));
-        System.out.println(numNewLineTags("test\nthis\n\nis\na\ntest"));
-        System.out.println(numNewLineTags("test"));
-        */
         textboxLabel = textbox;
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new ConversationCommand[choiceButtons.length];
         sceneManager = new SceneManager(this);
-        /*
-        Conversation testConversation = new Conversation();
-        LinkedList<ConversationCommand> branchOne = new LinkedList<ConversationCommand>();
-        //branchOne.add(new MessageCommand("Test", "This is a [\n] test so [\n] allow me to test it [\n] please. [\n][\n] please."));
-        branchOne.add(new CharacterAddCommand("Narrator", "Edgeworth"));
-        branchOne.add(new CharacterVisibleCommand("Narrator", false));
-        branchOne.add(new CharacterDirectionCommand("Narrator", -1));
-        branchOne.add(new CharacterAddCommand("Adam", "Edgeworth"));
-        branchOne.add(new CharacterPositionCommand("Adam", new Vector2(100, 160)));
-        branchOne.add(new CharacterAnimationCommand("Adam", "Idle", false));
-        branchOne.add(new CharacterVisibleCommand("Adam", true));
-        branchOne.add(new MessageCommand("Adam", "Yo bruh, this is a message that we're currently 'testing' here at the lab. " +
-                "Our top text scientists are attempting to determine if it properly scrolls. We are taking " +
-                "notes and keeping our observations in a top secret log!           "));
-        branchOne.add(new PlayMusicCommand("Music/crossexamination.mp3", true));
-        branchOne.add(new MessageCommand("Donald", "Yep, that's right! I'll tell you folks, we have the best scrolling text boxes. The best!"));
-        branchOne.add(new PlaySoundCommand("Sounds/intense.wav"));
-        branchOne.add(new MessageCommand("Christine", "Wait... why is Donald Trump here? Adam wtf, really? Really?", "talksoundfemale"));
-        branchOne.add(new MessageCommand("Adam", "I thought you invited him!"));
-        branchOne.add(new MessageCommand("Christine", ".......", "talksoundfemale"));
-        branchOne.add(new DebugCommand("This is a test 1."));
-        branchOne.add(new MessageCommand("Adam", "......."));
-        branchOne.add(new DebugCommand("This is another test."));
-        branchOne.add(new DebugCommand("And another."));
-        branchOne.add(new DebugCommand("And yet another."));
-        branchOne.add(new MessageCommand("Adam", "I blame the American voters."));
-        branchOne.add(new ChangeBranchCommand(testConversation, "Branch 2"));
-        testConversation.addBranch("Main Branch", branchOne);
-
-        LinkedList<ConversationCommand> branchTwo = new LinkedList<ConversationCommand>();
-        branchTwo.add(new CharacterPositionCommand("Narrator", new Vector2(400, 160)));
-        branchTwo.add(new CharacterAnimationCommand("Narrator", "Idle", false));
-        branchTwo.add(new CharacterVisibleCommand("Narrator", true));
-        branchTwo.add(new MessageCommand("Narrator", "So you're probably wondering what just happened. Why is there a narrator guy now? Well there's a simple explanation for that!"));
-        branchTwo.add(new DebugCommand("yoooo branch 2 whattup yer boiii"));
-        branchTwo.add(new MessageCommand("Christine", "We really weren't...", "talksoundfemale"));
-        branchTwo.add(new MessageCommand("Narrator", "It's because you've entered... BRANCH TWO!"));
-        //branchTwo.add(new PreloadCommand("Music/Pursuit.mp3", Music.class));
-        String[] text = new String[] {"Ask to return", "Beg to return", "Let Christine handle it", "Accuse of murder"};
-        ConversationCommand[] commands = new ConversationCommand[4];
-        commands[0] = new ChangeBranchCommand(testConversation, "Ask Branch");
-        commands[1] = new ChangeBranchCommand(testConversation, "Beg Branch");
-        commands[2] = new ChangeBranchCommand(testConversation, "Christine Branch");
-        commands[3] = new CommandSequence(new PlaySoundCommand("Sounds/intense.wav"), //new PlayMusicCommand("Music/Pursuit.mp3", true),
-                new ChangeBranchCommand(testConversation, "Accuse Branch"));
-        ShowChoicesCommand choice = new ShowChoicesCommand(text, commands);
-        branchTwo.add(choice);
-        testConversation.addBranch("Branch 2", branchTwo);
-
-        LinkedList<ConversationCommand> askBranch = new LinkedList<ConversationCommand>();
-        askBranch.add(new MessageCommand("Adam", "Can we just go back to the first one now please?"));
-        askBranch.add(new MessageCommand("Narrator", "Fine! But I'll be back!"));
-        askBranch.add(new ChangeBranchCommand(testConversation, "Main Branch"));
-        testConversation.addBranch("Ask Branch", askBranch);
-
-        LinkedList<ConversationCommand> begBranch = new LinkedList<ConversationCommand>();
-        begBranch.add(new MessageCommand("Adam", "Please for the love of god let us go back!"));
-        begBranch.add(new MessageCommand("Narrator", "Wow... I guess I didn't realize you felt so strongly. Alright then."));
-        begBranch.add(new ChangeBranchCommand(testConversation, "Main Branch"));
-        testConversation.addBranch("Beg Branch", begBranch);
-
-        LinkedList<ConversationCommand> christineBranch = new LinkedList<ConversationCommand>();
-        christineBranch.add(new MessageCommand("Christine", "I don't know who you are but I'm leaving. And if you try to follow I'll call the cops! I swear, Donald Trump was better than this!", "talksoundfemale"));
-        christineBranch.add(new ChangeBranchCommand(testConversation, "Main Branch"));
-        testConversation.addBranch("Christine Branch", christineBranch);
-
-        LinkedList<ConversationCommand> accuseBranch = new LinkedList<ConversationCommand>();
-        accuseBranch.add(new CharacterAnimationCommand("Adam", "Think", true));
-        accuseBranch.add(new MessageCommand("Adam", "Finally, everything's fallen into place... the real murderer..."));
-        accuseBranch.add(new PlaySoundCommand("Sounds/intense.wav"));
-        accuseBranch.add(new CharacterAnimationCommand("Adam", "Confront", false));
-        accuseBranch.add(new MessageCommand("Adam", "WAS YOU!"));
-        accuseBranch.add(new CharacterAnimationCommand("Narrator", "Confront", false));
-        accuseBranch.add(new MessageCommand("Narrator", "Wha... What! No way!"));
-        accuseBranch.add(new MessageCommand("Christine", "What tipped you off Adam?", "talksoundfemale"));
-        accuseBranch.add(new MessageCommand("Adam", "I started having suspicions as soon as Donald Trump appeared. As we both said earlier, neither of us invited him. " +
-                "So then how did he end up here? There's only one person with the power to do that."));
-        accuseBranch.add(new CharacterAnimationCommand("Adam", "Accuse", false));
-        accuseBranch.add(new PlaySoundCommand("Sounds/intense.wav"));
-        accuseBranch.add(new MessageCommand("Adam", "And that's you! The narrator!"));
-        accuseBranch.add(new MessageCommand("Narrator", "Hahahahaha... Oh how right you are! I do possess power. More than you could possibly imagine! Now begone! I banish you to the main branch!"));
-        accuseBranch.add(new PlaySoundCommand("Sounds/intense.wav"));
-        accuseBranch.add(new CharacterAnimationCommand("Narrator", "Accuse", true));
-        accuseBranch.add(new CharacterAnimationCommand("Adam", "Idle", false));
-        accuseBranch.add(new PlayMusicCommand("", false));
-        accuseBranch.add(new ChangeBranchCommand(testConversation, "Main Branch"));
-        testConversation.addBranch("Accuse Branch", accuseBranch);
-
-        setBranch(branchOne);
-
-        ConversationWriter.writeConversation(testConversation, "Conversations/testConversation.conv");
-        */
         Conversation conversation = conversationLoader.loadConversation("testConversation4.conv");
         setBranch(conversation.getBranch("default"));
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
     }
-
+    /** Returns the SceneManager being used update and draw CharacterSprites. */
     public SceneManager sceneManager() {
         return sceneManager;
     }
-
+    /** Called every frame and updates the GUI elements by executing commands.
+     * If waitToProceed is false, it continues to go onto the next command. Otherwise
+     * it waits for the current one to be completed. Also calls the SceneManager's update method.
+     * DELTA TIME is the time elapsed since the previous frame.
+     */
     public void update(float deltaTime) {
         if (GameManager.assetManager().getQueuedAssets() != 0) {
             GameManager.assetManager().update();
@@ -160,87 +95,128 @@ public class MessageWindow implements Controllable {
         }
         while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() != 0) {
             nextCommand();
+            displayAll = false;
         }
         updateText(deltaTime);
         sceneManager.update(deltaTime);
     }
-
+    /** If there is currently a message being displayed, updates the text timer.
+     * Once the text timer reaches 0 or if all text should be displayed at once it
+     * displays the next character of the message. If a command is encountered in
+     * the middle of the message, it executes it and returns if the update should
+     * wait for the command to complete. DELTA TIME is the time elapsed since the
+     * previous frame.
+     */
     public void updateText(float deltaTime) {
         if (doneSpeaking()) {
             return;
         }
+
+        if (currentSpeaker != null) {
+            setSpeakerName(currentSpeaker.getKnownName());
+        }
+
+        MessageCommand messageCommand;
         textTimer = Math.max(textTimer - 1, 0);
-        if (textTimer <= 0) {
-            boolean textAdded = false;
-            boolean tagAdded = false;
-            String newText = null;
-            String originalText = textboxLabel.getText().toString();
-            if (dummyTagAdded){
-                dummyTagAdded = false;
-            }
-            while (!textAdded) {
-                String[] words = remainingTextNoTags.split(" ");
-                String nextWord = "";
-                if (words.length > 0)
-                    nextWord = words[0];
-
-                String testText = originalText + nextWord;
-                textboxLabel.setText(testText + "nn");
-                textboxLabel.layout();
-                int currentNumLines = textboxLabel.getGlyphLayout().runs.size;
-                newText = originalText;
-                String tag = getTag(remainingText);
-                if (tag == null) {
-                    if (currentNumLines != 1 && currentNumLines > numLines) {
-                        newText = newText + "\n";
+        if (textTimer <= 0 || displayAll) {
+            do {
+                if (currentCommand != null && currentCommand instanceof MessageCommand) {
+                    messageCommand = (MessageCommand) currentCommand;
+                    if (!messageCommand.shouldUpdate()) {
+                        return;
                     }
-                    if (remainingText.length() != 0) {
-                        char nextChar = remainingText.charAt(0);
-                        newText += nextChar;
-                        if (nextChar != ' ') {
-                            playTextSound();
-                        }
-                        remainingText = remainingText.substring(1);
-                        remainingTextNoTags = remainingTextNoTags.substring(1);
-                    }
-                    textAdded = true;
-
                 } else {
-                    tagAdded = true;
-                    if (tag.equals("[\n]")) {
-                        tag = "\n";
-                    }
-                    newText += tag;
-                    remainingText = remainingText.substring(tag.length());
-                    currentNumLines += 1;
+                    return;
                 }
-                numLines = currentNumLines;
-                originalText = newText;
-            }
-            if (tagAdded) {
-                String closeTag = getTag(remainingText);
-                if (closeTag != null){
-                    //newText += closeTag;
-                    //remainingText = remainingText.substring(closeTag.length());
+                boolean textAdded = false;
+                boolean tagAdded = false;
+                String newText = null;
+                String originalText = textboxLabel.getText().toString();
+                if (dummyTagAdded) {
                     dummyTagAdded = false;
                 }
-                else{
-                    dummyTagAdded = true;
-                    //newText += "[]";
+                while (!textAdded) {
+                    String[] words = remainingTextNoTags.split(" ");
+                    String nextWord = "";
+                    boolean command = true;
+                    int index = 0;
+                    while (command) {
+                        command = false;
+                        if (words.length > index) {
+                            nextWord = words[index];
+                            if (nextWord.matches(".*@c\\{(.*)\\}.*")) {
+                                remainingTextNoTags = remainingTextNoTags.substring(nextWord.length() + 1);
+                                remainingText = remainingText.substring(nextWord.length() + 1);
+                                // replaceFirst("(.*)@c\\{.*\\}(.*)", "$1$2");
+                                command = true;
+                                messageCommand.setSubcommand(nextWord);
+                                if (!messageCommand.shouldUpdate()) {
+                                    return;
+                                }
+                            }
+                        } else {
+                            nextWord = "";
+                        }
+                        index += 1;
+                    }
+                    String testText = originalText + nextWord;
+                    textboxLabel.setText(testText + "nn");
+                    textboxLabel.layout();
+                    int currentNumLines = textboxLabel.getGlyphLayout().runs.size;
+                    newText = originalText;
+                    String tag = getTag(remainingText);
+                    if (tag == null) {
+                        if (currentNumLines != 1 && currentNumLines > numLines) {
+                            newText = newText + "\n";
+                        }
+                        if (remainingText.length() != 0) {
+                            char nextChar = remainingText.charAt(0);
+                            newText += nextChar;
+                            if (nextChar != ' ' && !displayAll) {
+                                playTextSound();
+                            }
+                            remainingText = remainingText.substring(1);
+                            remainingTextNoTags = remainingTextNoTags.substring(1);
+                        }
+                        textAdded = true;
+
+                    } else {
+                        tagAdded = true;
+                        if (tag.equals("[\n]")) {
+                            tag = "\n";
+                        }
+                        newText += tag;
+                        remainingText = remainingText.substring(tag.length());
+                        currentNumLines += 1;
+                    }
+                    numLines = currentNumLines;
+                    originalText = newText;
                 }
-            }
-            textTimer = textTimerDelay;
-            textboxLabel.setText(newText);
-            textboxLabel.layout();
-            numLines = textboxLabel.getGlyphLayout().runs.size;
-            textboxLabel.invalidate();
+                if (tagAdded) {
+                    String closeTag = getTag(remainingText);
+                    if (closeTag != null) {
+                        //newText += closeTag;
+                        //remainingText = remainingText.substring(closeTag.length());
+                        dummyTagAdded = false;
+                    } else {
+                        dummyTagAdded = true;
+                        //newText += "[]";
+                    }
+                }
+                textTimer = textTimerDelay;
+                textboxLabel.setText(newText);
+                textboxLabel.layout();
+                numLines = textboxLabel.getGlyphLayout().runs.size;
+                textboxLabel.invalidate();
+            } while (displayAll && !doneSpeaking());
         }
     }
-
+    /** Set the sound to be played for the current speaker to the sound named SOUND. */
     public void setCurrentSpeakerSound(String sound) {
         currentSpeakerSound = sound;
     }
-
+    /** If the text sounds should be played, it gets it from the AssetManager and plays it.
+     * Toggles whether the sound should be played next frame. */
     private void playTextSound() {
         if (playSoundNow) {
             Sound s = GameManager.assetManager().get("Sounds/" + currentSpeakerSound + ".wav", Sound.class);
@@ -248,11 +224,11 @@ public class MessageWindow implements Controllable {
         }
         playSoundNow = !playSoundNow;
     }
-
+    //TODO Fix this method and \n in messages later.
     private int numNewLineTags(String word) {
         return word.length() - word.replaceAll("\n", "").length();
     }
-
+    /** If there are more commands, execute the next one. */
     public void nextCommand() {
         if (currentBranch.size() != 0) {
             ConversationCommand command = currentBranch.remove();
@@ -263,7 +239,7 @@ public class MessageWindow implements Controllable {
             setTextBoxShowing(false);
         }
     }
-
+    /** Sets the current branch to a copy of the list of ConversationCommands BRANCH. */
     @SuppressWarnings("unchecked")
     public void setBranch(LinkedList<ConversationCommand> branch) {
         Object b = branch.clone();
@@ -271,32 +247,36 @@ public class MessageWindow implements Controllable {
             currentBranch = (LinkedList<ConversationCommand>) b;
         }
     }
-
+    /** Passes a CompleteEvent to the current command when an Animation is completed. */
     public void animationComplete(String name) {
         currentCommand.complete(new CompleteEvent(CompleteEvent.Type.ANIMATION_END, name));
     }
-
+    /** Returns whether there is no more text to display. */
     public boolean doneSpeaking() {
         return remainingText.isEmpty();
     }
-
+    /** Sets the remaining text to be displayed to TEXT. */
     public void setRemainingText(String text){
         remainingText = text;
         remainingTextNoTags = removeTags(text);
         textboxLabel.setText("");
         textboxLabel.invalidate();
     }
-
-    public void setSpeaker(String text){
+    /** Sets the current speaking character to the one represented by CHARACTER. */
+    public void setSpeaker(CharacterSprite character) {
+        currentSpeaker = character;
+    }
+    /** Updates the speakerLabel to TEXT. */
+    public void setSpeakerName(String text){
         speakerLabel.setText(text + "  ");
         speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
         speakerLabel.invalidate();
     }
-
+    /** Sets the textTimerDelay to DELAY. */
     public void setTextTimer(int delay){
         textTimerDelay = delay;
     }
-
+    /** Sets whether the textbox and speaker label should SHOW. */
     public void setTextBoxShowing(boolean show){
         textboxLabel.setVisible(show);
         speakerLabel.setVisible(show);
@@ -304,15 +284,21 @@ public class MessageWindow implements Controllable {
 
     /** Choices Code */
 
+    /** Sets whether choices should SHOW for the player. */
     public void setChoiceShowing(boolean show) {
         choiceShowing = show;
     }
-
-    public void setChoice(int number, String choice) {
-        choiceButtons[number].setVisible(!choice.equals(""));
-        choiceButtons[number].setText(choice);
+    /** Sets choice number CHOICE to CHOICE NAME. */
+    public void setChoice(int choice, String choiceName) {
+        choiceButtons[choice].setVisible(!choiceName.equals(""));
+        choiceButtons[choice].setText(choiceName);
     }
-
+    /** Sets choice number CHOICE to execute the ConversationCommand  COMMAND. */
+    public void setChoiceCommand(int choice, ConversationCommand command) {
+        choiceCommands[choice] = command;
+    }
+    /** Executes the command corresponding to CHOICE and send a CompleteEvent to
+     * the current command. */
     public void processChoice(int choice) {
         choiceShowing = false;
         for (int i = 0; i < choiceButtons.length; i += 1) {
@@ -325,12 +311,8 @@ public class MessageWindow implements Controllable {
         currentCommand.complete(new CompleteEvent(CompleteEvent.Type.CHOICE));
     }
 
-    public void setChoiceCommand(int choice, ConversationCommand command) {
-        choiceCommands[choice] = command;
-    }
-
     /** Tags Code */
-
+    /** Returns String S with all tags removed. */
     private String removeTags(String s){
         boolean inTag = false;
         String output = "";
@@ -349,7 +331,7 @@ public class MessageWindow implements Controllable {
         }
         return output;
     }
-
+    /** Returns the tag in S. */ //TODO Update this and rework tags
     private String getTag(String s){
         if (s.length() == 0 || s.charAt(0) != '[')
             return null;
@@ -365,20 +347,19 @@ public class MessageWindow implements Controllable {
         }
     }
 
+    /** Handles a touch on the screen and passes an Input CompleteEvent to the current
+     * ConversationCommand. If someone is currently speaking, instead set displayAll to true
+     * first. */
     @Override
     public void touchDown(int screenX, int screenY, int pointer, int button, boolean justPressed) {
         if (justPressed) {
             if (!doneSpeaking()) {
-                textboxLabel.setText(textboxLabel.getText().toString() + remainingText);
-                remainingText = "";
+                displayAll = true;
             } else {
                 if (currentCommand != null) {
                     currentCommand.complete(new CompleteEvent(CompleteEvent.Type.INPUT));
                 }
             }
-            //} else if (waitingForInput && !choiceShowing) {
-            //    nextCommand();
-            //}
         }
     }
 }

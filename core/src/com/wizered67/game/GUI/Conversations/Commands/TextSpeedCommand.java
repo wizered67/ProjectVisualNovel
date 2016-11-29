@@ -6,23 +6,25 @@ import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.MessageWindow;
 
-import java.io.IOException;
-
 /**
- * A ConversationCommand for displaying messages for
+ * A ConversationCommand that sets the speed of the text being
+ * displayed in the MessageWindow.
  * @author Adam Victor
  */
-public class DebugCommand implements ConversationCommand {
-    /** The debug message to show. */
-    private String message;
-    /** Creates a new DebugCommand that prints out M when executed. */
-    public DebugCommand(String m) {
-        message = m;
+public class TextSpeedCommand implements ConversationCommand {
+    /** The number of frames that will be waited before a text update. */
+    private int textSpeed;
+
+    /** Creates a new TextSpeedCommand that sets the number of frames to wait before a text update
+     * to TIME when executed.
+     */
+    public TextSpeedCommand(int time) {
+        textSpeed = time;
     }
     /** Executes the command on the MESSAGE WINDOW. */
     @Override
     public void execute(MessageWindow messageWindow) {
-        System.out.println(message);
+        messageWindow.setTextTimer(textSpeed);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -35,20 +37,14 @@ public class DebugCommand implements ConversationCommand {
     public void complete(CompleteEvent c) {
 
     }
+    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
+    public static TextSpeedCommand makeCommand(Conversation conversation, XmlReader.Element element) {
+        int time = element.getIntAttribute("time");
+        return new TextSpeedCommand(time);
+    }
     /** Outputs XML to the XML WRITER for this command. */
     @Override
     public void writeXml(XmlWriter xmlWriter) {
-        try {
-            xmlWriter.element("debug")
-                    .attribute("message", message)
-                    .pop();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
-    public static DebugCommand makeCommand(Conversation conversation, XmlReader.Element element) {
-        String text = element.getAttribute("message");
-        return new DebugCommand(text);
+        //TODO add this?
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
@@ -13,7 +14,9 @@ import com.wizered67.game.GameManager;
 import java.util.HashMap;
 
 /**
- * Created by Adam on 10/26/2016.
+ * Screen shown while loading all assets needed for the game, at least initially.
+ * Loads assets using an AssetManager.
+ * @author Adam Victor
  */
 public class LoadingScreen implements Screen {
     private AssetManager assetManager;
@@ -31,7 +34,6 @@ public class LoadingScreen implements Screen {
         assetManager.load("Sounds/sfxblipmale.wav", Sound.class);
         assetManager.load("Sounds/intense.wav", Sound.class);
         assetManager.load("Music/crossexamination.mp3", Music.class);
-
         assetManager.load("Animations/Edgeworth.pack", TextureAtlas.class);
     }
 

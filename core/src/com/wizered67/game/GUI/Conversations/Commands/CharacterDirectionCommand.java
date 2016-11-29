@@ -10,18 +10,24 @@ import com.wizered67.game.GUI.Conversations.MessageWindow;
 import java.io.IOException;
 
 /**
- * Created by Adam on 11/2/2016.
+ * A ConversationCommand that changes an existing CharacterSprite's direction.
+ * Mainly intended for debug use.
+ * @author Adam Victor
  */
 public class CharacterDirectionCommand implements ConversationCommand {
-
+    /** Name of the CharacterSprite to change the direction of. */
     String character;
+    /** New direction for the CharacterSprite to face. */
     int direction;
 
+    /** Creates a new CharacterDirectionCommand that changes the CharacterSprite
+     * NAME's direction to DIR when executed.
+     */
     public CharacterDirectionCommand(String name, int dir) {
         character = name;
         direction = dir;
     }
-
+    /** Executes the command on the MESSAGE WINDOW. */
     @Override
     public void execute(MessageWindow messageWindow) {
         CharacterSprite c = messageWindow.sceneManager().getCharacterByName(character);
@@ -30,17 +36,18 @@ public class CharacterDirectionCommand implements ConversationCommand {
         }
         c.setDirection(direction);
     }
-
+    /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
         return false;
     }
-
+    /** Checks whether the CompleteEvent C completes this command,
+     * and if so acts accordingly. */
     @Override
     public void complete(CompleteEvent c) {
 
     }
-
+    /** Outputs XML to the XML WRITER for this command. */
     @Override
     public void writeXml(XmlWriter xmlWriter) {
         try {
@@ -52,7 +59,7 @@ public class CharacterDirectionCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-
+    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
     public static CharacterDirectionCommand makeCommand(Conversation conversation, XmlReader.Element element) {
         String name = element.getAttribute("name");
         int direction = element.getInt("direction", 1);

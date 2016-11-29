@@ -11,9 +11,11 @@ import java.io.Writer;
 import java.util.LinkedList;
 
 /**
- * Created by Adam on 11/16/2016.
+ * A class to convert ConversationCommands to their XML equivalent.
+ * @author Adam Victor
  */
 public class ConversationWriter {
+    /** Writes the entire CONVERSATION to an XML file with name FILENAME. */
     public static void writeConversation(Conversation conversation, String filename) {
         FileHandle file = Gdx.files.local(filename);
         Writer writer = file.writer(false);
@@ -24,13 +26,6 @@ public class ConversationWriter {
             for (String branch : conversation.getAllBranches()) {
                 writeBranch(xmlWriter, conversation, branch);
             }
-                   /*
-                    .element("branch").attribute("name", "default")
-                    .element("message").attribute("speaker", "Adam").attribute("text", "Test message.")
-                    .pop()
-                    .pop()
-                    .pop();
-                    */
             xmlWriter.pop();
             writer.close();
             xmlWriter.close();
@@ -38,7 +33,8 @@ public class ConversationWriter {
             e.printStackTrace();
         }
     }
-
+    /** Writes the branch of CONVERSATION with name BRANCHNAME to
+     * XML by using the XML WRITER. */
     private static void writeBranch(XmlWriter xmlWriter, Conversation conversation, String branchName) {
         try {
             xmlWriter.element("branch").attribute("name", branchName);

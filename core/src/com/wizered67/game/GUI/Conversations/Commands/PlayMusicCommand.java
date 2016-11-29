@@ -12,24 +12,33 @@ import com.wizered67.game.GameManager;
 import java.io.IOException;
 
 /**
- * Created by Adam on 10/26/2016.
+ * A ConversationCommand that plays, pauses, or resumes background music.
+ * @author Adam Victor
  */
 public class PlayMusicCommand implements ConversationCommand {
-
+    /** Name of the music to play, if play command. */
     private String music;
+    /** Whether the music should loop, if play command. */
     private boolean loops;
+    /** If pause is 1, acts as a pause command. If pause is 2, acts as a resume command.
+     * When 0 as normal, just plays the music. */
     private int pause;
-
+    /** Creates a PlayMusicCommand that plays the music named M and
+     * sets its loop status to L when executed.
+     */
     public PlayMusicCommand(String m, boolean l) {
         music = m;
         loops = l;
         pause = 0;
     }
 
+    /** Creates a PlayMusicCommand that pauses or resumes music when executed. SHOULDPAUSE is 1 for
+     * pausing and 2 for resuming.
+     */
     public PlayMusicCommand(int shouldPause) { //pause/resume command, 1 for pause, 2 for resume
         pause = shouldPause;
     }
-
+    /** Executes the command on the MESSAGE WINDOW. */
     @Override
     public void execute(MessageWindow messageWindow) {
         if (pause != 0) {
@@ -51,20 +60,21 @@ public class PlayMusicCommand implements ConversationCommand {
             GameManager.musicManager().playMusic(m, music, loops);
             GameManager.musicManager().setVolume(0.8f);
         } else {
-            Gdx.app.log("Asset Error", "No sound loaded: " + music);
+            GameManager.error("No sound loaded: " + music);
         }
     }
-
+    /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
         return false;
     }
-
+    /** Checks whether the CompleteEvent C completes this command,
+     * and if so acts accordingly. */
     @Override
     public void complete(CompleteEvent c) {
 
     }
-
+    /** Outputs XML to the XML WRITER for this command. */
     @Override
     public void writeXml(XmlWriter xmlWriter) {
         try {
@@ -82,7 +92,7 @@ public class PlayMusicCommand implements ConversationCommand {
             e.printStackTrace();
         }
     }
-
+    /** Static method to create a new command from XML Element ELEMENT that is part of CONVERSATION. */
     public static PlayMusicCommand makeCommand(Conversation conversation, XmlReader.Element element) {
         String name = element.getAttribute("name");
         boolean loop = element.getBoolean("loop", false);
