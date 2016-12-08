@@ -6,8 +6,9 @@ Built on top of a previously started project, https://github.com/wizered67/fenci
 I chose to make this project instead of using something like Ren'Py for several reasons. Writing the command interpreter myself allows me to have much more control and allows me to implement commands however I feel is most convenient. Commands that would be inconvenient or impossible in Ren'Py can be implemented more easily. Additionally, writing this on top of LibGDX means that I can add any other gameplay I want in addition to the dialogue system. As such, extracting code from this project would allow me to make dialouge systems for any type of game, not just visual novels. Ren'Py is great for visual novels, but doesn't necessarily have functionality for other types of games. And perhaps most importantly, I thought it would be good experience to try doing something like this myself. There's little point in reinventing the wheel, but learning to make a better wheel is still useful.
 
 ##Demonstration
-Note: Graphics are placeholder and not mine. They are just for demonstration purposes.
+*Note: Graphics are placeholder and not mine. They are just for demonstration purposes.*
 ![gif](https://dl.dropboxusercontent.com/u/25507891/visualnovel3test.gif)
+
 The file containing the conversation used in the example can be seen [here] (https://github.com/wizered67/ProjectVisualNovel/blob/master/android/assets/Conversations/demonstration.conv)
 
 ## How it works
