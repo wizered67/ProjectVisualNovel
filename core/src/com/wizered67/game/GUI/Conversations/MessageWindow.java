@@ -76,7 +76,7 @@ public class MessageWindow implements Controllable {
         choiceButtons = choices;
         choiceCommands = new ConversationCommand[choiceButtons.length];
         sceneManager = new SceneManager(this);
-        currentConversation = conversationLoader.loadConversation("testConversation4.conv");
+        currentConversation = conversationLoader.loadConversation("demonstration.conv");
         setBranch("default");
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
