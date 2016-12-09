@@ -1,4 +1,4 @@
-# ProjectVisualNovel
+# ProjectVisualNovel (Fall 2016 - Present)
 
 ##Overview
 Built on top of a previously started project, https://github.com/wizered67/fencing-magician, the goal of this project is to recreate many of the elements common in **visual novels** in a [LibGDX] (https://libgdx.badlogicgames.com/) game. Visual Novels are a type of video games that feature little gameplay and instead are made mostly of dialogue, with most interaction being in the form of making choices that influence the story in some way. Visual Novels are less common for American gamers, but are extremely popular in Japan. This project was inspired by visual novels such as *Ace Attorney* and *Dangan Ronpa* and some of the ideas used in structuring the conversation files were based on *Ren'PY*, a Python engine for making visual novels. 
