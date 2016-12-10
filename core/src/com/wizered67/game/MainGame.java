@@ -17,7 +17,7 @@ public class MainGame extends Game {
     MusicManager musicManager;
 	@Override
 	public void create() {
-		Gdx.app.log("TEST", "TEST");
+		//Gdx.app.log("TEST", "TEST");
 		assetManager = new AssetManager();
         musicManager = new MusicManager();
         loadedAnimations = new HashMap<String, Map<String, Animation>>();
