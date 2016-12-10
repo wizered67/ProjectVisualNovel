@@ -11,12 +11,10 @@
         <setvisible name="Librarian" visible="false"/>
         <setdirection name="Librarian" direction="-1"/>
         <setname name="Librarian" displayname="???"/>
-
         <changebranch newbranch="main branch"/>
     </branch>
 
     <branch name="main branch">
-        <delay time="5"/>
         <message speaker="Detective">
             <assign name="anim">
                 <setanimation name="Detective" animation="Think" wait="true"/>
@@ -35,7 +33,7 @@
         <message speaker="Librarian">
             <text>I'm the head librarian here. It's a pleasure to meet you.</text>
         </message>
-        <message speaker="Detective">
+        <message speaker="Detective" wait="false">
             <text>Ah, good. I had a few questions for you. I guess I was mostly wondering...</text>
         </message>
         <changebranch newbranch="choices"/>
@@ -75,7 +73,7 @@
             <text>It was. We aren't sure how he got in here in the first place.</text>
             <text>Does that answer all of your questions?</text>
         </message>
-        <message speaker="Detective">
+        <message speaker="Detective" wait="false">
             <text>Didn't I also want to ask about...</text>
         </message>
         <changebranch newbranch="choices"/>
@@ -88,7 +86,7 @@
         <message speaker="Librarian">
             <text>For 5 years now. But how is that relevant?</text>
         </message>
-        <message speaker="Detective">
+        <message speaker="Detective" wait="false">
             <text>Oh... I guess it's not. Maybe I better ask about something else instead...</text>
         </message>
         <changebranch newbranch="choices"/>

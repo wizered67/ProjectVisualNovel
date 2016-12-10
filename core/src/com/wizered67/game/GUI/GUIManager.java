@@ -138,7 +138,7 @@ public class GUIManager {
         stage.addActor(speakerLabel);
 
         messageWindow = new MessageWindow(textboxLabel, speakerLabel, choiceButtons);
-
+        setTextboxShowing(false);
         //System.out.println(remainingTextNoTags);
         //remainingText = "this is a new message just so you know.";
 		//textboxLabel.setText("TESTING A MESSAGE BRO");
@@ -203,5 +203,9 @@ public class GUIManager {
     /** Returns the y position of the top of the textbox label. */
     public static float getTextboxTop() {
         return textboxLabel.getTop();
+    }
+    /** Sets the visibility of the textbox and speaker label to SHOW. */
+    public static void setTextboxShowing(boolean show) {
+        messageWindow.setTextBoxShowing(show);
     }
 }

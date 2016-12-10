@@ -102,6 +102,7 @@
             <xs:element type="xs:string" name="text" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="speaker" use="required"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="localAssignType">

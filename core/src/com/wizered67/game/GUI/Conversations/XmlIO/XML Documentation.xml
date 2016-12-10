@@ -32,7 +32,7 @@ CommandSequence with a series of COMMANDS.
 <debug message="string"/>
 DebugCommand that prints MESSAGE.
 
-<message>
+<message speaker="string" (optional)wait="boolean">
     <assign name="string">
         <command/>
     </assign>
@@ -40,7 +40,9 @@ DebugCommand that prints MESSAGE.
     <text>
     ...
 </message>
-Message command that assigns commands to shortcuts to be used in text.
+Message command spoken by character named SPEAKER, assigns commands to shortcuts
+to be used in text, and displays text as separate windows. WAIT is true by default
+and determines if player input is necessary to proceed to the next command.
 
 <playmusic name="string" loop="boolean"/>
 PlayMusicCommand that plays music with name NAME and sets looping to LOOP.

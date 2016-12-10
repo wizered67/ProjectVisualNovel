@@ -39,16 +39,31 @@ public class MessageCommand implements ConversationCommand {
     private MessageWindow messageWindow;
     /** The ConversationCommand embedded in this message currently being executed. */
     private ConversationCommand currentSubcommand;
+    /** Whether it is necessary to wait for input to proceed to the next command.
+     * If false, automatically go to next command once all text is shown. Assumed to
+     * be true if not specified in conversation file. */
+    private boolean waitForInput;
 
-    /** Creates a new MessageCommand with speaker named CHARACTER.
+    /** Creates a new MessageCommand with speaker named CHARACTER. If WAIT,
+     * does not allow going on to the next command without input. Otherwise,
+     * automatically goes to next command once all text is shown.
      * Sets stored text to empty initially but it can be added to later.
      */
-    public MessageCommand(String character) {
+    public MessageCommand(String character, boolean wait) {
         speaker = character;
         done = false;
         assignments = new HashMap<String, ConversationCommand>();
         storedText = new LinkedList<String>();
+        waitForInput = wait;
     }
+
+    /** Creates a new MessageCommand with speaker named CHARACTER
+     * and WAIT as true.
+     */
+    public MessageCommand(String character) {
+        this(character, true);
+    }
+
     /** Returns the speaker of this message. */
     public String getSpeaker() {
         return speaker;
@@ -60,6 +75,7 @@ public class MessageCommand implements ConversationCommand {
         currentText = (LinkedList) storedText.clone();
         messageWindow.setRemainingText(currentText.remove());
         CharacterSprite characterSpeaking = messageWindow.sceneManager().getCharacterByName(speaker);
+        messageWindow.setTextBoxShowing(true);
         messageWindow.setSpeaker(characterSpeaking);
         messageWindow.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
         currentSubcommand = null;
@@ -84,7 +100,11 @@ public class MessageCommand implements ConversationCommand {
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
-        return !done;
+        if (waitForInput) {
+            return !done;
+        } else {
+            return currentText.size() != 0 || !messageWindow.doneSpeaking();
+        }
     }
     /** Checks whether the CompleteEvent C completes this command,
      * and if so acts accordingly. */
@@ -106,7 +126,9 @@ public class MessageCommand implements ConversationCommand {
     public void writeXml(XmlWriter xmlWriter) {
         try {
             xmlWriter.element("message")
-                    .attribute("speaker", speaker);
+                    .attribute("speaker", speaker)
+                    .attribute("wait", waitForInput);
+
             for (String assigned : assignments.keySet()) {
                 xmlWriter.element("assign")
                         .attribute("name", assigned);
@@ -126,8 +148,9 @@ public class MessageCommand implements ConversationCommand {
     /** Static method to create a new command from XML Element ELEMENT. */
     public static MessageCommand makeCommand(XmlReader.Element element) {
         String speaker = element.getAttribute("speaker");
+        boolean waitForInput = element.getBooleanAttribute("wait", true);
         //String message = element.getAttribute("text");
-        MessageCommand message = new MessageCommand(speaker);
+        MessageCommand message = new MessageCommand(speaker, waitForInput);
         for (int i = 0; i < element.getChildCount(); i += 1) {
             XmlReader.Element e = element.getChild(i);
             if (e.getName().equalsIgnoreCase("text")) {
