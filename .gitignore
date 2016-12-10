@@ -62,3 +62,12 @@ build/
 
 ## OS Specific
 .DS_Store
+/android/assets/Conversations/christine.conv
+/android/assets/Conversations/testConversation2.conv
+/android/assets/Conversations/output.xml
+/android/assets/Conversations/testConversation3.conv
+/android/assets/Animations/
+/desktop/src/com/wizered67/game/desktop/TestLauncher.java
+/core/src/com/wizered67/game/Editor.java
+/desktop/src/com/wizered67/game/desktop/old commands
+/core/src/com/wizered67/game/ScrollPaneTest.java
