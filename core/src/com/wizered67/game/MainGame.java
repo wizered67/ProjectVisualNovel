@@ -6,12 +6,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.wizered67.game.Screens.GameScreen;
 import com.wizered67.game.Screens.LoadingScreen;
+import com.wizered67.game.Screens.MainGameScreen;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainGame extends Game {
-	GameScreen gameScreen;
+	MainGameScreen gameScreen;
 	AssetManager assetManager;
     Map<String, Map<String, Animation>> loadedAnimations;
     MusicManager musicManager;
@@ -22,7 +23,7 @@ public class MainGame extends Game {
         musicManager = new MusicManager();
         loadedAnimations = new HashMap<String, Map<String, Animation>>();
 		GameManager.init(this);
-		gameScreen = new GameScreen();
+		gameScreen = new MainGameScreen();
         setScreen(new LoadingScreen(assetManager, gameScreen));
 	}
 	
