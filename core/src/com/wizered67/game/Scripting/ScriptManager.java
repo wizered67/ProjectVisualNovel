@@ -15,4 +15,8 @@ public interface ScriptManager {
     String objectToString(Object o);
     /** Returns the value of variable VAR in a language specific object type. */
     Object getValue(String var);
+    /** Returns whether a variable named VAR has been defined. */
+    boolean isDefined(String var);
+    /** Returns a GameScript that, when executed, assigns variable named VAR to VALUE. */
+    GameScript createSetScript(String var, String value);
 }

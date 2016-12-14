@@ -40,4 +40,14 @@ public class LuaScriptManager implements ScriptManager {
     public LuaValue getValue(String var) {
         return globals.get(var);
     }
+    /** Returns whether a variable named VAR has been defined. */
+    @Override
+    public boolean isDefined(String var) {
+        return !getValue(var).isnil();
+    }
+    /** Returns a GameScript that, when executed, assigns variable named VAR to VALUE. */
+    @Override
+    public GameScript createSetScript(String var, String value) {
+        return new LuaScript(this, var + " = " + value, false);
+    }
 }

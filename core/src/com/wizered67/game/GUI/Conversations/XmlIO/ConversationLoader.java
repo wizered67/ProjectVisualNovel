@@ -99,6 +99,8 @@ public class ConversationLoader {
             command = TextSpeedCommand.makeCommand(root);
         } else if (name.equals("script")) {
             command = ExecuteScriptCommand.makeCommand(root);
+        } else if (name.equals("init")) {
+        command = VariableInitializeCommand.makeCommand(root);
         }
         return command;
     }

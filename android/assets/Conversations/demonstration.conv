@@ -12,12 +12,12 @@
         <setdirection name="Librarian" direction="-1"/>
         <setname name="Librarian" displayname="???"/>
 
-        <script language="Lua">
-            work = 0
-            test = "yes"
-            test2 = "no"
-            test3 = "maybe"
-        </script>
+        <init language="Lua">
+            work 0
+            test "yes"
+            test2 "no"
+            test3 "maybe"
+        </init>
 
         <changebranch newbranch="main branch"/>
 
