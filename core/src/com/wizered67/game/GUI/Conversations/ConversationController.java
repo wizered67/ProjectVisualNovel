@@ -9,8 +9,12 @@ import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationWriter;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
+import com.wizered67.game.Scripting.LuaScriptManager;
+import com.wizered67.game.Scripting.ScriptManager;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -18,7 +22,7 @@ import java.util.Queue;
  * executing a series of ConversationCommands.
  * @author Adam Victor
  */
-public class MessageWindow implements Controllable {
+public class ConversationController implements Controllable {
     /** Text left to be displayed. May include some tags. */
     private String remainingText = "";
     /** Text left to be displayed, ignoring Color tags. */
@@ -66,16 +70,20 @@ public class MessageWindow implements Controllable {
     private CharacterSprite currentSpeaker;
     /** Whether all text should be displayed at once without slowly scrolling. */
     private boolean displayAll = false;
+    /** Map used to map Strings to the ScriptManager for the language of that name. */
+    private static Map<String, ScriptManager> scriptManagers;
 
-    /** Initializes the MessageWindow with the GUI elements passed in from GUIManager.
+    /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
-    public MessageWindow(Label textbox, Label speaker, TextButton[] choices) {
+    public ConversationController(Label textbox, Label speaker, TextButton[] choices) {
         conversationLoader = new ConversationLoader();
         textboxLabel = textbox;
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new ConversationCommand[choiceButtons.length];
         sceneManager = new SceneManager(this);
+        scriptManagers = new HashMap<String, ScriptManager>();
+        scriptManagers.put("Lua", new LuaScriptManager());
         currentConversation = conversationLoader.loadConversation("demonstration.conv");
         setBranch("default");
         //remainingText =
@@ -85,6 +93,10 @@ public class MessageWindow implements Controllable {
     /** Returns the SceneManager being used update and draw CharacterSprites. */
     public SceneManager sceneManager() {
         return sceneManager;
+    }
+    /** Returns the ScriptManager for LANGUAGE. */
+    public static ScriptManager scriptManager(String language) {
+        return scriptManagers.get(language);
     }
     /** Called every frame and updates the GUI elements by executing commands.
      * If waitToProceed is false, it continues to go onto the next command. Otherwise

@@ -97,6 +97,8 @@ public class ConversationLoader {
             command = DelayCommand.makeCommand(root);
         } else if (name.equals("textspeed")) {
             command = TextSpeedCommand.makeCommand(root);
+        } else if (name.equals("script")) {
+            command = ExecuteScriptCommand.makeCommand(root);
         }
         return command;
     }

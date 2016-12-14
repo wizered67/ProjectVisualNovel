@@ -3,12 +3,11 @@ package com.wizered67.game.GUI.Conversations.Commands;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 
 /**
  * A ConversationCommand that sets the speed of the text being
- * displayed in the MessageWindow.
+ * displayed in the ConversationController.
  * @author Adam Victor
  */
 public class TextSpeedCommand implements ConversationCommand {
@@ -21,10 +20,10 @@ public class TextSpeedCommand implements ConversationCommand {
     public TextSpeedCommand(int time) {
         textSpeed = time;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
-        messageWindow.setTextTimer(textSpeed);
+    public void execute(ConversationController conversationController) {
+        conversationController.setTextTimer(textSpeed);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override

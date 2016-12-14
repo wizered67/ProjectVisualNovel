@@ -4,18 +4,20 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
+import com.wizered67.game.Scripting.ScriptManager;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A ConversationCommand that displays a message to the window
- * in MessageWindow. Can also have subcommands that execute in
+ * in ConversationController. Can also have subcommands that execute in
  * the middle of the message.
  * @author Adam Victor
  */
@@ -34,15 +36,16 @@ public class MessageCommand implements ConversationCommand {
     private LinkedList<String> storedText;
     /** The list of all blocks of text that still needs to be displayed. */
     private LinkedList<String> currentText;
-    /** Reference to the MessageWindow that is processing this MessageCommand. Used
+    /** Reference to the ConversationController that is processing this MessageCommand. Used
      * to set text and speaker and other message attributes. */
-    private MessageWindow messageWindow;
+    private ConversationController conversationController;
     /** The ConversationCommand embedded in this message currently being executed. */
     private ConversationCommand currentSubcommand;
     /** Whether it is necessary to wait for input to proceed to the next command.
      * If false, automatically go to next command once all text is shown. Assumed to
      * be true if not specified in conversation file. */
     private boolean waitForInput;
+    private Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
 
     /** Creates a new MessageCommand with speaker named CHARACTER. If WAIT,
      * does not allow going on to the next command without input. Otherwise,
@@ -68,20 +71,33 @@ public class MessageCommand implements ConversationCommand {
     public String getSpeaker() {
         return speaker;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @SuppressWarnings("unchecked")
-    public void execute(MessageWindow message) {
-        messageWindow = message;
+    public void execute(ConversationController message) {
+        conversationController = message;
         currentText = (LinkedList) storedText.clone();
-        messageWindow.setRemainingText(currentText.remove());
-        CharacterSprite characterSpeaking = messageWindow.sceneManager().getCharacterByName(speaker);
-        messageWindow.setTextBoxShowing(true);
-        messageWindow.setSpeaker(characterSpeaking);
-        messageWindow.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
+        //conversationController.setRemainingText(currentText.remove());
+        updateText();
+        CharacterSprite characterSpeaking = conversationController.sceneManager().getCharacterByName(speaker);
+        conversationController.setTextBoxShowing(true);
+        conversationController.setSpeaker(characterSpeaking);
+        conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
         currentSubcommand = null;
         done = false;
     }
-
+    /** Updates the text to be displayed to the next one in the currentText queue. */
+    public void updateText() {
+        String nextText = currentText.remove();
+        Matcher matcher = scriptVariablePattern.matcher(nextText);
+        while (matcher.find()) {
+            String language = matcher.group(1);
+            String variable = matcher.group(2);
+            ScriptManager manager = ConversationController.scriptManager(language);
+            String variableString = manager.objectToString(manager.getValue(variable));
+            nextText = nextText.replaceFirst(scriptVariablePattern.toString(), variableString);
+        }
+        conversationController.setRemainingText(nextText);
+    }
     /** Whether the text should be updated. False iff there is a current subcommand
      * that is being waited on.
      */
@@ -94,7 +110,7 @@ public class MessageCommand implements ConversationCommand {
         ConversationCommand command = assignments.get(commandName);
         if (command != null) {
             currentSubcommand = command;
-            currentSubcommand.execute(messageWindow);
+            currentSubcommand.execute(conversationController);
         }
     }
     /** Whether to wait before proceeding to the next command in the branch. */
@@ -103,7 +119,7 @@ public class MessageCommand implements ConversationCommand {
         if (waitForInput) {
             return !done;
         } else {
-            return currentText.size() != 0 || !messageWindow.doneSpeaking();
+            return currentText.size() != 0 || !conversationController.doneSpeaking();
         }
     }
     /** Checks whether the CompleteEvent C completes this command,
@@ -117,7 +133,7 @@ public class MessageCommand implements ConversationCommand {
             if (currentText.size() == 0) {
                 done = true;
             } else {
-                messageWindow.setRemainingText(currentText.remove());
+                updateText();
             }
         }
     }

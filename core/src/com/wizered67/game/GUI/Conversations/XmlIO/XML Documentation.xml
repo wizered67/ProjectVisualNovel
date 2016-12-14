@@ -74,6 +74,11 @@ DelayCommand with delay time TIME.
 <textspeed time="integer"/>
 TextSpeedCommand with waiting time TIME.
 
+<script language="string" (optional)isfile="boolean">
+    code or file
+</script>
+ExecuteScriptCommand that executes the code or contents of the file (if isfile) in LANGUAGE.
+
 
 
 

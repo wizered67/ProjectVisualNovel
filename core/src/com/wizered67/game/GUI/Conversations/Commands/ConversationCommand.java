@@ -1,18 +1,17 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 
 /**
  * Interface for all ConversationCommands which are executed in order
- * in MessageWindow.
+ * in ConversationController.
  * @author Adam Victor
  */
 public interface ConversationCommand {
-    /** Executes the command on the MESSAGE WINDOW. */
-    void execute(MessageWindow messageWindow);
+    /** Executes the command on the CONVERSATION CONTROLLER. */
+    void execute(ConversationController conversationController);
     /** Whether to wait before proceeding to the next command in the branch. */
     boolean waitToProceed();
     /** Checks whether the CompleteEvent C completes this command,

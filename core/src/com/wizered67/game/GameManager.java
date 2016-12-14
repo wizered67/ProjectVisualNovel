@@ -1,6 +1,5 @@
 package com.wizered67.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.Inputs.MyInputProcessor;
 import com.wizered67.game.Screens.GameScreen;
+import com.wizered67.game.Scripting.LuaExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +19,8 @@ public class GameManager {
 	private static MyInputProcessor inputProcessor;
 	public static void init(MainGame g){
 		game = g;
+		LuaExecutor lua = new LuaExecutor();
+		lua.init();
 	}
 	public static GameScreen getGameScreen(){
 		if (game.getScreen() instanceof GameScreen){

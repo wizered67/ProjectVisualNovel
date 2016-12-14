@@ -70,3 +70,4 @@ build/
 /core/src/com/wizered67/game/Editor.java
 /desktop/src/com/wizered67/game/desktop/old commands
 /core/src/com/wizered67/game/ScrollPaneTest.java
+/core/src/com/wizered67/game/Scripting/LuaExecutor.java
