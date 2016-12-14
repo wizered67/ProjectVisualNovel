@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="luaj-jse-3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.luaj/luaj-jse/3.0/fa029dd9be40830d3225e010057d6dcb76c9342d/luaj-jse-3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.luaj/luaj-jse/3.0/569de043453ebf9eb47fe597abdb1f65211506c/luaj-jse-3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

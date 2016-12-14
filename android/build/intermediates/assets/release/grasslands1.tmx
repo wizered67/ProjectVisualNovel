@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" nextobjectid="21">
+ <tileset firstgid="1" source="Grass.tsx"/>
+ <layer name="Tile Layer 1" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAdkKeh2YMN0NKvtDRbFIiZoVgYiJWBmI2G9qkCsQoUi1HBPCEgZoRiJSRxdH8R6ydc5lHbfbgAobgeaPchA1BcijCgxiMl5ikCsSAQM2ERg4kDAHivA5c=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" visible="0">
+  <object id="18" name="PlayerStart" x="545.333" y="94" width="32" height="33.3333">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

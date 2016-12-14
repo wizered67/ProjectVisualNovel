@@ -1,0 +1,88 @@
+<conversation xmlns="urn:Test.Namespace">
+    <branch name="default">
+        <changebranch newbranch="Main Branch"/>
+    </branch>
+    <branch name="Main Branch">
+        <addcharacter name="Narrator" animations="Edgeworth"/>
+        <setvisible name="Narrator" visible="false"/>
+        <setdirection name="Narrator" direction="-1"/>
+        <addcharacter name="Adam" animations="Edgeworth"/>
+        <setposition name="Adam" x="100.0" y="160.0"/>
+        <setanimation name="Adam" animation="Idle" wait="false"/>
+        <setvisible name="Adam" visible="true"/>
+        <message speaker="Adam" text="Yo bruh, this is a message that we're currently 'testing' here at the lab. Our top text scientists are attempting to determine if it properly scrolls. We are taking notes and keeping our observations in a top secret log!           " sound="talksoundmale"/>
+        <playmusic name="Music/crossexamination.mp3" loop="true"/>
+        <message speaker="Donald" text="Yep, that's right! I'll tell you folks, we have the best scrolling text boxes. The best!" sound="talksoundmale"/>
+        <playsound name="Sounds/intense.wav"/>
+        <message speaker="Christine" text="Wait... why is Donald Trump here? Adam wtf, really? Really?" sound="talksoundfemale"/>
+        <message speaker="Adam" text="I thought you invited him!" sound="talksoundmale"/>
+        <message speaker="Christine" text="......." sound="talksoundfemale"/>
+        <debug message="This is a test 1."/>
+        <message speaker="Adam" text="......." sound="talksoundmale"/>
+        <debug message="This is another test."/>
+        <debug message="And another."/>
+        <debug message="And yet another."/>
+        <message speaker="Adam" text="I blame the American voters." sound="talksoundmale"/>
+        <changebranch newbranch="Branch 2"/>
+    </branch>
+    <branch name="Branch 2">
+        <setposition name="Narrator" x="400.0" y="160.0"/>
+        <setanimation name="Narrator" animation="Idle" wait="false"/>
+        <setvisible name="Narrator" visible="true"/>
+        <message speaker="Narrator" text="So you're probably wondering what just happened. Why is there a narrator guy now? Well there's a simple explanation for that!" sound="talksoundmale"/>
+        <debug message="yoooo branch 2 whattup yer boiii"/>
+        <message speaker="Christine" text="We really weren't..." sound="talksoundfemale"/>
+        <message speaker="Narrator" text="It's because you've entered... BRANCH TWO!" sound="talksoundmale"/>
+        <choices>
+            <choice name="Ask to return">
+                <changebranch newbranch="Ask Branch"/>
+            </choice>
+            <choice name="Beg to return">
+                <changebranch newbranch="Beg Branch"/>
+            </choice>
+            <choice name="Let Christine handle it">
+                <changebranch newbranch="Christine Branch"/>
+            </choice>
+            <choice name="Accuse of murder">
+                <sequence>
+                    <playsound name="Sounds/intense.wav"/>
+                    <changebranch newbranch="Accuse Branch"/>
+                </sequence>
+            </choice>
+        </choices>
+    </branch>
+    <branch name="Ask Branch">
+        <message speaker="Adam" text="Can we just go back to the first one now please?" sound="talksoundmale"/>
+        <message speaker="Narrator" text="Fine! But I'll be back!" sound="talksoundmale"/>
+        <changebranch newbranch="Main Branch"/>
+    </branch>
+    <branch name="Accuse Branch">
+        <setanimation name="Adam" animation="Think" wait="true"/>
+        <message speaker="Adam" text="Finally, everything's fallen into place... the real murderer..." sound="talksoundmale"/>
+        <playsound name="Sounds/intense.wav"/>
+        <setanimation name="Adam" animation="Confront" wait="false"/>
+        <message speaker="Adam" text="WAS YOU!" sound="talksoundmale"/>
+        <setanimation name="Narrator" animation="Confront" wait="false"/>
+        <message speaker="Narrator" text="Wha... What! No way!" sound="talksoundmale"/>
+        <message speaker="Christine" text="What tipped you off Adam?" sound="talksoundfemale"/>
+        <message speaker="Adam" text="I started having suspicions as soon as Donald Trump appeared. As we both said earlier, neither of us invited him. So then how did he end up here? There's only one person with the power to do that." sound="talksoundmale"/>
+        <setanimation name="Adam" animation="Accuse" wait="false"/>
+        <playsound name="Sounds/intense.wav"/>
+        <message speaker="Adam" text="And that's you! The narrator!" sound="talksoundmale"/>
+        <message speaker="Narrator" text="Hahahahaha... Oh how right you are! I do possess power. More than you could possibly imagine! Now begone! I banish you to the main branch!" sound="talksoundmale"/>
+        <playsound name="Sounds/intense.wav"/>
+        <setanimation name="Narrator" animation="Accuse" wait="true"/>
+        <setanimation name="Adam" animation="Idle" wait="false"/>
+        <playmusic name="" loop="false"/>
+        <changebranch newbranch="Main Branch"/>
+    </branch>
+    <branch name="Christine Branch">
+        <message speaker="Christine" text="I don't know who you are but I'm leaving. And if you try to follow I'll call the cops! I swear, Donald Trump was better than this!" sound="talksoundfemale"/>
+        <changebranch newbranch="Main Branch"/>
+    </branch>
+    <branch name="Beg Branch">
+        <message speaker="Adam" text="Please for the love of god let us go back!" sound="talksoundmale"/>
+        <message speaker="Narrator" text="Wow... I guess I didn't realize you felt so strongly. Alright then." sound="talksoundmale"/>
+        <changebranch newbranch="Main Branch"/>
+    </branch>
+</conversation>

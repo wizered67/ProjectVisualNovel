@@ -1,0 +1,26 @@
+-injars 'C:\Users\Adam\Documents\GitHub\ProjectVisualNovel\android\build\intermediates\transforms\jarMerging\release\jars\1\1f\combined.jar'
+-outjars 'C:\Users\Adam\Documents\GitHub\ProjectVisualNovel\android\build\intermediates\multi-dex\release\componentClasses.jar'
+
+-libraryjars 'C:\Program Files (x86)\Android\android-sdk\build-tools\23.0.1\lib\shrinkedAndroid.jar'
+
+-forceprocessing
+-dontoptimize
+-dontobfuscate
+-dontusemixedcaseclassnames
+-dontpreverify
+-dontwarn
+-printconfiguration 'C:\Users\Adam\Documents\GitHub\ProjectVisualNovel\android\build\intermediates\multi-dex\release\components.flags'
+
+
+-keep class com.wizered67.game.AndroidLauncher {
+    <init>();
+}
+
+-keep public class * extends android.app.backup.BackupAgent {
+    <init>();
+}
+
+-keep public class * extends java.lang.annotation.Annotation {
+    <fields>;
+    <methods>;
+}
