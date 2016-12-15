@@ -1,36 +1,31 @@
 package com.wizered67.game.GUI.Conversations;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Represents a Scene with a set of characters that are updated
- * and drawn each frame. Alerts the MessageWindow when an Animation is
+ * and drawn each frame. Alerts the ConversationController when an Animation is
  * completed.
  * @author Adam Victor
  */
 public class SceneManager {
     /** List of all CharacterSprites in this scene. */
     private ArrayList<CharacterSprite> characterSprites;
-    /** Reference to the current MessageWindow so that it can be alerted of
+    /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed.
      */
-    private MessageWindow messageWindow;
+    private ConversationController conversationController;
     /** SpriteBatch used to draw Sprites for each CharacterSprite. */
     private SpriteBatch batch;
     /** Maps character names to their corresponding CharacterSprite. */
     private HashMap<String, CharacterSprite> allCharacters;
-    /** Creates a new SceneManager with MessageWindow MW and no CharacterSprites. */
-    public SceneManager(MessageWindow mw) {
-        messageWindow = mw;
+    /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
+    public SceneManager(ConversationController mw) {
+        conversationController = mw;
         characterSprites = new ArrayList<CharacterSprite>();
         batch = new SpriteBatch();
         allCharacters = new HashMap<String, CharacterSprite>();
@@ -77,11 +72,11 @@ public class SceneManager {
         return character;
     }
 
-    /** Alerts the MessageWindow that CharacterSprite CHARACTER SPRITE has finished
+    /** Alerts the ConversationController that CharacterSprite CHARACTER SPRITE has finished
      * its current animation.
      */
     public void finishedAnimation(CharacterSprite characterSprite) {
-        messageWindow.animationComplete(characterSprite.getAnimationName());
+        conversationController.animationComplete(characterSprite.getAnimationName());
         System.out.println("Animation finished for " + characterSprite);
     }
 }

@@ -1,12 +1,10 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GameManager;
 
 import java.io.IOException;
@@ -38,9 +36,9 @@ public class PlayMusicCommand implements ConversationCommand {
     public PlayMusicCommand(int shouldPause) { //pause/resume command, 1 for pause, 2 for resume
         pause = shouldPause;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
+    public void execute(ConversationController conversationController) {
         if (pause != 0) {
             if (pause == 1) {
                 GameManager.musicManager().pauseMusic();

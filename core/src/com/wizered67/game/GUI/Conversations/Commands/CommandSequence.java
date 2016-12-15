@@ -3,9 +3,8 @@ package com.wizered67.game.GUI.Conversations.Commands;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -45,11 +44,11 @@ public class CommandSequence implements ConversationCommand {
     public void addCommand(ConversationCommand command) {
         commands.add(command);
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
+    public void execute(ConversationController conversationController) {
         for (ConversationCommand c : commands) {
-            c.execute(messageWindow);
+            c.execute(conversationController);
         }
     }
     /** Whether to wait before proceeding to the next command in the branch. */

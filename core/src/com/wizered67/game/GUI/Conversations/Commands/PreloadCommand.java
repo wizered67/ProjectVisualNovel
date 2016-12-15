@@ -3,8 +3,7 @@ package com.wizered67.game.GUI.Conversations.Commands;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GameManager;
 
 /**
@@ -32,9 +31,9 @@ public class PreloadCommand implements ConversationCommand {
         this(f, t, true);
     }
 
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
+    public void execute(ConversationController conversationController) {
         boolean alreadyLoaded = GameManager.assetManager().isLoaded(file, type);
         if (load) {
             if (!alreadyLoaded) {

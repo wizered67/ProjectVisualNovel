@@ -1,13 +1,10 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GameManager;
 
 import java.io.IOException;
@@ -23,9 +20,9 @@ public class PlaySoundCommand implements ConversationCommand {
     public PlaySoundCommand(String s) {
         sound = s;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
+    public void execute(ConversationController conversationController) {
         if (GameManager.assetManager().isLoaded(sound)) {
             Sound s = GameManager.assetManager().get(sound, Sound.class);
             s.play();

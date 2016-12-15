@@ -35,6 +35,8 @@
                 <xs:element type="messageType" name="message" maxOccurs="unbounded"/>
                 <xs:element type="delayType" name="delay" maxOccurs="unbounded"/>
                 <xs:element type="textSpeedType" name="textspeed" maxOccurs="unbounded"/>
+                <xs:element type="scriptType" name="script" maxOccurs="unbounded"/>
+                <xs:element type="initType" name="init" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -132,6 +134,21 @@
 
     <xs:complexType name="textSpeedType">
         <xs:attribute type="xs:integer" name="time" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="languages">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Lua"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="scriptType" mixed="true">
+        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="initType" mixed="true">
+        <xs:attribute type="languages" name="language" use="required"/>
     </xs:complexType>
 
 </xs:schema>

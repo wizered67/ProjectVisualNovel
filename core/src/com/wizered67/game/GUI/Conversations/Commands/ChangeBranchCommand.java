@@ -1,12 +1,10 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
@@ -22,10 +20,10 @@ public class ChangeBranchCommand implements ConversationCommand {
     public ChangeBranchCommand(String branch) {
         newBranch = branch;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
-        messageWindow.setBranch(newBranch);
+    public void execute(ConversationController conversationController) {
+        conversationController.setBranch(newBranch);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override

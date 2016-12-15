@@ -11,7 +11,16 @@
         <setvisible name="Librarian" visible="false"/>
         <setdirection name="Librarian" direction="-1"/>
         <setname name="Librarian" displayname="???"/>
+
+        <init language="Lua">
+            work 0
+            test "yes"
+            test2 "no"
+            test3 "maybe"
+        </init>
+
         <changebranch newbranch="main branch"/>
+
     </branch>
 
     <branch name="main branch">
@@ -22,6 +31,7 @@
             <text>The body was found in the library... Now why would that be? @c{anim} Unless... </text>
         </message>
         <setvisible name="Librarian" visible="true"/>
+
         <message speaker="Librarian">
             <text>Excuse me, Detective, I heard you wanted to see me?</text>
         </message>
@@ -29,6 +39,7 @@
         <message speaker="Detective">
             <text>And you are...?</text>
         </message>
+
         <setname name="Librarian" displayname="Librarian"/>
         <message speaker="Librarian">
             <text>I'm the head librarian here. It's a pleasure to meet you.</text>
@@ -36,6 +47,7 @@
         <message speaker="Detective" wait="false">
             <text>Ah, good. I had a few questions for you. I guess I was mostly wondering...</text>
         </message>
+
         <changebranch newbranch="choices"/>
     </branch>
 
@@ -54,41 +66,60 @@
     </branch>
 
     <branch name="when">
+        <script language="Lua">
+            print(work)
+        </script>
+
         <message speaker="Detective">
             <text>Do you know when the murder took place?</text>
         </message>
+
         <message speaker="Librarian">
             <text>I wasn't there when it happened, but the security cameras
                 showed suspicious activity around 2:30 AM last night.
             </text>
         </message>
+
         <message speaker="Detective">
             <assign name="think">
                 <setanimation name="Detective" animation="Think" wait="true"/>
             </assign>
             <text>2:30 AM... @c{think} Shouldn't the library have been closed at that time?</text>
         </message>
+
         <setanimation name="Detective" animation="Idle"/>
         <message speaker="Librarian">
             <text>It was. We aren't sure how he got in here in the first place.</text>
             <text>Does that answer all of your questions?</text>
         </message>
+
         <message speaker="Detective" wait="false">
             <text>Didn't I also want to ask about...</text>
         </message>
+
         <changebranch newbranch="choices"/>
     </branch>
 
     <branch name="work">
+        <script language="Lua">
+            work = work + 1
+        </script>
         <message speaker="Detective">
             <text>How long have you been working here?</text>
         </message>
+
         <message speaker="Librarian">
             <text>For 5 years now. But how is that relevant?</text>
         </message>
+
+        <message speaker="Librarian">
+            <text>You asked @v{Lua_work} times. Also @v{Lua_test}, @v{Lua_test2}, @v{Lua_test3}. There, I hope you're happy!</text>
+        </message>
+
         <message speaker="Detective" wait="false">
             <text>Oh... I guess it's not. Maybe I better ask about something else instead...</text>
         </message>
+
         <changebranch newbranch="choices"/>
     </branch>
 
@@ -96,21 +127,25 @@
         <message speaker="Detective">
             <text>So did you know the victim personally?</text>
         </message>
+
         <message speaker="Librarian">
             <text>N...No. I've never seen him before. It's not like I hang out with chefs very often.</text>
         </message>
+
         <message speaker="Detective">
             <assign name="confront">
                 <setanimation name="Detective" animation="Confront"/>
             </assign>
             <text>Chefs? I don't recall mentioning that the victim was a chef. @c{confront} Just how did you know that?</text>
         </message>
+
         <message speaker="Librarian">
             <assign name="delay">
                 <delay time="1"/>
             </assign>
             <text>I... uh... @c{delay} saw his chef's hat.</text>
         </message>
+
         <message speaker="Detective">
             <text>(His story's getting phonier by the minute. Now I've just got to break through his lies once and for all!)</text>
         </message>

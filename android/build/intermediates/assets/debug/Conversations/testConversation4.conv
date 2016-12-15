@@ -1,0 +1,62 @@
+<conversation xmlns="urn:Test.Namespace">
+    <branch name="default">
+        <addcharacter name="Adam" animations="Edgeworth"/>
+        <addcharacter name="Nani" animations="Edgeworth" sound="talksoundfemale"/>
+        <setvisible name="Adam" visible="true"/>
+        <setposition name="Adam" x="100" y="160"/>
+        <setanimation name="Adam" animation="Idle"/>
+        <changebranch newbranch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+            <message speaker="Adam">
+                <assign name="h1">
+                    <setname name="Adam" displayname="ds"/>
+                </assign>
+                <assign name="s">
+                    <setposition name="Adam" x="0" y="0"/>
+                </assign>
+                <assign name="anim1">
+                    <setanimation name="Adam" animation="Think" wait="true"/>
+                </assign>
+                <assign name="anim2">
+                    <setanimation name="Adam" animation="Idle"/>
+                </assign>
+                <text>
+                    Hello! My name is Adam and I am a programmer. Hmmm... what else should
+                    I say... @c{anim1} Anyway, talk to you later!
+                </text>
+            </message>
+            <message speaker="Nani">
+                <text>Hello Adam! What do you want to eat?</text>
+            </message>
+
+        <choices>
+            <choice name="Bagels and Lox">
+                <changebranch newbranch="bagels"/>
+            </choice>
+            <choice name="Turkey">
+                <changebranch newbranch="turkey"/>
+            </choice>
+        </choices>
+    </branch>
+
+    <branch name="bagels">
+        <message speaker="Nani">
+            <text>Sounds delicious!</text>
+        </message>
+    </branch>
+
+    <branch name="turkey">
+        <message speaker="Nani">
+            <text>Let me check the kitchen...</text>
+        </message>
+        <delay time="3"/>
+        <textspeed time="1"/>
+        <message speaker="Nani">
+            <text>Papa is still making it for now. It smells great though!</text>
+        </message>
+    </branch>
+
+
+</conversation>

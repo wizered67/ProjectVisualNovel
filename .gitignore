@@ -70,12 +70,21 @@ build/
 /core/src/com/wizered67/game/Editor.java
 /desktop/src/com/wizered67/game/desktop/old commands
 /core/src/com/wizered67/game/ScrollPaneTest.java
+<<<<<<< HEAD
+=======
+/core/src/com/wizered67/game/Scripting/LuaExecutor.java
+/core/src/com/wizered67/game/Entities/
+/core/src/com/wizered67/game/Collisions/
+/core/src/com/wizered67/game/Enums/
+
+>>>>>>> scripting
 /android/assets/blur_pixel.glsl
 /android/assets/batman.png
 /android/assets/testmap.tmx
 /android/assets/maintileset.png
 /android/assets/ocean.png
 /android/assets/outline_pixel.glsl
+
 /android/assets/Sounds/
 /android/assets/Grass.pack
 /android/assets/grasslands1.tmx
@@ -89,9 +98,6 @@ build/
 /android/assets/Music/
 /android/assets/Grass.tsx
 /android/assets/Wheatley.pack
-/core/src/com/wizered67/game/Collisions/
-/core/src/com/wizered67/game/Entities/
-/core/src/com/wizered67/game/Enums/
 /core/src/com/wizered67/game/Screens/GameScreen.java
 /core/src/com/wizered67/game/EntityManager.java
 /core/src/com/wizered67/game/WorldManager.java
@@ -100,3 +106,7 @@ build/
 /html/
 /ios/
 /core/src/box2dLight/
+/android/assets/Conversations/testConversation4.conv
+/core/src/shaders/
+
+

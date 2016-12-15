@@ -3,9 +3,8 @@ package com.wizered67.game.GUI.Conversations.Commands;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
@@ -28,14 +27,14 @@ public class ShowChoicesCommand implements ConversationCommand {
         choicesCommands = commands;
         done = false;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
+    public void execute(ConversationController conversationController) {
         for (int i = 0; i < choicesText.length; i += 1) {
-            messageWindow.setChoice(i, choicesText[i]);
-            messageWindow.setChoiceCommand(i, choicesCommands[i]);
+            conversationController.setChoice(i, choicesText[i]);
+            conversationController.setChoiceCommand(i, choicesCommands[i]);
         }
-        messageWindow.setChoiceShowing(true);
+        conversationController.setChoiceShowing(true);
         done = false;
     }
     /** Whether to wait before proceeding to the next command in the branch. */

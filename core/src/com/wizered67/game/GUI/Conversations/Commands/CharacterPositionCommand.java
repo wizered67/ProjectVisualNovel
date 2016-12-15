@@ -5,8 +5,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
@@ -27,10 +26,10 @@ public class CharacterPositionCommand implements ConversationCommand {
         this.character = character;
         this.position = position;
     }
-    /** Executes the command on the MESSAGE WINDOW. */
+    /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
-    public void execute(MessageWindow messageWindow) {
-        CharacterSprite c = messageWindow.sceneManager().getCharacterByName(character);
+    public void execute(ConversationController conversationController) {
+        CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
         if (c == null) {
             return;
         }

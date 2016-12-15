@@ -17,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.wizered67.game.Constants;
-import com.wizered67.game.GUI.Conversations.MessageWindow;
-/** Contains GUI elements and the MessageWindow which the GUI elements are passed into.
+import com.wizered67.game.GUI.Conversations.ConversationController;
+/** Contains GUI elements and the ConversationController which the GUI elements are passed into.
  * Fixes GUI elements if screen is resized.
  * @author Adam Victor
  */
@@ -42,10 +42,10 @@ public class GUIManager {
     /** Constant denoting space between left side of the textbox and text. */
     private final static int LEFT_PADDING = 10;
     /** Message Window that updates the GUI elements as a Conversation proceeds. */
-    private static MessageWindow messageWindow;
+    private static ConversationController conversationController;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
-     * initializes MessageWindow with the elements it will update.
+     * initializes ConversationController with the elements it will update.
      */
     public GUIManager(Stage st){
 		stage = st;
@@ -101,7 +101,7 @@ public class GUIManager {
             tb.addListener(new ChangeListener() {
                 public void changed (ChangeEvent event, Actor actor) {
                     System.out.println("Clicked button " + actor.getUserObject());
-                    messageWindow.processChoice((Integer) actor.getUserObject());
+                    conversationController.processChoice((Integer) actor.getUserObject());
                     event.cancel();
                 }
             });
@@ -137,7 +137,7 @@ public class GUIManager {
         speakerLabel.setAlignment(Align.center);
         stage.addActor(speakerLabel);
 
-        messageWindow = new MessageWindow(textboxLabel, speakerLabel, choiceButtons);
+        conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
         //System.out.println(remainingTextNoTags);
         //remainingText = "this is a new message just so you know.";
@@ -167,11 +167,11 @@ public class GUIManager {
 	public static Stage getStage(){
 		return stage;
 	}
-    /** Called every frame. Updates the MessageWindow. DELTA TIME is the time
+    /** Called every frame. Updates the ConversationController. DELTA TIME is the time
      * elapsed since the last frame.
      */
 	public static void update(float deltaTime){
-        messageWindow.update(deltaTime);
+        conversationController.update(deltaTime);
 	}
     /** Resize all GUI elements when the screen is resized to dimensions
      * WIDTH by HEIGHT. Keeps GUI elements proportional to virtual size.
@@ -206,6 +206,6 @@ public class GUIManager {
     }
     /** Sets the visibility of the textbox and speaker label to SHOW. */
     public static void setTextboxShowing(boolean show) {
-        messageWindow.setTextBoxShowing(show);
+        conversationController.setTextBoxShowing(show);
     }
 }
