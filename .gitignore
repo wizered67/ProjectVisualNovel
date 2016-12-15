@@ -70,14 +70,12 @@ build/
 /core/src/com/wizered67/game/Editor.java
 /desktop/src/com/wizered67/game/desktop/old commands
 /core/src/com/wizered67/game/ScrollPaneTest.java
-<<<<<<< HEAD
-=======
+
 /core/src/com/wizered67/game/Scripting/LuaExecutor.java
 /core/src/com/wizered67/game/Entities/
 /core/src/com/wizered67/game/Collisions/
 /core/src/com/wizered67/game/Enums/
 
->>>>>>> scripting
 /android/assets/blur_pixel.glsl
 /android/assets/batman.png
 /android/assets/testmap.tmx
@@ -110,3 +108,4 @@ build/
 /core/src/shaders/
 
 
+/gradle/
