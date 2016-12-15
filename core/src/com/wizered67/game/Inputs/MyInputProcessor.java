@@ -1,7 +1,7 @@
 package com.wizered67.game.Inputs;
 
 import com.badlogic.gdx.InputProcessor;
-import com.wizered67.game.Entities.Entity;
+//import com.wizered67.game.Entities.Entity;
 
 import java.util.*;
 
@@ -11,7 +11,7 @@ public class MyInputProcessor implements InputProcessor {
     private Map<Integer,InputInfo> touches = new HashMap<Integer,InputInfo>();
     private Map<Integer,Integer> touchToAction = new HashMap<Integer,Integer>();
     private Map<Integer, InputInfo> keys = new HashMap<Integer, InputInfo>();
-	private ArrayList<Entity> controllableEntities = new ArrayList<Entity>();
+	//private ArrayList<Entity> controllableEntities = new ArrayList<Entity>();
     private Set<Controllable> registeredControllableObjects = new HashSet<Controllable>();
     private boolean screenTouched = false;
     public MyInputProcessor(){
@@ -26,10 +26,11 @@ public class MyInputProcessor implements InputProcessor {
             registeredControllableObjects.add(c);
         }
     }
-    
+    /*
     public void addControllableEntity(Entity e){
 		controllableEntities.add(e);
 	}
+	*/
     
     public void update(){
     	for (InputInfo input : keys.values()){
@@ -45,9 +46,11 @@ public class MyInputProcessor implements InputProcessor {
     }
 
 	private void setInput(int index, InputInfo result){
+		/*
 		for (Entity e : controllableEntities){
 			if (e != null && !e.getDestroyed()) {e.setInput(index, result); }
 		}
+		*/
 	}
 
     @Override
