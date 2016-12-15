@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.wizered67.game.Screens.GameScreen;
 import com.wizered67.game.Screens.LoadingScreen;
 import com.wizered67.game.Screens.MainGameScreen;
 
