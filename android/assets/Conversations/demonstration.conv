@@ -57,6 +57,7 @@
                 <changebranch newbranch="when"/>
             </choice>
             <choice name="How long have you been working for the library?">
+                <if language="Lua"> <![CDATA[return work < 2]]> </if>
                 <changebranch newbranch="work"/>
             </choice>
             <choice name="Did you know the victim?">
@@ -112,12 +113,20 @@
             <text>For 5 years now. But how is that relevant?</text>
         </message>
 
-        <message speaker="Librarian">
-            <text>You asked @v{Lua_work} times. Also @v{Lua_test}, @v{Lua_test2}, @v{Lua_test3}. There, I hope you're happy!</text>
+        <message speaker="Detective">
+            <text>Oh... I guess it's not.</text>
         </message>
 
+        <if language="Lua">
+            return work == 2
+            <message speaker="Librarian">
+                <text>I already answered your pointless question! Now stop bothering me!</text>
+            </message>
+            <debug message="answered twice"/>
+        </if>
+
         <message speaker="Detective" wait="false">
-            <text>Oh... I guess it's not. Maybe I better ask about something else instead...</text>
+            <text>Maybe I better ask about something else instead...</text>
         </message>
 
         <changebranch newbranch="choices"/>

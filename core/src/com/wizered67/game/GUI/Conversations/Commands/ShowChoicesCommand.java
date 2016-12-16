@@ -7,6 +7,7 @@ import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * A ConversationCommand that displays choices to the player and
@@ -17,22 +18,34 @@ public class ShowChoicesCommand implements ConversationCommand {
     /** Array of Strings containing text for choices. */
     private String[] choicesText;
     /** Array of ConversationCommands to be executed when the corresponding choice is selected. */
-    private ConversationCommand[] choicesCommands;
+    private List<ConversationCommand>[] choicesCommands;
+    /** Array of VariableConditionCommands. The ith choice is only added if conditions[i] is null or evaluates to true. */
+    private VariableConditionCommand[] conditions;
     /** Whether this ShowChoiceCommand is done displaying. Set to false initially until choice is made. */
     private boolean done;
+    /** Maximum number of choices that can be shown at once. */
+    private final int MAX_CHOICES = 4;
     /** Creates a new ShowChoiceCommand that shows the choices stored in TEXT
      * with corresponding COMMANDS when executed. */
-    public ShowChoicesCommand(String[] text, ConversationCommand[] commands) {
+    public ShowChoicesCommand(String[] text, List<ConversationCommand>[] commands, VariableConditionCommand[] cond) {
         choicesText = text;
         choicesCommands = commands;
+        conditions = cond;
         done = false;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
+        int numAdded = 0;
+        for (int i = 0; i < MAX_CHOICES; i += 1) {
+            conversationController.setChoice(i, "");
+        }
         for (int i = 0; i < choicesText.length; i += 1) {
-            conversationController.setChoice(i, choicesText[i]);
-            conversationController.setChoiceCommand(i, choicesCommands[i]);
+            if (conditions[i] == null || conditions[i].conditionMet()) {
+                conversationController.setChoice(numAdded, choicesText[i]);
+                conversationController.setChoiceCommand(numAdded, choicesCommands[i]);
+                numAdded += 1;
+            }
         }
         conversationController.setChoiceShowing(true);
         done = false;
@@ -58,7 +71,8 @@ public class ShowChoicesCommand implements ConversationCommand {
             for (int i = 0; i < choicesText.length; i += 1) {
                 xmlWriter.element("choice")
                         .attribute("name", choicesText[i]);
-                choicesCommands[i].writeXml(xmlWriter);
+                //Todo fix?
+                //choicesCommands[i].writeXml(xmlWriter);
                 xmlWriter.pop();
             }
             xmlWriter.pop();
@@ -70,14 +84,21 @@ public class ShowChoicesCommand implements ConversationCommand {
     public static ShowChoicesCommand makeCommand(XmlReader.Element element) {
         int numChoices = element.getChildCount();
         String[] textChoices = new String[numChoices];
-        ConversationCommand[] commandChoices = new ConversationCommand[numChoices];
+        List<ConversationCommand>[] commandChoices = new List<ConversationCommand>[numChoices];
+        VariableConditionCommand[] conditions = new VariableConditionCommand[numChoices];
         for (int i = 0; i < numChoices; i += 1) {
             XmlReader.Element c = element.getChild(i);
             textChoices[i] = c.getAttribute("name");
-            ConversationCommand command = ConversationLoader.getCommand(c.getChild(0));
-            commandChoices[i] = command;
+            for (int j = 0; j < c.getChildCount(); j += 1) {
+                ConversationCommand command = ConversationLoader.getCommand(c.getChild(j));
+                if (command instanceof VariableConditionCommand) {
+                    conditions[i] = (VariableConditionCommand) command;
+                } else {
+                    commandChoices[i] = command;
+                }
+            }
         }
-        return new ShowChoicesCommand(textChoices, commandChoices);
+        return new ShowChoicesCommand(textChoices, commandChoices, conditions);
     }
 
 

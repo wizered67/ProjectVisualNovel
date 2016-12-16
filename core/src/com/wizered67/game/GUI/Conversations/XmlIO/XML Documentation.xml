@@ -60,13 +60,15 @@ PlaySoundCommand that plays sound with name NAME.
 
 <choices>
     <choice name="string">
+        (optional)<if ...> script </if>
         <command/>
     </choice>
     <choice name="string">
-            <command/>
+        <command/>
     </choice>
 </choices>
-ShowChoicesCommand with text array of each choices NAME and command array of the commands.
+ShowChoicesCommand with text array of each choices NAME and command array of the commands. When a choice
+has an <if> inside of it, it's only added if the SCRIPT evaluates to a true value.
 
 <delay time="float"/>
 DelayCommand with delay time TIME.
@@ -86,6 +88,15 @@ ExecuteScriptCommand that executes the code or contents of the file (if isfile) 
 </init>
 VariableInitializeCommand that initializes the variables of language LANGUAGE to VALUEs
 if they have not yet been defined.
+
+<if language="language" (optional)isfile="boolean">
+    script
+    <command/>
+    <command/>
+    <command/>
+</if>
+VariableConditionCommand that executes COMMANDS if the SCRIPT results in a true value when executed.
+LANGUAGE is the scripting language being used and ISFILE determines whether a file should be loaded named SCRIPT.
 
 
 

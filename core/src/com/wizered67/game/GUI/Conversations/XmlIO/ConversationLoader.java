@@ -100,7 +100,9 @@ public class ConversationLoader {
         } else if (name.equals("script")) {
             command = ExecuteScriptCommand.makeCommand(root);
         } else if (name.equals("init")) {
-        command = VariableInitializeCommand.makeCommand(root);
+            command = VariableInitializeCommand.makeCommand(root);
+        } else if (name.equals("if")) {
+            command = VariableConditionCommand.makeCommand(root);
         }
         return command;
     }

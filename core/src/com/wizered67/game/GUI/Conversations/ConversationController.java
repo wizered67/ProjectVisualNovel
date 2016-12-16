@@ -12,10 +12,7 @@ import com.wizered67.game.Inputs.Controllable;
 import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Updates all of the GUI elements and the SceneManager by
@@ -49,9 +46,9 @@ public class ConversationController implements Controllable {
     /** Array containing ConversationCommands that would be executed when the
      * corresponding choice is made. */
     private ConversationCommand[] choiceCommands;
-    /** A Queue containing the ConversationCommands in the current branch, to be
+    /** A LinkedList (Queue) containing the ConversationCommands in the current branch, to be
      * executed in sequence. */
-    private Queue<ConversationCommand> currentBranch;
+    private LinkedList<ConversationCommand> currentBranch;
     /** The ConversationCommand currently being executed. */
     private ConversationCommand currentCommand;
     /** The current Conversation containing all possible branches. */
@@ -267,6 +264,13 @@ public class ConversationController implements Controllable {
             currentBranch = (LinkedList<ConversationCommand>) b;
         }
     }
+
+    /** Adds the ConversationCommands in COMMANDS to the
+     * front of the queue of commands to be executed for this branch.
+     */
+    public void insertCommands(List<ConversationCommand> commands) {
+        currentBranch.addAll(0, commands);
+    }
     /** Passes a CompleteEvent to the current command when an Animation is completed. */
     public void animationComplete(String name) {
         currentCommand.complete(new CompleteEvent(CompleteEvent.Type.ANIMATION_END, name));
@@ -310,7 +314,7 @@ public class ConversationController implements Controllable {
     }
     /** Sets choice number CHOICE to CHOICE NAME. */
     public void setChoice(int choice, String choiceName) {
-        choiceButtons[choice].setVisible(!choiceName.equals(""));
+        choiceButtons[choice].setVisible(!choiceName.isEmpty());
         choiceButtons[choice].setText(choiceName);
     }
     /** Sets choice number CHOICE to execute the ConversationCommand  COMMAND. */
