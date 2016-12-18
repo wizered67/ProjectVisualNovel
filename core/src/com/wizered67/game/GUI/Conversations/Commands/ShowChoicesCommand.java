@@ -7,6 +7,7 @@ import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,7 +85,8 @@ public class ShowChoicesCommand implements ConversationCommand {
     public static ShowChoicesCommand makeCommand(XmlReader.Element element) {
         int numChoices = element.getChildCount();
         String[] textChoices = new String[numChoices];
-        List<ConversationCommand>[] commandChoices = new List<ConversationCommand>[numChoices];
+        @SuppressWarnings("unchecked")
+        List<ConversationCommand>[] commandChoices = new List[numChoices];
         VariableConditionCommand[] conditions = new VariableConditionCommand[numChoices];
         for (int i = 0; i < numChoices; i += 1) {
             XmlReader.Element c = element.getChild(i);
@@ -94,7 +96,10 @@ public class ShowChoicesCommand implements ConversationCommand {
                 if (command instanceof VariableConditionCommand) {
                     conditions[i] = (VariableConditionCommand) command;
                 } else {
-                    commandChoices[i] = command;
+                    if (commandChoices[i] == null) {
+                        commandChoices[i] = new ArrayList<ConversationCommand>();
+                    }
+                    commandChoices[i].add(command);
                 }
             }
         }

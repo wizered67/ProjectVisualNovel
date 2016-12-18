@@ -43,9 +43,9 @@ public class ConversationController implements Controllable {
     /** Array containing TextButtons to be displayed when the player is offered a choice.
      * A reference to the one in GUIManager. */
     private TextButton[] choiceButtons;
-    /** Array containing ConversationCommands that would be executed when the
+    /** Array containing lists of ConversationCommands that would be executed when the
      * corresponding choice is made. */
-    private ConversationCommand[] choiceCommands;
+    private List<ConversationCommand>[] choiceCommands;
     /** A LinkedList (Queue) containing the ConversationCommands in the current branch, to be
      * executed in sequence. */
     private LinkedList<ConversationCommand> currentBranch;
@@ -77,7 +77,7 @@ public class ConversationController implements Controllable {
         textboxLabel = textbox;
         speakerLabel = speaker;
         choiceButtons = choices;
-        choiceCommands = new ConversationCommand[choiceButtons.length];
+        choiceCommands = new List[choiceButtons.length];
         sceneManager = new SceneManager(this);
         scriptManagers = new HashMap<String, ScriptManager>();
         scriptManagers.put("Lua", new LuaScriptManager());
@@ -317,21 +317,19 @@ public class ConversationController implements Controllable {
         choiceButtons[choice].setVisible(!choiceName.isEmpty());
         choiceButtons[choice].setText(choiceName);
     }
-    /** Sets choice number CHOICE to execute the ConversationCommand  COMMAND. */
-    public void setChoiceCommand(int choice, ConversationCommand command) {
-        choiceCommands[choice] = command;
+    /** Sets choice number CHOICE to execute the list of ConversationCommands COMMANDS. */
+    public void setChoiceCommand(int choice, List<ConversationCommand> commands) {
+        choiceCommands[choice] = commands;
     }
-    /** Executes the command corresponding to CHOICE and send a CompleteEvent to
-     * the current command. */
+    /** Adds to the front of the command queue the list of commands corresponding to CHOICE
+     * and send a CompleteEvent to the current command. */
     public void processChoice(int choice) {
         choiceShowing = false;
         for (TextButton b : choiceButtons) {
             b.setVisible(false);
         }
-        ConversationCommand command = choiceCommands[choice];
-        if (command != null) {
-            command.execute(this);
-        }
+        List<ConversationCommand> commands = choiceCommands[choice];
+        insertCommands(commands);
         currentCommand.complete(new CompleteEvent(CompleteEvent.Type.CHOICE));
     }
 

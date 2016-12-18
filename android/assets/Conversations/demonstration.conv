@@ -54,6 +54,8 @@
     <branch name="choices">
         <choices>
             <choice name="When did the murder take place?">
+                <debug message="test"/>
+                <setanimation name="Detective" animation="Think" wait="true"/>
                 <changebranch newbranch="when"/>
             </choice>
             <choice name="How long have you been working for the library?">

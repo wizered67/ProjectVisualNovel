@@ -47,9 +47,7 @@ public class CommandSequence implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        for (ConversationCommand c : commands) {
-            c.execute(conversationController);
-        }
+        conversationController.insertCommands(commands);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
