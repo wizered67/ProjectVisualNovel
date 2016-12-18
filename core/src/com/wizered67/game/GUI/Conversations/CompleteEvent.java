@@ -7,7 +7,9 @@ package com.wizered67.game.GUI.Conversations;
  * @author Adam Victor
  */
 public class CompleteEvent {
+    /** The data specific to this CompleteEvent, providing additional information. */
     public Object data;
+    /** The type of event that has occurred. */
     public Type type;
 
 

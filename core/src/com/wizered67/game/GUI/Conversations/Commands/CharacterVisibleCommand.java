@@ -7,23 +7,28 @@ import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
-
+//TODO CODE WAITTOPROCEED TO WAIT FOR FADING TO FINISH
 /**
  * A ConversationCommand that sets the visibility of a CharacterSprite.
  * @author Adam Victor
  */
 public class CharacterVisibleCommand implements ConversationCommand {
     /** The name of the CharacterSprite to modify the visibility of. */
-    String character;
+    private String character;
     /** Whether the CharacterSprite should be visible. */
-    boolean show;
-
+    private boolean show;
+    /** How long to fade in or out the CharacterSprite. */
+    private float fadeTime;
+    /** Whether to wait for the fade to complete before going on to the next command. */
+    private boolean wait;
     /** Creates a new CharacterVisibleCommand that sets the CharacterSprite
-     * NAME's visibility to VISIBLE when executed.
+     * NAME's visibility to VISIBLE when executed. Waits for completion iff W.
      */
-    public CharacterVisibleCommand(String name, boolean visible) {
+    public CharacterVisibleCommand(String name, boolean visible, float time, boolean w) {
         character = name;
         show = visible;
+        fadeTime = time;
+        wait = w;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
@@ -32,7 +37,13 @@ public class CharacterVisibleCommand implements ConversationCommand {
         if (c == null) {
             return;
         }
-        c.setVisible(show);
+        if (fadeTime == 0) {
+            c.setVisible(show);
+        } else {
+            float factor = show ? 1f : -1f;
+            float fadePerSecond = factor / fadeTime;
+            c.setFade(fadePerSecond);
+        }
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -60,7 +71,9 @@ public class CharacterVisibleCommand implements ConversationCommand {
     /** Static method to create a new command from XML Element ELEMENT. */
     public static CharacterVisibleCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("name");
-        boolean visible = element.getBoolean("visible", false);
-        return new CharacterVisibleCommand(name, visible);
+        boolean visible = element.getBooleanAttribute("visible", false);
+        float fade = element.getFloatAttribute("fade", 0f);
+        boolean wait = element.getBooleanAttribute("wait", true);
+        return new CharacterVisibleCommand(name, visible, fade, wait);
     }
 }

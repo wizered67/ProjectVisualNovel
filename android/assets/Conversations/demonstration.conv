@@ -1,14 +1,14 @@
 <conversation xmlns="urn:Test.Namespace">
     <branch name="default">
         <addcharacter name="Detective" animations="Edgeworth"/>
-        <setvisible name="Detective" visible="true"/>
+        <setvisible name="Detective" visible="true" fade="0.5" wait="false"/>
         <setposition name="Detective" x="10" y="160"/>
         <setanimation name="Detective" animation="Idle"/>
 
         <addcharacter name="Librarian" animations="Edgeworth"/>
         <setposition name="Librarian" x="120" y="160"/>
         <setanimation name="Librarian" animation="Idle"/>
-        <setvisible name="Librarian" visible="false"/>
+
         <setdirection name="Librarian" direction="-1"/>
         <setname name="Librarian" displayname="???"/>
 
@@ -30,7 +30,7 @@
             </assign>
             <text>The body was found in the library... Now why would that be? @c{anim} Unless... </text>
         </message>
-        <setvisible name="Librarian" visible="true"/>
+        <setvisible name="Librarian" visible="true" fade="1"/>
 
         <message speaker="Librarian">
             <text>Excuse me, Detective, I heard you wanted to see me?</text>
@@ -160,6 +160,8 @@
         <message speaker="Detective">
             <text>(His story's getting phonier by the minute. Now I've just got to break through his lies once and for all!)</text>
         </message>
+
+        <setvisible name="Librarian" visible="false" fade="1.5"/>
     </branch>
 
 </conversation>

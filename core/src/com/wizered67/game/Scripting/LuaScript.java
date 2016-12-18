@@ -19,6 +19,7 @@ public class LuaScript implements GameScript {
            loadedScript = manager.globals.load(script);
        }
     }
+    /** Executes the contents of this script and returns the result. */
     @Override
     public Object execute() {
         return loadedScript.call();

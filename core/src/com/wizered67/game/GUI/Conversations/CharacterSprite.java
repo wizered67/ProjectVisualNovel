@@ -16,22 +16,39 @@ import java.util.Map;
  * @author Adam Victor
  */
 public class CharacterSprite {
+    /** TextureRegion to be drawn for the current frame of animation. */
     private TextureRegion currentSprite;
+    /** Animation object containing all frames of animation. */
     private Animation currentAnimation;
+    /** The name of the current animation. Used to tell if the animation is being changed. */
     private String animationName;
+    /** A mapping of animation names to Animation objects so that animation can be set with just the name. */
     private Map<String, Animation> allAnimations;
+    /** Vector2 containing the position of the sprite to be drawn. */
     private final Vector2 position = new Vector2();
+    /** Whether the Animation should loop. */
     private boolean looping;
+    /** The stateTime used by Animation object to determine which frame should be displayed. */
     private float stateTime;
-    private boolean isVisible;
+    /** The SceneManager containing this sprite and all others. */
     private SceneManager manager;
+    /** Whether the animation being displayed has been finished. */
     private boolean wasFinished;
+    /** Whether the character this CharacterSprite represents is currently speaking. */
     private boolean isSpeaking;
+    /** The name to be displayed for the character. */
     private String knownName;
+    /** The sound to be used when the character is speaking. */
     private String speakingSound;
+    /** The Sprite object used to draw frames of animation. */
     private Sprite sprite;
+    /** The default speaking sound for all characters. */
     private static final String DEFAULT_SPEAKING_SOUND = "talksoundmale";
-    int scale;
+    /** How much the sprite drawn should be scaled. */
+    private int scale;
+    /** How much the alpha of the sprite being drawn should change per second. */
+    private float fadePerSecond;
+
     /** Creates a CharacterSprite with the no animations and default speaking sound. */
     public CharacterSprite(SceneManager m) {
         this(m, new HashMap<String, Animation>(), DEFAULT_SPEAKING_SOUND);
@@ -44,7 +61,6 @@ public class CharacterSprite {
     public CharacterSprite(SceneManager m, Map<String, Animation> animations, String sound) {
         allAnimations = animations;
         manager = m;
-        isVisible = true;
         looping = false;
         stateTime = 0;
         wasFinished = false;
@@ -56,6 +72,7 @@ public class CharacterSprite {
             speakingSound = DEFAULT_SPEAKING_SOUND;
         }
         sprite = new Sprite();
+        sprite.setAlpha(0);
         scale = 2;
         //sprite.setScale(2, 2);
     }
@@ -109,10 +126,20 @@ public class CharacterSprite {
 
     /** Updates the stateTime of the current Animation by DELTA STATE TIME and
      * updates the sprite to the Animation's current sprite. If the Animation is
-     * completed it alerts the SceneManager.
+     * completed it alerts the SceneManager. Also updates fading in or out the sprite.
      */
     public void updateAnimation(float deltaStateTime) {
-        if (isVisible && currentAnimation != null) {
+        if (fadePerSecond != 0) {
+            float alpha = sprite.getColor().a;
+            alpha += deltaStateTime * fadePerSecond;
+            sprite.setAlpha(alpha);
+            if (alpha <= 0) {
+                setVisible(false);
+            } else if (alpha >= 1) {
+                setVisible(true);
+            }
+        }
+        if (isVisible() && currentAnimation != null) {
             stateTime += deltaStateTime;
             currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
             sprite.setTexture(currentSprite.getTexture());
@@ -129,7 +156,7 @@ public class CharacterSprite {
     }
     /** Draws this CharacterSprite's current sprite to the BATCH. */
     public void draw(Batch batch) {
-        if (!isVisible || currentSprite == null) {
+        if (!isVisible() || currentSprite == null) {
             return;
         }
         sprite.draw(batch);
@@ -153,7 +180,12 @@ public class CharacterSprite {
     }
     /** Sets this CharacterSprite's visibility to VISIBLE. */
     public void setVisible(boolean visible) {
-        isVisible = visible;
+        if (visible) {
+            sprite.setAlpha(1);
+        } else {
+            sprite.setAlpha(0);
+        }
+        fadePerSecond = 0;
     }
     /** Sets speaking status to SPEAKING. */
     public void setSpeaking(boolean speaking) {
@@ -162,5 +194,13 @@ public class CharacterSprite {
     /** Sets the direction of the sprite to DIRECTION. */
     public void setDirection(int direction) {
         sprite.setScale(Math.abs(sprite.getScaleX()) * direction, sprite.getScaleY());
+    }
+    /** Sets how fast the sprite should fade in or out. FADEAMOUNT is alpha per second. */
+    public void setFade(float fadeAmount) {
+        fadePerSecond = fadeAmount;
+    }
+    /** Whether this sprite is visible (ie alpha is not 0). */
+    public boolean isVisible() {
+        return sprite.getColor().a > 0;
     }
 }

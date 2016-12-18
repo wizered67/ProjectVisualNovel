@@ -19,8 +19,10 @@ CharacterNameCommand that sets character NAME to have display name NEWNAME.
 <setposition name="string" position="string"/>
 CharacterPositionCommand that sets character NAME to have the position mapped to POSITION.
 
-<setvisible name="string" visible="boolean"/>
-CharacterVisibleCommand that sets character NAME to have visibility VISIBLE.
+<setvisible name="string" visible="boolean" (optional)fade="float" (optional)wait="boolean"/>
+CharacterVisibleCommand that sets character NAME to have visibility VISIBLE. If FADE is specified it denotes
+over how many seconds the character's sprite should fade in or out. If WAIT is specified, it denotes whether
+to wait for the end of the fade before going to the next command. True by default.
 
 <sequence>
     <command/>

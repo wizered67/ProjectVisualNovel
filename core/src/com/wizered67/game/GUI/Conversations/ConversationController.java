@@ -72,6 +72,7 @@ public class ConversationController implements Controllable {
 
     /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
+    @SuppressWarnings("unchecked")
     public ConversationController(Label textbox, Label speaker, TextButton[] choices) {
         conversationLoader = new ConversationLoader();
         textboxLabel = textbox;
