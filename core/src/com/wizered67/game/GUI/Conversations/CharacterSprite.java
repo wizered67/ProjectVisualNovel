@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashMap;
@@ -148,7 +147,7 @@ public class CharacterSprite {
             sprite.setOrigin(sprite.getWidth() * scale / 2, 0);
             //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
             if (currentAnimation.isAnimationFinished(stateTime) && !wasFinished) {
-                manager.finishedAnimation(this);
+                manager.complete(new CompleteEvent(CompleteEvent.Type.ANIMATION_END, animationName));
                 wasFinished = true;
             }
 
@@ -180,6 +179,9 @@ public class CharacterSprite {
     }
     /** Sets this CharacterSprite's visibility to VISIBLE. */
     public void setVisible(boolean visible) {
+        if (fadePerSecond != 0) {
+            manager.complete(new CompleteEvent(CompleteEvent.Type.FADE_END));
+        }
         if (visible) {
             sprite.setAlpha(1);
         } else {

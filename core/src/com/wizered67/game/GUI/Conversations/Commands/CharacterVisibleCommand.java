@@ -21,6 +21,8 @@ public class CharacterVisibleCommand implements ConversationCommand {
     private float fadeTime;
     /** Whether to wait for the fade to complete before going on to the next command. */
     private boolean wait;
+    /** Whether the command is completed and the next one can be executed. */
+    private boolean done;
     /** Creates a new CharacterVisibleCommand that sets the CharacterSprite
      * NAME's visibility to VISIBLE when executed. Waits for completion iff W.
      */
@@ -29,14 +31,17 @@ public class CharacterVisibleCommand implements ConversationCommand {
         show = visible;
         fadeTime = time;
         wait = w;
+        done = !wait;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
         CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
         if (c == null) {
+            done = true;
             return;
         }
+        done = !wait;
         if (fadeTime == 0) {
             c.setVisible(show);
         } else {
@@ -48,13 +53,15 @@ public class CharacterVisibleCommand implements ConversationCommand {
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
-        return false;
+        return !done;
     }
     /** Checks whether the CompleteEvent C completes this command,
      * and if so acts accordingly. */
     @Override
     public void complete(CompleteEvent c) {
-
+        if (c.type == CompleteEvent.Type.FADE_END) {
+            done = true;
+        }
     }
     /** Outputs XML to the XML WRITER for this command. */
     @Override

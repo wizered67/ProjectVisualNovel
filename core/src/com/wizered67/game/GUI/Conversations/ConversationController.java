@@ -272,9 +272,11 @@ public class ConversationController implements Controllable {
     public void insertCommands(List<ConversationCommand> commands) {
         currentBranch.addAll(0, commands);
     }
-    /** Passes a CompleteEvent to the current command when an Animation is completed. */
-    public void animationComplete(String name) {
-        currentCommand.complete(new CompleteEvent(CompleteEvent.Type.ANIMATION_END, name));
+    /** Passes the CompleteEvent EVENT to the current command. */
+    public void complete(CompleteEvent event) {
+        if (currentCommand != null) {
+            currentCommand.complete(event);
+        }
     }
     /** Returns whether there is no more text to display. */
     public boolean doneSpeaking() {

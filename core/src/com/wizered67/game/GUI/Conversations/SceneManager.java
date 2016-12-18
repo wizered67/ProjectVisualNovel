@@ -16,8 +16,7 @@ public class SceneManager {
     /** List of all CharacterSprites in this scene. */
     private ArrayList<CharacterSprite> characterSprites;
     /** Reference to the current ConversationController so that it can be alerted of
-     * Animations being completed.
-     */
+     * Animations being completed. */
     private ConversationController conversationController;
     /** SpriteBatch used to draw Sprites for each CharacterSprite. */
     private SpriteBatch batch;
@@ -71,12 +70,8 @@ public class SceneManager {
         }
         return character;
     }
-
-    /** Alerts the ConversationController that CharacterSprite CHARACTER SPRITE has finished
-     * its current animation.
-     */
-    public void finishedAnimation(CharacterSprite characterSprite) {
-        conversationController.animationComplete(characterSprite.getAnimationName());
-        System.out.println("Animation finished for " + characterSprite);
+    /** Passes the complete event to the ConversationController to be passed to the last executed command. */
+    public void complete(CompleteEvent event) {
+        conversationController.complete(event);
     }
 }

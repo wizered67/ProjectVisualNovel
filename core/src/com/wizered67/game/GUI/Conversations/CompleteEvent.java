@@ -23,6 +23,6 @@ public class CompleteEvent {
     }
 
     public enum Type {
-        INPUT, CHOICE, ANIMATION_END
+        INPUT, CHOICE, ANIMATION_END, FADE_END
     }
 }

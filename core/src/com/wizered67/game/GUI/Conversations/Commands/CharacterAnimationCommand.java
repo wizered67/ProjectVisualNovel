@@ -19,8 +19,7 @@ public class CharacterAnimationCommand implements ConversationCommand {
     /** The name of the animation to switch to. */
     private String animation;
     /** Whether to wait for the Animation to complete before moving to the next
-     * ConversationCommand.
-     */
+     * ConversationCommand. */
     private boolean wait;
     /** The name of the CharacterSprite that should have its animation changed. */
     private String character;
