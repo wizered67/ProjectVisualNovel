@@ -7,7 +7,6 @@ import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
-//TODO CODE WAITTOPROCEED TO WAIT FOR FADING TO FINISH
 /**
  * A ConversationCommand that sets the visibility of a CharacterSprite.
  * @author Adam Victor
