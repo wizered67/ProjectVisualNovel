@@ -106,4 +106,5 @@ build/
 /core/src/box2dLight/
 /android/assets/Conversations/testConversation4.conv
 /core/src/shaders/
+desktop/build
 
