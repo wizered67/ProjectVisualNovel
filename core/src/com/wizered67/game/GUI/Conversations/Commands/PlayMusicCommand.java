@@ -24,6 +24,12 @@ public class PlayMusicCommand implements ConversationCommand {
     /** Creates a PlayMusicCommand that plays the music named M and
      * sets its loop status to L when executed.
      */
+    /** No arguments constructor. */
+    public PlayMusicCommand() {
+        music = "";
+        loops = false;
+        pause = 0;
+    }
     public PlayMusicCommand(String m, boolean l) {
         music = m;
         loops = l;

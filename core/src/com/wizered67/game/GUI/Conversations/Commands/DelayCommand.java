@@ -16,6 +16,11 @@ public class DelayCommand implements ConversationCommand {
     private float delayTime;
     /** Whether this DelayCommand has finished executing and the delay is over. */
     private boolean done;
+    /** No arguments constructor. */
+    public DelayCommand() {
+        delayTime = 0;
+        done = true;
+    }
     /** Creates a new DelayCommand that delays for TIME seconds when executed. */
     public DelayCommand(float time) {
         delayTime = time;

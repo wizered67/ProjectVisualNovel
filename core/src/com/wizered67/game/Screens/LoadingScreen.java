@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.GameManager;
+import com.wizered67.game.Saving.SaveManager;
 
 import java.util.HashMap;
 
@@ -40,6 +41,7 @@ public class LoadingScreen implements Screen {
         if (assetManager.update()) {
             GameManager.loadAnimations();
             GameManager.game.setScreen(nextScreen);
+            SaveManager.load(Gdx.files.local("Saves/test2.bin"));
         }
         System.out.println(assetManager.getProgress());
     }

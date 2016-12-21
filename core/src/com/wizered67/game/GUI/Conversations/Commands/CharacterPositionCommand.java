@@ -19,6 +19,11 @@ public class CharacterPositionCommand implements ConversationCommand {
     /** A Vector2 containing the new position of the CharacterSprite. */
     private Vector2 position;
 
+    /** No arguments constructor. */
+    public CharacterPositionCommand() {
+        character = "";
+        position = null;
+    }
     /** Creates a new CharacterPositionCommand that moves the CharacterSprite
      * named CHARACTER to POSITION when executed.
      */

@@ -26,6 +26,14 @@ public class ShowChoicesCommand implements ConversationCommand {
     private boolean done;
     /** Maximum number of choices that can be shown at once. */
     private final int MAX_CHOICES = 4;
+
+    /** No arguments constructor. */
+    public ShowChoicesCommand() {
+        choicesText = null;
+        choicesCommands  = null;
+        conditions = null;
+        done = true;
+    }
     /** Creates a new ShowChoiceCommand that shows the choices stored in TEXT
      * with corresponding COMMANDS when executed. */
     public ShowChoicesCommand(String[] text, List<ConversationCommand>[] commands, VariableConditionCommand[] cond) {

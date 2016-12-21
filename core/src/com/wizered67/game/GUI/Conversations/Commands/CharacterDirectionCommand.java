@@ -15,10 +15,15 @@ import java.io.IOException;
  */
 public class CharacterDirectionCommand implements ConversationCommand {
     /** Name of the CharacterSprite to change the direction of. */
-    String character;
+    private String character;
     /** New direction for the CharacterSprite to face. */
-    int direction;
+    private int direction;
 
+    /** No arguments constructor. */
+    public CharacterDirectionCommand() {
+        character = "";
+        direction = 1;
+    }
     /** Creates a new CharacterDirectionCommand that changes the CharacterSprite
      * NAME's direction to DIR when executed.
      */

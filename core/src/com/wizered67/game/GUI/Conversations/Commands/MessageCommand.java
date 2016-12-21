@@ -45,8 +45,17 @@ public class MessageCommand implements ConversationCommand {
      * If false, automatically go to next command once all text is shown. Assumed to
      * be true if not specified in conversation file. */
     private boolean waitForInput;
-    private Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
+    /** Regex pattern used to match variables in messages. */
+    private transient Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
 
+    /** No arguments constructor. */
+    public MessageCommand() {
+        speaker = "";
+        done = true;
+        assignments = null;
+        storedText = null;
+        waitForInput = false;
+    }
     /** Creates a new MessageCommand with speaker named CHARACTER. If WAIT,
      * does not allow going on to the next command without input. Otherwise,
      * automatically goes to next command once all text is shown.

@@ -15,6 +15,10 @@ import java.io.IOException;
 public class ChangeBranchCommand implements ConversationCommand {
     /** The name of the new branch to switch to. */
     private String newBranch;
+    /** No arguments constructor. */
+    public ChangeBranchCommand() {
+        newBranch = "";
+    }
     /** Creates a new ChangeBranchCommand with Conversation C that
      * changes the branch to BRANCH when executed. */
     public ChangeBranchCommand(String branch) {

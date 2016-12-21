@@ -14,6 +14,10 @@ import java.io.IOException;
 public class DebugCommand implements ConversationCommand {
     /** The debug message to show. */
     private String message;
+    /** No arguments constructor. */
+    public DebugCommand() {
+        message = "";
+    }
     /** Creates a new DebugCommand that prints out M when executed. */
     public DebugCommand(String m) {
         message = m;

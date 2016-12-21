@@ -16,6 +16,11 @@ import java.io.IOException;
 public class PlaySoundCommand implements ConversationCommand {
     /** Name of the sound to play. */
     private String sound;
+
+    /** No arguments constructor. */
+    public PlaySoundCommand() {
+        sound = "";
+    }
     /** Creates a new PlaySoundCommand that plays the sound S when executed. */
     public PlaySoundCommand(String s) {
         sound = s;

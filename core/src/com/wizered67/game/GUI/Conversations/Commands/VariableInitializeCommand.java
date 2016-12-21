@@ -19,32 +19,49 @@ import java.util.regex.Pattern;
  * @author Adam Victor
  */
 public class VariableInitializeCommand implements ConversationCommand {
-    static Pattern initPattern = Pattern.compile("(\\S+) (\\S+)");
+    static transient Pattern initPattern = Pattern.compile("(\\S+) (\\S+)");
     /** Array of scripts to be executed that initializes the variables to the specified value. */
-    private GameScript[] scripts;
+    private transient GameScript[] scripts;
     /** ScriptManager used for specified language. Used to check if variable has been initialized. */
-    private ScriptManager scriptManager;
-    /** Names of the variables that will be initialized if undefined. */
-    private String[] variables;
-    /** Creates a GameScript of language LANGUAGE that initializes variable VAR
-     * to VALUE if it is undefined. */
-    public VariableInitializeCommand(List<String> vars, List<String> values, String language) {
-        scriptManager = ConversationController.scriptManager(language);
-        scripts = new GameScript[vars.size()];
-        variables = new String[vars.size()];
-        for (int i = 0; i < vars.size(); i += 1) {
-            scripts[i] = scriptManager.createSetScript(vars.get(i), values.get(i));
-            variables[i] = vars.get(i);
-        }
+    private transient ScriptManager scriptManager;
+    /** Lust of names of the variables that will be initialized if undefined. */
+    private List<String> variables;
+    /** List of values for each corresponding variable to be assigned to. */
+    private List<String> values;
+    /** Language used for all scripts. */
+    private String language;
 
+    /** No arguments constructor. */
+    public VariableInitializeCommand() {
+        language = "";
+        variables = null;
+        values = null;
     }
+    /** Creates a GameScript of language LANG that initializes variable VAR
+     * to VALS if it is undefined. */
+    public VariableInitializeCommand(List<String> vars, List<String> vals, String lang) {
+        language = lang;
+        variables = vars;
+        values = vals;
+        createScripts();
+    }
+
+    /** Create the GameScripts to be executed. */
+    public void createScripts() {
+        scriptManager = ConversationController.scriptManager(language);
+        scripts = new GameScript[variables.size()];
+        for (int i = 0; i < variables.size(); i += 1) {
+            scripts[i] = scriptManager.createSetScript(variables.get(i), values.get(i));
+        }
+    }
+
     /**
      * Executes the command on the CONVERSATION CONTROLLER.
      */
     @Override
     public void execute(ConversationController conversationController) {
-        for (int i = 0; i < variables.length; i += 1) {
-            if (!scriptManager.isDefined(variables[i])) {
+        for (int i = 0; i < variables.size(); i += 1) {
+            if (!scriptManager.isDefined(variables.get(i))) {
                 scripts[i].execute();
             }
         }

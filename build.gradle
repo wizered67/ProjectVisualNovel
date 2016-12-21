@@ -107,6 +107,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
         compile "org.luaj:luaj-jse:3.0"
+        compile 'com.esotericsoftware:kryo:4.0.0'
     }
 }
 

@@ -14,6 +14,10 @@ public class TextSpeedCommand implements ConversationCommand {
     /** The number of frames that will be waited before a text update. */
     private int textSpeed;
 
+    /** No arguments constructor. */
+    public TextSpeedCommand() {
+        textSpeed = 0;
+    }
     /** Creates a new TextSpeedCommand that sets the number of frames to wait before a text update
      * to TIME when executed.
      */

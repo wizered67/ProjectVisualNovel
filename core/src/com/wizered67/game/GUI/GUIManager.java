@@ -208,4 +208,8 @@ public class GUIManager {
     public static void setTextboxShowing(boolean show) {
         conversationController.setTextBoxShowing(show);
     }
+    /** Returns the ConversationController. */
+    public static ConversationController conversationController() {
+        return conversationController;
+    }
 }

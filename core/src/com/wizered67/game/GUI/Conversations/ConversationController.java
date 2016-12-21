@@ -1,5 +1,7 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -9,6 +11,8 @@ import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationWriter;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
+import com.wizered67.game.Saving.SaveData;
+import com.wizered67.game.Saving.SaveManager;
 import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
 
@@ -53,6 +57,8 @@ public class ConversationController implements Controllable {
     private ConversationCommand currentCommand;
     /** The current Conversation containing all possible branches. */
     private Conversation currentConversation;
+    /** Filename of current conversation. */
+    private String conversationName;
     /** Whether the speaking sound should be played this frame. */
     private boolean playSoundNow = true;
     /** Name of the sound used for the current speaker. */
@@ -82,7 +88,7 @@ public class ConversationController implements Controllable {
         sceneManager = new SceneManager(this);
         scriptManagers = new HashMap<String, ScriptManager>();
         scriptManagers.put("Lua", new LuaScriptManager());
-        currentConversation = conversationLoader.loadConversation("demonstration.conv");
+        loadConversation("demonstration.conv");
         setBranch("default");
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
@@ -96,12 +102,30 @@ public class ConversationController implements Controllable {
     public static ScriptManager scriptManager(String language) {
         return scriptManagers.get(language);
     }
+    /** Reloads the ConversationController from the SaveData. */
+    public void reload(SaveData data) {
+        loadConversation(data.conversation);
+        currentBranch = data.branch;
+        sceneManager = data.sceneManager;
+    }
+    /** Saves necessary data into SaveData to be loaded later. */
+    public void save(SaveData data) {
+        data.branch = currentBranch;
+        data.conversation = conversationName;
+    }
+    public void loadConversation(String fileName) {
+        currentConversation = conversationLoader.loadConversation(fileName);
+        conversationName = fileName;
+    }
     /** Called every frame and updates the GUI elements by executing commands.
      * If waitToProceed is false, it continues to go onto the next command. Otherwise
      * it waits for the current one to be completed. Also calls the SceneManager's update method.
      * DELTA TIME is the time elapsed since the previous frame.
      */
     public void update(float deltaTime) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            SaveManager.save(Gdx.files.local("Saves/test2.bin"));
+        }
         if (GameManager.assetManager().getQueuedAssets() != 0) {
             GameManager.assetManager().update();
             System.out.println(GameManager.assetManager().getProgress());

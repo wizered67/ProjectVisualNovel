@@ -1,7 +1,0 @@
--keep class com.wizered67.game.AndroidLauncher { <init>(); }
--keep public class * extends android.app.backup.BackupAgent {
-    <init>();
-}
--keep public class * extends java.lang.annotation.Annotation {
-    *;
-}

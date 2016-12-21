@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.wizered67.game.GameManager;
+import com.wizered67.game.Saving.SaveData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,13 +18,15 @@ import java.util.Map;
  */
 public class CharacterSprite {
     /** TextureRegion to be drawn for the current frame of animation. */
-    private TextureRegion currentSprite;
+    private transient TextureRegion currentSprite;
     /** Animation object containing all frames of animation. */
-    private Animation currentAnimation;
+    private transient Animation currentAnimation;
     /** The name of the current animation. Used to tell if the animation is being changed. */
     private String animationName;
+    /** The name of the set of all animations. */
+    private String allAnimationsName;
     /** A mapping of animation names to Animation objects so that animation can be set with just the name. */
-    private Map<String, Animation> allAnimations;
+    private transient Map<String, Animation> allAnimations;
     /** Vector2 containing the position of the sprite to be drawn. */
     private final Vector2 position = new Vector2();
     /** Whether the Animation should loop. */
@@ -30,7 +34,7 @@ public class CharacterSprite {
     /** The stateTime used by Animation object to determine which frame should be displayed. */
     private float stateTime;
     /** The SceneManager containing this sprite and all others. */
-    private SceneManager manager;
+    private transient SceneManager manager;
     /** Whether the animation being displayed has been finished. */
     private boolean wasFinished;
     /** Whether the character this CharacterSprite represents is currently speaking. */
@@ -40,7 +44,7 @@ public class CharacterSprite {
     /** The sound to be used when the character is speaking. */
     private String speakingSound;
     /** The Sprite object used to draw frames of animation. */
-    private Sprite sprite;
+    private transient Sprite sprite;
     /** The default speaking sound for all characters. */
     private static final String DEFAULT_SPEAKING_SOUND = "talksoundmale";
     /** How much the sprite drawn should be scaled. */
@@ -48,17 +52,26 @@ public class CharacterSprite {
     /** How much the alpha of the sprite being drawn should change per second. */
     private float fadePerSecond;
 
+    /** No argument constructor */
+    public CharacterSprite() {
+        sprite = new Sprite();
+    }
     /** Creates a CharacterSprite with the no animations and default speaking sound. */
     public CharacterSprite(SceneManager m) {
-        this(m, new HashMap<String, Animation>(), DEFAULT_SPEAKING_SOUND);
+        this(m, "", DEFAULT_SPEAKING_SOUND);
     }
     /** Creates a CharacterSprite with animations ANIMATIONS. */
-    public CharacterSprite(SceneManager m, Map<String, Animation> animations) {
+    public CharacterSprite(SceneManager m, String animations) {
         this(m, animations, DEFAULT_SPEAKING_SOUND);
     }
     /** Creates a CharacterSprite with animations ANIMATIONS and speaking sound SOUND. */
-    public CharacterSprite(SceneManager m, Map<String, Animation> animations, String sound) {
-        allAnimations = animations;
+    public CharacterSprite(SceneManager m, String animations, String sound) {
+        if (animations == null || animations.isEmpty()) {
+            allAnimations = new HashMap<String, Animation>();
+        } else {
+            allAnimations = GameManager.loadedAnimations().get(animations);
+        }
+        allAnimationsName = animations;
         manager = m;
         looping = false;
         stateTime = 0;
@@ -74,6 +87,13 @@ public class CharacterSprite {
         sprite.setAlpha(0);
         scale = 2;
         //sprite.setScale(2, 2);
+    }
+    /** Reloads CharacterSprite from DATA. */
+    public void reload(SaveData data) {
+        allAnimations = GameManager.loadedAnimations().get(allAnimationsName);
+        currentAnimation = allAnimations.get(animationName);
+        currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
+        manager = data.sceneManager;
     }
     /** Returns the name of this CharacterSprite's speaking sound. */
     public String getSpeakingSound() {

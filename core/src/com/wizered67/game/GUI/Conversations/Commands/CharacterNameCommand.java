@@ -18,6 +18,12 @@ public class CharacterNameCommand implements ConversationCommand {
     /** The new display name for the CharacterSprite. */
     private String newName;
 
+    /** No arguments constructor. */
+    public CharacterNameCommand() {
+        character = "";
+        newName = "";
+    }
+
     /** Creates a new CharacterNameCommand that changes the CharacterSprite named WHO to have
      * display name NAME when executed.
      */

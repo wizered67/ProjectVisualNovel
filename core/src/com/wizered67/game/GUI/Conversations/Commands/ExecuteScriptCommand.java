@@ -16,13 +16,33 @@ import com.wizered67.game.Scripting.ScriptManager;
  */
 public class ExecuteScriptCommand implements ConversationCommand {
     /** GameScript object representing the code to be executed. */
-    private GameScript gameScript;
+    private transient GameScript gameScript;
+    /** Script to be executed - either the contents or name of the file. */
+    private String script;
+    /** Whether the script is a file. */
+    private boolean isFile;
+    /** The scripting language the script is in. */
+    private String language;
 
+    /** No arguments constructor. */
+    public ExecuteScriptCommand() {
+        gameScript = null;
+        script = "";
+        isFile = false;
+        language = "";
+    }
     /** Loads gameScript by calling the load method of the ScriptManager for
-     * scripting language LANGUAGE. If ISFILE, it loads the script contained in
+     * scripting language LANG. If FILE, it loads the script contained in
      * the file named SCRIPT. Otherwise it loads the lines of code in SCRIPT.
      */
-    public ExecuteScriptCommand(String script, boolean isFile, String language) {
+    public ExecuteScriptCommand(String script, boolean file, String lang) {
+        this.script = script;
+        isFile = file;
+        language = lang;
+        loadScript();
+    }
+    /** Load the script to be executed. */
+    public void loadScript() {
         gameScript = ConversationController.scriptManager(language).load(script, isFile);
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */

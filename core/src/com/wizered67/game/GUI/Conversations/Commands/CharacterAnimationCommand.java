@@ -24,6 +24,14 @@ public class CharacterAnimationCommand implements ConversationCommand {
     /** The name of the CharacterSprite that should have its animation changed. */
     private String character;
 
+    /** No arguments constructor. */
+    public CharacterAnimationCommand() {
+        wait = false;
+        done = true;
+        animation = "";
+        character = "";
+    }
+
     /** Creates a new CharacterAnimationCommand that changes CharacterSprite NAME's
      * animation to ANIM when executed. Waits to complete before going to the next ConversationCommand
      * iff W.

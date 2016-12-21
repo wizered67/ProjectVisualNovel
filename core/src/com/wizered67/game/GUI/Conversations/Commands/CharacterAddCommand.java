@@ -13,12 +13,18 @@ import java.io.IOException;
  */
 public class CharacterAddCommand implements ConversationCommand {
     /** The name of the character to add. */
-    String character;
+    private String character;
     /** The name of the set of animations to use. */
-    String animations;
+    private String animations;
     /** The name of the speaking sound to use. */
-    String speakingSound;
+    private String speakingSound;
 
+    /** No arguments constructor. */
+    public CharacterAddCommand() {
+        character = "";
+        animations = "";
+        speakingSound = "";
+    }
     /** Creates a new CharacterAddCommand that adds a character with name NAME
      * and the default animations and speaking sound.
      */

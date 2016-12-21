@@ -2,14 +2,15 @@ package com.wizered67.game.GUI.Conversations;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.wizered67.game.GameManager;
+import com.wizered67.game.Saving.SaveData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Represents a Scene with a set of characters that are updated
- * and drawn each frame. Alerts the ConversationController when an Animation is
- * completed.
+ * and drawn each frame. Alerts the ConversationController when
+ * an Animation is completed.
  * @author Adam Victor
  */
 public class SceneManager {
@@ -17,11 +18,19 @@ public class SceneManager {
     private ArrayList<CharacterSprite> characterSprites;
     /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed. */
-    private ConversationController conversationController;
+    private transient ConversationController conversationController;
     /** SpriteBatch used to draw Sprites for each CharacterSprite. */
-    private SpriteBatch batch;
+    private transient SpriteBatch batch;
     /** Maps character names to their corresponding CharacterSprite. */
     private HashMap<String, CharacterSprite> allCharacters;
+
+    /** No argument constructor. */
+    public SceneManager() {
+        conversationController = null;
+        characterSprites = null;
+        batch = new SpriteBatch();
+        allCharacters = null;
+    }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
         conversationController = mw;
@@ -53,7 +62,7 @@ public class SceneManager {
      */
     public void addCharacter(String name, String animations, String speakingSound) {
         if (!allCharacters.containsKey(name)) {
-            CharacterSprite newCharacter = new CharacterSprite(this, GameManager.loadedAnimations().get(animations), speakingSound);
+            CharacterSprite newCharacter = new CharacterSprite(this, animations, speakingSound);
             newCharacter.setKnownName(name);
             allCharacters.put(name, newCharacter);
             characterSprites.add(newCharacter);
@@ -73,5 +82,15 @@ public class SceneManager {
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */
     public void complete(CompleteEvent event) {
         conversationController.complete(event);
+    }
+    /** Saves data to SaveData to be loaded later. */
+    public void save(SaveData data) {
+        data.sceneManager = this;
+    }
+    /** Reloads data from SaveData. */
+    public void reload(SaveData data) {
+        for (CharacterSprite characterSprite : allCharacters.values()) {
+            characterSprite.reload(data);
+        }
     }
 }

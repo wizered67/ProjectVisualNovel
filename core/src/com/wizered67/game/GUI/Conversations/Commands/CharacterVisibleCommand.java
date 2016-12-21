@@ -22,6 +22,14 @@ public class CharacterVisibleCommand implements ConversationCommand {
     private boolean wait;
     /** Whether the command is completed and the next one can be executed. */
     private boolean done;
+    /** No arguments constructor. */
+    public CharacterVisibleCommand() {
+        character = "";
+        show = true;
+        fadeTime = 0;
+        wait = false;
+        done = true;
+    }
     /** Creates a new CharacterVisibleCommand that sets the CharacterSprite
      * NAME's visibility to VISIBLE when executed. Waits for completion iff W.
      */

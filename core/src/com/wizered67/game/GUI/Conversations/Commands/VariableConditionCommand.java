@@ -19,17 +19,35 @@ import java.util.List;
  */
 public class VariableConditionCommand implements ConversationCommand {
     /** A script that returns whether a condition has been met when run. */
-    private GameScript condition;
+    private transient GameScript condition;
     /** The ScriptManager used to convert script result to a boolean. */
-    private ScriptManager scriptManager;
+    private transient ScriptManager scriptManager;
     /** The commands to be executed if the condition is met. */
     private List<ConversationCommand> commands;
+    /** Script to be executed - either the contents or name of the file. */
+    private String script;
+    /** Whether the script is a file. */
+    private boolean isFile;
+    /** The scipting language the script is in. */
+    private String language;
 
-    /** Sets the scriptManager to the one used for LANGUAGE and then loads the CONDITION SCRIPT.
-     * Iff ISFILE, it load vthe file named CONDITION SCRIPT. Also sets the commands to be
+    /** No arguments constructor. */
+    public VariableConditionCommand() {
+        scriptManager = null;
+        condition = null;
+        commands = null;
+        script = "";
+        isFile = false;
+        language = "";
+    }
+    /** Sets the scriptManager to the one used for LANG and then loads the CONDITION SCRIPT.
+     * Iff FILE, it load the file named CONDITION SCRIPT. Also sets the commands to be
      * executed to RESULT.
      */
-    public VariableConditionCommand(String conditionScript, boolean isFile, String language, List<ConversationCommand> result) {
+    public VariableConditionCommand(String conditionScript, boolean file, String lang, List<ConversationCommand> result) {
+        script = conditionScript;
+        isFile = file;
+        language = lang;
         scriptManager = ConversationController.scriptManager(language);
         condition = scriptManager.load(conditionScript, isFile);
         commands = result;
