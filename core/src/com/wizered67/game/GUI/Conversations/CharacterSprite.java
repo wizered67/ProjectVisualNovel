@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -34,7 +35,7 @@ public class CharacterSprite {
     /** The stateTime used by Animation object to determine which frame should be displayed. */
     private float stateTime;
     /** The SceneManager containing this sprite and all others. */
-    private transient SceneManager manager;
+    private SceneManager manager;
     /** Whether the animation being displayed has been finished. */
     private boolean wasFinished;
     /** Whether the character this CharacterSprite represents is currently speaking. */
@@ -51,6 +52,8 @@ public class CharacterSprite {
     private int scale;
     /** How much the alpha of the sprite being drawn should change per second. */
     private float fadePerSecond;
+    /** Current Color of the sprite. Used to save data. */
+    private Color color;
 
     /** No argument constructor */
     public CharacterSprite() {
@@ -88,8 +91,15 @@ public class CharacterSprite {
         scale = 2;
         //sprite.setScale(2, 2);
     }
+    /** Stores variables to save important information. */
+    public void save() {
+        if (sprite != null) {
+            color = sprite.getColor();
+        }
+    }
     /** Reloads CharacterSprite from DATA. */
     public void reload(SaveData data) {
+        sprite.setColor(color);
         allAnimations = GameManager.loadedAnimations().get(allAnimationsName);
         currentAnimation = allAnimations.get(animationName);
         currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
@@ -224,5 +234,12 @@ public class CharacterSprite {
     /** Whether this sprite is visible (ie alpha is not 0). */
     public boolean isVisible() {
         return sprite.getColor().a > 0;
+    }
+    /** Returns the Color of the sprite, including alpha. */
+    public Color getColor() {
+        if (sprite == null) {
+            return null;
+        }
+        return sprite.getColor();
     }
 }

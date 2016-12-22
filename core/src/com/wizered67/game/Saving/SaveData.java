@@ -1,6 +1,7 @@
 package com.wizered67.game.Saving;
 
 import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.SceneManager;
 import com.wizered67.game.MusicManager;
 
@@ -11,7 +12,8 @@ import java.util.LinkedList;
  */
 public class SaveData {
     public MusicManager musicManager;
-    public String conversation;
-    public LinkedList<ConversationCommand> branch;
-    public SceneManager sceneManager;
+    //public String conversation;
+    //public LinkedList<ConversationCommand> branch;
+    public transient SceneManager sceneManager;
+    public ConversationController conversationController;
 }

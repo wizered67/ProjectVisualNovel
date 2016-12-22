@@ -41,6 +41,7 @@ public class LoadingScreen implements Screen {
         if (assetManager.update()) {
             GameManager.loadAnimations();
             GameManager.game.setScreen(nextScreen);
+            SaveManager.init();
             SaveManager.load(Gdx.files.local("Saves/test2.bin"));
         }
         System.out.println(assetManager.getProgress());

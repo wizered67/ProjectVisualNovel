@@ -18,7 +18,7 @@ public class SceneManager {
     private ArrayList<CharacterSprite> characterSprites;
     /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed. */
-    private transient ConversationController conversationController;
+    private ConversationController conversationController;
     /** SpriteBatch used to draw Sprites for each CharacterSprite. */
     private transient SpriteBatch batch;
     /** Maps character names to their corresponding CharacterSprite. */
@@ -88,9 +88,11 @@ public class SceneManager {
         data.sceneManager = this;
     }
     /** Reloads data from SaveData. */
-    public void reload(SaveData data) {
+    public void reload() {//SaveData data) { //todo fix
+        /*
         for (CharacterSprite characterSprite : allCharacters.values()) {
             characterSprite.reload(data);
         }
+        */
     }
 }

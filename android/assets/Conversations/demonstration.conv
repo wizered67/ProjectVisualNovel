@@ -32,6 +32,8 @@
         </message>
         <setvisible name="Librarian" visible="true" fade="1"/>
 
+        <playmusic name="Music/crossexamination.mp3" loop="true"/>
+
         <message speaker="Librarian">
             <text>Excuse me, Detective, I heard you wanted to see me?</text>
         </message>

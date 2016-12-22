@@ -40,13 +40,13 @@ public class ConversationController implements Controllable {
     private int textTimerDelay = 2;
     /** Label for the main textbox. Displays text when spoken by characters.
      * A reference to the one in GUIManager.*/
-    private Label textboxLabel;
+    private transient Label textboxLabel;
     /** Label to display the name of the current speaker.
      * A reference to the one in GUIManager. */
-    private Label speakerLabel;
+    private transient Label speakerLabel;
     /** Array containing TextButtons to be displayed when the player is offered a choice.
      * A reference to the one in GUIManager. */
-    private TextButton[] choiceButtons;
+    private transient TextButton[] choiceButtons;
     /** Array containing lists of ConversationCommands that would be executed when the
      * corresponding choice is made. */
     private List<ConversationCommand>[] choiceCommands;
@@ -56,7 +56,7 @@ public class ConversationController implements Controllable {
     /** The ConversationCommand currently being executed. */
     private ConversationCommand currentCommand;
     /** The current Conversation containing all possible branches. */
-    private Conversation currentConversation;
+    private transient Conversation currentConversation;
     /** Filename of current conversation. */
     private String conversationName;
     /** Whether the speaking sound should be played this frame. */
@@ -68,13 +68,13 @@ public class ConversationController implements Controllable {
     /** Reference to the SceneManager that contains and updates all CharacterSprites. */
     private SceneManager sceneManager;
     /** A loader used to parse XML into a Conversation. */
-    private ConversationLoader conversationLoader;
+    private transient ConversationLoader conversationLoader;
     /** The CharacterSprite of the current speaker. */
     private CharacterSprite currentSpeaker;
     /** Whether all text should be displayed at once without slowly scrolling. */
     private boolean displayAll = false;
     /** Map used to map Strings to the ScriptManager for the language of that name. */
-    private static Map<String, ScriptManager> scriptManagers;
+    private transient static Map<String, ScriptManager> scriptManagers;
 
     /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
@@ -103,15 +103,19 @@ public class ConversationController implements Controllable {
         return scriptManagers.get(language);
     }
     /** Reloads the ConversationController from the SaveData. */
-    public void reload(SaveData data) {
+    public void reload() { //SaveData data
+        loadConversation(conversationName);
+        /*
         loadConversation(data.conversation);
         currentBranch = data.branch;
         sceneManager = data.sceneManager;
+        */
     }
     /** Saves necessary data into SaveData to be loaded later. */
     public void save(SaveData data) {
-        data.branch = currentBranch;
-        data.conversation = conversationName;
+        //data.branch = currentBranch;
+       // data.conversation = conversationName;
+        data.conversationController = this;
     }
     public void loadConversation(String fileName) {
         currentConversation = conversationLoader.loadConversation(fileName);
