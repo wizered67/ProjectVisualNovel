@@ -83,16 +83,4 @@ public class SceneManager {
     public void complete(CompleteEvent event) {
         conversationController.complete(event);
     }
-    /** Saves data to SaveData to be loaded later. */
-    public void save(SaveData data) {
-        data.sceneManager = this;
-    }
-    /** Reloads data from SaveData. */
-    public void reload() {//SaveData data) { //todo fix
-        /*
-        for (CharacterSprite characterSprite : allCharacters.values()) {
-            characterSprite.reload(data);
-        }
-        */
-    }
 }

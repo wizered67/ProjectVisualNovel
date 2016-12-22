@@ -3,6 +3,7 @@ package com.wizered67.game.Scripting;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Lua;
+import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 

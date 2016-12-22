@@ -49,7 +49,7 @@ public class CharacterSprite {
     /** The default speaking sound for all characters. */
     private static final String DEFAULT_SPEAKING_SOUND = "talksoundmale";
     /** How much the sprite drawn should be scaled. */
-    private int scale;
+    private Vector2 scale;
     /** How much the alpha of the sprite being drawn should change per second. */
     private float fadePerSecond;
     /** Current Color of the sprite. Used to save data. */
@@ -88,7 +88,7 @@ public class CharacterSprite {
         }
         sprite = new Sprite();
         sprite.setAlpha(0);
-        scale = 2;
+        scale = new Vector2(2, 2);
         //sprite.setScale(2, 2);
     }
     /** Stores variables to save important information. */
@@ -97,13 +97,13 @@ public class CharacterSprite {
             color = sprite.getColor();
         }
     }
-    /** Reloads CharacterSprite from DATA. */
-    public void reload(SaveData data) {
-        sprite.setColor(color);
+    /** Reloads CharacterSprite. */
+    public void reload() {
         allAnimations = GameManager.loadedAnimations().get(allAnimationsName);
         currentAnimation = allAnimations.get(animationName);
-        currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
-        manager = data.sceneManager;
+        updateSprite();
+        sprite.setColor(color);
+        //sprite.setScale(scale.x, scale.y);
     }
     /** Returns the name of this CharacterSprite's speaking sound. */
     public String getSpeakingSound() {
@@ -126,14 +126,6 @@ public class CharacterSprite {
         if (!allAnimations.containsKey(name)) {
             allAnimations.put(name, anim);
         }
-    }
-    /** Sets this CharacterSprite's current sprite to the TextureRegion TEXTURE. */
-    public void setCurrentSprite(TextureRegion texture) {
-        currentSprite = texture;
-        sprite.setTexture(currentSprite.getTexture());
-        sprite.setRegion(currentSprite);
-        sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth(), currentSprite.getRegionHeight());
-        sprite.setOrigin(sprite.getWidth() / 2, 0);
     }
     /** Switches this CharacterSprite's animation to the one named NAME. */
     public boolean setCurrentAnimation(String name) {
@@ -170,11 +162,7 @@ public class CharacterSprite {
         }
         if (isVisible() && currentAnimation != null) {
             stateTime += deltaStateTime;
-            currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
-            sprite.setTexture(currentSprite.getTexture());
-            sprite.setRegion(currentSprite);
-            sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale, currentSprite.getRegionHeight() * scale);
-            sprite.setOrigin(sprite.getWidth() * scale / 2, 0);
+            updateSprite();
             //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
             if (currentAnimation.isAnimationFinished(stateTime) && !wasFinished) {
                 manager.complete(new CompleteEvent(CompleteEvent.Type.ANIMATION_END, animationName));
@@ -182,6 +170,14 @@ public class CharacterSprite {
             }
 
         }
+    }
+    /** Updates the sprite to the correct animation frame. */
+    private void updateSprite() {
+        currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
+        sprite.setTexture(currentSprite.getTexture());
+        sprite.setRegion(currentSprite);
+        sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
+        sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
     }
     /** Draws this CharacterSprite's current sprite to the BATCH. */
     public void draw(Batch batch) {
@@ -194,6 +190,14 @@ public class CharacterSprite {
                 currentSprite.getRegionWidth() * scale * direction,
                 currentSprite.getRegionHeight() * scale);
                 */
+    }
+    /** Sets this CharacterSprite's current sprite to the TextureRegion TEXTURE. */
+    public void setCurrentSprite(TextureRegion texture) {
+        currentSprite = texture;
+        sprite.setTexture(currentSprite.getTexture());
+        sprite.setRegion(currentSprite);
+        sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth(), currentSprite.getRegionHeight());
+        sprite.setOrigin(sprite.getWidth() / 2, 0);
     }
     /** Sets current position to NEW POSITION. */
     public void setPosition(Vector2 newPosition){
@@ -225,7 +229,8 @@ public class CharacterSprite {
     }
     /** Sets the direction of the sprite to DIRECTION. */
     public void setDirection(int direction) {
-        sprite.setScale(Math.abs(sprite.getScaleX()) * direction, sprite.getScaleY());
+        //sprite.setScale(Math.abs(sprite.getScaleX()) * direction, sprite.getScaleY());
+        scale.x = Math.abs(scale.x) * direction;
     }
     /** Sets how fast the sprite should fade in or out. FADEAMOUNT is alpha per second. */
     public void setFade(float fadeAmount) {

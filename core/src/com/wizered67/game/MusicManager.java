@@ -86,10 +86,6 @@ public class MusicManager {
     public Music getCurrentMusic() {
         return currentMusic;
     }
-    /** Saves data to SaveData to be loaded later. */
-    public void save(SaveData data) {
-        data.musicManager = this;
-    }
     /** Reloads the music that was previously playing. */
     public void reload() {
         if (currentMusicName != null && GameManager.assetManager().isLoaded(currentMusicName, Music.class)) {

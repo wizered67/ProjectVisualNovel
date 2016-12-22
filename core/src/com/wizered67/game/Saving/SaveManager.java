@@ -14,6 +14,10 @@ import com.wizered67.game.GUI.Conversations.SceneManager;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.MusicManager;
+import com.wizered67.game.Scripting.LuaScriptManager;
+
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 
 /**
@@ -44,15 +48,17 @@ public class SaveManager {
 
     public static void save(FileHandle fileHandle) {
         SaveData data = new SaveData();
-        GameManager.musicManager().save(data);
+        data.musicManager = GameManager.musicManager();
         ConversationController conversationController = GUIManager.conversationController();
-        conversationController.save(data);
-        conversationController.sceneManager().save(data);
+        data.conversationController = conversationController;
+        data.sceneManager = conversationController.sceneManager();
         saveData(fileHandle, data);
+        LuaScriptManager sm = (LuaScriptManager) ConversationController.scriptManager("Lua");
+        sm.debugPrint(); //todo remove
     }
 
     public static void saveData(FileHandle fileHandle, SaveData saveData) {
-        Output output = new Output(fileHandle.write(false));
+        Output output = new Output(new DeflaterOutputStream(fileHandle.write(false)));
         kryo.writeObject(output, saveData);
         output.close();
     }
@@ -65,7 +71,7 @@ public class SaveManager {
     }
 
     public static SaveData loadData(FileHandle fileHandle) {
-        Input input = new Input(fileHandle.read());
+        Input input = new Input(new InflaterInputStream(fileHandle.read()));
         SaveData data = kryo.readObject(input, SaveData.class);
         input.close();
         return data;

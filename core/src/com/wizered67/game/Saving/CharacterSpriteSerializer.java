@@ -32,7 +32,7 @@ public class CharacterSpriteSerializer extends FieldSerializer<CharacterSprite> 
     @Override
     public CharacterSprite read (Kryo kryo, Input input, Class<CharacterSprite> type) {
         CharacterSprite c = super.read(kryo, input, type);
-        //m.reload();
+        c.reload();
         return c;
     }
 }

@@ -12,13 +12,6 @@
         <setdirection name="Librarian" direction="-1"/>
         <setname name="Librarian" displayname="???"/>
 
-        <init language="Lua">
-            work 0
-            test "yes"
-            test2 "no"
-            test3 "maybe"
-        </init>
-
         <changebranch newbranch="main branch"/>
 
     </branch>
@@ -56,12 +49,9 @@
     <branch name="choices">
         <choices>
             <choice name="When did the murder take place?">
-                <debug message="test"/>
-                <setanimation name="Detective" animation="Think" wait="true"/>
                 <changebranch newbranch="when"/>
             </choice>
             <choice name="How long have you been working for the library?">
-                <if language="Lua"> <![CDATA[return work < 2]]> </if>
                 <changebranch newbranch="work"/>
             </choice>
             <choice name="Did you know the victim?">
@@ -71,10 +61,6 @@
     </branch>
 
     <branch name="when">
-        <script language="Lua">
-            print(work)
-        </script>
-
         <message speaker="Detective">
             <text>Do you know when the murder took place?</text>
         </message>
@@ -106,9 +92,6 @@
     </branch>
 
     <branch name="work">
-        <script language="Lua">
-            work = work + 1
-        </script>
         <message speaker="Detective">
             <text>How long have you been working here?</text>
         </message>
@@ -120,14 +103,6 @@
         <message speaker="Detective">
             <text>Oh... I guess it's not.</text>
         </message>
-
-        <if language="Lua">
-            return work == 2
-            <message speaker="Librarian">
-                <text>I already answered your pointless question! Now stop bothering me!</text>
-            </message>
-            <debug message="answered twice"/>
-        </if>
 
         <message speaker="Detective" wait="false">
             <text>Maybe I better ask about something else instead...</text>

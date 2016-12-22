@@ -10,6 +10,10 @@ import com.badlogic.gdx.math.Vector3;
 public class Constants {
 	//Debug Settings
 	public final static boolean DEBUG = false;
+
+	//todo fix
+	public final static boolean LOAD = false;
+
 	//Game Settings
 	public final static String GAME_NAME = "Visual Novel";
 	public final static int DEFAULT_WIDTH = 800; //1024

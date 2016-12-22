@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.wizered67.game.Constants;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Saving.SaveManager;
 
@@ -42,7 +43,9 @@ public class LoadingScreen implements Screen {
             GameManager.loadAnimations();
             GameManager.game.setScreen(nextScreen);
             SaveManager.init();
-            SaveManager.load(Gdx.files.local("Saves/test2.bin"));
+            if (Constants.LOAD) { //todo fixme
+                SaveManager.load(Gdx.files.local("Saves/test2.bin"));
+            }
         }
         System.out.println(assetManager.getProgress());
     }

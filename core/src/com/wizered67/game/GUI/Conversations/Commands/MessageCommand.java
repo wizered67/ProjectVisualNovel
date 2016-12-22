@@ -143,6 +143,7 @@ public class MessageCommand implements ConversationCommand {
                 done = true;
             } else {
                 updateText();
+                conversationController.setDisplayAll(false);
             }
         }
     }

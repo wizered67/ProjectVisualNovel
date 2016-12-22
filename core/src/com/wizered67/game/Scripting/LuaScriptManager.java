@@ -50,4 +50,10 @@ public class LuaScriptManager implements ScriptManager {
     public GameScript createSetScript(String var, String value) {
         return new LuaScript(this, var + " = " + value, false);
     }
+
+    public void debugPrint() {
+        for (LuaValue key : globals.keys()) {
+            System.out.println("Key: " + key + ", Value: " + globals.get(key));
+        }
+    }
 }

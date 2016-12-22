@@ -6,11 +6,13 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationWriter;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
+import com.wizered67.game.Saving.GUIState;
 import com.wizered67.game.Saving.SaveData;
 import com.wizered67.game.Saving.SaveManager;
 import com.wizered67.game.Scripting.LuaScriptManager;
@@ -75,6 +77,8 @@ public class ConversationController implements Controllable {
     private boolean displayAll = false;
     /** Map used to map Strings to the ScriptManager for the language of that name. */
     private transient static Map<String, ScriptManager> scriptManagers;
+    /** State of GUI elements, like labels. Used to save and load data. */
+    private GUIState guiState;
 
     /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
@@ -88,11 +92,41 @@ public class ConversationController implements Controllable {
         sceneManager = new SceneManager(this);
         scriptManagers = new HashMap<String, ScriptManager>();
         scriptManagers.put("Lua", new LuaScriptManager());
-        loadConversation("demonstration.conv");
-        setBranch("default");
+        if (!Constants.LOAD) { //todo fix
+            loadConversation("demonstration.conv");
+            setBranch("default");
+        }
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
+    }
+    /** Saves the GUI state. */
+    public void save() {
+        guiState = new GUIState();
+        guiState.speakerLabelText = speakerLabel.getText().toString();
+        guiState.speakerLabelVisible = speakerLabel.isVisible();
+        guiState.textboxLabelText = textboxLabel.getText().toString();
+        guiState.textboxLabelVisible = textboxLabel.isVisible();
+        String[] choiceText = new String[choiceButtons.length];
+        for (int i = 0; i < choiceText.length; i += 1) {
+            choiceText[i] = choiceButtons[i].getText().toString();
+        }
+        guiState.choiceButtonText = choiceText;
+    }
+    /** Loads the GUI state and Conversation. */
+    public void reload() {
+        loadConversation(conversationName);
+        if (guiState == null) {
+            return;
+        }
+        setSpeakerName(guiState.speakerLabelText);
+        speakerLabel.setVisible(guiState.speakerLabelVisible);
+        textboxLabel.setText(guiState.textboxLabelText);
+        textboxLabel.setVisible(guiState.textboxLabelVisible);
+        for (int i = 0; i < choiceButtons.length; i += 1) {
+            setChoice(i, guiState.choiceButtonText[i]);
+        }
+        numLines = textboxLabel.getGlyphLayout().runs.size;
     }
     /** Returns the SceneManager being used update and draw CharacterSprites. */
     public SceneManager sceneManager() {
@@ -102,21 +136,7 @@ public class ConversationController implements Controllable {
     public static ScriptManager scriptManager(String language) {
         return scriptManagers.get(language);
     }
-    /** Reloads the ConversationController from the SaveData. */
-    public void reload() { //SaveData data
-        loadConversation(conversationName);
-        /*
-        loadConversation(data.conversation);
-        currentBranch = data.branch;
-        sceneManager = data.sceneManager;
-        */
-    }
-    /** Saves necessary data into SaveData to be loaded later. */
-    public void save(SaveData data) {
-        //data.branch = currentBranch;
-       // data.conversation = conversationName;
-        data.conversationController = this;
-    }
+    /** Loads the Conversation with filename FILENAME. */
     public void loadConversation(String fileName) {
         currentConversation = conversationLoader.loadConversation(fileName);
         conversationName = fileName;
@@ -335,6 +355,10 @@ public class ConversationController implements Controllable {
     public void setTextBoxShowing(boolean show){
         textboxLabel.setVisible(show);
         speakerLabel.setVisible(show);
+    }
+    /** Set whether to display all text to DISPLAY. */
+    public void setDisplayAll(boolean display) {
+        displayAll = display;
     }
 
     /** Choices Code */

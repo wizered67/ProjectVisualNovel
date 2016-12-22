@@ -30,6 +30,7 @@ public class ConversationSerializer extends FieldSerializer<ConversationControll
     @Override
     public void write (Kryo kryo, Output output, ConversationController object) {
         Gdx.app.log("Serialization", "Wrote conversation.");
+        object.save();
         super.write(kryo, output, object);
     }
     @Override
