@@ -146,6 +146,7 @@
     <xs:simpleType name="languages">
         <xs:restriction base="xs:string">
             <xs:enumeration value="Lua"/>
+            <xs:enumeration value="Groovy"/>
         </xs:restriction>
     </xs:simpleType>
 

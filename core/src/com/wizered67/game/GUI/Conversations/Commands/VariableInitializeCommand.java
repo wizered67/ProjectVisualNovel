@@ -19,11 +19,11 @@ import java.util.regex.Pattern;
  * @author Adam Victor
  */
 public class VariableInitializeCommand implements ConversationCommand {
-    static transient Pattern initPattern = Pattern.compile("(\\S+) (\\S+)");
+    static transient Pattern initPattern = Pattern.compile("(\\S+) +(.+)");
     /** Array of scripts to be executed that initializes the variables to the specified value. */
-    private transient GameScript[] scripts;
+    private GameScript[] scripts;
     /** ScriptManager used for specified language. Used to check if variable has been initialized. */
-    private transient ScriptManager scriptManager;
+    private ScriptManager scriptManager;
     /** Lust of names of the variables that will be initialized if undefined. */
     private List<String> variables;
     /** List of values for each corresponding variable to be assigned to. */
@@ -92,14 +92,25 @@ public class VariableInitializeCommand implements ConversationCommand {
     public static VariableInitializeCommand makeCommand(XmlReader.Element element) {
         String language = element.getAttribute("language");
         String text = element.getText();
-        Matcher matcher = initPattern.matcher(text);
         List<String> vars = new ArrayList<String>();
         List<String> values = new ArrayList<String>();
+        /*
         while (matcher.find()) {
             String var = matcher.group(1);
             String value = matcher.group(2);
             vars.add(var);
             values.add(value);
+        }
+        */
+        text = text.replaceAll("\r", "");
+        String[] lines = text.split("\n");
+        for (String line : lines) {
+            line = line.trim();
+            Matcher matcher = initPattern.matcher(line);
+            if (matcher.matches()) {
+                vars.add(matcher.group(1));
+                values.add(matcher.group(2));
+            }
         }
         return new VariableInitializeCommand(vars, values, language);
     }

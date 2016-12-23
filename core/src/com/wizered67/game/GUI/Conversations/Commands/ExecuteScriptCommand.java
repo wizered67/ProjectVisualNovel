@@ -16,7 +16,7 @@ import com.wizered67.game.Scripting.ScriptManager;
  */
 public class ExecuteScriptCommand implements ConversationCommand {
     /** GameScript object representing the code to be executed. */
-    private transient GameScript gameScript;
+    private GameScript gameScript;
     /** Script to be executed - either the contents or name of the file. */
     private String script;
     /** Whether the script is a file. */

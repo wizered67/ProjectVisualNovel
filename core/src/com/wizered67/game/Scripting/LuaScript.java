@@ -8,7 +8,7 @@ import org.luaj.vm2.LuaValue;
  * Stores loaded scripts in Lua to be executed later. Implements GameScript interface.
  * @author Adam Victor
  */
-public class LuaScript implements GameScript {
+public class LuaScript extends GameScript {
     private LuaValue loadedScript;
     /** Loads the LuaScript SCRIPT in MANAGER. If ISFILE, loads the script contained in the file named SCRIPT. */
     public LuaScript(LuaScriptManager manager, String script, boolean isFile) {

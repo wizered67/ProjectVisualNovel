@@ -5,7 +5,13 @@ package com.wizered67.game.Scripting;
  * implement this interface.
  * @author Adam Victor
  */
-public interface GameScript {
+public abstract class GameScript {
+    /** Language used for this script. Used to save and reload. */
+    public String language;
+    /** Script or filename of script. Used to save and reload. */
+    public String script;
+    /** Whether the script is a filename. */
+    public boolean isFile;
     /** Executes the contents of this script and returns the result. */
-    Object execute();
+    public abstract Object execute();
 }

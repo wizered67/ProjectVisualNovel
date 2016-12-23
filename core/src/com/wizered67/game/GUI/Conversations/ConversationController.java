@@ -12,6 +12,7 @@ import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
 import com.wizered67.game.Saving.Serializers.GUIState;
 import com.wizered67.game.Saving.SaveManager;
+import com.wizered67.game.Scripting.GroovyScriptManager;
 import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
 
@@ -89,8 +90,9 @@ public class ConversationController implements Controllable {
         sceneManager = new SceneManager(this);
         scriptManagers = new HashMap<String, ScriptManager>();
         scriptManagers.put("Lua", new LuaScriptManager());
+        scriptManagers.put("Groovy", new GroovyScriptManager());
         if (!Constants.LOAD) { //todo fix
-            loadConversation("demonstration.conv");
+            loadConversation("demonstrationGroovy.conv");
             setBranch("default");
         }
         //remainingText =
@@ -106,7 +108,11 @@ public class ConversationController implements Controllable {
         guiState.textboxLabelVisible = textboxLabel.isVisible();
         String[] choiceText = new String[choiceButtons.length];
         for (int i = 0; i < choiceText.length; i += 1) {
-            choiceText[i] = choiceButtons[i].getText().toString();
+            if (choiceShowing) {
+                choiceText[i] = choiceButtons[i].getText().toString();
+            } else {
+                choiceText[i] = "";
+            }
         }
         guiState.choiceButtonText = choiceText;
     }

@@ -7,6 +7,8 @@ import java.util.Map;
  * @author Adam Victor
  */
 public interface ScriptManager {
+    /** Returns the name of the language used for this ScriptManager. */
+    String name();
     /** Loads and returns the GameScript SCRIPT. If ISFILE it loads it from the filed named SCRIPT. */
     GameScript load(String script, boolean isFile);
     /** Returns the boolean value of Object O, where O is assumed to be some

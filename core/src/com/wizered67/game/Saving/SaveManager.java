@@ -13,14 +13,12 @@ import com.wizered67.game.GUI.Conversations.SceneManager;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.MusicManager;
-import com.wizered67.game.Saving.Serializers.CharacterSpriteSerializer;
-import com.wizered67.game.Saving.Serializers.ConversationSerializer;
+import com.wizered67.game.Saving.Serializers.*;
 import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaBooleanSerializer;
 import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaDoubleSerializer;
 import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaIntegerSerializer;
 import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaStringSerializer;
-import com.wizered67.game.Saving.Serializers.MusicManagerSerializer;
-import com.wizered67.game.Saving.Serializers.SceneManagerSerializer;
+import com.wizered67.game.Scripting.GameScript;
 import com.wizered67.game.Scripting.LuaScript;
 import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
@@ -49,6 +47,8 @@ public class SaveManager {
         kryo.addDefaultSerializer(LuaDouble.class, LuaDoubleSerializer.class);
         kryo.addDefaultSerializer(LuaInteger.class, LuaIntegerSerializer.class);
         kryo.addDefaultSerializer(LuaString.class, LuaStringSerializer.class);
+        kryo.addDefaultSerializer(GameScript.class, GameScriptSerializer.class);
+        kryo.addDefaultSerializer(ScriptManager.class, ScriptManagerSerializer.class);
         kryo.setReferences(true);
         Log.set(Log.LEVEL_TRACE);
         kryo.register(Color.class, new Serializer<Color>() {

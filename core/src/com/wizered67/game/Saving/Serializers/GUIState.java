@@ -9,5 +9,4 @@ public class GUIState {
     public boolean speakerLabelVisible;
     public boolean textboxLabelVisible;
     public String[] choiceButtonText;
-
 }

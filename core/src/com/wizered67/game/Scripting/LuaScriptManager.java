@@ -26,10 +26,19 @@ public class LuaScriptManager implements ScriptManager {
             defaultKeys.add(key);
         }
     }
+    /** Returns the name of the language used for this ScriptManager. */
+    @Override
+    public String name() {
+        return "Lua";
+    }
 
     @Override
     public GameScript load(String script, boolean isFile) {
-        return new LuaScript(this, script, isFile);
+        GameScript gs = new LuaScript(this, script, isFile);
+        gs.isFile = isFile;
+        gs.script = script;
+        gs.language = "Lua";
+        return gs;
     }
     /** Returns the boolean value of Object O, where O is assumed to be some
      * type specific to the scripting language. */

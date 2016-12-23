@@ -13,6 +13,7 @@ import com.wizered67.game.Inputs.MyInputProcessor;
 import com.wizered67.game.Saving.SaveData;
 import com.wizered67.game.Saving.TestSaveData;
 import com.wizered67.game.Saving.SaveManager;
+import com.wizered67.game.Scripting.GroovyTest;
 
 import java.util.*;
 
@@ -25,6 +26,8 @@ public class GameManager {
 		LuaExecutor lua = new LuaExecutor();
 		lua.init();
 		*/
+		GroovyTest groovy = new GroovyTest();
+		groovy.init();
 		//TODO remove this test
         /*
 		TestSaveData data = new TestSaveData();

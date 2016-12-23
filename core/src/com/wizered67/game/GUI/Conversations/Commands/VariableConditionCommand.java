@@ -19,9 +19,9 @@ import java.util.List;
  */
 public class VariableConditionCommand implements ConversationCommand {
     /** A script that returns whether a condition has been met when run. */
-    private transient GameScript condition;
+    private GameScript condition;
     /** The ScriptManager used to convert script result to a boolean. */
-    private transient ScriptManager scriptManager;
+    private ScriptManager scriptManager;
     /** The commands to be executed if the condition is met. */
     private List<ConversationCommand> commands;
     /** Script to be executed - either the contents or name of the file. */
