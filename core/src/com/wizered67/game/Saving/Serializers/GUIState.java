@@ -1,4 +1,4 @@
-package com.wizered67.game.Saving;
+package com.wizered67.game.Saving.Serializers;
 
 /**
  * Created by Adam on 12/21/2016.

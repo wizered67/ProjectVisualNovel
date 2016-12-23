@@ -4,6 +4,11 @@ import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * A ScriptManager that loads Lua scripts.
  * @author Adam Victor
@@ -12,9 +17,14 @@ public class LuaScriptManager implements ScriptManager {
     static final String SCRIPT_DIRECTORY = "Scripts/";
     /** Globals used for loading and executing Lua scripts. */
     Globals globals;
+    private Set<LuaValue> defaultKeys;
     /** Initializes globals to the Standard Globals. */
     public LuaScriptManager() {
         globals = JsePlatform.standardGlobals();
+        defaultKeys = new HashSet<LuaValue>();
+        for (LuaValue key : globals.keys()) {
+            defaultKeys.add(key);
+        }
     }
 
     @Override
@@ -50,10 +60,26 @@ public class LuaScriptManager implements ScriptManager {
     public GameScript createSetScript(String var, String value) {
         return new LuaScript(this, var + " = " + value, false);
     }
-
-    public void debugPrint() {
+    @Override
+    /** Returns a Map of variables names to values for variables that aren't predefined. */
+    public Map<String, Object> saveMap() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
         for (LuaValue key : globals.keys()) {
-            System.out.println("Key: " + key + ", Value: " + globals.get(key));
+            if (!defaultKeys.contains(key)) {
+                map.put(key.toString(), globals.get(key));
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Reloads variables from the save map between variable name and value MAP.
+     */
+    @Override
+    public void reload(Map<String, Object> map) {
+        for (String key : map.keySet()) {
+            globals.set(key, (LuaValue) map.get(key));
         }
     }
+
 }

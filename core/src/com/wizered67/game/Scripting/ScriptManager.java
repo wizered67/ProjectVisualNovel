@@ -1,5 +1,7 @@
 package com.wizered67.game.Scripting;
 
+import java.util.Map;
+
 /**
  * Interface of all ScriptManagers. Has methods for loading scripts to be executed later.
  * @author Adam Victor
@@ -19,4 +21,8 @@ public interface ScriptManager {
     boolean isDefined(String var);
     /** Returns a GameScript that, when executed, assigns variable named VAR to VALUE. */
     GameScript createSetScript(String var, String value);
+    /** Returns a map of variable names to variable values for non default variables. Used for saving. */
+    Map<String, Object> saveMap();
+    /** Reloads variables from the save map between variable name and value MAP. */
+    void reload(Map<String, Object> map);
 }

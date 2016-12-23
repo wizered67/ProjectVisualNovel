@@ -1,4 +1,4 @@
-package com.wizered67.game.Saving;
+package com.wizered67.game.Saving.Serializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;

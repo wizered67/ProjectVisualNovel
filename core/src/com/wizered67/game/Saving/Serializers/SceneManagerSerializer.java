@@ -1,4 +1,4 @@
-package com.wizered67.game.Saving;
+package com.wizered67.game.Saving.Serializers;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;

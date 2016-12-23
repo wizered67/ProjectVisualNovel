@@ -107,4 +107,4 @@ build/
 /android/assets/Conversations/testConversation4.conv
 /core/src/shaders/
 desktop/build
-
+/core/src/com/wizered67/game/Scripting/GroovyTest.java

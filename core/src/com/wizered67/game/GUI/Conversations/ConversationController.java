@@ -3,17 +3,14 @@ package com.wizered67.game.GUI.Conversations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.Conversations.XmlIO.ConversationWriter;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
-import com.wizered67.game.Saving.GUIState;
-import com.wizered67.game.Saving.SaveData;
+import com.wizered67.game.Saving.Serializers.GUIState;
 import com.wizered67.game.Saving.SaveManager;
 import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
@@ -135,6 +132,10 @@ public class ConversationController implements Controllable {
     /** Returns the ScriptManager for LANGUAGE. */
     public static ScriptManager scriptManager(String language) {
         return scriptManagers.get(language);
+    }
+    /** Returns map between names and ScriptManagers. */
+    public static Map<String, ScriptManager> allScriptManagers() {
+        return scriptManagers;
     }
     /** Loads the Conversation with filename FILENAME. */
     public void loadConversation(String fileName) {
