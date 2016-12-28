@@ -12,6 +12,7 @@ import com.wizered67.game.Scripting.ScriptManager;
  * Used to Serialize GameScripts for saving and loading. Stores language, whether it is a file,
  * and contents or filename. To read back it simply calls load method of the ScriptManager for
  * the corresponding language.
+ * @author Adam Victor
  */
 public class GameScriptSerializer extends Serializer<GameScript> {
     @Override

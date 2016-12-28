@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -100,7 +101,9 @@ public class CharacterSprite {
     /** Reloads CharacterSprite. */
     public void reload() {
         allAnimations = GameManager.loadedAnimations().get(allAnimationsName);
-        currentAnimation = allAnimations.get(animationName);
+        if (allAnimations != null) {
+            currentAnimation = allAnimations.get(animationName);
+        }
         updateSprite();
         sprite.setColor(color);
         //sprite.setScale(scale.x, scale.y);
@@ -127,8 +130,11 @@ public class CharacterSprite {
             allAnimations.put(name, anim);
         }
     }
-    /** Switches this CharacterSprite's animation to the one named NAME. */
+    /** Switches this CharacterSprite's animation to the one named NAME. Returns true if animation is valid. */
     public boolean setCurrentAnimation(String name) {
+        if (allAnimations == null) {
+            return false;
+        }
         if (!animationName.equalsIgnoreCase(name)) {
             stateTime = 0;
             animationName = name;
@@ -136,7 +142,7 @@ public class CharacterSprite {
         currentAnimation = allAnimations.get(name);
         wasFinished = false;
         if (currentAnimation == null) {
-            System.out.println("No animation found: " + name);
+            Gdx.app.error("Animation", "No animation found: " + name);
         }
         return currentAnimation != null;
     }
@@ -173,11 +179,13 @@ public class CharacterSprite {
     }
     /** Updates the sprite to the correct animation frame. */
     private void updateSprite() {
-        currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
-        sprite.setTexture(currentSprite.getTexture());
-        sprite.setRegion(currentSprite);
-        sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
-        sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
+        if (currentAnimation != null) {
+            currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
+            sprite.setTexture(currentSprite.getTexture());
+            sprite.setRegion(currentSprite);
+            sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
+            sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
+        }
     }
     /** Draws this CharacterSprite's current sprite to the BATCH. */
     public void draw(Batch batch) {

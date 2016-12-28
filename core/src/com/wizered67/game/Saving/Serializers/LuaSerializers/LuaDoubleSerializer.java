@@ -8,7 +8,8 @@ import org.luaj.vm2.LuaDouble;
 import org.luaj.vm2.LuaValue;
 
 /**
- * Created by Adam on 12/22/2016.
+ * Serializer used for saving and loading LuaDoubles.
+ * @author Adam Victor
  */
 public class LuaDoubleSerializer extends Serializer<LuaDouble> {
     public void write (Kryo kryo, Output output, LuaDouble object) {

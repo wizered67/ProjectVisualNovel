@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Created by Adam on 12/22/2016.
+ * A ScriptManager that manages and loads Groovy scripts.
+ * @author Adam Victor
  */
 public class GroovyScriptManager implements ScriptManager {
     private GroovyShell groovyShell;

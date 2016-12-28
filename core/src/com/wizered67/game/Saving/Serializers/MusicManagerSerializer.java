@@ -9,7 +9,8 @@ import com.wizered67.game.GameManager;
 import com.wizered67.game.MusicManager;
 
 /**
- * Created by Adam on 12/21/2016.
+ * Serializer used for saving and loading the MusicManager.
+ * @author Adam Victor
  */
 public class MusicManagerSerializer extends FieldSerializer<MusicManager> {
     public MusicManagerSerializer (Kryo kryo, Class type) {

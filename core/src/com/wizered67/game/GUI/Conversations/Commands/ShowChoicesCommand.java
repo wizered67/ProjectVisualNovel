@@ -101,7 +101,7 @@ public class ShowChoicesCommand implements ConversationCommand {
             textChoices[i] = c.getAttribute("name");
             for (int j = 0; j < c.getChildCount(); j += 1) {
                 ConversationCommand command = ConversationLoader.getCommand(c.getChild(j));
-                if (command instanceof VariableConditionCommand) {
+                if (j == 0 && command instanceof VariableConditionCommand) {
                     conditions[i] = (VariableConditionCommand) command;
                 } else {
                     if (commandChoices[i] == null) {

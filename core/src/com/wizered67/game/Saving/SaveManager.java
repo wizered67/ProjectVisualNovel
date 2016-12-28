@@ -19,8 +19,6 @@ import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaDoubleSerializer;
 import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaIntegerSerializer;
 import com.wizered67.game.Saving.Serializers.LuaSerializers.LuaStringSerializer;
 import com.wizered67.game.Scripting.GameScript;
-import com.wizered67.game.Scripting.LuaScript;
-import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
 import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaDouble;
@@ -31,13 +29,13 @@ import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-
 /**
- * Created by Adam on 12/20/2016.
+ * Saves and loads serialized data using Kryo.
+ * @author Adam Victor
  */
 public class SaveManager {
     private static Kryo kryo = new Kryo();
-
+    /** Adds all necessary serializers to Kryo for serializing important objects. */
     public static void init() {
         kryo.addDefaultSerializer(MusicManager.class, MusicManagerSerializer.class);
         kryo.addDefaultSerializer(CharacterSprite.class, CharacterSpriteSerializer.class);
@@ -63,13 +61,12 @@ public class SaveManager {
             }
         });
     }
-
+    /** Saves all game data to the file FILEHANDLE. */
     public static void save(FileHandle fileHandle) {
         SaveData data = new SaveData();
         data.musicManager = GameManager.musicManager();
         ConversationController conversationController = GUIManager.conversationController();
         data.conversationController = conversationController;
-        data.sceneManager = conversationController.sceneManager();
         //LuaScriptManager sm = (LuaScriptManager) ConversationController.scriptManager("Lua");
         Map<String, ScriptManager> managers = ConversationController.allScriptManagers();
         for (String name : managers.keySet()) {
@@ -77,24 +74,21 @@ public class SaveManager {
         }
         saveData(fileHandle, data);
     }
-
-    public static void saveData(FileHandle fileHandle, SaveData saveData) {
+    /** Writes all data in SAVEDATA to the file FILEHANDLE. */
+    private static void saveData(FileHandle fileHandle, SaveData saveData) {
         Output output = new Output(new DeflaterOutputStream(fileHandle.write(false)));
         kryo.writeObject(output, saveData);
         output.close();
     }
-
+    /** Loads all game data from the file FILEHANDLE. */
     public static void load(FileHandle fileHandle) {
         SaveData saveData = loadData(fileHandle);
         for (String name : saveData.scriptingVariables.keySet()) {
             Map<String, Object> variables = saveData.scriptingVariables.get(name);
             ConversationController.scriptManager(name).reload(variables);
         }
-        //ConversationController conversationController = GUIManager.conversationController();
-        //conversationController.reload(saveData);
-        //conversationController.sceneManager().reload(saveData);
     }
-
+    /** Returns a SaveData object with the data from file FILEHANDLE. */
     public static SaveData loadData(FileHandle fileHandle) {
         Input input = new Input(new InflaterInputStream(fileHandle.read()));
         SaveData data = kryo.readObject(input, SaveData.class);

@@ -103,7 +103,7 @@
             <xs:attribute type="xs:boolean" name="wait" default="false"/>
     </xs:complexType>
 
-    <xs:complexType name="messageType">
+    <xs:complexType name="messageType" mixed="true">
         <xs:sequence>
             <xs:sequence maxOccurs="unbounded" minOccurs="0">
                 <xs:element type="localAssignType" name="assign" maxOccurs="unbounded" minOccurs="0"/>

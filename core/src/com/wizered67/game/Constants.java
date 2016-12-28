@@ -12,7 +12,7 @@ public class Constants {
 	public final static boolean DEBUG = false;
 
 	//todo fix
-	public final static boolean LOAD = false;
+	public final static boolean LOAD = true;
 
 	//Game Settings
 	public final static String GAME_NAME = "Visual Novel";

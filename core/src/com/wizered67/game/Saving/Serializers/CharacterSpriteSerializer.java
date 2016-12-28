@@ -6,10 +6,10 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializerConfig;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
-import com.wizered67.game.MusicManager;
 
 /**
- * Created by Adam on 12/21/2016.
+ * Serializer used for saving and loading CharacterSprites.
+ * @author Adam Victor
  */
 public class CharacterSpriteSerializer extends FieldSerializer<CharacterSprite> {
     public CharacterSpriteSerializer (Kryo kryo, Class type) {
@@ -23,7 +23,6 @@ public class CharacterSpriteSerializer extends FieldSerializer<CharacterSprite> 
     protected CharacterSpriteSerializer (Kryo kryo, Class type, Class[] generics, FieldSerializerConfig config) {
         super(kryo, type, generics, config);
     }
-
     @Override
     public void write (Kryo kryo, Output output, CharacterSprite object) {
         object.save();

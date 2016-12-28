@@ -10,13 +10,12 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Created by Adam on 12/20/2016.
+ * Stores important game information to be serialized for saving and loading.
+ * @author Adam Victor
  */
 public class SaveData {
     public MusicManager musicManager;
-    //public String conversation;
-    //public LinkedList<ConversationCommand> branch;
-    public transient SceneManager sceneManager;
     public ConversationController conversationController;
+    /** Maps scripting language names to a map of variable names to values. */
     public Map<String, Map<String, Object>> scriptingVariables = new HashMap<String, Map<String, Object>>();
 }

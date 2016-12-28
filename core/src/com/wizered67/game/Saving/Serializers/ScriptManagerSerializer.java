@@ -9,6 +9,7 @@ import com.wizered67.game.Scripting.ScriptManager;
 
 /**
  * Used to serialize ScriptManagers for saving and loading. Only saves language name to load from there.
+ * @author Adam Victor
  */
 public class ScriptManagerSerializer extends Serializer<ScriptManager> {
 

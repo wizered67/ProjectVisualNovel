@@ -8,7 +8,8 @@ import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaValue;
 
 /**
- * Created by Adam on 12/22/2016.
+ * Serializer used for saving and loading LuaBooleans.
+ * @author Adam Victor
  */
 public class LuaBooleanSerializer extends Serializer<LuaBoolean> {
     public void write (Kryo kryo, Output output, LuaBoolean object) {

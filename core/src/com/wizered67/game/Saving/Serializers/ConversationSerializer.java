@@ -13,7 +13,8 @@ import com.wizered67.game.GameManager;
 import com.wizered67.game.MusicManager;
 
 /**
- * Created by Adam on 12/21/2016.
+ * Serializer used for saving and loading Conversations.
+ * @author Adam Victor
  */
 public class ConversationSerializer extends FieldSerializer<ConversationController> {
     public ConversationSerializer (Kryo kryo, Class type) {
@@ -29,16 +30,13 @@ public class ConversationSerializer extends FieldSerializer<ConversationControll
     }
     @Override
     public void write (Kryo kryo, Output output, ConversationController object) {
-        Gdx.app.log("Serialization", "Wrote conversation.");
         object.save();
         super.write(kryo, output, object);
     }
     @Override
     public ConversationController read (Kryo kryo, Input input, Class<ConversationController> type) {
-        Gdx.app.log("Serialization", "Read conversation.");
         ConversationController conversationController = super.read(kryo, input, type);
         conversationController.reload();
-        //kryo.reference(conversationController);
         return conversationController;
     }
     @Override

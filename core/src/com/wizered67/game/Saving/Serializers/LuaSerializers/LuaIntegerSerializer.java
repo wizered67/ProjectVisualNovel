@@ -9,7 +9,8 @@ import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaValue;
 
 /**
- * Created by Adam on 12/22/2016.
+ * Serializer used for saving and loading LuaIntegers.
+ * @author Adam Victor
  */
 public class LuaIntegerSerializer extends Serializer<LuaInteger> {
     public void write (Kryo kryo, Output output, LuaInteger object) {

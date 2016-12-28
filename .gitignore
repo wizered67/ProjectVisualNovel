@@ -108,3 +108,7 @@ build/
 /core/src/shaders/
 desktop/build
 /core/src/com/wizered67/game/Scripting/GroovyTest.java
+/android/assets/Conversations/mixedTest.conv
+/android/assets/Conversations/rpg.conv
+/android/assets/Saves/test2.bin
+/android/assets/Saves/test1.bin

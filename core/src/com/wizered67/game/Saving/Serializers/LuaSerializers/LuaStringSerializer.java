@@ -9,7 +9,8 @@ import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaValue;
 
 /**
- * Created by Adam on 12/22/2016.
+ * Serializer used for saving and loading LuaStrings.
+ * @author Adam Victor
  */
 public class LuaStringSerializer extends Serializer<LuaString> {
     public void write (Kryo kryo, Output output, LuaString object) {

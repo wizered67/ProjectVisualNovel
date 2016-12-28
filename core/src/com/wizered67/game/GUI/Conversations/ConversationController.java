@@ -155,7 +155,7 @@ public class ConversationController implements Controllable {
      */
     public void update(float deltaTime) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            SaveManager.save(Gdx.files.local("Saves/test2.bin"));
+            SaveManager.save(Gdx.files.local("Saves/test2.bin")); //todo remove
         }
         if (GameManager.assetManager().getQueuedAssets() != 0) {
             GameManager.assetManager().update();
