@@ -6,13 +6,18 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.badlogic.gdx.utils.XmlWriter;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Method;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.GUI.Conversations.Conversation;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * A class used to load and parse XML files into Conversations with
@@ -20,7 +25,33 @@ import java.util.LinkedList;
  * @author Adam Victor
  */
 public class ConversationLoader {
+    /** Used to parse Xml. The MixedXmlReader separates text into its own elements to maintain order. */
     private MixedXmlReader xml = new MixedXmlReader();
+    /** Mapping of xml element names to corresponding ConversationCommand class. */
+    private static Map<String, Class> classMapping = new HashMap<String, Class>();
+
+    static {
+        classMapping.put("assign", AssignCommand.class);
+        classMapping.put("changebranch", ChangeBranchCommand.class);
+        classMapping.put("character", CharacterAddCommand.class);
+        classMapping.put("animation", CharacterAnimationCommand.class);
+        classMapping.put("direction", CharacterDirectionCommand.class);
+        classMapping.put("name", CharacterNameCommand.class);
+        classMapping.put("position", CharacterPositionCommand.class);
+        classMapping.put("visible", CharacterVisibleCommand.class);
+        classMapping.put("sequence", CommandSequence.class);
+        classMapping.put("debug", DebugCommand.class);
+        classMapping.put("delay", DelayCommand.class);
+        classMapping.put("script", ExecuteScriptCommand.class);
+        classMapping.put("message", MessageCommand.class);
+        classMapping.put("music", PlayMusicCommand.class);
+        classMapping.put("sound", PlaySoundCommand.class);
+        classMapping.put("preload", PreloadCommand.class);
+        classMapping.put("choices", ShowChoicesCommand.class);
+        classMapping.put("textspeed", TextSpeedCommand.class);
+        classMapping.put("if", VariableConditionCommand.class);
+        classMapping.put("init", VariableInitializeCommand.class);
+    }
 
     /** Returns the Conversation created by parsing the XML file
      * with the name NAME.
@@ -55,56 +86,29 @@ public class ConversationLoader {
         conversation.addBranch(name, commands);
     }
 
+    /** Static method to add a new mapping between element name NAME
+     * and ConversationCommand class type. */
+    public static void addClassMapping(String name, Class type) {
+        classMapping.put(name, type);
+    }
+
     /** Static method to return a ConversationCommand given the XML Element ROOT.
      * Passes in the current CONVERSATION for commands to reference as necessary.
+     * Uses reflection to invoke the makeCommand method of the corresponding class
+     * based on class mapping.
      */
     public static ConversationCommand getCommand(Element root) {
         String name = root.getName();
+        Class clazz = classMapping.get(name);
         ConversationCommand command = null;
-        if (name.equals("changebranch")) {
-            command = ChangeBranchCommand.makeCommand(root);
-        } else if (name.equals("character")) {
-            command = CharacterAddCommand.makeCommand(root);
-        } else if (name.equals("animation")) {
-            command = CharacterAnimationCommand.makeCommand(root);
-        } else if (name.equals("direction")) {
-            command = CharacterDirectionCommand.makeCommand(root);
-        } else if (name.equals("name")) {
-            command = CharacterNameCommand.makeCommand(root);
-        } else if (name.equals("position")) {
-            command = CharacterPositionCommand.makeCommand(root);
-        } else if (name.equals("visible")) {
-            command = CharacterVisibleCommand.makeCommand(root);
-        } else if (name.equals("sequence")) {
-            command = CommandSequence.makeCommand(root);
-        } else if (name.equals("debug")) {
-            command = DebugCommand.makeCommand(root);
-        } else if (name.equals("message")) {
-            command = MessageCommand.makeCommand(root);
-        } else if (name.equals("music")) {
-            command = PlayMusicCommand.makeCommand(root);
-        } else if (name.equals("pausemusic")) {
-            command = new PlayMusicCommand(1);
-        } else if (name.equals("resumemusic")) {
-            command = new PlayMusicCommand(2);
-        } else if (name.equals("sound")) {
-            command = PlaySoundCommand.makeCommand(root);
-        } else if (name.equals("preload")) {
-            command = null; //TODO
-        } else if (name.equals("choices")) {
-            command = ShowChoicesCommand.makeCommand(root);
-        } else if (name.equals("delay")) {
-            command = DelayCommand.makeCommand(root);
-        } else if (name.equals("textspeed")) {
-            command = TextSpeedCommand.makeCommand(root);
-        } else if (name.equals("script")) {
-            command = ExecuteScriptCommand.makeCommand(root);
-        } else if (name.equals("init")) {
-            command = VariableInitializeCommand.makeCommand(root);
-        } else if (name.equals("if")) {
-            command = VariableConditionCommand.makeCommand(root);
-        } else if (name.equals("assign")) {
-            command = AssignCommand.makeCommand(root);
+        if (clazz == null) {
+            Gdx.app.error("Commands", "No class mapped to name: " + name);
+        }
+        try {
+            Method m = ClassReflection.getMethod(clazz, "makeCommand", Element.class);
+            command = (ConversationCommand) m.invoke(null, root);
+        } catch (ReflectionException re) {
+            re.printStackTrace();
         }
         return command;
     }
