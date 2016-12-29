@@ -69,7 +69,8 @@ public class ExecuteScriptCommand implements ConversationCommand {
 
     /** Static method to create a new command from XML Element ELEMENT. */
     public static ExecuteScriptCommand makeCommand(XmlReader.Element element) {
-        String script = element.getText();
+        XmlReader.Element textElement = element.getChild(0);
+        String script = textElement != null ? textElement.getText() : "";
         boolean isFile = element.getBoolean("isfile", false);
         String language = element.getAttribute("language");
         return new ExecuteScriptCommand(script, isFile, language);

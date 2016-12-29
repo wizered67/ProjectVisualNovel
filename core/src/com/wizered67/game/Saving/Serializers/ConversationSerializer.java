@@ -1,46 +1,32 @@
 package com.wizered67.game.Saving.Serializers;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.FieldSerializer;
-import com.esotericsoftware.kryo.serializers.FieldSerializerConfig;
 import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.GUIManager;
-import com.wizered67.game.GameManager;
-import com.wizered67.game.MusicManager;
+
+import java.util.Map;
 
 /**
- * Serializer used for saving and loading Conversations.
+ * Serializer used for saving and loading Conversations. Only stores the
+ * assignments map and name of conversation and uses these to reload.
  * @author Adam Victor
  */
-public class ConversationSerializer extends FieldSerializer<ConversationController> {
-    public ConversationSerializer (Kryo kryo, Class type) {
-        super(kryo, type);
-    }
+public class ConversationSerializer extends Serializer<Conversation> {
 
-    public ConversationSerializer (Kryo kryo, Class type, Class[] generics) {
-        super(kryo, type, generics);
-    }
-
-    protected ConversationSerializer (Kryo kryo, Class type, Class[] generics, FieldSerializerConfig config) {
-        super(kryo, type, generics, config);
+    @Override
+    public void write (Kryo kryo, Output output, Conversation object) {
+        output.writeString(object.getName());
+        kryo.writeObjectOrNull(output, object.getAllAssignments(), Map.class);
     }
     @Override
-    public void write (Kryo kryo, Output output, ConversationController object) {
-        object.save();
-        super.write(kryo, output, object);
-    }
-    @Override
-    public ConversationController read (Kryo kryo, Input input, Class<ConversationController> type) {
-        ConversationController conversationController = super.read(kryo, input, type);
-        conversationController.reload();
-        return conversationController;
-    }
-    @Override
-    public ConversationController create (Kryo kryo, Input input, Class type) {
-        return GUIManager.conversationController();
+    public Conversation read (Kryo kryo, Input input, Class<Conversation> type) {
+        String filename = input.readString();
+        Map assignments = kryo.readObjectOrNull(input, Map.class);
+        Conversation conversation = GUIManager.conversationController().loadConversation(filename);
+        conversation.setAssignments(assignments);
+        return conversation;
     }
 }

@@ -8,6 +8,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.minlog.Log;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.SceneManager;
 import com.wizered67.game.GUI.GUIManager;
@@ -39,7 +40,7 @@ public class SaveManager {
     public static void init() {
         kryo.addDefaultSerializer(MusicManager.class, MusicManagerSerializer.class);
         kryo.addDefaultSerializer(CharacterSprite.class, CharacterSpriteSerializer.class);
-        kryo.addDefaultSerializer(ConversationController.class, ConversationSerializer.class);
+        kryo.addDefaultSerializer(ConversationController.class, ConversationControllerSerializer.class);
         kryo.addDefaultSerializer(SceneManager.class, SceneManagerSerializer.class);
         kryo.addDefaultSerializer(LuaBoolean.class, LuaBooleanSerializer.class);
         kryo.addDefaultSerializer(LuaDouble.class, LuaDoubleSerializer.class);
@@ -47,6 +48,7 @@ public class SaveManager {
         kryo.addDefaultSerializer(LuaString.class, LuaStringSerializer.class);
         kryo.addDefaultSerializer(GameScript.class, GameScriptSerializer.class);
         kryo.addDefaultSerializer(ScriptManager.class, ScriptManagerSerializer.class);
+        kryo.addDefaultSerializer(Conversation.class, ConversationSerializer.class);
         kryo.setReferences(true);
         Log.set(Log.LEVEL_TRACE);
         kryo.register(Color.class, new Serializer<Color>() {

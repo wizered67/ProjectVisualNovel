@@ -20,14 +20,14 @@ import java.util.LinkedList;
  * @author Adam Victor
  */
 public class ConversationLoader {
-    private XmlReader xml = new XmlReader();
+    private MixedXmlReader xml = new MixedXmlReader();
 
     /** Returns the Conversation created by parsing the XML file
      * with the name NAME.
      */
     public Conversation loadConversation(String name) {
         try {
-            Conversation conversation = new Conversation();
+            Conversation conversation = new Conversation(name);
             FileHandle file = Gdx.files.internal("Conversations/" + name);
             Element root = xml.parse(file);
             for (int i = 0; i < root.getChildCount(); i += 1) {
@@ -63,17 +63,17 @@ public class ConversationLoader {
         ConversationCommand command = null;
         if (name.equals("changebranch")) {
             command = ChangeBranchCommand.makeCommand(root);
-        } else if (name.equals("addcharacter")) {
+        } else if (name.equals("character")) {
             command = CharacterAddCommand.makeCommand(root);
-        } else if (name.equals("setanimation")) {
+        } else if (name.equals("animation")) {
             command = CharacterAnimationCommand.makeCommand(root);
-        } else if (name.equals("setdirection")) {
+        } else if (name.equals("direction")) {
             command = CharacterDirectionCommand.makeCommand(root);
-        } else if (name.equals("setname")) {
+        } else if (name.equals("name")) {
             command = CharacterNameCommand.makeCommand(root);
-        } else if (name.equals("setposition")) {
+        } else if (name.equals("position")) {
             command = CharacterPositionCommand.makeCommand(root);
-        } else if (name.equals("setvisible")) {
+        } else if (name.equals("visible")) {
             command = CharacterVisibleCommand.makeCommand(root);
         } else if (name.equals("sequence")) {
             command = CommandSequence.makeCommand(root);
@@ -81,13 +81,13 @@ public class ConversationLoader {
             command = DebugCommand.makeCommand(root);
         } else if (name.equals("message")) {
             command = MessageCommand.makeCommand(root);
-        } else if (name.equals("playmusic")) {
+        } else if (name.equals("music")) {
             command = PlayMusicCommand.makeCommand(root);
         } else if (name.equals("pausemusic")) {
             command = new PlayMusicCommand(1);
         } else if (name.equals("resumemusic")) {
             command = new PlayMusicCommand(2);
-        } else if (name.equals("playsound")) {
+        } else if (name.equals("sound")) {
             command = PlaySoundCommand.makeCommand(root);
         } else if (name.equals("preload")) {
             command = null; //TODO
@@ -103,6 +103,8 @@ public class ConversationLoader {
             command = VariableInitializeCommand.makeCommand(root);
         } else if (name.equals("if")) {
             command = VariableConditionCommand.makeCommand(root);
+        } else if (name.equals("assign")) {
+            command = AssignCommand.makeCommand(root);
         }
         return command;
     }

@@ -57,7 +57,7 @@ public class ChangeBranchCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static ChangeBranchCommand makeCommand(XmlReader.Element element) {
-        String newBranch = element.getAttribute("newbranch", null);
+        String newBranch = element.getAttribute("branch", null);
         if (newBranch == null) {
             throw new GdxRuntimeException("No new branch specified for new branch command.");
         }

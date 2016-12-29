@@ -19,20 +19,20 @@
         <xs:sequence>
             <xs:choice maxOccurs="unbounded">
                 <xs:element type="changebranchType" name="changebranch" maxOccurs="unbounded"/>
-                <xs:element type="addcharacterType" name="addcharacter" maxOccurs="unbounded"/>
-                <xs:element type="setanimationType" name="setanimation" maxOccurs="unbounded"/>
-                <xs:element type="setdirectionType" name="setdirection" maxOccurs="unbounded"/>
-                <xs:element type="setnameType" name="setname" maxOccurs="unbounded"/>
-                <xs:element type="setpositionType" name="setposition" maxOccurs="unbounded"/>
-                <xs:element type="setvisibleType" name="setvisible" maxOccurs="unbounded"/>
+                <xs:element type="addcharacterType" name="character" maxOccurs="unbounded"/>
+                <xs:element type="setanimationType" name="animation" maxOccurs="unbounded"/>
+                <xs:element type="setdirectionType" name="direction" maxOccurs="unbounded"/>
+                <xs:element type="setnameType" name="name" maxOccurs="unbounded"/>
+                <xs:element type="setpositionType" name="position" maxOccurs="unbounded"/>
+                <xs:element type="setvisibleType" name="visible" maxOccurs="unbounded"/>
                 <xs:element type="sequenceType" name="sequence" maxOccurs="unbounded"/>
                 <xs:element type="debugType" name="debug" maxOccurs="unbounded"/>
-                <xs:element type="playmusicType" name="playmusic" maxOccurs="unbounded"/>
+                <xs:element type="playmusicType" name="music" maxOccurs="unbounded"/>
                 <xs:element type="xs:string" name="pausemusic" maxOccurs="unbounded"/>
                 <xs:element type="xs:string" name="resumemusic" maxOccurs="unbounded"/>
-                <xs:element type="playsoundType" name="playsound" maxOccurs="unbounded"/>
+                <xs:element type="playsoundType" name="sound" maxOccurs="unbounded"/>
                 <xs:element type="choicesType" name="choices" maxOccurs="unbounded"/>
-                <xs:element type="messageType" name="message" maxOccurs="unbounded"/>
+                <xs:element type="assignType" name="assign" maxOccurs="unbounded"/>
                 <xs:element type="delayType" name="delay" maxOccurs="unbounded"/>
                 <xs:element type="textSpeedType" name="textspeed" maxOccurs="unbounded"/>
                 <xs:element type="scriptType" name="script" maxOccurs="unbounded"/>
@@ -43,10 +43,8 @@
     </xs:group>
 
 
-    <xs:complexType name="choicesType">
-        <xs:sequence>
-            <xs:element type="choiceType" name="choice" maxOccurs="4" minOccurs="1"/>
-        </xs:sequence>
+    <xs:complexType name="choicesType" mixed="true">
+        <xs:group ref="commands"/>
     </xs:complexType>
 
     <xs:complexType name="choiceType">
@@ -94,7 +92,7 @@
     </xs:complexType>
 
     <xs:complexType name="changebranchType">
-            <xs:attribute type="xs:string" name="newbranch" use="required"/>
+            <xs:attribute type="xs:string" name="branch" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="setanimationType">
@@ -103,20 +101,8 @@
             <xs:attribute type="xs:boolean" name="wait" default="false"/>
     </xs:complexType>
 
-    <xs:complexType name="messageType" mixed="true">
-        <xs:sequence>
-            <xs:sequence maxOccurs="unbounded" minOccurs="0">
-                <xs:element type="localAssignType" name="assign" maxOccurs="unbounded" minOccurs="0"/>
-            </xs:sequence>
-            <xs:element type="xs:string" name="text" maxOccurs="unbounded" minOccurs="0"/>
-        </xs:sequence>
-        <xs:attribute type="xs:string" name="speaker" use="required"/>
-        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="localAssignType">
+    <xs:complexType name="assignType" mixed="true">
         <xs:group ref="commands"/>
-        <xs:attribute type="xs:string" name="name" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="setdirectionType">
@@ -124,7 +110,7 @@
         <xs:attribute type="xs:integer" name="direction" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="branchType">
+    <xs:complexType name="branchType" mixed="true">
         <xs:group ref="commands"/>
         <xs:attribute type="xs:string" name="name" use="required"/>
     </xs:complexType>

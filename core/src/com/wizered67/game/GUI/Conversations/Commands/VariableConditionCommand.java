@@ -92,7 +92,7 @@ public class VariableConditionCommand implements ConversationCommand {
     public static VariableConditionCommand makeCommand(XmlReader.Element element) {
         String language = element.getAttribute("language");
         boolean isFile = element.getBoolean("isfile", false);
-        String script = element.getText();
+        String script = element.getText(); //todo Have to figure out how to separate condition script from message commands
         List<ConversationCommand> commands = new ArrayList<ConversationCommand>();
         for (int i = 0; i < element.getChildCount(); i += 1) {
             XmlReader.Element c = element.getChild(i);

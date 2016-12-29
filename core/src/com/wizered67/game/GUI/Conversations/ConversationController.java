@@ -56,7 +56,7 @@ public class ConversationController implements Controllable {
     /** The ConversationCommand currently being executed. */
     private ConversationCommand currentCommand;
     /** The current Conversation containing all possible branches. */
-    private transient Conversation currentConversation;
+    private Conversation currentConversation;
     /** Filename of current conversation. */
     private String conversationName;
     /** Whether the speaking sound should be played this frame. */
@@ -92,7 +92,7 @@ public class ConversationController implements Controllable {
         scriptManagers.put("Lua", new LuaScriptManager());
         scriptManagers.put("Groovy", new GroovyScriptManager());
         if (!Constants.LOAD) { //todo fix
-            loadConversation("demonstrationGroovy.conv");
+            loadConversation("simple.conv");
             setBranch("default");
         }
         //remainingText =
@@ -118,7 +118,6 @@ public class ConversationController implements Controllable {
     }
     /** Loads the GUI state and Conversation. */
     public void reload() {
-        loadConversation(conversationName);
         if (guiState == null) {
             return;
         }
@@ -130,6 +129,10 @@ public class ConversationController implements Controllable {
             setChoice(i, guiState.choiceButtonText[i]);
         }
         numLines = textboxLabel.getGlyphLayout().runs.size;
+    }
+    /** Returns the current Conversation. */
+    public Conversation conversation() {
+        return currentConversation;
     }
     /** Returns the SceneManager being used update and draw CharacterSprites. */
     public SceneManager sceneManager() {
@@ -144,9 +147,10 @@ public class ConversationController implements Controllable {
         return scriptManagers;
     }
     /** Loads the Conversation with filename FILENAME. */
-    public void loadConversation(String fileName) {
+    public Conversation loadConversation(String fileName) {
         currentConversation = conversationLoader.loadConversation(fileName);
         conversationName = fileName;
+        return currentConversation;
     }
     /** Called every frame and updates the GUI elements by executing commands.
      * If waitToProceed is false, it continues to go onto the next command. Otherwise

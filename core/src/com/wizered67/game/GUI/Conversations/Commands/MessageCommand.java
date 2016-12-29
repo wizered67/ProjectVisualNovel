@@ -29,8 +29,6 @@ public class MessageCommand implements ConversationCommand {
     private boolean done;
     /** The default speaking sound to be played. */
     private static final String DEFAULT_SOUND = "talksoundmale";
-    /** Mapping between text shortcuts in the form @c{string} and ConversationCommands. */
-    private Map<String, ConversationCommand> assignments;
     /** List of all blocks of text to be displayed. Each String in the list is
      * a separate dialogue box. */
     private LinkedList<String> storedText;
@@ -52,7 +50,6 @@ public class MessageCommand implements ConversationCommand {
     public MessageCommand() {
         speaker = "";
         done = true;
-        assignments = null;
         storedText = null;
         waitForInput = false;
     }
@@ -64,7 +61,6 @@ public class MessageCommand implements ConversationCommand {
     public MessageCommand(String character, boolean wait) {
         speaker = character;
         done = false;
-        assignments = new HashMap<String, ConversationCommand>();
         storedText = new LinkedList<String>();
         waitForInput = wait;
     }
@@ -116,7 +112,7 @@ public class MessageCommand implements ConversationCommand {
     /** Sets the current subcommand to the one contained in COMMAND STRING. */
     public void setSubcommand(String commandString) {
         String commandName = commandString.replaceAll("@c\\{(.*)\\}", "$1");
-        ConversationCommand command = assignments.get(commandName);
+        ConversationCommand command = conversationController.conversation().getAssignment(commandName);
         if (command != null) {
             currentSubcommand = command;
             currentSubcommand.execute(conversationController);
@@ -150,18 +146,12 @@ public class MessageCommand implements ConversationCommand {
     /** Outputs XML to the XML WRITER for this command. */
     @Override
     public void writeXml(XmlWriter xmlWriter) {
+        //todo fix?
         try {
             xmlWriter.element("message")
                     .attribute("speaker", speaker)
                     .attribute("wait", waitForInput);
 
-            for (String assigned : assignments.keySet()) {
-                xmlWriter.element("assign")
-                        .attribute("name", assigned);
-                ConversationCommand command = assignments.get(assigned);
-                command.writeXml(xmlWriter);
-                xmlWriter.pop();
-            }
             for (String text : storedText) {
                 xmlWriter.element("text", text).pop();
             }
@@ -186,9 +176,6 @@ public class MessageCommand implements ConversationCommand {
                 text = text.replaceAll("\\t", "");
                 text = text.replaceAll("@n", "\n");
                 message.storedText.addLast(text);
-            } else if (e.getName().equalsIgnoreCase("assign")) {
-                message.assignments.put(e.getAttribute("name", ""),
-                        ConversationLoader.getCommand(e.getChild(0)));
             }
         }
         return message;
