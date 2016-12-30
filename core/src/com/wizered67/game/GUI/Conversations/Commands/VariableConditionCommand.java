@@ -10,6 +10,8 @@ import com.wizered67.game.Scripting.ScriptManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A ConversationCommand that executes a sequence of commands when some condition is met.
@@ -28,9 +30,10 @@ public class VariableConditionCommand implements ConversationCommand {
     private String script;
     /** Whether the script is a file. */
     private boolean isFile;
-    /** The scipting language the script is in. */
+    /** The scripting language the script is in. */
     private String language;
-
+    /** Pattern used to match scripts in brackets. */
+    private transient static Pattern scriptPattern = Pattern.compile("\\{(.*)\\}(.*)?", Pattern.DOTALL);
     /** No arguments constructor. */
     public VariableConditionCommand() {
         scriptManager = null;
@@ -92,9 +95,18 @@ public class VariableConditionCommand implements ConversationCommand {
     public static VariableConditionCommand makeCommand(XmlReader.Element element) {
         String language = element.getAttribute("language");
         boolean isFile = element.getBoolean("isfile", false);
-        String script = element.getText(); //todo Have to figure out how to separate condition script from message commands
         List<ConversationCommand> commands = new ArrayList<ConversationCommand>();
-        for (int i = 0; i < element.getChildCount(); i += 1) {
+        String text = element.getChild(0).getText().trim();
+        Matcher matcher = scriptPattern.matcher(text);
+        String script = "";
+        if (matcher.matches()) {
+            script = matcher.group(1);
+            String messages = matcher.group(2);
+            if (!messages.trim().isEmpty()) {
+                commands.add(MessageCommand.makeCommand(messages));
+            }
+        }
+        for (int i = 1; i < element.getChildCount(); i += 1) {
             XmlReader.Element c = element.getChild(i);
             ConversationCommand command = ConversationLoader.getCommand(c);
             commands.add(command);

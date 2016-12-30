@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
@@ -25,7 +26,7 @@ public class ShowChoicesCommand implements ConversationCommand {
     /** Whether this ShowChoiceCommand is done displaying. Set to false initially until choice is made. */
     private boolean done;
     /** Maximum number of choices that can be shown at once. */
-    private final int MAX_CHOICES = 4;
+    private static final int MAX_CHOICES = 4;
 
     /** No arguments constructor. */
     public ShowChoicesCommand() {
@@ -50,7 +51,7 @@ public class ShowChoicesCommand implements ConversationCommand {
             conversationController.setChoice(i, "");
         }
         for (int i = 0; i < choicesText.length; i += 1) {
-            if (conditions[i] == null || conditions[i].conditionMet()) {
+            if (choicesText[i] != null && (conditions[i] == null || conditions[i].conditionMet())) {
                 conversationController.setChoice(numAdded, choicesText[i]);
                 conversationController.setChoiceCommand(numAdded, choicesCommands[i]);
                 numAdded += 1;
@@ -91,28 +92,58 @@ public class ShowChoicesCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static ShowChoicesCommand makeCommand(XmlReader.Element element) {
-        int numChoices = element.getChildCount();
+        int numChoices = MAX_CHOICES;
         String[] textChoices = new String[numChoices];
         @SuppressWarnings("unchecked")
         List<ConversationCommand>[] commandChoices = new List[numChoices];
-        VariableConditionCommand[] conditions = new VariableConditionCommand[numChoices];
         for (int i = 0; i < numChoices; i += 1) {
-            XmlReader.Element c = element.getChild(i);
-            textChoices[i] = c.getAttribute("name");
-            for (int j = 0; j < c.getChildCount(); j += 1) {
-                ConversationCommand command = ConversationLoader.getCommand(c.getChild(j));
-                if (j == 0 && command instanceof VariableConditionCommand) {
-                    conditions[i] = (VariableConditionCommand) command;
-                } else {
-                    if (commandChoices[i] == null) {
-                        commandChoices[i] = new ArrayList<ConversationCommand>();
+            commandChoices[i] = new ArrayList<ConversationCommand>();
+        }
+        VariableConditionCommand[] conditions = new VariableConditionCommand[numChoices];
+        int choiceNum = -1;
+        boolean afterChoice = false;
+        for (int i = 0; i < element.getChildCount(); i += 1) {
+            XmlReader.Element elem = element.getChild(i);
+            if (elem.getName().equalsIgnoreCase("text")) { //block of text. Iterate through to separate into message/choices
+                //also handle case where condition directly follows choice
+                String text = elem.getText().replaceAll("\\r", "");
+                String[] lines = text.split("\\n");
+                String messages = "";
+                for (String line : lines) {
+                    line = line.trim();
+                    if (line.charAt(line.length() - 1) == ':') {
+                        addMessageCommand(messages, choiceNum, commandChoices);
+                        choiceNum += 1;
+                        textChoices[choiceNum] = line.substring(0, line.length() - 1);
+                        afterChoice = true;
+                    } else {
+                        messages += (" " + line);
+                        afterChoice = false;
                     }
-                    commandChoices[i].add(command);
                 }
+                addMessageCommand(messages, choiceNum, commandChoices);
+            } else {
+                ConversationCommand c = ConversationLoader.getCommand(elem);
+                if (afterChoice && c instanceof VariableConditionCommand) {
+                    conditions[choiceNum] = (VariableConditionCommand) c;
+                } else {
+                    List<ConversationCommand> commands = commandChoices[choiceNum];
+                    commands.add(c);
+                }
+                afterChoice = false;
             }
         }
         return new ShowChoicesCommand(textChoices, commandChoices, conditions);
     }
-
+    /** Helper method for adding a MessageCommand with content TEXT to command list of choice CHOICENUM. */
+    private static void addMessageCommand(String text, int choiceNum, List<ConversationCommand>[] commandChoices) {
+        if (!text.isEmpty()) {
+            if (choiceNum < 0) {
+                Gdx.app.error("Command Parser", "Trying to add message before choice in choices block.");
+            } else {
+                commandChoices[choiceNum].add(MessageCommand.makeCommand(text));
+            }
+        }
+    }
 
 }

@@ -109,6 +109,7 @@ public class ConversationLoader {
             command = (ConversationCommand) m.invoke(null, root);
         } catch (ReflectionException re) {
             re.printStackTrace();
+            throw new RuntimeException();
         }
         return command;
     }

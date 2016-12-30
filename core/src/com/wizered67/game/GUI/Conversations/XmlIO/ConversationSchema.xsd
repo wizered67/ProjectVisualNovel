@@ -147,7 +147,7 @@
 
     <xs:complexType name="ifType" mixed="true">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="commands"/>
+            <xs:group ref="commands" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute type="languages" name="language" use="required"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>

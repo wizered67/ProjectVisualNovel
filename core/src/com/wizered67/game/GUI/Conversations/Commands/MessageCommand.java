@@ -81,7 +81,6 @@ public class MessageCommand implements ConversationCommand {
     }
     /** Increments index of current text being displayed as well as speaker. */
     public void updateText() {
-        index += 1;
         String nextText = storedText.get(index);
         Matcher matcher = scriptVariablePattern.matcher(nextText);
         while (matcher.find()) {
@@ -95,6 +94,7 @@ public class MessageCommand implements ConversationCommand {
         CharacterSprite characterSpeaking = conversationController.sceneManager().getCharacterByName(getSpeaker());
         conversationController.setSpeaker(characterSpeaking);
         conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
+        index += 1;
     }
     /** Whether the text should be updated. False iff there is a current subcommand
      * that is being waited on. */
@@ -113,7 +113,7 @@ public class MessageCommand implements ConversationCommand {
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
-        if (waitForInput.get(index)) { //todo make it so text keeps scrolling if !waitForInput.get(index)
+        if (waitForInput.get(index - 1)) { //todo make it so text keeps scrolling if !waitForInput.get(index)
             return !done;
         } else {
             return index < storedText.size() || !conversationController.doneSpeaking();
@@ -142,11 +142,13 @@ public class MessageCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static MessageCommand makeCommand(XmlReader.Element element) {
-        //String message = element.getAttribute("text");
+        return makeCommand(element.getText());
+    }
+    /** Creates a MessgaeCommand from the text TEXT. */
+    public static MessageCommand makeCommand(String text) {
         ArrayList<String> storedText = new ArrayList<String>();
         ArrayList<Boolean> waitToProceed = new ArrayList<Boolean>();
         ArrayList<String> speakers = new ArrayList<String>();
-        String text = element.getText();
         text = text.replaceAll("\\r", "");
         String[] lines = text.split("\\n");
         for (String line : lines) {
@@ -181,19 +183,6 @@ public class MessageCommand implements ConversationCommand {
                 storedText.set(storedText.size() - 1, last + " " + line);
             }
         }
-        /*
-        for (int i = 0; i < element.getChildCount(); i += 1) {
-            XmlReader.Element e = element.getChild(i);
-            if (e.getName().equalsIgnoreCase("text")) {
-                String text = e.getText();
-                text = text.replaceAll("\\n\\s*", " ");
-                text = text.replaceAll("\\r", "");
-                text = text.replaceAll("\\t", "");
-                text = text.replaceAll("@n", "\n");
-                storedText.add(text);
-            }
-        }
-        return message; */
         return new MessageCommand(storedText, speakers, waitToProceed);
     }
 }
