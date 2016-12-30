@@ -8,7 +8,6 @@ import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.GUIManager;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Serializer used for saving and loading Conversations. Only stores the
