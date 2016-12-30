@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
@@ -9,9 +10,7 @@ import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.Scripting.ScriptManager;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,8 +21,8 @@ import java.util.regex.Pattern;
  * @author Adam Victor
  */
 public class MessageCommand implements ConversationCommand {
-    /** The name of the speaker of this message. */
-    private String speaker;
+    /** List of strings of speakers. Each speaker corresponds to a message of the same index. */
+    private ArrayList<String> speakers;
     /** Whether this MessageCommand is done and the next ConversationCommand
      * should be executed. Begins as false. */
     private boolean done;
@@ -31,9 +30,7 @@ public class MessageCommand implements ConversationCommand {
     private static final String DEFAULT_SOUND = "talksoundmale";
     /** List of all blocks of text to be displayed. Each String in the list is
      * a separate dialogue box. */
-    private LinkedList<String> storedText;
-    /** The list of all blocks of text that still needs to be displayed. */
-    private LinkedList<String> currentText;
+    private ArrayList<String> storedText;
     /** Reference to the ConversationController that is processing this MessageCommand. Used
      * to set text and speaker and other message attributes. */
     private ConversationController conversationController;
@@ -42,57 +39,50 @@ public class MessageCommand implements ConversationCommand {
     /** Whether it is necessary to wait for input to proceed to the next command.
      * If false, automatically go to next command once all text is shown. Assumed to
      * be true if not specified in conversation file. */
-    private boolean waitForInput;
+    private ArrayList<Boolean> waitForInput;
+    /** Index of the message currently being displayed. */
+    private int index;
     /** Regex pattern used to match variables in messages. */
     private transient Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
+    /** Regex pattern used to match messages with a speaker. */
+    private transient static Pattern speakerMessagePattern = Pattern.compile("\\s*(\\S*)\\s*:(.+)");
 
     /** No arguments constructor. */
     public MessageCommand() {
-        speaker = "";
+        speakers = null;
         done = true;
         storedText = null;
-        waitForInput = false;
+        waitForInput = null;
     }
-    /** Creates a new MessageCommand with speaker named CHARACTER. If WAIT,
-     * does not allow going on to the next command without input. Otherwise,
-     * automatically goes to next command once all text is shown.
-     * Sets stored text to empty initially but it can be added to later.
+    /** Creates a new MessageCommand with speakers in SPEAKER list. WAIT is a list
+     * that determines whether player input is necessary before moving on to the next
+     * command or if message ending is enough. TEXT contains stored text.
      */
-    public MessageCommand(String character, boolean wait) {
-        speaker = character;
+    public MessageCommand(ArrayList<String> text, ArrayList<String> speaker, ArrayList<Boolean> wait) {
         done = false;
-        storedText = new LinkedList<String>();
+        storedText = text;
+        speakers = speaker;
         waitForInput = wait;
-    }
-
-    /** Creates a new MessageCommand with speaker named CHARACTER
-     * and WAIT as true.
-     */
-    public MessageCommand(String character) {
-        this(character, true);
     }
 
     /** Returns the speaker of this message. */
     public String getSpeaker() {
-        return speaker;
+        return speakers.get(index);
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @SuppressWarnings("unchecked")
     public void execute(ConversationController message) {
         conversationController = message;
-        currentText = (LinkedList) storedText.clone();
-        //conversationController.setRemainingText(currentText.remove());
+        index = 0;
         updateText();
-        CharacterSprite characterSpeaking = conversationController.sceneManager().getCharacterByName(speaker);
         conversationController.setTextBoxShowing(true);
-        conversationController.setSpeaker(characterSpeaking);
-        conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
         currentSubcommand = null;
         done = false;
     }
-    /** Updates the text to be displayed to the next one in the currentText queue. */
+    /** Increments index of current text being displayed as well as speaker. */
     public void updateText() {
-        String nextText = currentText.remove();
+        index += 1;
+        String nextText = storedText.get(index);
         Matcher matcher = scriptVariablePattern.matcher(nextText);
         while (matcher.find()) {
             String language = matcher.group(1);
@@ -102,10 +92,12 @@ public class MessageCommand implements ConversationCommand {
             nextText = nextText.replaceFirst(scriptVariablePattern.toString(), variableString);
         }
         conversationController.setRemainingText(nextText);
+        CharacterSprite characterSpeaking = conversationController.sceneManager().getCharacterByName(getSpeaker());
+        conversationController.setSpeaker(characterSpeaking);
+        conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
     }
     /** Whether the text should be updated. False iff there is a current subcommand
-     * that is being waited on.
-     */
+     * that is being waited on. */
     public boolean shouldUpdate() {
         return currentSubcommand == null || !currentSubcommand.waitToProceed();
     }
@@ -121,10 +113,10 @@ public class MessageCommand implements ConversationCommand {
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
     public boolean waitToProceed() {
-        if (waitForInput) {
+        if (waitForInput.get(index)) { //todo make it so text keeps scrolling if !waitForInput.get(index)
             return !done;
         } else {
-            return currentText.size() != 0 || !conversationController.doneSpeaking();
+            return index < storedText.size() || !conversationController.doneSpeaking();
         }
     }
     /** Checks whether the CompleteEvent C completes this command,
@@ -135,7 +127,7 @@ public class MessageCommand implements ConversationCommand {
             currentSubcommand.complete(c);
         }
         if (c.type == CompleteEvent.Type.INPUT) {
-            if (currentText.size() == 0) {
+            if (index >= storedText.size()) {
                 done = true;
             } else {
                 updateText();
@@ -147,26 +139,49 @@ public class MessageCommand implements ConversationCommand {
     @Override
     public void writeXml(XmlWriter xmlWriter) {
         //todo fix?
-        try {
-            xmlWriter.element("message")
-                    .attribute("speaker", speaker)
-                    .attribute("wait", waitForInput);
-
-            for (String text : storedText) {
-                xmlWriter.element("text", text).pop();
-            }
-            xmlWriter.pop();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static MessageCommand makeCommand(XmlReader.Element element) {
-        String speaker = element.getAttribute("speaker");
-        boolean waitForInput = element.getBooleanAttribute("wait", true);
         //String message = element.getAttribute("text");
-        MessageCommand message = new MessageCommand(speaker, waitForInput);
+        ArrayList<String> storedText = new ArrayList<String>();
+        ArrayList<Boolean> waitToProceed = new ArrayList<Boolean>();
+        ArrayList<String> speakers = new ArrayList<String>();
+        String text = element.getText();
+        text = text.replaceAll("\\r", "");
+        String[] lines = text.split("\\n");
+        for (String line : lines) {
+            line = line.trim();
+            line = line.replaceAll("@n", "\n");
+            if (line.isEmpty()) {
+                continue;
+            }
+            Matcher matcher = speakerMessagePattern.matcher(line);
+            if (matcher.matches()) {
+                storedText.add(matcher.group(2));
+                String speakerText = matcher.group(1);
+                if (!speakerText.isEmpty() && speakerText.charAt(0) == '!') {
+                    waitToProceed.add(false);
+                    speakerText = speakerText.substring(1);
+                } else {
+                    waitToProceed.add(true);
+                }
+                if (speakerText.trim().isEmpty()) {
+                    if (speakers.isEmpty()) {
+                        Gdx.app.error("Command Parser", "Text with continued speaker has no previous speaker.");
+                    }
+                    speakers.add(speakers.get(speakers.size() - 1));
+                } else {
+                    speakers.add(speakerText);
+                }
+            } else {
+                if (storedText.isEmpty()) {
+                    Gdx.app.error("Command Parser", "Trying to add text with no speaker declared.");
+                }
+                String last = storedText.get(storedText.size() - 1);
+                storedText.set(storedText.size() - 1, last + " " + line);
+            }
+        }
+        /*
         for (int i = 0; i < element.getChildCount(); i += 1) {
             XmlReader.Element e = element.getChild(i);
             if (e.getName().equalsIgnoreCase("text")) {
@@ -175,9 +190,10 @@ public class MessageCommand implements ConversationCommand {
                 text = text.replaceAll("\\r", "");
                 text = text.replaceAll("\\t", "");
                 text = text.replaceAll("@n", "\n");
-                message.storedText.addLast(text);
+                storedText.add(text);
             }
         }
-        return message;
+        return message; */
+        return new MessageCommand(storedText, speakers, waitToProceed);
     }
 }
