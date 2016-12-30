@@ -26,12 +26,6 @@ public class VariableConditionCommand implements ConversationCommand {
     private ScriptManager scriptManager;
     /** The commands to be executed if the condition is met. */
     private List<ConversationCommand> commands;
-    /** Script to be executed - either the contents or name of the file. */
-    private String script;
-    /** Whether the script is a file. */
-    private boolean isFile;
-    /** The scripting language the script is in. */
-    private String language;
     /** Pattern used to match scripts in brackets. */
     private transient static Pattern scriptPattern = Pattern.compile("\\{(.*)\\}(.*)?", Pattern.DOTALL);
     /** No arguments constructor. */
@@ -39,20 +33,14 @@ public class VariableConditionCommand implements ConversationCommand {
         scriptManager = null;
         condition = null;
         commands = null;
-        script = "";
-        isFile = false;
-        language = "";
     }
     /** Sets the scriptManager to the one used for LANG and then loads the CONDITION SCRIPT.
      * Iff FILE, it load the file named CONDITION SCRIPT. Also sets the commands to be
      * executed to RESULT.
      */
     public VariableConditionCommand(String conditionScript, boolean file, String lang, List<ConversationCommand> result) {
-        script = conditionScript;
-        isFile = file;
-        language = lang;
-        scriptManager = ConversationController.scriptManager(language);
-        condition = scriptManager.load(conditionScript, isFile);
+        scriptManager = ConversationController.scriptManager(lang);
+        condition = scriptManager.load(conditionScript, file);
         commands = result;
     }
     /** Whether the condition in the script passed in has been met. */
