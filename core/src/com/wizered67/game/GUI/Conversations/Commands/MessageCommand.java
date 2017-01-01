@@ -134,6 +134,13 @@ public class MessageCommand implements ConversationCommand {
                 conversationController.setDisplayAll(false);
             }
         }
+        if (c.type == CompleteEvent.Type.TEXT) {
+            if (index < storedText.size() && !waitForInput.get(index - 1)
+                    && (currentSubcommand == null || !currentSubcommand.waitToProceed())) {
+                updateText();
+                conversationController.setDisplayAll(false);
+            }
+        }
     }
     /** Outputs XML to the XML WRITER for this command. */
     @Override

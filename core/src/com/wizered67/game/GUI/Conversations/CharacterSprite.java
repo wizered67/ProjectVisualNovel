@@ -171,7 +171,7 @@ public class CharacterSprite {
             updateSprite();
             //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
             if (currentAnimation.isAnimationFinished(stateTime) && !wasFinished) {
-                manager.complete(new CompleteEvent(CompleteEvent.Type.ANIMATION_END, animationName));
+                manager.complete(CompleteEvent.animationEnd(animationName));
                 wasFinished = true;
             }
 
@@ -222,7 +222,7 @@ public class CharacterSprite {
     /** Sets this CharacterSprite's visibility to VISIBLE. */
     public void setVisible(boolean visible) {
         if (fadePerSecond != 0) {
-            manager.complete(new CompleteEvent(CompleteEvent.Type.FADE_END));
+            manager.complete(CompleteEvent.fade());
         }
         if (visible) {
             sprite.setAlpha(1);

@@ -181,6 +181,9 @@ public class ConversationController implements Controllable {
      */
     public void updateText(float deltaTime) {
         if (doneSpeaking()) {
+            if (currentCommand != null) {
+                currentCommand.complete(CompleteEvent.text());
+            }
             return;
         }
 
@@ -396,7 +399,7 @@ public class ConversationController implements Controllable {
         }
         List<ConversationCommand> commands = choiceCommands[choice];
         insertCommands(commands);
-        currentCommand.complete(new CompleteEvent(CompleteEvent.Type.CHOICE));
+        currentCommand.complete(CompleteEvent.choice());
     }
 
     /** Tags Code */
@@ -445,7 +448,7 @@ public class ConversationController implements Controllable {
                 displayAll = true;
             } else {
                 if (currentCommand != null) {
-                    currentCommand.complete(new CompleteEvent(CompleteEvent.Type.INPUT));
+                    currentCommand.complete(CompleteEvent.input());
                 }
             }
         }

@@ -12,6 +12,16 @@ public class CompleteEvent {
     /** The type of event that has occurred. */
     public Type type;
 
+    /** A CompleteEvent for when input is given. */
+    private static final CompleteEvent INPUT_COMPLETE_EVENT = new CompleteEvent(Type.INPUT);
+    /** A CompleteEvent for when a choice is made. */
+    private static final CompleteEvent CHOICE_COMPLETE_EVENT = new CompleteEvent(Type.CHOICE);
+    /** A CompleteEvent for when an animation ends. */
+    private static final CompleteEvent ANIMATION_END_EVENT = new CompleteEvent(Type.ANIMATION_END);
+    /** A CompleteEvent for when fading ends. */
+    private static final CompleteEvent FADE_END_EVENT = new CompleteEvent(Type.FADE_END);
+    /** A CompleteEvent for when all current text has been displayed. */
+    private static final CompleteEvent TEXT_END_EVENT = new CompleteEvent(Type.TEXT);
 
     public CompleteEvent(Type t) {
         this(t, null);
@@ -22,7 +32,28 @@ public class CompleteEvent {
         data = d;
     }
 
+    public static CompleteEvent input() {
+        return INPUT_COMPLETE_EVENT;
+    }
+
+    public static CompleteEvent choice() {
+        return CHOICE_COMPLETE_EVENT;
+    }
+
+    public static CompleteEvent animationEnd(String name) {
+        ANIMATION_END_EVENT.data = name;
+        return ANIMATION_END_EVENT;
+    }
+
+    public static CompleteEvent fade() {
+        return FADE_END_EVENT;
+    }
+
+    public static CompleteEvent text() {
+        return TEXT_END_EVENT;
+    }
+
     public enum Type {
-        INPUT, CHOICE, ANIMATION_END, FADE_END
+        INPUT, CHOICE, ANIMATION_END, FADE_END, TEXT
     }
 }
