@@ -357,9 +357,14 @@ public class ConversationController implements Controllable {
     }
     /** Updates the speakerLabel to TEXT. */
     public void setSpeakerName(String text){
-        speakerLabel.setText(text + "  ");
-        speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
-        speakerLabel.invalidate();
+        if (text.isEmpty()) {
+            speakerLabel.setVisible(false);
+        } else {
+            speakerLabel.setVisible(true);
+            speakerLabel.setText(text + "  ");
+            speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
+            speakerLabel.invalidate();
+        }
     }
     /** Sets the textTimerDelay to DELAY. */
     public void setTextTimer(int delay){
