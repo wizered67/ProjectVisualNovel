@@ -65,7 +65,6 @@ build/
 /android/assets/Conversations/testConversation2.conv
 /android/assets/Conversations/output.xml
 /android/assets/Conversations/testConversation3.conv
-/android/assets/Animations/
 /desktop/src/com/wizered67/game/desktop/TestLauncher.java
 /core/src/com/wizered67/game/Editor.java
 /desktop/src/com/wizered67/game/desktop/old commands
@@ -112,6 +111,5 @@ desktop/build
 /android/assets/Conversations/rpg.conv
 /android/assets/Saves/test2.bin
 /android/assets/Saves/test1.bin
-/android/assets/Conversations/simple.conv
 /android/assets/Conversations/saveTest.conv
 /android/assets/Conversations/demonstrationGroovy.conv

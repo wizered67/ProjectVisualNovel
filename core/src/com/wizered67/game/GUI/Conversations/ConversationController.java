@@ -92,7 +92,7 @@ public class ConversationController implements Controllable {
         scriptManagers.put("Lua", new LuaScriptManager());
         scriptManagers.put("Groovy", new GroovyScriptManager());
         if (!Constants.LOAD) { //todo fix
-            loadConversation("simple.conv");
+            loadConversation("demonstration.conv");
             setBranch("default");
         }
         //remainingText =

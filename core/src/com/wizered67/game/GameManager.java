@@ -6,14 +6,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.Inputs.MyInputProcessor;
-import com.wizered67.game.Saving.SaveData;
-import com.wizered67.game.Saving.TestSaveData;
-import com.wizered67.game.Saving.SaveManager;
-import com.wizered67.game.Scripting.GroovyTest;
 
 import java.util.*;
 
