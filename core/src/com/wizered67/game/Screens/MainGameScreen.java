@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.MyInputProcessor;
+import com.wizered67.game.Saving.SaveManager;
 
 /**
  * Main Game Screen for initializing and updating GUIManager.

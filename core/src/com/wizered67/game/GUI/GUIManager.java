@@ -163,6 +163,9 @@ public class GUIManager {
 		//tooltipTable.add(new TextButton("Fancy tooltip!", skin));
 
 	}
+    public GUIManager() {
+        conversationController = new ConversationController();
+    }
     /** Returns the Stage used to display GUI elements. */
 	public static Stage getStage(){
 		return stage;

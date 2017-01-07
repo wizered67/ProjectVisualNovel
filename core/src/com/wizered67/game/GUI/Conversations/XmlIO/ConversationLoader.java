@@ -54,12 +54,19 @@ public class ConversationLoader {
     }
 
     /** Returns the Conversation created by parsing the XML file
-     * with the name NAME.
-     */
+     * with the name NAME. */
     public Conversation loadConversation(String name) {
+        FileHandle file = Gdx.files.internal("Conversations/" + name);
+        return loadConversation(file);
+    }
+
+    /** Returns the Conversation created by parsing the XML file with FileHandle FILE. */
+    public Conversation loadConversation(FileHandle file) {
+        if (file == null) {
+            return null;
+        }
         try {
-            Conversation conversation = new Conversation(name);
-            FileHandle file = Gdx.files.internal("Conversations/" + name);
+            Conversation conversation = new Conversation(file.name());
             Element root = xml.parse(file);
             for (int i = 0; i < root.getChildCount(); i += 1) {
                 Element c = root.getChild(i);
@@ -70,7 +77,7 @@ public class ConversationLoader {
             }
             return conversation;
         } catch (IOException e) {
-            throw new GdxRuntimeException("Couldn't load Conversation " + name, e);
+            throw new GdxRuntimeException("Couldn't load Conversation " + file.name(), e);
         }
     }
 

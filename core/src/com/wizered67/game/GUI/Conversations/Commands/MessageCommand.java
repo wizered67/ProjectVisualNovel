@@ -43,9 +43,9 @@ public class MessageCommand implements ConversationCommand {
     /** Index of the message currently being displayed. */
     private int index;
     /** Regex pattern used to match variables in messages. */
-    private transient Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
+    public transient static Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
     /** Regex pattern used to match messages with a speaker. */
-    private transient static Pattern speakerMessagePattern = Pattern.compile("\\s*(\\S*)\\s*:(.+)");
+    public transient static Pattern speakerMessagePattern = Pattern.compile("\\s*(\\S*)\\s*(?<!\\\\):(.+)");
 
     /** No arguments constructor. */
     public MessageCommand() {
@@ -151,7 +151,7 @@ public class MessageCommand implements ConversationCommand {
     public static MessageCommand makeCommand(XmlReader.Element element) {
         return makeCommand(element.getText());
     }
-    /** Creates a MessgaeCommand from the text TEXT. */
+    /** Creates a MessageCommand from the text TEXT. */
     public static MessageCommand makeCommand(String text) {
         ArrayList<String> storedText = new ArrayList<String>();
         ArrayList<Boolean> waitToProceed = new ArrayList<Boolean>();
@@ -160,13 +160,12 @@ public class MessageCommand implements ConversationCommand {
         String[] lines = text.split("\\n");
         for (String line : lines) {
             line = line.trim();
-            line = line.replaceAll("@n", "\n");
             if (line.isEmpty()) {
                 continue;
             }
             Matcher matcher = speakerMessagePattern.matcher(line);
             if (matcher.matches()) {
-                storedText.add(matcher.group(2));
+                storedText.add(matcher.group(2).trim());
                 String speakerText = matcher.group(1);
                 if (!speakerText.isEmpty() && speakerText.charAt(0) == '!') {
                     waitToProceed.add(false);
@@ -187,6 +186,8 @@ public class MessageCommand implements ConversationCommand {
                     Gdx.app.error("Command Parser", "Trying to add text with no speaker declared.");
                 }
                 String last = storedText.get(storedText.size() - 1);
+                line = line.replaceAll("\\\\:", ":");
+                line = line.replaceAll("@n", "\n");
                 storedText.set(storedText.size() - 1, last + " " + line);
             }
         }

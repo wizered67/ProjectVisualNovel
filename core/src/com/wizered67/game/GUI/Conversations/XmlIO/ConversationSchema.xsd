@@ -44,16 +44,7 @@
 
 
     <xs:complexType name="choicesType" mixed="true">
-        <xs:group ref="commands"/>
-    </xs:complexType>
-
-    <xs:complexType name="choiceType">
-        <xs:sequence>
-            <xs:element type="ifType" name="if" minOccurs="0" maxOccurs="1"/>
-            <xs:group ref="commands" minOccurs="1" maxOccurs="1"/>
-        </xs:sequence>
-
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:group ref="commands" minOccurs="0"/>
     </xs:complexType>
 
     <xs:complexType name="debugType">

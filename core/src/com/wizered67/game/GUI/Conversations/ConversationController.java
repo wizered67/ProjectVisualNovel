@@ -3,6 +3,7 @@ package com.wizered67.game.GUI.Conversations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.wizered67.game.Constants;
@@ -78,6 +79,9 @@ public class ConversationController implements Controllable {
     /** State of GUI elements, like labels. Used to save and load data. */
     private GUIState guiState;
 
+    public ConversationController() {
+        initScriptManagers();
+    }
     /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
     @SuppressWarnings("unchecked")
@@ -88,16 +92,20 @@ public class ConversationController implements Controllable {
         choiceButtons = choices;
         choiceCommands = new List[choiceButtons.length];
         sceneManager = new SceneManager(this);
-        scriptManagers = new HashMap<String, ScriptManager>();
-        scriptManagers.put("Lua", new LuaScriptManager());
-        scriptManagers.put("Groovy", new GroovyScriptManager());
+        initScriptManagers();
         if (!Constants.LOAD) { //todo fix
-            loadConversation("demonstration.conv");
+            loadConversation("demonstrationLua.conv");
             setBranch("default");
         }
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
+    }
+    /** Initializes all script managers. */
+    private void initScriptManagers() {
+        scriptManagers = new HashMap<String, ScriptManager>();
+        scriptManagers.put("Lua", new LuaScriptManager());
+        scriptManagers.put("Groovy", new GroovyScriptManager());
     }
     /** Saves the GUI state. */
     public void save() {

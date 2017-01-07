@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.2.0'
     }
 }
 
@@ -76,29 +76,24 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
     }
-}
-
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
-
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion:sources"
+    android.packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
 project(":core") {
     apply plugin: "java"
 
+    sourceSets.test.java.srcDirs = ["test/"]
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -109,6 +104,13 @@ project(":core") {
         compile "org.luaj:luaj-jse:3.0"
         compile 'com.esotericsoftware:kryo:4.0.0'
         compile 'org.codehaus.groovy:groovy:2.4.7'
+
+        testCompile "junit:junit:4.11"
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testCompile group: 'junit-addons', name: 'junit-addons', version: '1.4'
+
     }
 }
 

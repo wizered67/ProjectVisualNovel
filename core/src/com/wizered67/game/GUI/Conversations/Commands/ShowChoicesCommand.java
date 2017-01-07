@@ -111,17 +111,23 @@ public class ShowChoicesCommand implements ConversationCommand {
                 String messages = "";
                 for (String line : lines) {
                     line = line.trim();
-                    if (line.charAt(line.length() - 1) == ':') {
-                        addMessageCommand(messages, choiceNum, commandChoices);
+                    if (line.charAt(line.length() - 1) == ':' && line.charAt(line.length() - 2) != '\\') {
+                        if (!messages.isEmpty()) {
+                            addMessageCommand(messages, choiceNum, commandChoices);
+                        }
+                        messages = "";
                         choiceNum += 1;
                         textChoices[choiceNum] = line.substring(0, line.length() - 1);
                         afterChoice = true;
                     } else {
-                        messages += (" " + line);
+                        line = line.replaceAll("\\\\:", ":");
+                        messages += (" " + line + "\n");
                         afterChoice = false;
                     }
                 }
-                addMessageCommand(messages, choiceNum, commandChoices);
+                if (!messages.isEmpty()) {
+                    addMessageCommand(messages, choiceNum, commandChoices);
+                }
             } else {
                 ConversationCommand c = ConversationLoader.getCommand(elem);
                 if (afterChoice && c instanceof VariableConditionCommand) {
@@ -135,14 +141,12 @@ public class ShowChoicesCommand implements ConversationCommand {
         }
         return new ShowChoicesCommand(textChoices, commandChoices, conditions);
     }
-    /** Helper method for adding a MessageCommand with content TEXT to command list of choice CHOICENUM. */
-    private static void addMessageCommand(String text, int choiceNum, List<ConversationCommand>[] commandChoices) {
-        if (!text.isEmpty()) {
-            if (choiceNum < 0) {
-                Gdx.app.error("Command Parser", "Trying to add message before choice in choices block.");
-            } else {
-                commandChoices[choiceNum].add(MessageCommand.makeCommand(text));
-            }
+    /** Helper method for adding a MessageCommand with content MESSAGES to command list of choice CHOICENUM. */
+    private static void addMessageCommand(String messages, int choiceNum, List<ConversationCommand>[] commandChoices) {
+        if (choiceNum < 0) {
+            Gdx.app.error("Command Parser", "Trying to add message before choice in choices block.");
+        } else {
+            commandChoices[choiceNum].add(MessageCommand.makeCommand(messages));
         }
     }
 

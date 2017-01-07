@@ -64,7 +64,7 @@ public class SceneManager {
         if (!allCharacters.containsKey(name)) {
             CharacterSprite newCharacter = new CharacterSprite(this, animations, speakingSound);
             newCharacter.setKnownName(name);
-            allCharacters.put(name, newCharacter);
+            allCharacters.put(name.toLowerCase(), newCharacter);
             characterSprites.add(newCharacter);
         }
     }
@@ -73,9 +73,9 @@ public class SceneManager {
      * outputs an error if no such character is in the same.
      */
     public CharacterSprite getCharacterByName(String name) {
-        CharacterSprite character = allCharacters.get(name);
+        CharacterSprite character = allCharacters.get(name.toLowerCase());
         if (character == null) {
-            GameManager.error("No character of name " + name);
+            GameManager.error("No character of name " + name.toLowerCase());
         }
         return character;
     }

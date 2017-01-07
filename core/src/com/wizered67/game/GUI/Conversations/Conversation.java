@@ -31,11 +31,11 @@ public class Conversation {
     }
     /** Adds a new BRANCH to BRANCHES with name NAME. */
     public void addBranch(String name, LinkedList<ConversationCommand> branch) {
-        branches.put(name, branch);
+        branches.put(name.toLowerCase(), branch);
     }
     /** Returns the branch with the name NAME. */
     public LinkedList<ConversationCommand> getBranch(String name) {
-        return branches.get(name);
+        return branches.get(name.toLowerCase());
     }
     /** Returns a set of String with the names of all BRANCHES. */
     public Set<String> getAllBranches() {
@@ -43,11 +43,11 @@ public class Conversation {
     }
     /** Return the ConversationCommand assigned to the string NAME. */
     public ConversationCommand getAssignment(String name) {
-        return assignments.get(name);
+        return assignments.get(name.toLowerCase());
     }
     /** Adds the mapping of string NAME to ConversationCommand COMMAND. */
     public void addAssignment(String name, ConversationCommand command) {
-        assignments.put(name, command);
+        assignments.put(name.toLowerCase(), command);
     }
     /** Sets the assignment map to MAP. */
     public void setAssignments(Map<String, ConversationCommand> map) {

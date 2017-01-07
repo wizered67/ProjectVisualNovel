@@ -1,0 +1,61 @@
+<conversation xmlns="urn:Test.Namespace">
+    <branch name="default">
+        <init language="Lua">
+            x 5
+        </init>
+        <changebranch branch="branchone"/>
+    </branch>
+
+    <branch name="Branchone">
+        c1: text one
+        <debug message="test"/>
+        c2: text two
+        text three
+        !: text four
+        c3: text five
+        <changebranch branch="BRANCHTWO"/>
+    </branch>
+
+    <branch name="BRANCHtwo">
+        <choices>
+            choice one:
+                c1: text six: text seven\:
+                    text e\:ight.
+                !c2: text nine.
+                :text ten
+            choice two:
+                c1: text eleven
+                    text twelve
+            choice three:
+                !c2: text thirteen
+                    text fourteen
+                !c3: text fifteen
+            choice four:
+                c1: text sixteen
+        </choices>
+        <changebranch branch="branchthree"/>
+    </branch>
+
+    <branch name="branchthree">
+        <choices>
+            choice one:
+            <if language="Lua">{return x == 5}</if>
+                <debug message="test"/>
+                c1: text seventeen
+            choice two:
+                <debug message="test"/>
+                <if language="Lua"> {return x == 7}
+                    <debug message="test"/>
+                </if>
+                <debug message="test"/>
+            choice three:
+                !c1: text eighteen
+        </choices>
+        <if language="Lua"> {return x == 6}
+            c1: text nineteen
+            !: text twenty
+            <debug message="test"/>
+        </if>
+    </branch>
+
+</conversation>

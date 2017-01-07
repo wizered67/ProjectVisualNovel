@@ -27,7 +27,7 @@ public class VariableConditionCommand implements ConversationCommand {
     /** The commands to be executed if the condition is met. */
     private List<ConversationCommand> commands;
     /** Pattern used to match scripts in brackets. */
-    private transient static Pattern scriptPattern = Pattern.compile("\\{(.*)\\}(.*)?", Pattern.DOTALL);
+    public transient static Pattern scriptPattern = Pattern.compile("\\{(.*)\\}(.*)?", Pattern.DOTALL);
     /** No arguments constructor. */
     public VariableConditionCommand() {
         scriptManager = null;
