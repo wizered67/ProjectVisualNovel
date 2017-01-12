@@ -30,7 +30,6 @@
     <branch name="main branch">
         Detective: The body was found in the library... Now why would that be? @c{anim} Unless...
         <visible name="Librarian" visible="true" fade="1"/>
-        <music name="Music/crossexamination.mp3" loop="true"/>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation name="Detective" animation="Idle"/>

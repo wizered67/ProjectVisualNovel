@@ -114,3 +114,5 @@ desktop/build
 /android/assets/Conversations/saveTest.conv
 /android/assets/Conversations/demonstrationGroovy.conv
 /android/assets/Conversations/demonstrationLua.conv
+/core/build/
+/android/build/
