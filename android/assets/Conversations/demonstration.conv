@@ -9,7 +9,7 @@
         </assign>
 
         <character name="Detective" animations="Edgeworth"/>
-        <visible name="Detective" visible="true" fade="0.5" wait="false"/>
+        <visible name="Detective" visible="true" fade="0.5" wait="true"/>
         <position name="Detective" x="10" y="160"/>
         <animation name="Detective" animation="Idle"/>
 
