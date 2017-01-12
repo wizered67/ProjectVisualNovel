@@ -94,7 +94,7 @@ public class ConversationController implements Controllable {
         sceneManager = new SceneManager(this);
         initScriptManagers();
         if (!Constants.LOAD) { //todo fix
-            loadConversation("demonstrationLua.conv");
+            loadConversation("demonstration.conv");
             setBranch("default");
         }
         //remainingText =

@@ -124,6 +124,9 @@ public class MessageCommand implements ConversationCommand {
     @Override
     public void complete(CompleteEvent c) {
         if (currentSubcommand != null) {
+            if (c.type == CompleteEvent.Type.INPUT) {
+                System.out.println("test"); //todo remove
+            }
             currentSubcommand.complete(c);
         }
         if (c.type == CompleteEvent.Type.INPUT) {

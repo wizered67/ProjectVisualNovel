@@ -49,8 +49,8 @@ public class GameManager {
 
 	public static void loadDefault() {
 		AssetManager assetManager = assetManager();
-		//assetManager.load("Sounds/talksoundmale.wav", Sound.class);
-		//assetManager.load("Sounds/talksoundfemale.wav", Sound.class);
+		assetManager.load("Sounds/talksoundmale.wav", Sound.class);
+		assetManager.load("Sounds/talksoundfemale.wav", Sound.class);
 		//assetManager.load("Sounds/sfxblipmale.wav", Sound.class);
 		//assetManager.load("Sounds/intense.wav", Sound.class);
 		//assetManager.load("Music/crossexamination.mp3", Music.class);

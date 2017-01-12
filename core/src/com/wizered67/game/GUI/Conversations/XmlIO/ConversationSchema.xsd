@@ -114,6 +114,7 @@
 
     <xs:complexType name="delayType">
         <xs:attribute type="xs:float" name="time" use="required"/>
+        <xs:attribute type="xs:boolean" name="skippable" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="textSpeedType">

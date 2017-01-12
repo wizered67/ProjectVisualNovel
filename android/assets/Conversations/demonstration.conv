@@ -5,7 +5,7 @@
             anim <animation name="Detective" animation="Think" wait="true"/>
             think <animation name="Detective" animation="Think" wait="true"/>
             confront <animation name="Detective" animation="Confront"/>
-            delay <delay time="1"/>
+            delay <delay time="1" skippable="true"/>
         </assign>
 
         <character name="Detective" animations="Edgeworth"/>
@@ -28,7 +28,7 @@
     </branch>
 
     <branch name="main branch">
-        Detective: The body was found in the library... Now why would that be? @c{anim} Unless...
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
         <visible name="Librarian" visible="true" fade="1"/>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?

@@ -75,8 +75,8 @@ PlaySoundCommand that plays sound with name NAME.
 ShowChoicesCommand with text array of each choice and command array of the commands. When a choice
 has an <if> inside of it, it's only added if the SCRIPT evaluates to a true value.
 
-<delay time="float"/>
-DelayCommand with delay time TIME.
+<delay time="float" (optional)skippable="boolean"/>
+DelayCommand with delay time TIME. Can be skipped with input if SKIPPABLE.
 
 <textspeed time="integer"/>
 TextSpeedCommand with waiting time TIME.
