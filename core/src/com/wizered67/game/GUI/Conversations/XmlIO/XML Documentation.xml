@@ -103,7 +103,8 @@ if they have not yet been defined.
 VariableConditionCommand that executes COMMANDS if the SCRIPT results in a true value when executed.
 LANGUAGE is the scripting language being used and ISFILE determines whether a file should be loaded named SCRIPT.
 
-
+<bg image="string">
+BackgroundSetCommand that sets the scene's background to the image with filename IMAGE.
 
 
 

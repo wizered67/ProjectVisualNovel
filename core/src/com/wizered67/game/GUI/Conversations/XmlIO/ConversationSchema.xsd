@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--XML Schema for all conversations. Used to help autocompletion when writing conversations. -->
-<xs:schema targetNamespace="urn:Test.Namespace"
-           xmlns="urn:Test.Namespace"
+<xs:schema targetNamespace="urn:conversations"
+           xmlns="urn:conversations"
            attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="conversation">
@@ -38,6 +38,7 @@
                 <xs:element type="scriptType" name="script" maxOccurs="unbounded"/>
                 <xs:element type="initType" name="init" maxOccurs="unbounded"/>
                 <xs:element type="ifType" name="if" maxOccurs="unbounded"/>
+                <xs:element type="bgType" name="bg" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -143,6 +144,10 @@
         </xs:sequence>
         <xs:attribute type="languages" name="language" use="required"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="bgType">
+        <xs:attribute name="image" type="xs:string" use="required"/>
     </xs:complexType>
 
 </xs:schema>

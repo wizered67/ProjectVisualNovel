@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Saving.SaveData;
@@ -23,6 +24,10 @@ public class SceneManager {
     private transient SpriteBatch batch;
     /** Maps character names to their corresponding CharacterSprite. */
     private HashMap<String, CharacterSprite> allCharacters;
+    /** Texture to draw as background. */
+    private transient Texture background;
+    /** Filename for background texture. */
+    private String backgroundFilename;
 
     /** No argument constructor. */
     public SceneManager() {
@@ -30,6 +35,7 @@ public class SceneManager {
         characterSprites = null;
         batch = new SpriteBatch();
         allCharacters = null;
+        background = null;
     }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
@@ -38,12 +44,15 @@ public class SceneManager {
         batch = new SpriteBatch();
         allCharacters = new HashMap<String, CharacterSprite>();
     }
-    /** Called each frame to update the Animation of each CharacterSprite and
+    /** Called each frame to draw the background, update the Animation of each CharacterSprite, and
      * then draw them. DELTA is the amount of time that has elapsed since the
      * last frame.
      */
     public void update(float delta) {
         batch.begin();
+        if (background != null) {
+            batch.draw(background, 0, 0);
+        }
         for (CharacterSprite sprite : characterSprites) {
             sprite.updateAnimation(delta);
             sprite.draw(batch);
@@ -56,7 +65,6 @@ public class SceneManager {
     public void addCharacter(String name) {
         addCharacter(name, name, null);
     }
-
     /** Adds a new CharacterSprite with name NAME, animation set named ANIMATIONS,
      * and speaking sound SPEAKING SOUND.
      */
@@ -68,7 +76,6 @@ public class SceneManager {
             characterSprites.add(newCharacter);
         }
     }
-
     /** Returns the CharacterSprite with the name NAME, or
      * outputs an error if no such character is in the same.
      */
@@ -78,6 +85,20 @@ public class SceneManager {
             GameManager.error("No character of name " + name.toLowerCase());
         }
         return character;
+    }
+    /** Sets the background to the Texture with filename imageFile. */
+    public void setBackground(String imageFile) {
+        if (backgroundFilename != imageFile) {
+            backgroundFilename = imageFile;
+            if (!GameManager.assetManager().isLoaded(imageFile)) {
+                GameManager.error("Background with filename " + imageFile + " is not loaded.");
+            }
+            background = GameManager.assetManager().get(imageFile);
+        }
+    }
+    /** Returns the filename of the current background. */
+    public String getBackgroundName() {
+        return backgroundFilename;
     }
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */
     public void complete(CompleteEvent event) {

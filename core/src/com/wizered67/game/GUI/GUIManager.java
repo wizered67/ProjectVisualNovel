@@ -77,22 +77,6 @@ public class GUIManager {
 			textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 			textButtonStyle.font = skin.getFont("default");
 			skin.add("default", textButtonStyle);
-			final TextButton button = new TextButton("Click me!", skin);
-			button.setPosition(40, 40);
-			button.setSize(60, 60);
-            button.setVisible(false);
-			//table.add(button).pad(20).expand().bottom().left();
-			stage.addActor(button);
-			// Add a listener to the button. ChangeListener is fired when the button's checked state changes, eg when clicked,
-			// Button#setChecked() is called, via a key press, etc. If the event.cancel() is called, the checked state will be reverted.
-			// ClickListener could have been used, but would only fire when clicked. Also, canceling a ClickListener event won't
-			// revert the checked state.
-			button.addListener(new ChangeListener() {
-				public void changed (ChangeEvent event, Actor actor) {
-					System.out.println("Clicked! Is checked: " + ((Button)actor).isChecked());
-					((TextButton)actor).setText("Good job!");
-				}
-			});
 
         choiceButtons = new TextButton[4];
         for (int i = 0; i < choiceButtons.length; i += 1) {

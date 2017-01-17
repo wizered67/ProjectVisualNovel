@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
@@ -55,6 +56,7 @@ public class GameManager {
 		//assetManager.load("Sounds/intense.wav", Sound.class);
 		//assetManager.load("Music/crossexamination.mp3", Music.class);
 		assetManager.load("Animations/Edgeworth.pack", TextureAtlas.class);
+		assetManager.load("Backgrounds/testbackground.png", Texture.class);
 	}
 
 	public static void loadAnimations() {

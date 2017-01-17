@@ -32,6 +32,7 @@ public class SceneManagerSerializer extends FieldSerializer<SceneManager> {
     @Override
     public SceneManager read(Kryo kryo, Input input, Class<SceneManager> type) {
         SceneManager sceneManager = super.read(kryo, input, type);
+        sceneManager.setBackground(sceneManager.getBackgroundName());
         return sceneManager;
     }
 }

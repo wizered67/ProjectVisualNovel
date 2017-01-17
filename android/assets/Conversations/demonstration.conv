@@ -1,4 +1,4 @@
-<conversation xmlns="urn:Test.Namespace">
+<conversation xmlns="urn:conversations">
     <branch name="default">
 
         <assign>
@@ -23,13 +23,13 @@
         <init language="Groovy">
             work 0
         </init>
+        <bg image="Backgrounds/testbackground.png"/>
         <changebranch branch="main branch"/>
-
     </branch>
 
     <branch name="main branch">
         Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
-        <visible name="Librarian" visible="true" fade="1"/>
+        <visible name="Librarian" visible="true" fade="0.5"/>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation name="Detective" animation="Idle"/>

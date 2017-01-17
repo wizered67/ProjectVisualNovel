@@ -32,6 +32,7 @@ public class ConversationLoader {
 
     static {
         classMapping.put("assign", AssignCommand.class);
+        classMapping.put("bg", BackgroundSetCommand.class);
         classMapping.put("changebranch", ChangeBranchCommand.class);
         classMapping.put("character", CharacterAddCommand.class);
         classMapping.put("animation", CharacterAnimationCommand.class);

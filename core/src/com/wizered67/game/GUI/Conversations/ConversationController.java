@@ -461,7 +461,7 @@ public class ConversationController implements Controllable {
                 displayAll = true;
             }
             if (currentCommand != null) {
-                    currentCommand.complete(CompleteEvent.input());
+                currentCommand.complete(CompleteEvent.input());
             }
         }
     }
