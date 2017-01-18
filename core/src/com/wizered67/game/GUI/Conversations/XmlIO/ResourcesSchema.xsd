@@ -1,0 +1,43 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:simpleType name="anyType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="animations">
+		<xs:union memberTypes="anyType">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="!Edgeworth.pack"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="backgrounds">
+		<xs:union memberTypes="anyType">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="!testbackground.png"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="music">
+		<xs:union memberTypes="anyType">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="!crossexamination.mp3"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="sounds">
+		<xs:union memberTypes="anyType">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="!intense.wav"/>
+					<xs:enumeration value="!talksoundfemale.wav"/>
+					<xs:enumeration value="!talksoundmale.wav"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+</xs:schema>

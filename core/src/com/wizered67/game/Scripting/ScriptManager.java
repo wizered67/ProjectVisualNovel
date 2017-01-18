@@ -17,6 +17,9 @@ public interface ScriptManager {
     /** Returns the string value of Object O, where O is assumed to be some
      * type specific to the scripting language. */
     String objectToString(Object o);
+    /** Returns the integer value of Object O, where O is assumed to be some
+     * type specific to the scripting language. */
+    int objectToInteger(Object o);
     /** Returns the value of variable VAR in a language specific object type. */
     Object getValue(String var);
     /** Returns whether a variable named VAR has been defined. */

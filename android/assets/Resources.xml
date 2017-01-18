@@ -1,0 +1,19 @@
+<resources>
+    <animations>
+        !Edgeworth.pack
+    </animations>
+
+    <backgrounds>
+        !testbackground.png
+    </backgrounds>
+
+    <music>
+        !crossexamination.mp3
+    </music>
+
+    <sounds>
+        !intense.wav
+        !talksoundfemale.wav
+        !talksoundmale.wav
+    </sounds>
+</resources>

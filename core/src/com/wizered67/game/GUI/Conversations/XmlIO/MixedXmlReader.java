@@ -1,9 +1,7 @@
 package com.wizered67.game.GUI.Conversations.XmlIO;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.SerializationException;
-import com.badlogic.gdx.utils.StreamUtils;
+import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.StringBuilder;
 
 import java.io.IOException;
@@ -20,7 +18,7 @@ import static com.badlogic.gdx.utils.XmlReader.Element;
  * Most of the code is redundant and the only changes are in the MixedXmlReader#text method.
  * @author Nathan Sweet and Adam Victor
  */
-public class MixedXmlReader {
+public class MixedXmlReader extends XmlReader {
     private final Array<Element> elements = new Array(8);
     private Element root, current;
     private final StringBuilder textBuffer = new StringBuilder(64);

@@ -23,6 +23,11 @@
         <init language="Groovy">
             work 0
         </init>
+       <object>
+           <number>fdfsdf</number>
+           <name></name>
+           <size></size>
+       </object>
         <bg image="Backgrounds/testbackground.png"/>
         <changebranch branch="main branch"/>
     </branch>

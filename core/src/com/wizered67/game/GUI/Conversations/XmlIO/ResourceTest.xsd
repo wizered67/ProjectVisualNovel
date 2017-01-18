@@ -1,0 +1,9 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="fruits">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Apples"/>
+            <xs:enumeration value="Oranges"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

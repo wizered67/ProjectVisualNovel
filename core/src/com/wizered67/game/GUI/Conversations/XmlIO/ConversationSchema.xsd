@@ -4,6 +4,7 @@
            xmlns="urn:conversations"
            attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="ResourcesSchema.xsd"/>
     <xs:element name="conversation">
 
         <xs:complexType>
@@ -39,6 +40,18 @@
                 <xs:element type="initType" name="init" maxOccurs="unbounded"/>
                 <xs:element type="ifType" name="if" maxOccurs="unbounded"/>
                 <xs:element type="bgType" name="bg" maxOccurs="unbounded"/>
+                <xs:element name="object">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="number" type="xs:integer"/>
+                            <xs:element name="name" type="xs:string"/>
+                            <xs:element name="size" type="xs:integer"/>
+                        </xs:sequence>
+                        <xs:attribute name="dept" type="xs:string"/>
+                        <xs:assert test="(@dept = 'ACC' and number > 500) or
+                   (number &lt; 300)"/>
+                    </xs:complexType>
+                </xs:element>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -148,6 +161,6 @@
 
     <xs:complexType name="bgType">
         <xs:attribute name="image" type="xs:string" use="required"/>
+        <xs:attribute name="bagel" type="sounds"/>
     </xs:complexType>
-
 </xs:schema>

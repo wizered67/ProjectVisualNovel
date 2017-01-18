@@ -54,6 +54,17 @@ public class LuaScriptManager implements ScriptManager {
         LuaValue value = (LuaValue) o;
         return value.toString();
     }
+
+    /**
+     * Returns the integer value of Object O, where O is assumed to be some
+     * type specific to the scripting language.
+     */
+    @Override
+    public int objectToInteger(Object o) {
+        LuaValue value = (LuaValue) o;
+        return value.toint();
+    }
+
     /** Returns the value of variable VAR in a language specific object type. */
     @Override
     public LuaValue getValue(String var) {

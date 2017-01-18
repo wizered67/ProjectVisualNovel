@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
+import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
 import com.wizered67.game.Saving.Serializers.GUIState;

@@ -1,7 +1,9 @@
 package com.wizered67.game.Scripting;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.wizered67.game.GameManager;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
@@ -71,6 +73,20 @@ public class GroovyScriptManager implements ScriptManager {
     @Override
     public String objectToString(Object o) {
         return o.toString();
+    }
+
+    /**
+     * Returns the integer value of Object O, where O is assumed to be some
+     * type specific to the scripting language.
+     */
+    @Override
+    public int objectToInteger(Object o) {
+        if (o instanceof Integer) {
+            return (Integer) o;
+        } else {
+            GameManager.error("Tried to convert non integer object to integer.");
+            return 0;
+        }
     }
 
     /**
