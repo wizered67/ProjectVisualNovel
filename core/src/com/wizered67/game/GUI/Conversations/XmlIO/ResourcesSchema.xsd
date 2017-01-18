@@ -40,4 +40,9 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:group name="animationSets">
+		<xs:sequence>
+			<xs:element name="test" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:group>
 </xs:schema>
