@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class CharacterVisibleCommand implements ConversationCommand {
-    /** The name of the CharacterSprite to modify the visibility of. */
+    /** The identifier of the CharacterSprite to modify the visibility of. */
     private String character;
     /** Whether the CharacterSprite should be visible. */
     private boolean show;
@@ -31,10 +31,11 @@ public class CharacterVisibleCommand implements ConversationCommand {
         done = true;
     }
     /** Creates a new CharacterVisibleCommand that sets the CharacterSprite
-     * NAME's visibility to VISIBLE when executed. Waits for completion iff W.
+     * with identifier ID's visibility to VISIBLE when executed.
+     * Waits for completion iff W.
      */
-    public CharacterVisibleCommand(String name, boolean visible, float time, boolean w) {
-        character = name;
+    public CharacterVisibleCommand(String id, boolean visible, float time, boolean w) {
+        character = id;
         show = visible;
         fadeTime = time;
         wait = w;
@@ -43,7 +44,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
+        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             done = true;
             return;
@@ -84,7 +85,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static CharacterVisibleCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
+        String name = element.getAttribute("id");
         boolean visible = element.getBooleanAttribute("visible", false);
         float fade = element.getFloatAttribute("fade", 0f);
         boolean wait = element.getBooleanAttribute("wait", true);

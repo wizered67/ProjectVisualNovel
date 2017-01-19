@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class CharacterDirectionCommand implements ConversationCommand {
-    /** Name of the CharacterSprite to change the direction of. */
+    /** Identifier of the CharacterSprite to change the direction of. */
     private String character;
     /** New direction for the CharacterSprite to face. */
     private int direction;
@@ -25,16 +25,16 @@ public class CharacterDirectionCommand implements ConversationCommand {
         direction = 1;
     }
     /** Creates a new CharacterDirectionCommand that changes the CharacterSprite
-     * NAME's direction to DIR when executed.
+     * ID's direction to DIR when executed.
      */
-    public CharacterDirectionCommand(String name, int dir) {
-        character = name;
+    public CharacterDirectionCommand(String id, int dir) {
+        character = id;
         direction = dir;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
+        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             return;
         }
@@ -65,7 +65,7 @@ public class CharacterDirectionCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static CharacterDirectionCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
+        String name = element.getAttribute("id");
         int direction = element.getInt("direction", 1);
         return new CharacterDirectionCommand(name, direction);
     }

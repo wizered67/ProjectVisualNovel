@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class CharacterNameCommand implements ConversationCommand {
-    /** The name of the CharacterSprite to rename. */
+    /** The identifier of the CharacterSprite to rename. */
     private String character;
     /** The new display name for the CharacterSprite. */
     private String newName;
@@ -24,17 +24,17 @@ public class CharacterNameCommand implements ConversationCommand {
         newName = "";
     }
 
-    /** Creates a new CharacterNameCommand that changes the CharacterSprite named WHO to have
+    /** Creates a new CharacterNameCommand that changes the CharacterSprite with identifier ID to have
      * display name NAME when executed.
      */
-    public CharacterNameCommand(String who, String name) {
-        character = who;
+    public CharacterNameCommand(String id, String name) {
+        character = id;
         newName = name;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
+        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             return;
         }
@@ -65,7 +65,7 @@ public class CharacterNameCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static CharacterNameCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
+        String name = element.getAttribute("id");
         String newName = element.getAttribute("displayname");
         return new CharacterNameCommand(name, newName);
     }

@@ -4,23 +4,23 @@ specifies a branch with name NAME.
 <changebranch branch="string"/>
 ChangeBranchCommand that switches branch to BRANCH.
 
-<character name="string" (optional)animations="string" (optional)sound="string"/>
-CharacterAddCommand that adds character with name NAME, animations named ANIMATIONS, and speaking sound SOUND.
+<character id="character" (optional)animations="string" (optional)sound="string"/>
+CharacterAddCommand that adds character with id ID, animations named ANIMATIONS, and speaking sound SOUND.
 
-<animation name="string" animation="string" wait="boolean"/>
-CharacterAnimationCommand that sets character NAME to have animation ANIMATION. Waits to go on to next command iff WAIT.
+<animation id="character" animation="string" wait="boolean"/>
+CharacterAnimationCommand that sets character ID to have animation ANIMATION. Waits to go on to next command iff WAIT.
 
-<direction name="string" direction="int"/>
-CharacterDirectionCommand that sets character NAME to have direction DIRECTION.
+<direction id="character" direction="int"/>
+CharacterDirectionCommand that sets character ID to have direction DIRECTION.
 
-<name name="string" newname="string"/>
-CharacterNameCommand that sets character NAME to have display name NEWNAME.
+<name id="character" newname="string"/>
+CharacterNameCommand that sets character ID to have display name NEWNAME.
 
-<position name="string" position="string"/>
-CharacterPositionCommand that sets character NAME to have the position mapped to POSITION.
+<position id="character" position="string"/>
+CharacterPositionCommand that sets character ID to have the position mapped to POSITION.
 
-<visible name="string" visible="boolean" (optional)fade="float" (optional)wait="boolean"/>
-CharacterVisibleCommand that sets character NAME to have visibility VISIBLE. If FADE is specified it denotes
+<visible id="character" visible="boolean" (optional)fade="float" (optional)wait="boolean"/>
+CharacterVisibleCommand that sets character ID to have visibility VISIBLE. If FADE is specified it denotes
 over how many seconds the character's sprite should fade in or out. If WAIT is specified, it denotes whether
 to wait for the end of the fade before going to the next command. True by default.
 
@@ -49,8 +49,8 @@ the text is considered a continuation of the previous line and appears in the sa
 If speaker is empty, ie ": text" then it continues with the same speaker but appears in a new
 message box.
 
-<music name="string" loop="boolean"/>
-PlayMusicCommand that plays music with name NAME and sets looping to LOOP.
+<music id="music" loop="boolean"/>
+PlayMusicCommand that plays music with identifier ID and sets looping to LOOP.
 
 <pausemusic/>
 PlayMusicCommand that pauses music.
@@ -58,8 +58,8 @@ PlayMusicCommand that pauses music.
 <resumemusic/>
 PlayMusicCommand that resumes music.
 
-<sound name="string"/>
-PlaySoundCommand that plays sound with name NAME.
+<sound id="sound"/>
+PlaySoundCommand that plays sound with identifier ID.
 
 <preload > #TODO
 
@@ -103,8 +103,8 @@ if they have not yet been defined.
 VariableConditionCommand that executes COMMANDS if the SCRIPT results in a true value when executed.
 LANGUAGE is the scripting language being used and ISFILE determines whether a file should be loaded named SCRIPT.
 
-<bg image="string">
-BackgroundSetCommand that sets the scene's background to the image with filename IMAGE.
+<bg id="background">
+BackgroundSetCommand that sets the scene's background to the image with identifier ID.
 
 
 

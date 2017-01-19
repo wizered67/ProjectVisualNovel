@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class CharacterPositionCommand implements ConversationCommand {
-    /** The name of the CharacterSprite to change the position of. */
+    /** The identifier of the CharacterSprite to change the position of. */
     private String character;
     /** A Vector2 containing the new position of the CharacterSprite. */
     private Vector2 position;
@@ -25,16 +25,16 @@ public class CharacterPositionCommand implements ConversationCommand {
         position = null;
     }
     /** Creates a new CharacterPositionCommand that moves the CharacterSprite
-     * named CHARACTER to POSITION when executed.
+     * with identifier ID to POSITION when executed.
      */
-    public CharacterPositionCommand(String character, Vector2 position) {
-        this.character = character;
-        this.position = position;
+    public CharacterPositionCommand(String id, Vector2 posn) {
+        character = id;
+        position = posn;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
+        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             return;
         }
@@ -66,7 +66,7 @@ public class CharacterPositionCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static CharacterPositionCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
+        String name = element.getAttribute("id");
         //String position = element.getAttribute("position");
         float x = element.getFloatAttribute("x");
         float y = element.getFloatAttribute("y");

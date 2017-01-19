@@ -117,3 +117,5 @@ desktop/build
 /core/build/
 /android/build/
 /android/assets/Sounds/sfxblipmale.wav
+/desktop/build/
+/desktop/src/META-INF/

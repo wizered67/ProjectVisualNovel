@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class PlaySoundCommand implements ConversationCommand {
-    /** Name of the sound to play. */
+    /** Identifier of the sound to play. */
     private String sound;
 
     /** No arguments constructor. */
@@ -59,7 +59,7 @@ public class PlaySoundCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static PlaySoundCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
-        return new PlaySoundCommand(name);
+        String id = element.getAttribute("id");
+        return new PlaySoundCommand(id);
     }
 }

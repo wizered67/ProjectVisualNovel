@@ -40,10 +40,11 @@
                 <xs:element type="initType" name="init" maxOccurs="unbounded"/>
                 <xs:element type="ifType" name="if" maxOccurs="unbounded"/>
                 <xs:element type="bgType" name="bg" maxOccurs="unbounded"/>
-                <xs:group ref="animationSets"/>
+
             </xs:choice>
         </xs:sequence>
     </xs:group>
+
 
 
     <xs:complexType name="choicesType" mixed="true">
@@ -55,7 +56,7 @@
     </xs:complexType>
 
     <xs:complexType name="setnameType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="characterType" name="id" use="required"/>
         <xs:attribute type="xs:string" name="displayname" use="required"/>
     </xs:complexType>
 
@@ -64,22 +65,22 @@
     </xs:complexType>
 
     <xs:complexType name="addcharacterType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="id" use="required"/>
         <xs:attribute type="xs:string" name="animations" use="optional"/>
         <xs:attribute type="xs:string" name="sound" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="playmusicType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="musicResource" name="id" use="required"/>
         <xs:attribute type="xs:boolean" name="loop" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="playsoundType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="soundResource" name="id" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="setvisibleType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="characterType" name="id" use="required"/>
         <xs:attribute type="xs:boolean" name="visible" use="required"/>
         <xs:attribute type="xs:float" name="fade" use="optional"/>
         <xs:attribute type="xs:boolean" name="wait" use="optional"/>
@@ -90,8 +91,8 @@
     </xs:complexType>
 
     <xs:complexType name="setanimationType">
-            <xs:attribute type="xs:string" name="name" use="required"/>
-            <xs:attribute type="xs:string" name="animation" use="required"/>
+            <xs:attribute type="characterType" name="id" use="required"/>
+            <xs:attribute type="animationResource" name="animation" use="required"/>
             <xs:attribute type="xs:boolean" name="wait" default="false"/>
     </xs:complexType>
 
@@ -100,7 +101,7 @@
     </xs:complexType>
 
     <xs:complexType name="setdirectionType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="characterType" name="id" use="required"/>
         <xs:attribute type="xs:integer" name="direction" use="required"/>
     </xs:complexType>
 
@@ -110,7 +111,7 @@
     </xs:complexType>
 
     <xs:complexType name="setpositionType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="characterType" name="id" use="required"/>
         <xs:attribute type="xs:float" name="x" use="required"/>
         <xs:attribute type="xs:float" name="y" use="required"/>
     </xs:complexType>
@@ -149,7 +150,6 @@
     </xs:complexType>
 
     <xs:complexType name="bgType">
-        <xs:attribute name="image" type="xs:string" use="required"/>
-        <xs:attribute name="bagel" type="sounds"/>
+        <xs:attribute name="id" type="backgroundResource" use="required"/>
     </xs:complexType>
 </xs:schema>

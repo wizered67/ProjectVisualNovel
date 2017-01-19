@@ -1,0 +1,31 @@
+<xs:schema targetNamespace="urn:resourceXml"
+           xmlns="urn:resourceXml"
+           attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="ResourcesSchema.xsd"/>
+    <xs:element name="resources">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="animations"/>
+                <xs:element name="backgrounds"/>
+                <xs:element name="music"/>
+                <xs:element name="sounds"/>
+                <xs:element name="characters">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="character" type="characterDefinition"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:all>
+            <xs:attribute name="strict" type="xs:boolean" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="characterDefinition">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="animations" type="animationAtlasResource" use="required"/>
+        <xs:attribute name="sound" type="soundResource" use="required"/>
+    </xs:complexType>
+</xs:schema>

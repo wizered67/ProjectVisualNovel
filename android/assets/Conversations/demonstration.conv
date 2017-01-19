@@ -2,40 +2,42 @@
     <branch name="default">
 
         <assign>
-            anim <animation name="Detective" animation="Think" wait="true"/>
-            think <animation name="Detective" animation="Think" wait="true"/>
-            confront <animation name="Detective" animation="Confront"/>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
             delay <delay time="1" skippable="true"/>
         </assign>
 
-        <character name="Detective" animations="Edgeworth"/>
-        <visible name="Detective" visible="true" fade="0.5" wait="true"/>
-        <position name="Detective" x="10" y="160"/>
-        <animation name="Detective" animation="Idle"/>
+        <character id="Detective" animations="Edgeworth"/>
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
 
-        <character name="Librarian" animations="Edgeworth"/>
-        <position name="Librarian" x="800" y="160"/>
-        <animation name="Librarian" animation="Idle"/>
+        <character id="Librarian" animations="Edgeworth"/>
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
 
-        <direction name="Librarian" direction="-1"/>
-        <name name="Librarian" displayname="???"/>
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
 
         <init language="Groovy">
             work 0
         </init>
-        <bg image="Backgrounds/testbackground.png"/>
+        <bg image="many8"/>
+        <sound name="test"/>
+        <music name="new" loop="false"/>
         <changebranch branch="main branch"/>
     </branch>
 
     <branch name="main branch">
         Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
-        <visible name="Librarian" visible="true" fade="0.5"/>
+        <visible id="Librarian" visible="true" fade="0.5"/>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
-        <animation name="Detective" animation="Idle"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
 
         Detective: And you are...?
-        <name name="Librarian" displayname="Librarian"/>
+        <name id="Librarian" displayname="Librarian"/>
 
         Librarian: I'm the head librarian here. It's a pleasure to meet you.
 
@@ -62,7 +64,7 @@
         showed suspicious activity around 2:30 AM last night.
 
         Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
-        <animation name="Detective" animation="Idle"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
 
         Librarian: It was. We aren't sure how he got in here in the first place.
         : Does that answer all of your questions?
@@ -98,7 +100,7 @@
 
         Detective: (His story's getting phonier by the minute. Now I've just got to break through
         his lies once and for all!)
-        <visible name="Librarian" visible="false" fade="1.5"/>
+        <visible id="Librarian" visible="false" fade="1.5"/>
     </branch>
 
 </conversation>

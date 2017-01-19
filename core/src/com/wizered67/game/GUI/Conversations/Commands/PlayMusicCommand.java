@@ -14,22 +14,23 @@ import java.io.IOException;
  * @author Adam Victor
  */
 public class PlayMusicCommand implements ConversationCommand {
-    /** Name of the music to play, if play command. */
+    /** Identifier of the music to play, if play command. */
     private String music;
     /** Whether the music should loop, if play command. */
     private boolean loops;
     /** If pause is 1, acts as a pause command. If pause is 2, acts as a resume command.
      * When 0 as normal, just plays the music. */
     private int pause;
-    /** Creates a PlayMusicCommand that plays the music named M and
-     * sets its loop status to L when executed.
-     */
-    /** No arguments constructor. */
+
+    /** No arguments constructor. Used for serialization. */
     public PlayMusicCommand() {
         music = "";
         loops = false;
         pause = 0;
     }
+    /** Creates a PlayMusicCommand that plays the music with identifier M and
+     * sets its loop status to L when executed.
+     */
     public PlayMusicCommand(String m, boolean l) {
         music = m;
         loops = l;
@@ -98,8 +99,8 @@ public class PlayMusicCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static PlayMusicCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
+        String id = element.getAttribute("id");
         boolean loop = element.getBoolean("loop", false);
-        return new PlayMusicCommand(name, loop);
+        return new PlayMusicCommand(id, loop);
     }
 }

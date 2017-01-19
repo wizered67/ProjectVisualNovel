@@ -3,7 +3,6 @@ package com.wizered67.game.GUI.Conversations;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Saving.SaveData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +25,10 @@ public class SceneManager {
     private HashMap<String, CharacterSprite> allCharacters;
     /** Texture to draw as background. */
     private transient Texture background;
-    /** Filename for background texture. */
-    private String backgroundFilename;
+    /** Identifier used for background texture. */
+    private String backgroundIdentifier;
 
-    /** No argument constructor. */
+    /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
         conversationController = null;
         characterSprites = null;
@@ -59,46 +58,46 @@ public class SceneManager {
         }
         batch.end();
     }
-    /** Adds a new CharacterSprite with name NAME, no animations, and the
+    /** Adds a new CharacterSprite with identifier IDENTIFIER, no animations, and the
      * default speaking sound.
      */
-    public void addCharacter(String name) {
-        addCharacter(name, name, null);
+    public void addCharacter(String identifier) {
+        addCharacter(identifier, identifier, null);
     }
-    /** Adds a new CharacterSprite with name NAME, animation set named ANIMATIONS,
+    /** Adds a new CharacterSprite with identifier IDENTIFIER, animation set named ANIMATIONS,
      * and speaking sound SPEAKING SOUND.
      */
-    public void addCharacter(String name, String animations, String speakingSound) {
-        if (!allCharacters.containsKey(name)) {
+    public void addCharacter(String identifier, String animations, String speakingSound) {
+        if (!allCharacters.containsKey(identifier)) {
             CharacterSprite newCharacter = new CharacterSprite(this, animations, speakingSound);
-            newCharacter.setKnownName(name);
-            allCharacters.put(name.toLowerCase(), newCharacter);
+            newCharacter.setKnownName(identifier);
+            allCharacters.put(identifier.toLowerCase(), newCharacter);
             characterSprites.add(newCharacter);
         }
     }
-    /** Returns the CharacterSprite with the name NAME, or
-     * outputs an error if no such character is in the same.
+    /** Returns the CharacterSprite with the identifier IDENTIFIER, or
+     * outputs an error if no such character is in the scene.
      */
-    public CharacterSprite getCharacterByName(String name) {
-        CharacterSprite character = allCharacters.get(name.toLowerCase());
+    public CharacterSprite getCharacterByIdentifier(String identifier) {
+        CharacterSprite character = allCharacters.get(identifier.toLowerCase());
         if (character == null) {
-            GameManager.error("No character of name " + name.toLowerCase());
+            GameManager.error("No character of name " + identifier.toLowerCase());
         }
         return character;
     }
-    /** Sets the background to the Texture with filename imageFile. */
-    public void setBackground(String imageFile) {
-        if (backgroundFilename != imageFile) {
-            backgroundFilename = imageFile;
-            if (!GameManager.assetManager().isLoaded(imageFile)) {
-                GameManager.error("Background with filename " + imageFile + " is not loaded.");
+    /** Sets the background to the Texture with identifier IMAGEIDENTIFIER. */
+    public void setBackground(String imageIdentifier) {
+        if (!backgroundIdentifier.equals(imageIdentifier)) {
+            backgroundIdentifier = imageIdentifier;
+            if (!GameManager.assetManager().isLoaded(imageIdentifier)) {
+                GameManager.error("Background with filename " + imageIdentifier + " is not loaded.");
             }
-            background = GameManager.assetManager().get(imageFile);
+            background = GameManager.assetManager().get(imageIdentifier);
         }
     }
-    /** Returns the filename of the current background. */
-    public String getBackgroundName() {
-        return backgroundFilename;
+    /** Returns the identifier of the current background. */
+    public String getBackgroundIdentifier() {
+        return backgroundIdentifier;
     }
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */
     public void complete(CompleteEvent event) {

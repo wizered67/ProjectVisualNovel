@@ -21,7 +21,7 @@ public class CharacterAnimationCommand implements ConversationCommand {
     /** Whether to wait for the Animation to complete before moving to the next
      * ConversationCommand. */
     private boolean wait;
-    /** The name of the CharacterSprite that should have its animation changed. */
+    /** The identifier of the CharacterSprite that should have its animation changed. */
     private String character;
 
     /** No arguments constructor. */
@@ -36,16 +36,16 @@ public class CharacterAnimationCommand implements ConversationCommand {
      * animation to ANIM when executed. Waits to complete before going to the next ConversationCommand
      * iff W.
      */
-    public CharacterAnimationCommand(String name, String anim, boolean w) {
+    public CharacterAnimationCommand(String id, String anim, boolean w) {
         wait = w;
         done = !wait;
         animation = anim;
-        character = name;
+        character = id;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByName(character);
+        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             done = true;
             return;
@@ -87,7 +87,7 @@ public class CharacterAnimationCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static CharacterAnimationCommand makeCommand(XmlReader.Element element) {
-        String name = element.getAttribute("name");
+        String name = element.getAttribute("id");
         String animation = element.getAttribute("animation", name);
         boolean wait = element.getBoolean("wait", false);
         return new CharacterAnimationCommand(name, animation, wait);
