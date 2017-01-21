@@ -8,12 +8,10 @@
             delay <delay time="1" skippable="true"/>
         </assign>
 
-        <character id="Detective" animations="Edgeworth"/>
         <visible id="Detective" visible="true" fade="0.5" wait="true"/>
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>
 
-        <character id="Librarian" animations="Edgeworth"/>
         <position id="Librarian" x="800" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
 
@@ -23,9 +21,9 @@
         <init language="Groovy">
             work 0
         </init>
-        <bg image="many8"/>
-        <sound name="test"/>
-        <music name="new" loop="false"/>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
         <changebranch branch="main branch"/>
     </branch>
 

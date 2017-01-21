@@ -19,16 +19,13 @@ import java.util.Map;
  * @author Adam Victor
  */
 public class CharacterSprite {
+    private String identifier;
     /** TextureRegion to be drawn for the current frame of animation. */
     private transient TextureRegion currentSprite;
     /** Animation object containing all frames of animation. */
     private transient Animation currentAnimation;
     /** The name of the current animation. Used to tell if the animation is being changed. */
     private String animationName;
-    /** The name of the set of all animations. */
-    private String allAnimationsName;
-    /** A mapping of animation names to Animation objects so that animation can be set with just the name. */
-    private transient Map<String, Animation> allAnimations;
     /** Vector2 containing the position of the sprite to be drawn. */
     private final Vector2 position = new Vector2();
     /** Whether the Animation should loop. */
@@ -48,7 +45,7 @@ public class CharacterSprite {
     /** The Sprite object used to draw frames of animation. */
     private transient Sprite sprite;
     /** The default speaking sound for all characters. */
-    private static final String DEFAULT_SPEAKING_SOUND = "talksoundmale";
+    public static final String DEFAULT_SPEAKING_SOUND = "talksoundmale.wav";
     /** How much the sprite drawn should be scaled. */
     private Vector2 scale;
     /** How much the alpha of the sprite being drawn should change per second. */
@@ -59,23 +56,15 @@ public class CharacterSprite {
     /** No argument constructor */
     public CharacterSprite() {
         sprite = new Sprite();
+        identifier = "";
     }
-    /** Creates a CharacterSprite with the no animations and default speaking sound. */
+    /** Creates a CharacterSprite with the default speaking sound. */
     public CharacterSprite(SceneManager m) {
-        this(m, "", DEFAULT_SPEAKING_SOUND);
+        this("", m, DEFAULT_SPEAKING_SOUND);
     }
-    /** Creates a CharacterSprite with animations ANIMATIONS. */
-    public CharacterSprite(SceneManager m, String animations) {
-        this(m, animations, DEFAULT_SPEAKING_SOUND);
-    }
-    /** Creates a CharacterSprite with animations ANIMATIONS and speaking sound SOUND. */
-    public CharacterSprite(SceneManager m, String animations, String sound) {
-        if (animations == null || animations.isEmpty()) {
-            allAnimations = new HashMap<String, Animation>();
-        } else {
-            allAnimations = GameManager.loadedAnimations().get(animations);
-        }
-        allAnimationsName = animations;
+    /** Creates a CharacterSprite with id ID and speaking sound SOUND. */
+    public CharacterSprite(String id, SceneManager m, String sound) {
+        identifier = id;
         manager = m;
         looping = false;
         stateTime = 0;
@@ -100,10 +89,7 @@ public class CharacterSprite {
     }
     /** Reloads CharacterSprite. */
     public void reload() {
-        allAnimations = GameManager.loadedAnimations().get(allAnimationsName);
-        if (allAnimations != null) {
-            currentAnimation = allAnimations.get(animationName);
-        }
+        currentAnimation = GameManager.assetManager().getAnimation(animationName);
         updateSprite();
         sprite.setColor(color);
         //sprite.setScale(scale.x, scale.y);
@@ -124,25 +110,17 @@ public class CharacterSprite {
     public void setKnownName(String newName) {
         knownName = newName;
     }
-    /** Adds the Animation ANIM to this CharacterSprite under the name NAME. */
-    public void addAnimation(String name, Animation anim) {
-        if (!allAnimations.containsKey(name)) {
-            allAnimations.put(name, anim);
-        }
-    }
+
     /** Switches this CharacterSprite's animation to the one named NAME. Returns true if animation is valid. */
     public boolean setCurrentAnimation(String name) {
-        if (allAnimations == null) {
-            return false;
-        }
         if (!animationName.equalsIgnoreCase(name)) {
             stateTime = 0;
             animationName = name;
         }
-        currentAnimation = allAnimations.get(name);
+        currentAnimation = GameManager.assetManager().getAnimation(name);
         wasFinished = false;
         if (currentAnimation == null) {
-            Gdx.app.error("Animation", "No animation found: " + name);
+            GameManager.error("No animation found: " + name);
         }
         return currentAnimation != null;
     }
@@ -228,6 +206,7 @@ public class CharacterSprite {
             sprite.setAlpha(1);
         } else {
             sprite.setAlpha(0);
+            removeFromScene();
         }
         fadePerSecond = 0;
     }
@@ -254,5 +233,31 @@ public class CharacterSprite {
             return null;
         }
         return sprite.getColor();
+    }
+    /** Sets the SceneManager for this CharacterSprite to SM and adds the CharacterSprite to that scene. */
+    public void addToScene(SceneManager sm) {
+        manager = sm;
+        manager.addCharacter(identifier);
+    }
+    /** Removes this CharacterSprite from the SceneManager. */
+    public void removeFromScene() {
+        if (manager != null) {
+            manager.removeCharacter(identifier);
+            manager = null;
+        }
+    }
+    @Override
+    public int hashCode() {
+        return identifier.hashCode();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof CharacterSprite) {
+            return ((CharacterSprite) o).identifier.equals(identifier);
+        }
+        return false;
     }
 }

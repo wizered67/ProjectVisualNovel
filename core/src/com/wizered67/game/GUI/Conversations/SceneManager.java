@@ -6,6 +6,8 @@ import com.wizered67.game.GameManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a Scene with a set of characters that are updated
@@ -14,15 +16,15 @@ import java.util.HashMap;
  * @author Adam Victor
  */
 public class SceneManager {
-    /** List of all CharacterSprites in this scene. */
-    private ArrayList<CharacterSprite> characterSprites;
+    /** Set of all CharacterSprites in this scene. */
+    private Set<CharacterSprite> characterSprites;
     /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed. */
     private ConversationController conversationController;
     /** SpriteBatch used to draw Sprites for each CharacterSprite. */
     private transient SpriteBatch batch;
     /** Maps character names to their corresponding CharacterSprite. */
-    private HashMap<String, CharacterSprite> allCharacters;
+    private static HashMap<String, CharacterSprite> allCharacters = new HashMap<String, CharacterSprite>();
     /** Texture to draw as background. */
     private transient Texture background;
     /** Identifier used for background texture. */
@@ -39,9 +41,9 @@ public class SceneManager {
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
         conversationController = mw;
-        characterSprites = new ArrayList<CharacterSprite>();
+        characterSprites = new HashSet<>();
         batch = new SpriteBatch();
-        allCharacters = new HashMap<String, CharacterSprite>();
+        backgroundIdentifier = "";
     }
     /** Called each frame to draw the background, update the Animation of each CharacterSprite, and
      * then draw them. DELTA is the amount of time that has elapsed since the
@@ -53,26 +55,26 @@ public class SceneManager {
             batch.draw(background, 0, 0);
         }
         for (CharacterSprite sprite : characterSprites) {
+            //System.out.println("Updating " + sprite.getKnownName());
             sprite.updateAnimation(delta);
             sprite.draw(batch);
         }
         batch.end();
     }
-    /** Adds a new CharacterSprite with identifier IDENTIFIER, no animations, and the
-     * default speaking sound.
-     */
+   /** Adds the CharacterSprite with identifier IDENTIFIER to this scene. */
     public void addCharacter(String identifier) {
-        addCharacter(identifier, identifier, null);
+        characterSprites.add(allCharacters.get(identifier.toLowerCase()));
     }
-    /** Adds a new CharacterSprite with identifier IDENTIFIER, animation set named ANIMATIONS,
-     * and speaking sound SPEAKING SOUND.
-     */
-    public void addCharacter(String identifier, String animations, String speakingSound) {
-        if (!allCharacters.containsKey(identifier)) {
-            CharacterSprite newCharacter = new CharacterSprite(this, animations, speakingSound);
-            newCharacter.setKnownName(identifier);
+    /** Removes the CharacterSprite with identifier IDENTIFIER from the scene. */
+    public void removeCharacter(String identifier) {
+        characterSprites.remove(allCharacters.get(identifier.toLowerCase()));
+    }
+
+    public static void createCharacter(String identifier, String name, String speakingSound) {
+        if (!allCharacters.containsKey(identifier.toLowerCase())) {
+            CharacterSprite newCharacter = new CharacterSprite(identifier.toLowerCase(), null, speakingSound);
+            newCharacter.setKnownName(name);
             allCharacters.put(identifier.toLowerCase(), newCharacter);
-            characterSprites.add(newCharacter);
         }
     }
     /** Returns the CharacterSprite with the identifier IDENTIFIER, or

@@ -43,7 +43,7 @@ public class CharacterAddCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        conversationController.sceneManager().addCharacter(character, animations, speakingSound);
+        conversationController.sceneManager().addCharacter(character);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override

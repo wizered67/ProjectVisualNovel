@@ -57,6 +57,9 @@ public class CharacterVisibleCommand implements ConversationCommand {
             float fadePerSecond = factor / fadeTime;
             c.setFade(fadePerSecond);
         }
+        if (show) {
+            c.addToScene(conversationController.sceneManager());
+        }
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override

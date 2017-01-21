@@ -1,8 +1,16 @@
 <resources xmlns="urn:resourceXml" strict="true">
-    <animations>
+    <animation_files>
         !Edgeworth Edgeworth.pack
         Test Test.pack
         test4.png
+    </animation_files>
+
+    <animations>
+        <animation id="Edgeworth_Static" frameDuration="1" playMode="NORMAL"/>
+        <animation id="Edgeworth_Accuse" frameDuration="0.05"/>
+        <animation id="Edgeworth_Confront" frameDuration="1"/>
+        <animation id="Edgeworth_Edgeworth" frameDuration="0.3"/>
+        <animation id="Edgeworth_Point" frameDuration="1"/>
     </animations>
 
     <backgrounds>
@@ -74,8 +82,8 @@
     </sounds>
 
     <characters>
-        <character id="Detective" name="Detective" animations="Edgeworth" sound="talksoundmale.wav"/>
-        <character id="Librarian" name="???" animations="Edgeworth" sound="talksoundmale.wav"/>
-        <character id="Buddy" name="YOLO SWAGGINS" animations="Test" sound="talksoundmale.wav"/>
+        <character id="Detective" name="Detective" sound="talksoundmale.wav"/>
+        <character id="Librarian" name="???" sound="talksoundmale.wav"/>
+        <character id="Buddy" name="YOLO SWAGGINS"  sound="talksoundmale.wav"/>
     </characters>
 </resources>

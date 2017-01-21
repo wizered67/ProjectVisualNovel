@@ -306,7 +306,7 @@ public class ConversationController implements Controllable {
      * Toggles whether the sound should be played next frame. */
     private void playTextSound() {
         if (playSoundNow) {
-            Sound s = GameManager.assetManager().get("Sounds/" + currentSpeakerSound + ".wav", Sound.class);
+            Sound s = GameManager.assetManager().get(currentSpeakerSound, Sound.class);
             s.play();
         }
         playSoundNow = !playSoundNow;

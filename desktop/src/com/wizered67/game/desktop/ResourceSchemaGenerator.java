@@ -21,7 +21,7 @@ public class ResourceSchemaGenerator {
     private static final String MUSIC_DIRECTORY = "Music";
     private static final String SOUNDS_DIRECTORY = "Sounds";
 
-    private static final String ANIMATIONS_TAG = "animations";
+    private static final String ANIMATIONS_TAG = "animation_files";
     private static final String BACKGROUNDS_TAG = "backgrounds";
     private static final String MUSIC_TAG = "music";
     private static final String SOUNDS_TAG = "sounds";
@@ -130,7 +130,7 @@ public class ResourceSchemaGenerator {
                 }
             }
         }
-        writeIdentifiers(ANIMATIONS_TYPE, animationNames); //todo write different type for each character
+        writeIdentifiers(ANIMATIONS_TYPE, animationNames);
     }
 
     private static void writeBackgrounds(Element root) {

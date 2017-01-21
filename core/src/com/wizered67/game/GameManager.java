@@ -32,13 +32,9 @@ public class GameManager {
 		return inputProcessor;
 	}
 
-	public static AssetManager assetManager() {
+	public static Assets assetManager() {
 		return game.assetManager;
 	}
-
-    public static Map<String, Map<String, Animation>> loadedAnimations() {
-        return game.loadedAnimations;
-    }
 
 	public static void error(String error) {
 		Gdx.app.error("ERROR", error);
@@ -48,6 +44,7 @@ public class GameManager {
         return game.musicManager;
     }
 
+    /*
 	public static void loadDefault() {
 		AssetManager assetManager = assetManager();
 		assetManager.load("Sounds/talksoundmale.wav", Sound.class);
@@ -80,4 +77,5 @@ public class GameManager {
 		edgeworthAnimations.put("Accuse", accuseAnim);
 		loadedAnimations().put("Edgeworth", edgeworthAnimations);
 	}
+	*/
 }

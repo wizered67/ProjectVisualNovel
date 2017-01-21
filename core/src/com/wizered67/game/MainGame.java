@@ -13,18 +13,16 @@ import java.util.Map;
 
 public class MainGame extends Game {
 	MainGameScreen gameScreen;
-	AssetManager assetManager;
-    Map<String, Map<String, Animation>> loadedAnimations;
+	Assets assetManager;
     MusicManager musicManager;
 	@Override
 	public void create() {
 		//Gdx.app.log("TEST", "TEST");
-		assetManager = new AssetManager();
+		assetManager = new Assets();
         musicManager = new MusicManager();
-        loadedAnimations = new HashMap<String, Map<String, Animation>>();
 		GameManager.init(this);
 		gameScreen = new MainGameScreen();
-        setScreen(new LoadingScreen(assetManager, gameScreen));
+        setScreen(new LoadingScreen(gameScreen));
 	}
 	
 }
