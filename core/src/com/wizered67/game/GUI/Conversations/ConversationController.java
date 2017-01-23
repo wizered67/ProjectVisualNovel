@@ -167,13 +167,15 @@ public class ConversationController implements Controllable {
      * DELTA TIME is the time elapsed since the previous frame.
      */
     public void update(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            SaveManager.save(Gdx.files.local("Saves/test2.bin")); //todo remove
-        }
         if (GameManager.assetManager().getQueuedAssets() != 0) {
             GameManager.assetManager().update();
             System.out.println(GameManager.assetManager().getProgress());
         }
+
+        if (currentConversation == null) {
+            return;
+        }
+
         while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() != 0) {
             nextCommand();
             displayAll = false;
@@ -383,6 +385,10 @@ public class ConversationController implements Controllable {
     public void setTextBoxShowing(boolean show){
         textboxLabel.setVisible(show);
         speakerLabel.setVisible(show);
+    }
+    /** Returns whether text is currently showing. */
+    public boolean isTextShowing() {
+        return textboxLabel.isVisible();
     }
     /** Set whether to display all text to DISPLAY. */
     public void setDisplayAll(boolean display) {

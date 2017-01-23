@@ -1,6 +1,8 @@
 package com.wizered67.game.Scripting;
 
+import com.wizered67.game.GameManager;
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
@@ -99,6 +101,21 @@ public class LuaScriptManager implements ScriptManager {
     public void reload(Map<String, Object> map) {
         for (String key : map.keySet()) {
             globals.set(key, (LuaValue) map.get(key));
+        }
+    }
+    /** Assign variable of name NAME to be equal to VALUE. */
+    @Override
+    public void setValue(String name, Object value) {
+        if (value instanceof Integer) {
+            globals.set(name, (Integer) value);
+        } else if (value instanceof String) {
+            globals.set(name, (String) value);
+        } else if (value instanceof Boolean) {
+            globals.set(name, LuaValue.valueOf((Boolean) value));
+        } else if (value instanceof Float || value instanceof Double) {
+            globals.set(name, (double) value);
+        } else {
+            GameManager.error("Trying to set Lua variable '" + name + "' to unsupported type.");
         }
     }
 

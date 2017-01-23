@@ -4,10 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.wizered67.game.GameManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a Scene with a set of characters that are updated
@@ -29,6 +26,8 @@ public class SceneManager {
     private transient Texture background;
     /** Identifier used for background texture. */
     private String backgroundIdentifier;
+    /** List of identifiers of CharacterSprites to be removed from the scene at the end of the next update loop. */
+    private List<String> removeList;
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
@@ -37,6 +36,7 @@ public class SceneManager {
         batch = new SpriteBatch();
         allCharacters = null;
         background = null;
+        removeList = new ArrayList<>();
     }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
@@ -44,6 +44,7 @@ public class SceneManager {
         characterSprites = new HashSet<>();
         batch = new SpriteBatch();
         backgroundIdentifier = "";
+        removeList = new ArrayList<>();
     }
     /** Called each frame to draw the background, update the Animation of each CharacterSprite, and
      * then draw them. DELTA is the amount of time that has elapsed since the
@@ -58,6 +59,9 @@ public class SceneManager {
             //System.out.println("Updating " + sprite.getKnownName());
             sprite.updateAnimation(delta);
             sprite.draw(batch);
+        }
+        for (String character : removeList) {
+            characterSprites.remove(character);
         }
         batch.end();
     }

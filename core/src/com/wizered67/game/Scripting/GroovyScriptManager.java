@@ -15,7 +15,7 @@ import java.util.Map;
  * A ScriptManager that manages and loads Groovy scripts.
  * @author Adam Victor
  */
-public class GroovyScriptManager implements ScriptManager {
+public  class GroovyScriptManager implements ScriptManager {
     private GroovyShell groovyShell;
     private Binding binding;
     static final String SCRIPT_DIRECTORY = "Scripts/";
@@ -129,5 +129,10 @@ public class GroovyScriptManager implements ScriptManager {
         for (String key : map.keySet()) {
             binding.setProperty(key, map.get(key));
         }
+    }
+    /** Assign variable of name NAME to be equal to VALUE. */
+    @Override
+    public void setValue(String name, Object value) {
+        binding.setVariable(name, value);
     }
 }
