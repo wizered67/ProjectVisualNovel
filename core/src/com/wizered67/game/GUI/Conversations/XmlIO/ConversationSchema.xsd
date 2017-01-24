@@ -143,11 +143,18 @@
     </xs:complexType>
 
     <xs:complexType name="ifType" mixed="true">
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="commands" minOccurs="0"/>
+        <xs:sequence minOccurs="0">
+            <xs:group ref="commands" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element type="elseType" name="else" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute type="languages" name="language" use="required"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="elseType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="commands" minOccurs="0"/>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="bgType">

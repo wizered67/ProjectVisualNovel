@@ -29,7 +29,6 @@ public class ConversationLoader {
     private MixedXmlReader xml = new MixedXmlReader();
     /** Mapping of xml element names to corresponding ConversationCommand class. */
     private static Map<String, Class> classMapping = new HashMap<String, Class>();
-
     static {
         classMapping.put("assign", AssignCommand.class);
         classMapping.put("bg", BackgroundSetCommand.class);

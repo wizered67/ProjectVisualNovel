@@ -338,7 +338,14 @@ public class ConversationController implements Controllable {
             currentBranch = (LinkedList<ConversationCommand>) b;
         }
     }
-
+    /** Exits the current conversation. Clears command queue, hides characters, choices, and text. */
+    public void exit() {
+        currentBranch.clear();
+        setTextBoxShowing(false);
+        //todo fix choice hiding?
+        setChoiceShowing(false);
+        sceneManager.removeAllCharacters();
+    }
     /** Adds the ConversationCommands in COMMANDS to the
      * front of the queue of commands to be executed for this branch.
      */

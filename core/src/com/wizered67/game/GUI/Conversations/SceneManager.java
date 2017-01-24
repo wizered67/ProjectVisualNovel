@@ -73,7 +73,13 @@ public class SceneManager {
     public void removeCharacter(String identifier) {
         characterSprites.remove(allCharacters.get(identifier.toLowerCase()));
     }
-
+    /** Removes all CharacterSprites from the scene and sets their visibility to false. */
+    public void removeAllCharacters() {
+        for (CharacterSprite characterSprite : characterSprites) {
+            characterSprite.setVisible(false);
+        }
+        characterSprites.clear();
+    }
     public static void createCharacter(String identifier, String name, String speakingSound) {
         if (!allCharacters.containsKey(identifier.toLowerCase())) {
             CharacterSprite newCharacter = new CharacterSprite(identifier.toLowerCase(), null, speakingSound);
