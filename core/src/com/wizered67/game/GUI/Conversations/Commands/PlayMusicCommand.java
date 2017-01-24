@@ -21,19 +21,23 @@ public class PlayMusicCommand implements ConversationCommand {
     /** If pause is 1, acts as a pause command. If pause is 2, acts as a resume command.
      * When 0 as normal, just plays the music. */
     private Type type;
+    /** The volume to play the sound at, between 0 and 1. */
+    private float volume;
 
     /** No arguments constructor. Used for serialization. */
     public PlayMusicCommand() {
         music = "";
         loops = false;
         type = Type.PLAY;
+        volume = 1;
     }
     /** Creates a PlayMusicCommand that plays the music with identifier M and
      * sets its loop status to L when executed.
      */
-    public PlayMusicCommand(String m, boolean l) {
+    public PlayMusicCommand(String m, boolean l, float v) {
         music = m;
         loops = l;
+        volume = v;
         type = Type.PLAY;
     }
 
@@ -57,7 +61,7 @@ public class PlayMusicCommand implements ConversationCommand {
             GameManager.musicManager().stopMusic();
             return;
         }
-        GameManager.musicManager().playMusic(music, loops);
+        GameManager.musicManager().playMusic(music, loops, volume);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -97,8 +101,9 @@ public class PlayMusicCommand implements ConversationCommand {
             return new PlayMusicCommand(Type.RESUME);
         }
         String id = element.getAttribute("id");
-        boolean loop = element.getBoolean("loop", false);
-        return new PlayMusicCommand(id, loop);
+        boolean loop = element.getBooleanAttribute("loop", false);
+        float volume = element.getFloatAttribute("volume", 1);
+        return new PlayMusicCommand(id, loop, volume);
     }
     /** The type of action this command does ie playing, pausing, or resuming music. */
     private enum Type {

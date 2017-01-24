@@ -4,7 +4,7 @@
            xmlns="urn:conversations"
            attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="ResourcesSchema.xsd"/>
+    <xs:include schemaLocation="ConversationResources.xsd"/>
     <xs:element name="conversation">
 
         <xs:complexType>
@@ -73,6 +73,7 @@
     <xs:complexType name="playmusicType">
         <xs:attribute type="musicResource" name="id" use="required"/>
         <xs:attribute type="xs:boolean" name="loop" use="required"/>
+        <xs:attribute type="xs:float" name="volume" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="playsoundType">

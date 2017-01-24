@@ -2,7 +2,7 @@
            xmlns="urn:resourceXml"
            attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="ResourcesSchema.xsd"/>
+    <xs:include schemaLocation="ConversationResources.xsd"/>
     <xs:element name="resources">
         <xs:complexType>
             <xs:all>

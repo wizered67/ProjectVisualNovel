@@ -29,10 +29,10 @@ public class MusicManager {
     /** Plays the music with identifier NAME. If it was already playing but paused, resume it.
      * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
      */
-    public void playMusic(String id, boolean loops) {
+    public void playMusic(String id, boolean loops, float volume) {
         if (GameManager.assetManager().isLoaded(id)) {
             Music music = GameManager.assetManager().get(id);
-            playMusic(music, id, loops);
+            playMusic(music, id, loops, volume);
         } else {
             GameManager.error("Music '" + id + "' was not loaded first.");
         }
@@ -41,7 +41,7 @@ public class MusicManager {
     /** Plays the Music object MUSIC named NAME. If it was already playing but paused, resume it.
      * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
      */
-    public void playMusic(Music music, String name, boolean loops) {
+    public void playMusic(Music music, String name, boolean loops, float volume) {
         if (currentMusicName.equals(name)) {
             if (paused) {
                 resumeMusic();
@@ -52,8 +52,9 @@ public class MusicManager {
         stopMusic();
         currentMusic = music;
         currentMusicName = name;
-        music.play();
         setLooping(loops);
+        setVolume(volume);
+        music.play();
     }
     /** Stops the music currently being played and resets currentMusic and currentMusicName. */
     public void stopMusic() {
