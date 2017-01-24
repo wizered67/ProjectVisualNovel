@@ -1,4 +1,4 @@
-<conversation xmlns="urn:Test.Namespace">
+<conversation xmlns="urn:conversations">
     <branch name="default">
         <init language="Lua">
             x 5

@@ -142,8 +142,9 @@ public class ResourceSchemaGenerator {
 
     private static void writeMusic(Element root) {
         Map<String, String> resources = getResources(root, MUSIC_TAG);
-        writeIdentifiers(MUSIC_TYPE, resources.keySet());
         verifyResources(resources, MUSIC_DIRECTORY);
+        resources.put("", "");
+        writeIdentifiers(MUSIC_TYPE, resources.keySet());
         System.out.println("Wrote music.");
     }
 

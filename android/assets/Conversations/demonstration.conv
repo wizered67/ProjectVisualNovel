@@ -17,7 +17,6 @@
 
         <direction id="Librarian" direction="-1"/>
         <name id="Librarian" displayname="???"/>
-
         <init language="Groovy">
             work 0
         </init>

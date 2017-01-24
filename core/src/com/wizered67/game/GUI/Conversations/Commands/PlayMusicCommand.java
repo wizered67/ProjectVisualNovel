@@ -20,13 +20,13 @@ public class PlayMusicCommand implements ConversationCommand {
     private boolean loops;
     /** If pause is 1, acts as a pause command. If pause is 2, acts as a resume command.
      * When 0 as normal, just plays the music. */
-    private int pause;
+    private Type type;
 
     /** No arguments constructor. Used for serialization. */
     public PlayMusicCommand() {
         music = "";
         loops = false;
-        pause = 0;
+        type = Type.PLAY;
     }
     /** Creates a PlayMusicCommand that plays the music with identifier M and
      * sets its loop status to L when executed.
@@ -34,39 +34,30 @@ public class PlayMusicCommand implements ConversationCommand {
     public PlayMusicCommand(String m, boolean l) {
         music = m;
         loops = l;
-        pause = 0;
+        type = Type.PLAY;
     }
 
-    /** Creates a PlayMusicCommand that pauses or resumes music when executed. SHOULDPAUSE is 1 for
-     * pausing and 2 for resuming.
+    /** Creates a PlayMusicCommand that pauses or resumes music when executed.
+     * T is an enum corresponding to type.
      */
-    public PlayMusicCommand(int shouldPause) { //pause/resume command, 1 for pause, 2 for resume
-        pause = shouldPause;
+    public PlayMusicCommand(Type t) { //pause/resume command, 1 for pause, 2 for resume
+        type = t;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        if (pause != 0) {
-            if (pause == 1) {
-                GameManager.musicManager().pauseMusic();
-            } else {
-                if (pause == 2) {
-                    GameManager.musicManager().resumeMusic();
-                }
-            }
+        if (type == Type.PAUSE) {
+            GameManager.musicManager().pauseMusic();
+            return;
+        } else if (type == Type.RESUME) {
+            GameManager.musicManager().resumeMusic();
             return;
         }
         if (music.equals("")) {
             GameManager.musicManager().stopMusic();
             return;
         }
-        if (GameManager.assetManager().isLoaded(music)) {
-            Music m = GameManager.assetManager().get(music, Music.class);
-            GameManager.musicManager().playMusic(m, music, loops);
-            GameManager.musicManager().setVolume(0.8f);
-        } else {
-            GameManager.error("No sound loaded: " + music);
-        }
+        GameManager.musicManager().playMusic(music, loops);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -83,14 +74,14 @@ public class PlayMusicCommand implements ConversationCommand {
     @Override
     public void writeXml(XmlWriter xmlWriter) {
         try {
-            if (pause == 0) {
+            if (type == Type.PLAY) {
                 xmlWriter.element("playmusic")
                         .attribute("name", music)
                         .attribute("loop", loops)
                         .pop();
-            } else if (pause == 1) {
+            } else if (type == Type.PAUSE) {
                 xmlWriter.element("pausemusic").pop();
-            } else if (pause == 2) {
+            } else if (type == Type.RESUME) {
                 xmlWriter.element("resumemusic").pop();
             }
         } catch (IOException e) {
@@ -99,8 +90,18 @@ public class PlayMusicCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static PlayMusicCommand makeCommand(XmlReader.Element element) {
+        if (element.getName().equals("pausemusic")) {
+            return new PlayMusicCommand(Type.PAUSE);
+        }
+        if (element.getName().equals("resumemusic")) {
+            return new PlayMusicCommand(Type.RESUME);
+        }
         String id = element.getAttribute("id");
         boolean loop = element.getBoolean("loop", false);
         return new PlayMusicCommand(id, loop);
+    }
+    /** The type of action this command does ie playing, pausing, or resuming music. */
+    private enum Type {
+        PLAY, PAUSE, RESUME
     }
 }

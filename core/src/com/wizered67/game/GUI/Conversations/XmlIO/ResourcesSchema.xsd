@@ -75,6 +75,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="musicResource">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value=""/>
 			<xs:enumeration value="new"/>
 			<xs:enumeration value="crossexamination.mp3"/>
 		</xs:restriction>
