@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.Conversation;
+import com.wizered67.game.GUI.Conversations.ConversationAssetLoader;
 import com.wizered67.game.GUI.Conversations.SceneManager;
 import com.wizered67.game.GUI.Conversations.XmlIO.MixedXmlReader;
 
@@ -30,7 +33,9 @@ import java.util.regex.Pattern;
 
 
 /**
- * Created by Adam on 1/19/2017.
+ * Manages resources by adapting an AssetManager and using identifiers, not filenames, for resources.
+ * When created, loads identifier-filename mapping from RESOURCE_XML.
+ * @author Adam Victor
  */
 public class Assets {
     private MixedXmlReader xmlReader;
@@ -58,6 +63,7 @@ public class Assets {
         assetIdentifiers = new HashMap<>();
         allAnimations = new HashMap<>();
         loadResources();
+        assetManager.setLoader(Conversation.class, new ConversationAssetLoader(new InternalFileHandleResolver()));
     }
 
     public Animation getAnimation(String identifier) {
@@ -213,7 +219,6 @@ public class Assets {
         return assetManager.get(assetIdentifiers.get(fileName));
     }
 
-
     public synchronized <T> T get(String fileName, Class<T> type) {
         return assetManager.get(assetIdentifiers.get(fileName), type);
     }
@@ -236,6 +241,14 @@ public class Assets {
 
     public synchronized <T> void load(String fileName, Class<T> type) {
         assetManager.load(assetIdentifiers.get(fileName), type);
+    }
+
+    public synchronized <T> void loadRaw(String fileName, Class<T> type) {
+        assetManager.load(fileName, type);
+    }
+    //todo put near top, documentation ^ too
+    public synchronized <T> T getRaw(String fileName) {
+        return assetManager.get(fileName);
     }
 
 

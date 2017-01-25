@@ -20,57 +20,15 @@
 	</xs:simpleType>
 	<xs:simpleType name="backgroundResource">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="many20000"/>
-			<xs:enumeration value="many6000"/>
-			<xs:enumeration value="many2000"/>
-			<xs:enumeration value="many40"/>
 			<xs:enumeration value="mountain"/>
-			<xs:enumeration value="many8"/>
-			<xs:enumeration value="many10000"/>
-			<xs:enumeration value="many7"/>
-			<xs:enumeration value="many9"/>
-			<xs:enumeration value="many4"/>
+			<xs:enumeration value="test7.png"/>
+			<xs:enumeration value="test4.png"/>
+			<xs:enumeration value="test5.png"/>
+			<xs:enumeration value="testbackground2.png"/>
 			<xs:enumeration value="many3"/>
-			<xs:enumeration value="many6"/>
-			<xs:enumeration value="many5"/>
-			<xs:enumeration value="many80"/>
+			<xs:enumeration value="testbackground.png"/>
 			<xs:enumeration value="many2"/>
 			<xs:enumeration value="many1"/>
-			<xs:enumeration value="many200"/>
-			<xs:enumeration value="many9000"/>
-			<xs:enumeration value="many600"/>
-			<xs:enumeration value="many400"/>
-			<xs:enumeration value="test5.png"/>
-			<xs:enumeration value="many5000"/>
-			<xs:enumeration value="many800"/>
-			<xs:enumeration value="many90000"/>
-			<xs:enumeration value="many1000"/>
-			<xs:enumeration value="many50"/>
-			<xs:enumeration value="many80000"/>
-			<xs:enumeration value="many10"/>
-			<xs:enumeration value="test4.png"/>
-			<xs:enumeration value="many90"/>
-			<xs:enumeration value="many70000"/>
-			<xs:enumeration value="many8000"/>
-			<xs:enumeration value="many4000"/>
-			<xs:enumeration value="many60"/>
-			<xs:enumeration value="many20"/>
-			<xs:enumeration value="many60000"/>
-			<xs:enumeration value="many100"/>
-			<xs:enumeration value="many500"/>
-			<xs:enumeration value="many40000"/>
-			<xs:enumeration value="many300"/>
-			<xs:enumeration value="many50000"/>
-			<xs:enumeration value="many900"/>
-			<xs:enumeration value="many700"/>
-			<xs:enumeration value="many7000"/>
-			<xs:enumeration value="testbackground.png"/>
-			<xs:enumeration value="many3000"/>
-			<xs:enumeration value="many70"/>
-			<xs:enumeration value="test7.png"/>
-			<xs:enumeration value="many30"/>
-			<xs:enumeration value="many30000"/>
-			<xs:enumeration value="testbackground2.png"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="musicResource">
@@ -78,6 +36,7 @@
 			<xs:enumeration value=""/>
 			<xs:enumeration value="new"/>
 			<xs:enumeration value="crossexamination.mp3"/>
+			<xs:enumeration value="newsong"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="soundResource">
@@ -87,6 +46,7 @@
 			<xs:enumeration value="talksoundfemale.wav"/>
 			<xs:enumeration value="intense.wav"/>
 			<xs:enumeration value="talksoundmale.wav"/>
+			<xs:enumeration value="newsound"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="characterType">
@@ -98,66 +58,26 @@
 	</xs:simpleType>
 	<xs:simpleType name="resourceType">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="many20000"/>
-			<xs:enumeration value="many6000"/>
-			<xs:enumeration value="many2000"/>
-			<xs:enumeration value="many40"/>
-			<xs:enumeration value="mountain"/>
-			<xs:enumeration value="many8"/>
-			<xs:enumeration value="many10000"/>
-			<xs:enumeration value="Test"/>
-			<xs:enumeration value="many7"/>
-			<xs:enumeration value="many9"/>
-			<xs:enumeration value="many4"/>
-			<xs:enumeration value="crossexamination.mp3"/>
-			<xs:enumeration value="many3"/>
-			<xs:enumeration value="many6"/>
-			<xs:enumeration value="many5"/>
-			<xs:enumeration value="many80"/>
-			<xs:enumeration value="many2"/>
-			<xs:enumeration value="many1"/>
-			<xs:enumeration value="many200"/>
 			<xs:enumeration value="new"/>
-			<xs:enumeration value="many9000"/>
-			<xs:enumeration value="many600"/>
 			<xs:enumeration value="test"/>
-			<xs:enumeration value="many400"/>
 			<xs:enumeration value="test5.png"/>
 			<xs:enumeration value="new sound for this"/>
-			<xs:enumeration value="many5000"/>
-			<xs:enumeration value="many800"/>
-			<xs:enumeration value="many90000"/>
-			<xs:enumeration value="intense.wav"/>
-			<xs:enumeration value="many1000"/>
-			<xs:enumeration value="talksoundmale.wav"/>
-			<xs:enumeration value="many50"/>
-			<xs:enumeration value="many80000"/>
-			<xs:enumeration value="many10"/>
-			<xs:enumeration value="test4.png"/>
-			<xs:enumeration value="many90"/>
-			<xs:enumeration value="many70000"/>
-			<xs:enumeration value="many8000"/>
-			<xs:enumeration value="many4000"/>
-			<xs:enumeration value="many60"/>
-			<xs:enumeration value="many20"/>
-			<xs:enumeration value="talksoundfemale.wav"/>
-			<xs:enumeration value="many60000"/>
-			<xs:enumeration value="many100"/>
-			<xs:enumeration value="many500"/>
-			<xs:enumeration value="many40000"/>
-			<xs:enumeration value="many300"/>
-			<xs:enumeration value="many50000"/>
-			<xs:enumeration value="many900"/>
-			<xs:enumeration value="many700"/>
-			<xs:enumeration value="many7000"/>
 			<xs:enumeration value="testbackground.png"/>
-			<xs:enumeration value="many3000"/>
+			<xs:enumeration value="intense.wav"/>
+			<xs:enumeration value="talksoundmale.wav"/>
 			<xs:enumeration value="Edgeworth"/>
-			<xs:enumeration value="many70"/>
+			<xs:enumeration value="mountain"/>
+			<xs:enumeration value="Test"/>
 			<xs:enumeration value="test7.png"/>
-			<xs:enumeration value="many30"/>
-			<xs:enumeration value="many30000"/>
+			<xs:enumeration value="test4.png"/>
+			<xs:enumeration value="crossexamination.mp3"/>
+			<xs:enumeration value="talksoundfemale.wav"/>
 			<xs:enumeration value="testbackground2.png"/>
+			<xs:enumeration value="many3"/>
+			<xs:enumeration value="newsong"/>
+			<xs:enumeration value="many2"/>
+			<xs:enumeration value="many1"/>
+			<xs:enumeration value="newsound"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

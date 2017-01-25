@@ -24,53 +24,12 @@
         many1
         many2
         many3
-        many4
-        many5
-        many6
-        many7
-        many8
-        many9
-        many10
-        many20
-        many30
-        many40
-        many50
-        many60
-        many70
-        many80
-        many90
-        many100
-        many200
-        many300
-        many400
-        many500
-        many600
-        many700
-        many800
-        many900
-        many1000
-        many2000
-        many3000
-        many4000
-        many5000
-        many6000
-        many7000
-        many8000
-        many9000
-        many10000
-        many20000
-        many30000
-        many40000
-        many50000
-        many60000
-        many70000
-        many80000
-        many90000
     </backgrounds>
 
     <music>
         !crossexamination.mp3
         new music.mp3
+        newsong thistest.mp3
     </music>
 
     <sounds>
@@ -79,6 +38,7 @@
         !talksoundmale.wav
         new sound for this file
         test
+        newsound thissound.wav
     </sounds>
 
     <textures>

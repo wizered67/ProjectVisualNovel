@@ -1,0 +1,4578 @@
+<conversation xmlns="urn:conversations">
+    <branch name="default real">
+        Detective: This is a super long conversation!!!!!
+        Librarian: Congrats! You made it!
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+                <changebranch branch="when"/>
+            How long have you been working for the library?:
+                <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+                <changebranch branch="work"/>
+            Did you know the victim?:
+                <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+
+    <branch name="default">
+
+        <assign>
+            anim <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
+            delay <delay time="1" skippable="true"/>
+        </assign>
+
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <position id="Librarian" x="800" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+
+        <direction id="Librarian" direction="-1"/>
+        <name id="Librarian" displayname="???"/>
+        <init language="Groovy">
+            work 0
+        </init>
+        <bg id="testbackground.png"/>
+        <sound id="intense.wav"/>
+        <music id="crossexamination.mp3" loop="false"/>
+        <changebranch branch="main branch"/>
+    </branch>
+
+    <branch name="main branch">
+        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
+        <visible id="Librarian" visible="true" fade="0.5"/>
+
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Detective: And you are...?
+        <name id="Librarian" displayname="Librarian"/>
+
+        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+
+        !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="choices">
+        <choices>
+            When did the murder take place?:
+            <changebranch branch="when"/>
+            How long have you been working for the library?:
+            <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+            <changebranch branch="work"/>
+            Did you know the victim?:
+            <changebranch branch="know"/>
+        </choices>
+    </branch>
+
+    <branch name="when">
+        Detective: Do you know when the murder took place?
+
+        Librarian: I wasn't there when it happened, but the security cameras
+        showed suspicious activity around 2:30 AM last night.
+
+        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        Librarian: It was. We aren't sure how he got in here in the first place.
+        : Does that answer all of your questions?
+
+        !Detective: Didn't I also want to ask about...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="work">
+        Detective: How long have you been working here?
+        <script language="Groovy"> work += 1</script>
+
+        Librarian: For 5 years now. But how is that relevant?
+
+        Detective: Oh... I guess it's not.
+        <if language="Groovy"> {work == 2}
+            Librarian: I already answered your pointless question! Now stop bothering me!
+        </if>
+
+        !Detective: Maybe I better ask about something else instead...
+        <changebranch branch="choices"/>
+    </branch>
+
+    <branch name="know">
+        Detective: So did you know the victim personally?
+
+        Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
+
+        Detective: Chefs? I don't recall mentioning that the victim was a chef.
+        @c{confront} Just how did you know that?
+
+        Librarian: I... uh... @c{delay} saw his chef's hat.
+
+        Detective: (His story's getting phonier by the minute. Now I've just got to break through
+        his lies once and for all!)
+        <visible id="Librarian" visible="false" fade="1.5"/>
+    </branch>
+
+</conversation>

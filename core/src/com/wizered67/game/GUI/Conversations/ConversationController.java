@@ -94,10 +94,13 @@ public class ConversationController implements Controllable {
         choiceCommands = new List[choiceButtons.length];
         sceneManager = new SceneManager(this);
         initScriptManagers();
+        /*
         if (!Constants.LOAD) { //todo fix
-            loadConversation("demonstration.conv");
+            loadConversation("super long.conv");
+            System.out.println(System.nanoTime() / 1000000);
             setBranch("default");
         }
+        */
         //remainingText =
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
@@ -108,6 +111,15 @@ public class ConversationController implements Controllable {
         scriptManagers.put("Lua", new LuaScriptManager());
         scriptManagers.put("Groovy", new GroovyScriptManager());
     }
+
+    public ConversationLoader loader() { //todo fixme
+        return conversationLoader;
+    }
+
+    public void setConv(Conversation conv) { //todo fixme
+        currentConversation = conv;
+    }
+
     /** Saves the GUI state. */
     public void save() {
         guiState = new GUIState();
@@ -168,7 +180,10 @@ public class ConversationController implements Controllable {
      */
     public void update(float deltaTime) {
         if (GameManager.assetManager().getQueuedAssets() != 0) {
-            GameManager.assetManager().update();
+            if (GameManager.assetManager().update()) { //todo fixme
+                setConv((Conversation) GameManager.assetManager().getRaw("Conversations/super long.conv"));
+                setBranch("default real");
+            }
             System.out.println(GameManager.assetManager().getProgress());
         }
 
