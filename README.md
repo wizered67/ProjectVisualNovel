@@ -29,8 +29,12 @@ I have taken several steps to make writing XML conversations as fast, clean, and
 
 I have also simplified Conversation files by allowing some elements to use text instead of XML tags. For example, dialogue can be added by writing "Speaker: Text to say." instead of <message speaker="" text="">. This slightly reduces the autocompletion capabilities and validation, but it makes it much easier to read and write. I intend to write a more extensive validator in Java that would catch additional problems.
 
-## Features
-* Test
-* Test 2
+## Scripting support
+I have also added support for scripting languages to allow creators to make more dynamic content. Currently, Lua and Groovy are both supported, although only Lua works on Android. Creators can add script commands to Conversation files that execute a line of code or load and execute a file containing code. The primary use of scripting languages is to let the user modify variables at different points. Then, a command can be used to check if a condition is met and execute commands only if it is. Here's a hypothetical example. The creator makes a Lua variable called "money". Throughout the game, different characters may ask them questions, and depending on how they answer, the player receives money, with something like "money = money + 10". The player could even gain random amounts of money by using a random function! Later in the game, there could be an item that the player can only buy with a certain amount of money. By using commands, the Conversation could check if the player has enough money ("money >= 50"), subtract it if they do ("money = money - 50") and give the player an item ("hasitem = true"), in addition to showing different dialogue to the player!
 
+## Saving and Loading
+The system has been set up to use the [Kryo] (https://github.com/EsotericSoftware/kryo) framework for saving and loading progress. Serializers have been written for the critical game components. When the player saves, the text, characters, and commands in progress are written to a file to be loaded later. All variables defined in the scripting languages are also saved!
+
+## Resource Management
+Changes are in progress to make resource management as easy as possible! The creator simply has to edit the Resources.xml file, adding their own files to each category. They can give each resource an identifier, the name through which it is referred when writing Conversations. The identifier allows the creator to change swap resources with new ones without changing Conversation files, as long as they keep the identifier the same! Additionally, the new [Resource Schema Generator] (https://github.com/wizered67/ResourceSchemaGenerator) can be used to automatically generate an XSD schema containing all resources defined in Resources.xml. By creating a schema, whenever the creator references a resource in their Conversation files they can use autocompletion and validation! IntelliJ's "file watcher" plugin even allows the schema generator jar file to be run automatically every time Resources.xml changes, so the user doesn't have to do anything!
 
