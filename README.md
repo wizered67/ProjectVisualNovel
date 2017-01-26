@@ -9,6 +9,7 @@ I chose to make this project instead of using something like Ren'Py for several 
 
 ##Demonstrations
 This project was used by team members and I to make a [game during a Hackathon] (https://devpost.com/software/alice-wonder-presidential-prodigy)! Some new features were added just for the game, but the flexibility of this system made it easy and fast to do!
+
 *Note: Graphics are placeholder and not mine. They are just for demonstration purposes.*
 ![gif](https://dl.dropboxusercontent.com/u/25507891/visualnovel3test.gif)
 
