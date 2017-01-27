@@ -130,7 +130,7 @@ public class GUIManager {
 
 		//textboxLabel.setPosition(200, 400);
 		//textboxLabel.setSize(350, 60);
-		//textboxLabel.setVisible(false);
+		//textboxLabel.setFullVisible(false);
 		/*
         TextTooltip.TextTooltipStyle textTooltipStyle = new TextTooltip.TextTooltipStyle();
 		textTooltipStyle.background = skin.newDrawable("white", Color.DARK_GRAY);

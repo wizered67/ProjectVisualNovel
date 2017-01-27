@@ -48,6 +48,7 @@ public class Assets {
     private static final String BACKGROUNDS_DIRECTORY = "Backgrounds";
     private static final String MUSIC_DIRECTORY = "Music";
     private static final String SOUNDS_DIRECTORY = "Sounds";
+    private static final String TEXTURES_DIRECTORY = "Textures";
 
     private static final String ANIMATION_FILES_TAG = "animation_files";
     private static final String ANIMATIONS_TAG = "animations";
@@ -55,11 +56,16 @@ public class Assets {
     private static final String MUSIC_TAG = "music";
     private static final String SOUNDS_TAG = "sounds";
     private static final String CHARACTERS_TAG = "characters";
+    private static final String TEXTURES_TAG = "textures";
 
     private static final Pattern RESOURCE_PATTERN = Pattern.compile("\\s*(.+)\\s+(.+)\\s*");
 
     public Assets() {
-        assetManager = new AssetManager();
+        this(new AssetManager());
+    }
+
+    public Assets(AssetManager manager) {
+        assetManager = manager;
         assetIdentifiers = new HashMap<>();
         allAnimations = new HashMap<>();
         loadResources();
@@ -74,14 +80,25 @@ public class Assets {
         xmlReader = new MixedXmlReader();
         try {
             Element root = xmlReader.parse(Gdx.files.internal(RESOURCE_XML));
+            loadTextures(root);
             loadAnimationFiles(root);
             //loadAnimations(root);
-            loadBackgrounds(root);
             loadMusic(root);
             loadSounds(root);
             loadCharacters(root);
         } catch (IOException io) {
             io.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadTextures(Element root) {
+        Object[] data = getResources(root, TEXTURES_TAG, TEXTURES_DIRECTORY);
+        Map<String, String> resources = (Map<String, String>) data[0];
+        assetIdentifiers.putAll(resources);
+        List<String> loadNow = (List<String>) data[1];
+        for (String id : loadNow) {
+            load(id, Texture.class);
         }
     }
     @SuppressWarnings("unchecked")
@@ -117,16 +134,6 @@ public class Assets {
             }
         } catch (IOException io) {
             io.printStackTrace();
-        }
-    }
-    @SuppressWarnings("unchecked")
-    private void loadBackgrounds(Element root) {
-        Object[] data = getResources(root, BACKGROUNDS_TAG, BACKGROUNDS_DIRECTORY);
-        Map<String, String> resources = (Map<String, String>) data[0];
-        assetIdentifiers.putAll(resources);
-        List<String> loadNow = (List<String>) data[1];
-        for (String id : loadNow) {
-            load(id, Texture.class);
         }
     }
     @SuppressWarnings("unchecked")

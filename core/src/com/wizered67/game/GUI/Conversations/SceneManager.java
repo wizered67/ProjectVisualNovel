@@ -1,7 +1,10 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.GameManager;
 
 import java.util.*;
@@ -28,7 +31,10 @@ public class SceneManager {
     private String backgroundIdentifier;
     /** List of identifiers of CharacterSprites to be removed from the scene at the end of the next update loop. */
     private List<String> removeList;
-
+    private Map<String, List<SceneImage>> imagesByTexture;
+    private List<SceneImage> sortedImages;
+    /** Dummy added at depth 0. When iterating it is skipped and instead characters are drawn at depth 0. */
+    private final SceneImage zeroDummy = new SceneImage(0);
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
         conversationController = null;
@@ -37,6 +43,8 @@ public class SceneManager {
         allCharacters = null;
         background = null;
         removeList = new ArrayList<>();
+        imagesByTexture = new HashMap<>();
+        sortedImages = new ArrayList<>();
     }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
@@ -45,16 +53,48 @@ public class SceneManager {
         batch = new SpriteBatch();
         backgroundIdentifier = "";
         removeList = new ArrayList<>();
+        imagesByTexture = new HashMap<>();
+        sortedImages = new ArrayList<>();
+        sortedImages.add(zeroDummy);
     }
     /** Called each frame to draw the background, update the Animation of each CharacterSprite, and
      * then draw them. DELTA is the amount of time that has elapsed since the
      * last frame.
      */
     public void update(float delta) {
+        if (Gdx.input.justTouched()) {
+            SceneImage newImage = new SceneImage("test", "icon", 5);
+            newImage.addToScene(this);
+            newImage.setFade(2f);
+            newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            SceneImage newImage = new SceneImage("test2", "icon2", -5);
+            newImage.addToScene(this);
+            newImage.setFade(1f);
+            newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+        }
         batch.begin();
         if (background != null) {
             batch.draw(background, 0, 0);
         }
+
+        Iterator<SceneImage> imageIterator = sortedImages.iterator();
+        while (imageIterator.hasNext()) {
+            SceneImage image = imageIterator.next();
+            if (image == zeroDummy) {
+                renderCharacters(delta);
+            } else if (image.isRemoved()) {
+                imageIterator.remove();
+            } else {
+                image.update(delta);
+                image.draw(batch);
+            }
+        }
+        batch.end();
+    }
+    /** Updates and renders all characters in the scene. */
+    public void renderCharacters(float delta) {
         for (CharacterSprite sprite : characterSprites) {
             //System.out.println("Updating " + sprite.getKnownName());
             sprite.updateAnimation(delta);
@@ -63,7 +103,6 @@ public class SceneManager {
         for (String character : removeList) {
             characterSprites.remove(character);
         }
-        batch.end();
     }
    /** Adds the CharacterSprite with identifier IDENTIFIER to this scene. */
     public void addCharacter(String identifier) {
@@ -76,7 +115,7 @@ public class SceneManager {
     /** Removes all CharacterSprites from the scene and sets their visibility to false. */
     public void removeAllCharacters() {
         for (CharacterSprite characterSprite : characterSprites) {
-            characterSprite.setVisible(false);
+            characterSprite.setFullVisible(false);
         }
         characterSprites.clear();
     }
@@ -111,6 +150,29 @@ public class SceneManager {
     public String getBackgroundIdentifier() {
         return backgroundIdentifier;
     }
+
+    public void addImage(SceneImage image) {
+        List<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName());
+        if (imagesOfTexture == null) {
+            imagesOfTexture = new LinkedList<SceneImage>();
+            imagesByTexture.put(image.getTextureName(), imagesOfTexture);
+        }
+        imagesOfTexture.add(image);
+
+        int newIndex = Collections.binarySearch(sortedImages, image);
+        if (newIndex < 0) {
+            newIndex = -(newIndex + 1);
+        }
+        sortedImages.add(newIndex, image);
+    }
+
+    public void removeImage(SceneImage image) {
+        List<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName()); //todo use set with uuid?
+        if (imagesOfTexture != null) {
+
+        }
+    }
+
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */
     public void complete(CompleteEvent event) {
         conversationController.complete(event);

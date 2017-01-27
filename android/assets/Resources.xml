@@ -42,7 +42,9 @@
     </sounds>
 
     <textures>
-        icon testicon.png
+        !icon testicon.png
+        !testbackground.png
+        !icon2 testicon2.png
     </textures>
 
     <characters>

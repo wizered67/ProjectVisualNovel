@@ -1,6 +1,5 @@
 package com.wizered67.game.GUI.Conversations;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,10 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Saving.SaveData;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Represents a character in the game. Contains information about the
@@ -139,9 +134,9 @@ public class CharacterSprite {
             alpha += deltaStateTime * fadePerSecond;
             sprite.setAlpha(alpha);
             if (alpha <= 0) {
-                setVisible(false);
+                setFullVisible(false);
             } else if (alpha >= 1) {
-                setVisible(true);
+                setFullVisible(true);
             }
         }
         if (isVisible() && currentAnimation != null) {
@@ -198,7 +193,7 @@ public class CharacterSprite {
         return position;
     }
     /** Sets this CharacterSprite's visibility to VISIBLE. */
-    public void setVisible(boolean visible) {
+    public void setFullVisible(boolean visible) {
         if (fadePerSecond != 0) {
             manager.complete(CompleteEvent.fade());
         }
