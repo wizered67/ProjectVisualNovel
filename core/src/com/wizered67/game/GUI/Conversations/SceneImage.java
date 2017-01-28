@@ -15,9 +15,10 @@ import com.wizered67.game.GameManager;
  * @author Adam Victor
  */
 public class SceneImage implements Comparable<SceneImage> {
-    /** Identifier specified in commands to reference this image, or the identifier of
-     * the texture if none is specified. */
+    /** Identifier specified in commands to reference this image. */
     private String instanceIdentifier;
+    /** Identifier specified in commands to refer to group of images. */
+    private String groupIdentifier;
     /** The sprite that is drawn by this image. */
     private transient Sprite sprite;
     /** Whether this image has already been removed. */
@@ -30,6 +31,10 @@ public class SceneImage implements Comparable<SceneImage> {
     private int depth;
     /** The name of the texture used with this. */
     private String textureName;
+    private static int nextInstance;
+    static {
+        nextInstance = 0;
+    }
 
 
     public SceneImage() {}
@@ -39,9 +44,15 @@ public class SceneImage implements Comparable<SceneImage> {
         this.depth = depth;
     }
 
-    public SceneImage(String instance, String texture, int depth) {
+    public SceneImage(String instance, String group, String texture, int depth) {
         removed = false;
-        instanceIdentifier = instance;
+        if (!instance.isEmpty()) {
+            instanceIdentifier = instance;
+        } else {
+            instanceIdentifier = "__INTERNAL_INSTANCE__" + nextInstance;
+            nextInstance += 1;
+        }
+        groupIdentifier = group;
         if (!GameManager.assetManager().isLoaded(texture)) {
             GameManager.assetManager().finishLoadingAsset(texture);
         }
@@ -77,6 +88,18 @@ public class SceneImage implements Comparable<SceneImage> {
         sprite.setPosition(position.x, position.y);
     }
 
+    public void setX(float x) {
+        sprite.setPosition(x, sprite.getY());
+    }
+
+    public void setY(float y) {
+        sprite.setPosition(sprite.getX(), y);
+    }
+
+    public void setDepth(int d) {
+        depth = d;
+    }
+
     public void setFade(float fadeAmount) {
         fadePerSecond = fadeAmount;
     }
@@ -101,6 +124,10 @@ public class SceneImage implements Comparable<SceneImage> {
             manager.removeImage(this);
         }
         removed = true;
+    }
+
+    public String getGroup() {
+        return groupIdentifier;
     }
 
     public String getTextureName() {

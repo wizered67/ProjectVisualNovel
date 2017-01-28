@@ -31,7 +31,7 @@ public class SceneManager {
     private String backgroundIdentifier;
     /** List of identifiers of CharacterSprites to be removed from the scene at the end of the next update loop. */
     private List<String> removeList;
-    private Map<String, Set<SceneImage>> imagesByTexture;
+    private Map<String, Set<SceneImage>> imagesByGroup;
     private Map<String, SceneImage> imagesByInstance;
     private List<SceneImage> sortedImages;
     /** Dummy added at depth 0. When iterating it is skipped and instead characters are drawn at depth 0. */
@@ -44,7 +44,7 @@ public class SceneManager {
         allCharacters = null;
         background = null;
         removeList = new ArrayList<>();
-        imagesByTexture = new HashMap<>();
+        imagesByGroup = new HashMap<>();
         sortedImages = new ArrayList<>();
         imagesByInstance = new HashMap<>();
     }
@@ -55,7 +55,7 @@ public class SceneManager {
         batch = new SpriteBatch();
         backgroundIdentifier = "";
         removeList = new ArrayList<>();
-        imagesByTexture = new HashMap<>();
+        imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedImages = new ArrayList<>();
         sortedImages.add(zeroDummy);
@@ -66,13 +66,13 @@ public class SceneManager {
      */
     public void update(float delta) {
         if (Gdx.input.justTouched()) {
-            SceneImage newImage = new SceneImage("test", "icon", 5);
+            SceneImage newImage = new SceneImage("test", "icons", "icon", 5);
             newImage.addToScene(this);
             newImage.setFade(2f);
             newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            SceneImage newImage = new SceneImage("test2", "icon2", -5);
+            SceneImage newImage = new SceneImage("test2", "icons", "icon2", -5);
             newImage.addToScene(this);
             newImage.setFade(1f);
             newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
@@ -155,10 +155,10 @@ public class SceneManager {
     }
 
     public void addImage(SceneImage image) {
-        Set<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName());
+        Set<SceneImage> imagesOfTexture = imagesByGroup.get(image.getTextureName());
         if (imagesOfTexture == null) {
             imagesOfTexture = new HashSet<>();
-            imagesByTexture.put(image.getTextureName(), imagesOfTexture);
+            imagesByGroup.put(image.getTextureName(), imagesOfTexture);
         }
         imagesOfTexture.add(image);
 
@@ -170,7 +170,7 @@ public class SceneManager {
     }
 
     public void removeImage(SceneImage image) {
-        Set<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName());
+        Set<SceneImage> imagesOfTexture = imagesByGroup.get(image.getTextureName());
         if (imagesOfTexture != null) {
             imagesOfTexture.remove(image);
         }
@@ -181,8 +181,8 @@ public class SceneManager {
         return imagesByInstance.get(instanceIdentifier);
     }
 
-    public Set<SceneImage> getImagesByTexture(String textureName) {
-        return imagesByTexture.get(textureName);
+    public Set<SceneImage> getImagesByGroup(String group) {
+        return imagesByGroup.get(group);
     }
 
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */

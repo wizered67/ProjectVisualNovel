@@ -168,6 +168,7 @@
     <xs:complexType name="imageType">
         <xs:group ref="imageProperties" minOccurs="1"/>
         <xs:attribute name="instance" type="xs:string" use="required"/>
+        <xs:attribute name="group" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:group name="imageProperties">

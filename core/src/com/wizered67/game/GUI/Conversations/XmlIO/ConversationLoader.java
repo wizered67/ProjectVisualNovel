@@ -3,18 +3,15 @@ package com.wizered67.game.GUI.Conversations.XmlIO;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.badlogic.gdx.utils.XmlWriter;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.wizered67.game.GUI.Conversations.Commands.*;
+import com.wizered67.game.GUI.Conversations.Commands.images.ModifyImageCommandCreator;
 import com.wizered67.game.GUI.Conversations.Conversation;
 
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -52,6 +49,7 @@ public class ConversationLoader {
         classMapping.put("textspeed", TextSpeedCommand.class);
         classMapping.put("if", VariableConditionCommand.class);
         classMapping.put("init", VariableInitializeCommand.class);
+        classMapping.put("image", ModifyImageCommandCreator.class);
     }
 
     /** Returns the Conversation created by parsing the XML file
