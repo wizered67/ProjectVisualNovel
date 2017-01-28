@@ -23,6 +23,13 @@
         <bg id="testbackground.png"/>
         <sound id="intense.wav"/>
         <music id="crossexamination.mp3" loop="false"/>
+
+        <image instance="bg">
+            <texture id="texture"/>
+            <visibility visible="true" fadeTime="1" wait="true"/>
+            <position x="1"/>
+        </image>
+
         <changebranch branch="main branch"/>
     </branch>
 

@@ -20,7 +20,6 @@
         <xs:sequence>
             <xs:choice maxOccurs="unbounded">
                 <xs:element type="changebranchType" name="changebranch" maxOccurs="unbounded"/>
-                <xs:element type="addcharacterType" name="character" maxOccurs="unbounded"/>
                 <xs:element type="setanimationType" name="animation" maxOccurs="unbounded"/>
                 <xs:element type="setdirectionType" name="direction" maxOccurs="unbounded"/>
                 <xs:element type="setnameType" name="name" maxOccurs="unbounded"/>
@@ -41,6 +40,7 @@
                 <xs:element type="ifType" name="if" maxOccurs="unbounded"/>
                 <xs:element type="bgType" name="bg" maxOccurs="unbounded"/>
                 <xs:element type="changeConversationType" name="changeconv" maxOccurs="unbounded"/>
+                <xs:element type="imageType" name="image" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -163,5 +163,34 @@
 
     <xs:complexType name="changeConversationType">
         <xs:attribute name="conv" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="imageType">
+        <xs:group ref="imageProperties" minOccurs="1"/>
+        <xs:attribute name="instance" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:group name="imageProperties">
+        <xs:all>
+            <xs:element name="texture" type="imageTexture" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="position" type="positionDepthType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="visibility" type="visibleType" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:group>
+
+    <xs:complexType name="imageTexture">
+        <xs:attribute name="id" type="textureResource" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="positionDepthType">
+        <xs:attribute name="x" type="xs:float" use="optional"/>
+        <xs:attribute name="y" type="xs:float" use="optional"/>
+        <xs:attribute name="depth" type="xs:integer" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="visibleType">
+        <xs:attribute name="visible" type="xs:boolean" use="required"/>
+        <xs:attribute name="fadeTime" type="xs:float" use="optional"/>
+        <xs:attribute name="wait" type="xs:boolean" use="optional"/>
     </xs:complexType>
 </xs:schema>

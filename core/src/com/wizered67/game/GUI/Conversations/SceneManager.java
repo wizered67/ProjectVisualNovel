@@ -31,7 +31,8 @@ public class SceneManager {
     private String backgroundIdentifier;
     /** List of identifiers of CharacterSprites to be removed from the scene at the end of the next update loop. */
     private List<String> removeList;
-    private Map<String, List<SceneImage>> imagesByTexture;
+    private Map<String, Set<SceneImage>> imagesByTexture;
+    private Map<String, SceneImage> imagesByInstance;
     private List<SceneImage> sortedImages;
     /** Dummy added at depth 0. When iterating it is skipped and instead characters are drawn at depth 0. */
     private final SceneImage zeroDummy = new SceneImage(0);
@@ -45,6 +46,7 @@ public class SceneManager {
         removeList = new ArrayList<>();
         imagesByTexture = new HashMap<>();
         sortedImages = new ArrayList<>();
+        imagesByInstance = new HashMap<>();
     }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
@@ -54,6 +56,7 @@ public class SceneManager {
         backgroundIdentifier = "";
         removeList = new ArrayList<>();
         imagesByTexture = new HashMap<>();
+        imagesByInstance = new HashMap<>();
         sortedImages = new ArrayList<>();
         sortedImages.add(zeroDummy);
     }
@@ -152,9 +155,9 @@ public class SceneManager {
     }
 
     public void addImage(SceneImage image) {
-        List<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName());
+        Set<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName());
         if (imagesOfTexture == null) {
-            imagesOfTexture = new LinkedList<SceneImage>();
+            imagesOfTexture = new HashSet<>();
             imagesByTexture.put(image.getTextureName(), imagesOfTexture);
         }
         imagesOfTexture.add(image);
@@ -167,10 +170,19 @@ public class SceneManager {
     }
 
     public void removeImage(SceneImage image) {
-        List<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName()); //todo use set with uuid?
+        Set<SceneImage> imagesOfTexture = imagesByTexture.get(image.getTextureName());
         if (imagesOfTexture != null) {
-
+            imagesOfTexture.remove(image);
         }
+        imagesByInstance.remove(image.getInstanceIdentifier());
+    }
+
+    public SceneImage getImage(String instanceIdentifier) {
+        return imagesByInstance.get(instanceIdentifier);
+    }
+
+    public Set<SceneImage> getImagesByTexture(String textureName) {
+        return imagesByTexture.get(textureName);
     }
 
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */

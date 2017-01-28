@@ -10,8 +10,8 @@ import com.wizered67.game.GameManager;
  * Represents an image displayed by the user during a scene and its depth.
  * Holds a Sprite and the filename associated with it for serialization,
  * as well as an "instance id" to be used to reference this with commands.
- * It also has an "internal id" which is unique to each SceneImage and used to
- * determine equality. Depth, however, is used for comparisons.
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ * It uses depth in compareTo for ordering and uses instanceIdentifier for equals.
  * @author Adam Victor
  */
 public class SceneImage implements Comparable<SceneImage> {
@@ -125,7 +125,20 @@ public class SceneImage implements Comparable<SceneImage> {
     }
 
     @Override
+    public int hashCode() {
+        return instanceIdentifier.hashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
-        return o == this;
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof SceneImage) {
+            SceneImage other = (SceneImage) o;
+            return other.instanceIdentifier.equals(instanceIdentifier);
+        } else {
+            return false;
+        }
     }
 }
