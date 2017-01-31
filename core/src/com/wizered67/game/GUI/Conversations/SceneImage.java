@@ -44,7 +44,7 @@ public class SceneImage implements Comparable<SceneImage> {
         this.depth = depth;
     }
 
-    public SceneImage(String instance, String group, String texture, int depth) {
+    public SceneImage(String instance) {
         removed = false;
         if (!instance.isEmpty()) {
             instanceIdentifier = instance;
@@ -52,19 +52,13 @@ public class SceneImage implements Comparable<SceneImage> {
             instanceIdentifier = "__INTERNAL_INSTANCE__" + nextInstance;
             nextInstance += 1;
         }
-        groupIdentifier = group;
-        if (!GameManager.assetManager().isLoaded(texture)) {
-            GameManager.assetManager().finishLoadingAsset(texture);
-        }
-        sprite = new Sprite(GameManager.assetManager().get(texture, Texture.class));
+        sprite = new Sprite();
         sprite.setAlpha(0);
-        textureName = texture;
         fadePerSecond = 0;
-        this.depth = depth;
     }
 
     public void update(float deltaTime) {
-        System.out.println(fadePerSecond + ", " + sprite.getColor().a);
+        //System.out.println(fadePerSecond + ", " + sprite.getColor().a);
         if (fadePerSecond != 0) {
             float alpha = sprite.getColor().a;
             alpha += deltaTime * fadePerSecond;
@@ -78,10 +72,25 @@ public class SceneImage implements Comparable<SceneImage> {
     }
 
     public void draw(Batch batch) {
-        if (sprite == null || removed) {
+        if (sprite == null || sprite.getTexture() == null || sprite.getColor().a == 0 || removed) {
             return;
         }
         sprite.draw(batch);
+    }
+
+    public void setTexture(String texture) {
+        textureName = texture;
+        if (!GameManager.assetManager().isLoaded(texture)) {
+            GameManager.assetManager().finishLoadingAsset(texture);
+        }
+        //sprite.setTexture();
+        //sprite.setRegion(GameManager.assetManager().get(texture, Texture.class));
+        Texture t = GameManager.assetManager().get(texture, Texture.class);
+        sprite.setTexture(t);
+        sprite.setRegion(t);
+        sprite.setSize(t.getWidth(), t.getHeight());
+        sprite.setOrigin(t.getWidth() / 2, t.getHeight() / 2);
+        //sprite = new Sprite(GameManager.assetManager().get(texture, Texture.class));
     }
 
     public void setPosition(Vector2 position) {
@@ -96,8 +105,9 @@ public class SceneImage implements Comparable<SceneImage> {
         sprite.setPosition(sprite.getX(), y);
     }
 
-    public void setDepth(int d) {
+    public void setDepth(SceneManager manager, int d) {
         depth = d;
+        manager.addImageToSorted(this);
     }
 
     public void setFade(float fadeAmount) {
@@ -105,6 +115,9 @@ public class SceneImage implements Comparable<SceneImage> {
     }
 
     public void setFullVisible(boolean visible) {
+        if (fadePerSecond != 0) {
+            manager.complete(CompleteEvent.fade()); //todo add fade data
+        }
         if (visible) {
             sprite.setAlpha(1);
         } else {
@@ -124,6 +137,12 @@ public class SceneImage implements Comparable<SceneImage> {
             manager.removeImage(this);
         }
         removed = true;
+    }
+
+    public void changeGroup(SceneManager manager, String newGroup) {
+        String oldGroup = groupIdentifier;
+        groupIdentifier = newGroup;
+        manager.changeImageGroup(this, oldGroup);
     }
 
     public String getGroup() {

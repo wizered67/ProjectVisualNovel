@@ -167,12 +167,13 @@
 
     <xs:complexType name="imageType">
         <xs:group ref="imageProperties" minOccurs="1"/>
-        <xs:attribute name="instance" type="xs:string" use="required"/>
+        <xs:attribute name="instance" type="xs:string" use="optional"/>
         <xs:attribute name="group" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:group name="imageProperties">
         <xs:all>
+            <xs:element name="group" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="texture" type="imageTexture" minOccurs="0" maxOccurs="1"/>
             <xs:element name="position" type="positionDepthType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="visibility" type="visibleType" minOccurs="0" maxOccurs="1"/>

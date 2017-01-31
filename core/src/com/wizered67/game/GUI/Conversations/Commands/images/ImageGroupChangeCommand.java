@@ -9,30 +9,31 @@ import com.wizered67.game.GUI.Conversations.SceneImage;
 import com.wizered67.game.GUI.Conversations.SceneManager;
 
 /**
- * Created by Adam on 1/27/2017.
+ * Created by Adam on 1/30/2017.
  */
-class ImageTextureCommand implements ConversationCommand {
-    private String newTexture;
+class ImageGroupChangeCommand implements ConversationCommand {
     private String instanceIdentifier;
     private String groupIdentifier;
+    private String newGroup;
 
-    ImageTextureCommand() {}
+    ImageGroupChangeCommand() {}
 
-    ImageTextureCommand(String instance, String group, String texture) {
+    ImageGroupChangeCommand(String instance, String group, String nGroup) {
         instanceIdentifier = instance;
         groupIdentifier = group;
-        newTexture = texture;
+        newGroup = nGroup;
     }
+
     /**
      * Executes the command on the CONVERSATION CONTROLLER.
      */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneManager manager = conversationController.sceneManager();
+        final SceneManager manager = conversationController.sceneManager();
         manager.applyImageCommand(instanceIdentifier, groupIdentifier, new ImageAction() {
             @Override
             public void apply(SceneImage image) {
-                image.setTexture(newTexture);
+                image.changeGroup(manager, newGroup);
             }
         });
     }
@@ -54,9 +55,13 @@ class ImageTextureCommand implements ConversationCommand {
 
     }
     /** Static method to create a new command from XML Element ELEMENT. */
-    static ImageTextureCommand makeCommand(String instance, String group, XmlReader.Element element) {
-        String newTexture = element.getAttribute("id");
-        return new ImageTextureCommand(instance, group, newTexture);
+    static ImageGroupChangeCommand makeCommand(String instanceIdentifier, String groupIdentifier, XmlReader.Element element) {
+        XmlReader.Element text = element.getChild(0);
+        if (!text.getName().equals("text")) {
+            throw new IllegalArgumentException("Group change element must have text");
+        }
+        String newGroup = text.getText();
+        return new ImageGroupChangeCommand(instanceIdentifier, groupIdentifier, newGroup);
     }
 
     /**

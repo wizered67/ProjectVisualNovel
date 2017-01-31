@@ -1,6 +1,5 @@
 package com.wizered67.game.GUI.Conversations.Commands.images;
 
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
@@ -9,32 +8,26 @@ import com.wizered67.game.GUI.Conversations.SceneImage;
 import com.wizered67.game.GUI.Conversations.SceneManager;
 
 /**
- * Created by Adam on 1/27/2017.
+ * Created by Adam on 1/30/2017.
  */
-class ImageTextureCommand implements ConversationCommand {
-    private String newTexture;
-    private String instanceIdentifier;
-    private String groupIdentifier;
+class ImageCreateCommand implements ConversationCommand {
+    private String instance;
 
-    ImageTextureCommand() {}
-
-    ImageTextureCommand(String instance, String group, String texture) {
-        instanceIdentifier = instance;
-        groupIdentifier = group;
-        newTexture = texture;
+    ImageCreateCommand() {}
+    ImageCreateCommand(String inst) {
+        instance = inst;
     }
+
     /**
      * Executes the command on the CONVERSATION CONTROLLER.
      */
     @Override
     public void execute(ConversationController conversationController) {
         SceneManager manager = conversationController.sceneManager();
-        manager.applyImageCommand(instanceIdentifier, groupIdentifier, new ImageAction() {
-            @Override
-            public void apply(SceneImage image) {
-                image.setTexture(newTexture);
-            }
-        });
+        if (manager.getImage(instance) == null) {
+            manager.addImage(new SceneImage(instance));
+        }
+
     }
 
     /**
@@ -52,11 +45,6 @@ class ImageTextureCommand implements ConversationCommand {
     @Override
     public void complete(CompleteEvent c) {
 
-    }
-    /** Static method to create a new command from XML Element ELEMENT. */
-    static ImageTextureCommand makeCommand(String instance, String group, XmlReader.Element element) {
-        String newTexture = element.getAttribute("id");
-        return new ImageTextureCommand(instance, group, newTexture);
     }
 
     /**

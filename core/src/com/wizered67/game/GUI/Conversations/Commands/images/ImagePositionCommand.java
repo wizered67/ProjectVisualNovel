@@ -23,9 +23,9 @@ class ImagePositionCommand implements ConversationCommand {
     private int depth;
     private boolean depthSpecified;
 
-    public ImagePositionCommand() {}
+    ImagePositionCommand() {}
 
-    public ImagePositionCommand(String inst, String group, Vector2 pos, int depth) {
+    ImagePositionCommand(String inst, String group, Vector2 pos, int depth) {
         instance = inst;
         groupIdentifier = group;
         position = pos;
@@ -40,29 +40,23 @@ class ImagePositionCommand implements ConversationCommand {
      */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneManager manager = conversationController.sceneManager();
-        if (instance.isEmpty() && !groupIdentifier.isEmpty()) {
-            Set<SceneImage> images = manager.getImagesByGroup(groupIdentifier);
-            for (SceneImage image : images) {
-                apply(image);
+        final SceneManager manager = conversationController.sceneManager();
+        manager.applyImageCommand(instance, groupIdentifier, new ImageAction() {
+            @Override
+            public void apply(SceneImage image) {
+                if (xSpecified) {
+                    image.setX(position.x);
+                }
+                if (ySpecified) {
+                    image.setY(position.y);
+                }
+                if (depthSpecified) {
+                    image.setDepth(manager, depth);
+                }
             }
-        } else {
-            SceneImage image = manager.getImage(instance);
-            apply(image);
-        }
+        });
     }
 
-    private void apply(SceneImage image) {
-        if (xSpecified) {
-            image.setX(position.x);
-        }
-        if (ySpecified) {
-            image.setY(position.y);
-        }
-        if (depthSpecified) {
-            image.setDepth(depth);
-        }
-    }
 
     /**
      * Whether to wait before proceeding to the next command in the branch.
@@ -80,7 +74,7 @@ class ImagePositionCommand implements ConversationCommand {
     public void complete(CompleteEvent c) {
 
     }
-
+    /** Static method to create a new command from XML Element ELEMENT. */
     static ImagePositionCommand makeCommand(String instance, String group, XmlReader.Element element) {
         String xString = element.getAttribute("x", null);
         String yString = element.getAttribute("y", null);

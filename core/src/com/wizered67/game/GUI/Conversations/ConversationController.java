@@ -180,10 +180,12 @@ public class ConversationController implements Controllable {
      */
     public void update(float deltaTime) {
         if (GameManager.assetManager().getQueuedAssets() != 0) {
+            /*
             if (GameManager.assetManager().update()) { //todo fixme
                 setConv((Conversation) GameManager.assetManager().getRaw("Conversations/super long.conv"));
                 setBranch("default real");
             }
+            */
             System.out.println(GameManager.assetManager().getProgress());
         }
 

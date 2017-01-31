@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
 import com.wizered67.game.GameManager;
 
 import java.util.*;
@@ -65,6 +66,7 @@ public class SceneManager {
      * last frame.
      */
     public void update(float delta) {
+        /*
         if (Gdx.input.justTouched()) {
             SceneImage newImage = new SceneImage("test", "icons", "icon", 5);
             newImage.addToScene(this);
@@ -77,6 +79,7 @@ public class SceneManager {
             newImage.setFade(1f);
             newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
         }
+        */
         batch.begin();
         if (background != null) {
             batch.draw(background, 0, 0);
@@ -154,14 +157,32 @@ public class SceneManager {
         return backgroundIdentifier;
     }
 
-    public void addImage(SceneImage image) {
-        Set<SceneImage> imagesOfTexture = imagesByGroup.get(image.getTextureName());
-        if (imagesOfTexture == null) {
-            imagesOfTexture = new HashSet<>();
-            imagesByGroup.put(image.getTextureName(), imagesOfTexture);
+    public boolean applyImageCommand(String instance, String group, ImageAction action) {
+        if (instance.isEmpty() && !group.isEmpty()) {
+            Set<SceneImage> images = getImagesByGroup(group);
+            if (images == null || images.size() == 0) {
+                return false;
+            }
+            for (SceneImage image : images) {
+                action.apply(image);
+            }
+            return true;
+        } else {
+            SceneImage image = getImage(instance);
+            if (image != null) {
+                action.apply(image);
+                return true;
+            }
+            return false;
         }
-        imagesOfTexture.add(image);
+    }
 
+    public void addImage(SceneImage image) {
+        addImageToGroup(image, image.getGroup());
+        imagesByInstance.put(image.getInstanceIdentifier(), image);
+    }
+
+    public void addImageToSorted(SceneImage image) {
         int newIndex = Collections.binarySearch(sortedImages, image);
         if (newIndex < 0) {
             newIndex = -(newIndex + 1);
@@ -170,11 +191,33 @@ public class SceneManager {
     }
 
     public void removeImage(SceneImage image) {
-        Set<SceneImage> imagesOfTexture = imagesByGroup.get(image.getTextureName());
-        if (imagesOfTexture != null) {
-            imagesOfTexture.remove(image);
-        }
+        removeImageFromGroup(image, image.getGroup());
         imagesByInstance.remove(image.getInstanceIdentifier());
+    }
+
+    public void changeImageGroup(SceneImage image, String oldGroup) {
+        removeImageFromGroup(image, oldGroup);
+        addImageToGroup(image, image.getGroup());
+    }
+
+    public void addImageToGroup(SceneImage image, String group) {
+        if (group != null && !group.isEmpty()) {
+            Set<SceneImage> imagesOfGroup = imagesByGroup.get(group);
+            if (imagesOfGroup == null) {
+                imagesOfGroup = new HashSet<>();
+                imagesByGroup.put(group, imagesOfGroup);
+            }
+            imagesOfGroup.add(image);
+        }
+    }
+
+    public void removeImageFromGroup(SceneImage image, String group) {
+        if (group != null && !group.isEmpty()) {
+            Set<SceneImage> imagesOfGroup = imagesByGroup.get(group);
+            if (imagesOfGroup != null) {
+                imagesOfGroup.remove(image);
+            }
+        }
     }
 
     public SceneImage getImage(String instanceIdentifier) {
