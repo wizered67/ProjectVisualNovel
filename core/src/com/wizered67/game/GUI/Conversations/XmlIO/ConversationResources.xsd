@@ -18,17 +18,11 @@
 			<xs:enumeration value="Edgeworth_Point"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="backgroundResource">
+	<xs:simpleType name="textureResource">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="mountain"/>
-			<xs:enumeration value="test7.png"/>
-			<xs:enumeration value="test4.png"/>
-			<xs:enumeration value="test5.png"/>
-			<xs:enumeration value="testbackground2.png"/>
-			<xs:enumeration value="many3"/>
+			<xs:enumeration value="icon"/>
 			<xs:enumeration value="testbackground.png"/>
-			<xs:enumeration value="many2"/>
-			<xs:enumeration value="many1"/>
+			<xs:enumeration value="icon2"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="musicResource">
@@ -41,7 +35,6 @@
 	</xs:simpleType>
 	<xs:simpleType name="soundResource">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="test"/>
 			<xs:enumeration value="new sound for this"/>
 			<xs:enumeration value="talksoundfemale.wav"/>
 			<xs:enumeration value="intense.wav"/>
@@ -59,24 +52,18 @@
 	<xs:simpleType name="resourceType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="new"/>
-			<xs:enumeration value="test"/>
-			<xs:enumeration value="test5.png"/>
 			<xs:enumeration value="new sound for this"/>
+			<xs:enumeration value="icon"/>
 			<xs:enumeration value="testbackground.png"/>
 			<xs:enumeration value="intense.wav"/>
+			<xs:enumeration value="icon2"/>
 			<xs:enumeration value="talksoundmale.wav"/>
 			<xs:enumeration value="Edgeworth"/>
-			<xs:enumeration value="mountain"/>
 			<xs:enumeration value="Test"/>
-			<xs:enumeration value="test7.png"/>
 			<xs:enumeration value="test4.png"/>
 			<xs:enumeration value="crossexamination.mp3"/>
 			<xs:enumeration value="talksoundfemale.wav"/>
-			<xs:enumeration value="testbackground2.png"/>
-			<xs:enumeration value="many3"/>
 			<xs:enumeration value="newsong"/>
-			<xs:enumeration value="many2"/>
-			<xs:enumeration value="many1"/>
 			<xs:enumeration value="newsound"/>
 		</xs:restriction>
 	</xs:simpleType>

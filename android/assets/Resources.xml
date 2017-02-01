@@ -13,18 +13,11 @@
         <animation id="Edgeworth_Point" frameDuration="1"/>
     </animations>
 
-    <backgrounds>
+    <textures>
+        !icon testicon.png
         !testbackground.png
-        testbackground2.png
-        mountain test3.png
-        test4.png
-        test5.png
-        !mountain test6.png
-        test7.png
-        many1
-        many2
-        many3
-    </backgrounds>
+        !icon2 testicon2.png
+    </textures>
 
     <music>
         !crossexamination.mp3
@@ -37,15 +30,8 @@
         !talksoundfemale.wav
         !talksoundmale.wav
         new sound for this file
-        test
         newsound thissound.wav
     </sounds>
-
-    <textures>
-        !icon testicon.png
-        !testbackground.png
-        !icon2 testicon2.png
-    </textures>
 
     <characters>
         <character id="Detective" name="Detective" sound="talksoundmale.wav"/>

@@ -15,7 +15,6 @@
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="textures"/>
-                <xs:element name="backgrounds"/>
                 <xs:element name="music"/>
                 <xs:element name="sounds"/>
                 <xs:element name="characters">
