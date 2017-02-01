@@ -195,7 +195,7 @@ public class CharacterSprite {
     /** Sets this CharacterSprite's visibility to VISIBLE. */
     public void setFullVisible(boolean visible) {
         if (fadePerSecond != 0) {
-            manager.complete(CompleteEvent.fade());
+            manager.complete(CompleteEvent.fade(manager, this));
         }
         if (visible) {
             sprite.setAlpha(1);

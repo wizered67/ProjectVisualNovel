@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CharacterSprite;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.GUI.Conversations.SceneManager;
 
 import java.io.IOException;
 /**
@@ -72,7 +73,13 @@ public class CharacterVisibleCommand implements ConversationCommand {
     @Override
     public void complete(CompleteEvent c) {
         if (c.type == CompleteEvent.Type.FADE_END) {
-            done = true;
+            Object[] data = (Object[]) c.data;
+            SceneManager manager = (SceneManager) data[0];
+            Object entity = data[1];
+            CharacterSprite cs = manager.getCharacterByIdentifier(character);
+            if (cs != null && cs.equals(entity)) {
+                done = true;
+            }
         }
     }
     /** Outputs XML to the XML WRITER for this command. */

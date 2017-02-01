@@ -190,6 +190,21 @@ public class SceneManager {
         sortedImages.add(newIndex, image);
     }
 
+    public void removeImageFromSorted(SceneImage image) {
+        int oldIndex = Collections.binarySearch(sortedImages, image);
+        if (oldIndex < 0) {
+            return;
+        }
+        Iterator<SceneImage> iter = sortedImages.listIterator(oldIndex);
+        while (iter.hasNext()) {
+            SceneImage img = iter.next();
+            if (img.equals(image)) {
+                iter.remove();
+                return;
+            }
+        }
+    }
+
     public void removeImage(SceneImage image) {
         removeImageFromGroup(image, image.getGroup());
         imagesByInstance.remove(image.getInstanceIdentifier());

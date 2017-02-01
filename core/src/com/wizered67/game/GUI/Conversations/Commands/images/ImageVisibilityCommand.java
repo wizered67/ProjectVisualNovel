@@ -42,6 +42,9 @@ class ImageVisibilityCommand implements ConversationCommand {
         boolean result = manager.applyImageCommand(instanceIdentifier, groupIdentifier, new ImageAction() {
             @Override
             public void apply(SceneImage image) {
+                if (show) {
+                    image.addToScene(manager);
+                }
                 if (fadeTime == 0) {
                     image.setFullVisible(show);
                     done = true;
@@ -49,9 +52,6 @@ class ImageVisibilityCommand implements ConversationCommand {
                     float factor = show ? 1f : -1f;
                     float fadePerSecond = factor / fadeTime;
                     image.setFade(fadePerSecond);
-                }
-                if (show) {
-                    image.addToScene(manager);
                 }
             }
         });
@@ -73,9 +73,20 @@ class ImageVisibilityCommand implements ConversationCommand {
      * and if so acts accordingly.
      */
     @Override
-    public void complete(CompleteEvent c) { //todo add data for fade to make sure this is the correct thing that has finished fading
+    public void complete(CompleteEvent c) {
         if (c.type == CompleteEvent.Type.FADE_END) {
-            done = true;
+            Object[] data = (Object[]) c.data;
+            SceneManager manager = (SceneManager) data[0];
+            Object entity = data[1];
+            if (instanceIdentifier != null && !instanceIdentifier.isEmpty()) {
+                if (manager.getImage(instanceIdentifier).equals(entity)) {
+                    done = true;
+                }
+            } else if (groupIdentifier != null && !groupIdentifier.isEmpty()) {
+                if (manager.getImagesByGroup(groupIdentifier).contains(entity)) {
+                    done = true;
+                }
+            }
         }
     }
 

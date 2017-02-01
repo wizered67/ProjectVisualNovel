@@ -29,6 +29,8 @@ public class SceneImage implements Comparable<SceneImage> {
     private float fadePerSecond;
     /** Depth to draw this image at, lower is closer to background, higher is foreground. */
     private int depth;
+    /** Whether the depth has been assigned yet. */
+    private boolean hasDepth;
     /** The name of the texture used with this. */
     private String textureName;
     private static int nextInstance;
@@ -55,6 +57,7 @@ public class SceneImage implements Comparable<SceneImage> {
         sprite = new Sprite();
         sprite.setAlpha(0);
         fadePerSecond = 0;
+        hasDepth = false;
     }
 
     public void update(float deltaTime) {
@@ -106,8 +109,12 @@ public class SceneImage implements Comparable<SceneImage> {
     }
 
     public void setDepth(SceneManager manager, int d) {
+        if (hasDepth) {
+            manager.removeImageFromSorted(this);
+        }
         depth = d;
         manager.addImageToSorted(this);
+        hasDepth = true;
     }
 
     public void setFade(float fadeAmount) {
@@ -116,7 +123,7 @@ public class SceneImage implements Comparable<SceneImage> {
 
     public void setFullVisible(boolean visible) {
         if (fadePerSecond != 0) {
-            manager.complete(CompleteEvent.fade()); //todo add fade data
+            manager.complete(CompleteEvent.fade(manager, this));
         }
         if (visible) {
             sprite.setAlpha(1);
