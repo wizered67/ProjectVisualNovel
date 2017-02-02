@@ -2,15 +2,16 @@ package com.wizered67.game.Saving;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.minlog.Log;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.SceneManager;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.MusicManager;
@@ -39,7 +40,7 @@ public class SaveManager {
     /** Adds all necessary serializers to Kryo for serializing important objects. */
     public static void init() {
         kryo.addDefaultSerializer(MusicManager.class, MusicManagerSerializer.class);
-        kryo.addDefaultSerializer(CharacterSprite.class, CharacterSpriteSerializer.class);
+        kryo.addDefaultSerializer(SceneCharacter.class, CharacterSpriteSerializer.class);
         kryo.addDefaultSerializer(ConversationController.class, ConversationControllerSerializer.class);
         kryo.addDefaultSerializer(SceneManager.class, SceneManagerSerializer.class);
         kryo.addDefaultSerializer(LuaBoolean.class, LuaBooleanSerializer.class);
@@ -49,6 +50,7 @@ public class SaveManager {
         kryo.addDefaultSerializer(GameScript.class, GameScriptSerializer.class);
         kryo.addDefaultSerializer(ScriptManager.class, ScriptManagerSerializer.class);
         kryo.addDefaultSerializer(Conversation.class, ConversationSerializer.class);
+        kryo.addDefaultSerializer(Sprite.class, SpriteSerializer.class);
         kryo.setReferences(true);
         Log.set(Log.LEVEL_TRACE);
         kryo.register(Color.class, new Serializer<Color>() {
@@ -62,6 +64,29 @@ public class SaveManager {
                 output.writeInt(Color.rgba8888(color));
             }
         });
+        /*
+        TestClass test = new TestClass();
+        test.test = "Hello world!";
+        Output o = new Output(Gdx.files.local("saveloadtest.sav").write(false));
+        kryo.writeObject(o, test);
+        o.close();
+        */
+        /*
+        Input i = new Input(Gdx.files.local("saveloadtest.sav").read());
+        TestClass test = kryo.readObject(i, TestClass.class);
+        i.close();
+        */
+        /*
+        Sprite sprite = new Sprite();
+        sprite.setColor(Color.CYAN);
+        sprite.setX(50);
+        sprite.setY(100);
+        sprite.setScale(2, 2);
+        sprite.setRotation(90);
+        Output o = new Output(Gdx.files.local("saveloadtest.sav").write(false));
+        kryo.writeObject(o, sprite);
+        o.close();
+        */
     }
     /** Saves all game data to the file FILEHANDLE. */
     public static void save(FileHandle fileHandle) {

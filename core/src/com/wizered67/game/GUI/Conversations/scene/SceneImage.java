@@ -1,9 +1,10 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.scene;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GameManager;
 
 /**
@@ -14,7 +15,7 @@ import com.wizered67.game.GameManager;
  * It uses depth in compareTo for ordering and uses instanceIdentifier for equals.
  * @author Adam Victor
  */
-public class SceneImage implements Comparable<SceneImage> {
+public class SceneImage extends SceneEntity {
     /** Identifier specified in commands to reference this image. */
     private String instanceIdentifier;
     /** Identifier specified in commands to refer to group of images. */
@@ -58,6 +59,11 @@ public class SceneImage implements Comparable<SceneImage> {
         sprite.setAlpha(0);
         fadePerSecond = 0;
         hasDepth = false;
+    }
+
+    @Override
+    public void reload() {
+
     }
 
     public void update(float deltaTime) {
@@ -170,11 +176,6 @@ public class SceneImage implements Comparable<SceneImage> {
 
     public String getInstanceIdentifier() {
         return instanceIdentifier;
-    }
-
-    @Override
-    public int compareTo(SceneImage o) {
-        return depth - o.depth;
     }
 
     @Override

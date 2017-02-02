@@ -45,7 +45,7 @@ public class CompleteEvent {
         return ANIMATION_END_EVENT;
     }
 
-    public static CompleteEvent fade(SceneManager manager, Object entity) {
+    public static CompleteEvent fade(com.wizered67.game.GUI.Conversations.scene.SceneManager manager, Object entity) {
         FADE_END_EVENT.data = new Object[] { manager, entity };
         return FADE_END_EVENT;
     }

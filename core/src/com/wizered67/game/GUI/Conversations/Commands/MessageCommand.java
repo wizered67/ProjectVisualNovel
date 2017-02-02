@@ -3,7 +3,7 @@ package com.wizered67.game.GUI.Conversations.Commands;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.Scripting.ScriptManager;
@@ -89,7 +89,7 @@ public class MessageCommand implements ConversationCommand {
             nextText = nextText.replaceFirst(scriptVariablePattern.toString(), variableString);
         }
         conversationController.setRemainingText(nextText);
-        CharacterSprite characterSpeaking = conversationController.sceneManager().getCharacterByIdentifier(getSpeaker());
+        SceneCharacter characterSpeaking = conversationController.sceneManager().getCharacterByIdentifier(getSpeaker());
         conversationController.setSpeaker(characterSpeaking);
         conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
         index += 1;

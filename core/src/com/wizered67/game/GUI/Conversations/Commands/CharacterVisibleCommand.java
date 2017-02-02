@@ -2,22 +2,22 @@ package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.SceneManager;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 import java.io.IOException;
 /**
- * A ConversationCommand that sets the visibility of a CharacterSprite.
+ * A ConversationCommand that sets the visibility of a SceneCharacter.
  * @author Adam Victor
  */
 public class CharacterVisibleCommand implements ConversationCommand {
-    /** The identifier of the CharacterSprite to modify the visibility of. */
+    /** The identifier of the SceneCharacter to modify the visibility of. */
     private String character;
-    /** Whether the CharacterSprite should be visible. */
+    /** Whether the SceneCharacter should be visible. */
     private boolean show;
-    /** How long to fade in or out the CharacterSprite. */
+    /** How long to fade in or out the SceneCharacter. */
     private float fadeTime;
     /** Whether to wait for the fade to complete before going on to the next command. */
     private boolean wait;
@@ -31,7 +31,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
         wait = false;
         done = true;
     }
-    /** Creates a new CharacterVisibleCommand that sets the CharacterSprite
+    /** Creates a new CharacterVisibleCommand that sets the SceneCharacter
      * with identifier ID's visibility to VISIBLE when executed.
      * Waits for completion iff W.
      */
@@ -45,7 +45,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             done = true;
             return;
@@ -76,7 +76,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
             Object[] data = (Object[]) c.data;
             SceneManager manager = (SceneManager) data[0];
             Object entity = data[1];
-            CharacterSprite cs = manager.getCharacterByIdentifier(character);
+            SceneCharacter cs = manager.getCharacterByIdentifier(character);
             if (cs != null && cs.equals(entity)) {
                 done = true;
             }

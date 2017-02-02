@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.XmlIO;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -6,11 +6,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
-import com.wizered67.game.Assets;
+import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.GUIManager;
-import com.wizered67.game.GameManager;
 
 
 public class ConversationAssetLoader extends AsynchronousAssetLoader<Conversation, ConversationAssetLoader.ConvParameter> {

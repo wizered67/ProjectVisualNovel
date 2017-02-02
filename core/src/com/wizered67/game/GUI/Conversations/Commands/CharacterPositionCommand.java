@@ -3,20 +3,20 @@ package com.wizered67.game.GUI.Conversations.Commands;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
 /**
- * A ConversationCommand that changes the position of an existing CharacterSprite.
+ * A ConversationCommand that changes the position of an existing SceneCharacter.
  * @author Adam Victor
  */
 public class CharacterPositionCommand implements ConversationCommand {
-    /** The identifier of the CharacterSprite to change the position of. */
+    /** The identifier of the SceneCharacter to change the position of. */
     private String character;
-    /** A Vector2 containing the new position of the CharacterSprite. */
+    /** A Vector2 containing the new position of the SceneCharacter. */
     private Vector2 position;
 
     /** No arguments constructor. */
@@ -24,7 +24,7 @@ public class CharacterPositionCommand implements ConversationCommand {
         character = "";
         position = null;
     }
-    /** Creates a new CharacterPositionCommand that moves the CharacterSprite
+    /** Creates a new CharacterPositionCommand that moves the SceneCharacter
      * with identifier ID to POSITION when executed.
      */
     public CharacterPositionCommand(String id, Vector2 posn) {
@@ -34,7 +34,7 @@ public class CharacterPositionCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             return;
         }

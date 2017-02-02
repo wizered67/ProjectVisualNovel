@@ -2,14 +2,14 @@ package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
 /**
- * A ConversationCommand that changes an existing CharacterSprite's animation.
+ * A ConversationCommand that changes an existing SceneCharacter's animation.
  * @author Adam Victor
  */
 public class CharacterAnimationCommand implements ConversationCommand {
@@ -21,7 +21,7 @@ public class CharacterAnimationCommand implements ConversationCommand {
     /** Whether to wait for the Animation to complete before moving to the next
      * ConversationCommand. */
     private boolean wait;
-    /** The identifier of the CharacterSprite that should have its animation changed. */
+    /** The identifier of the SceneCharacter that should have its animation changed. */
     private String character;
 
     /** No arguments constructor. */
@@ -32,7 +32,7 @@ public class CharacterAnimationCommand implements ConversationCommand {
         character = "";
     }
 
-    /** Creates a new CharacterAnimationCommand that changes CharacterSprite NAME's
+    /** Creates a new CharacterAnimationCommand that changes SceneCharacter NAME's
      * animation to ANIM when executed. Waits to complete before going to the next ConversationCommand
      * iff W.
      */
@@ -45,7 +45,7 @@ public class CharacterAnimationCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             done = true;
             return;

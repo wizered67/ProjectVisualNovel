@@ -5,13 +5,13 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializerConfig;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 
 /**
  * Serializer used for saving and loading CharacterSprites.
  * @author Adam Victor
  */
-public class CharacterSpriteSerializer extends FieldSerializer<CharacterSprite> {
+public class CharacterSpriteSerializer extends FieldSerializer<SceneCharacter> {
     public CharacterSpriteSerializer (Kryo kryo, Class type) {
         super(kryo, type);
     }
@@ -24,13 +24,13 @@ public class CharacterSpriteSerializer extends FieldSerializer<CharacterSprite> 
         super(kryo, type, generics, config);
     }
     @Override
-    public void write (Kryo kryo, Output output, CharacterSprite object) {
+    public void write (Kryo kryo, Output output, SceneCharacter object) {
         object.save();
         super.write(kryo, output, object);
     }
     @Override
-    public CharacterSprite read (Kryo kryo, Input input, Class<CharacterSprite> type) {
-        CharacterSprite c = super.read(kryo, input, type);
+    public SceneCharacter read (Kryo kryo, Input input, Class<SceneCharacter> type) {
+        SceneCharacter c = super.read(kryo, input, type);
         c.reload();
         return c;
     }

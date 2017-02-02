@@ -2,20 +2,20 @@ package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
 /**
- * A ConversationCommand that changes the displayed name of a CharacterSprite.
+ * A ConversationCommand that changes the displayed name of a SceneCharacter.
  * @author Adam Victor
  */
 public class CharacterNameCommand implements ConversationCommand {
-    /** The identifier of the CharacterSprite to rename. */
+    /** The identifier of the SceneCharacter to rename. */
     private String character;
-    /** The new display name for the CharacterSprite. */
+    /** The new display name for the SceneCharacter. */
     private String newName;
 
     /** No arguments constructor. */
@@ -24,7 +24,7 @@ public class CharacterNameCommand implements ConversationCommand {
         newName = "";
     }
 
-    /** Creates a new CharacterNameCommand that changes the CharacterSprite with identifier ID to have
+    /** Creates a new CharacterNameCommand that changes the SceneCharacter with identifier ID to have
      * display name NAME when executed.
      */
     public CharacterNameCommand(String id, String name) {
@@ -34,7 +34,7 @@ public class CharacterNameCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             return;
         }

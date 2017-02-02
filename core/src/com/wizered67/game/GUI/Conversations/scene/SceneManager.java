@@ -1,11 +1,10 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.scene;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GameManager;
 
 import java.util.*;
@@ -18,14 +17,14 @@ import java.util.*;
  */
 public class SceneManager {
     /** Set of all CharacterSprites in this scene. */
-    private Set<CharacterSprite> characterSprites;
+    private Set<SceneCharacter> sceneCharacters;
     /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed. */
     private ConversationController conversationController;
-    /** SpriteBatch used to draw Sprites for each CharacterSprite. */
+    /** SpriteBatch used to draw Sprites for each SceneCharacter. */
     private transient SpriteBatch batch;
-    /** Maps character names to their corresponding CharacterSprite. */
-    private static HashMap<String, CharacterSprite> allCharacters = new HashMap<String, CharacterSprite>();
+    /** Maps character names to their corresponding SceneCharacter. */
+    private static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
     /** Texture to draw as background. */
     private transient Texture background;
     /** Identifier used for background texture. */
@@ -34,34 +33,34 @@ public class SceneManager {
     private List<String> removeList;
     private Map<String, Set<SceneImage>> imagesByGroup;
     private Map<String, SceneImage> imagesByInstance;
-    private List<SceneImage> sortedImages;
+    private List<SceneEntity> sortedEntities;
     /** Dummy added at depth 0. When iterating it is skipped and instead characters are drawn at depth 0. */
     private final SceneImage zeroDummy = new SceneImage(0);
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
         conversationController = null;
-        characterSprites = null;
+        sceneCharacters = null;
         batch = new SpriteBatch();
         allCharacters = null;
         background = null;
         removeList = new ArrayList<>();
         imagesByGroup = new HashMap<>();
-        sortedImages = new ArrayList<>();
+        sortedEntities = new ArrayList<>();
         imagesByInstance = new HashMap<>();
     }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
         conversationController = mw;
-        characterSprites = new HashSet<>();
+        sceneCharacters = new HashSet<>();
         batch = new SpriteBatch();
         backgroundIdentifier = "";
         removeList = new ArrayList<>();
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
-        sortedImages = new ArrayList<>();
-        sortedImages.add(zeroDummy);
+        sortedEntities = new ArrayList<>();
+        sortedEntities.add(zeroDummy);
     }
-    /** Called each frame to draw the background, update the Animation of each CharacterSprite, and
+    /** Called each frame to draw the background, update the Animation of each SceneCharacter, and
      * then draw them. DELTA is the amount of time that has elapsed since the
      * last frame.
      */
@@ -85,58 +84,46 @@ public class SceneManager {
             batch.draw(background, 0, 0);
         }
 
-        Iterator<SceneImage> imageIterator = sortedImages.iterator();
-        while (imageIterator.hasNext()) {
-            SceneImage image = imageIterator.next();
-            if (image == zeroDummy) {
-                renderCharacters(delta);
-            } else if (image.isRemoved()) {
-                imageIterator.remove();
+        Iterator<SceneEntity> entityIterator = sortedEntities.iterator();
+        while (entityIterator.hasNext()) {
+            SceneEntity entity = entityIterator.next();
+            if (entity.isRemoved()) {
+                entityIterator.remove();
             } else {
-                image.update(delta);
-                image.draw(batch);
+                entity.update(delta);
+                entity.draw(batch);
             }
         }
         batch.end();
     }
-    /** Updates and renders all characters in the scene. */
-    public void renderCharacters(float delta) {
-        for (CharacterSprite sprite : characterSprites) {
-            //System.out.println("Updating " + sprite.getKnownName());
-            sprite.updateAnimation(delta);
-            sprite.draw(batch);
-        }
-        for (String character : removeList) {
-            characterSprites.remove(character);
-        }
-    }
-   /** Adds the CharacterSprite with identifier IDENTIFIER to this scene. */
+
+   /** Adds the SceneCharacter with identifier IDENTIFIER to this scene. */
     public void addCharacter(String identifier) {
-        characterSprites.add(allCharacters.get(identifier.toLowerCase()));
+        sceneCharacters.add(allCharacters.get(identifier.toLowerCase()));
     }
-    /** Removes the CharacterSprite with identifier IDENTIFIER from the scene. */
+    /** Removes the SceneCharacter with identifier IDENTIFIER from the scene. */
     public void removeCharacter(String identifier) {
-        characterSprites.remove(allCharacters.get(identifier.toLowerCase()));
+        sceneCharacters.remove(allCharacters.get(identifier.toLowerCase()));
     }
     /** Removes all CharacterSprites from the scene and sets their visibility to false. */
     public void removeAllCharacters() {
-        for (CharacterSprite characterSprite : characterSprites) {
-            characterSprite.setFullVisible(false);
+        for (SceneCharacter sceneCharacter : sceneCharacters) {
+            sceneCharacter.setFullVisible(false);
         }
-        characterSprites.clear();
+        sceneCharacters.clear();
     }
     public static void createCharacter(String identifier, String name, String speakingSound) {
         if (!allCharacters.containsKey(identifier.toLowerCase())) {
-            CharacterSprite newCharacter = new CharacterSprite(identifier.toLowerCase(), null, speakingSound);
+            SceneCharacter newCharacter = new SceneCharacter(identifier.toLowerCase(), null, speakingSound);
             newCharacter.setKnownName(name);
             allCharacters.put(identifier.toLowerCase(), newCharacter);
         }
     }
-    /** Returns the CharacterSprite with the identifier IDENTIFIER, or
+    /** Returns the SceneCharacter with the identifier IDENTIFIER, or
      * outputs an error if no such character is in the scene.
      */
-    public CharacterSprite getCharacterByIdentifier(String identifier) {
-        CharacterSprite character = allCharacters.get(identifier.toLowerCase());
+    public SceneCharacter getCharacterByIdentifier(String identifier) {
+        SceneCharacter character = allCharacters.get(identifier.toLowerCase());
         if (character == null) {
             GameManager.error("No character of name " + identifier.toLowerCase());
         }
@@ -182,23 +169,23 @@ public class SceneManager {
         imagesByInstance.put(image.getInstanceIdentifier(), image);
     }
 
-    public void addImageToSorted(SceneImage image) {
-        int newIndex = Collections.binarySearch(sortedImages, image);
+    public void addToSorted(SceneEntity entity) {
+        int newIndex = Collections.binarySearch(sortedEntities, entity);
         if (newIndex < 0) {
             newIndex = -(newIndex + 1);
         }
-        sortedImages.add(newIndex, image);
+        sortedEntities.add(newIndex, entity);
     }
 
-    public void removeImageFromSorted(SceneImage image) {
-        int oldIndex = Collections.binarySearch(sortedImages, image);
+    public void removeFromSorted(SceneEntity entity) {
+        int oldIndex = Collections.binarySearch(sortedEntities, entity);
         if (oldIndex < 0) {
             return;
         }
-        Iterator<SceneImage> iter = sortedImages.listIterator(oldIndex);
+        Iterator<SceneEntity> iter = sortedEntities.listIterator(oldIndex);
         while (iter.hasNext()) {
-            SceneImage img = iter.next();
-            if (img.equals(image)) {
+            SceneEntity e = iter.next();
+            if (e.equals(entity)) {
                 iter.remove();
                 return;
             }

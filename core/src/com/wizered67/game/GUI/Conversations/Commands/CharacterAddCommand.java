@@ -8,7 +8,7 @@ import com.wizered67.game.GUI.Conversations.ConversationController;
 import java.io.IOException;
 
 /**
- * A ConversationCommand that adds a new CharacterSprite to the scene.
+ * A ConversationCommand that adds a new SceneCharacter to the scene.
  * @author Adam Victor
  */
 public class CharacterAddCommand implements ConversationCommand {

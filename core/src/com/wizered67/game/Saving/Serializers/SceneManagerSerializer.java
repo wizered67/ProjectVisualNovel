@@ -5,7 +5,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializerConfig;
-import com.wizered67.game.GUI.Conversations.SceneManager;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
  * Serializer used for saving and loading SceneManagers.

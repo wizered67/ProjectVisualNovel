@@ -15,10 +15,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.ConversationAssetLoader;
-import com.wizered67.game.GUI.Conversations.SceneManager;
+import com.wizered67.game.GUI.Conversations.XmlIO.ConversationAssetLoader;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GUI.Conversations.XmlIO.MixedXmlReader;
 
 import static com.badlogic.gdx.utils.XmlReader.Element;
@@ -163,7 +163,7 @@ public class Assets {
             Element character = characters.getChild(c);
             String id = character.getAttribute("id");
             String name = character.getAttribute("name");
-            String sound = character.getAttribute("sound", CharacterSprite.DEFAULT_SPEAKING_SOUND);
+            String sound = character.getAttribute("sound", SceneCharacter.DEFAULT_SPEAKING_SOUND);
             SceneManager.createCharacter(id, name, sound);
         }
     }

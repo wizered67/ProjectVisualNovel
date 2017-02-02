@@ -4,8 +4,8 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.SceneImage;
-import com.wizered67.game.GUI.Conversations.SceneManager;
+import com.wizered67.game.GUI.Conversations.scene.SceneImage;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
  * Created by Adam on 1/30/2017.

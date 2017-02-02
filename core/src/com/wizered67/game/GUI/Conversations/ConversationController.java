@@ -1,19 +1,14 @@
 package com.wizered67.game.GUI.Conversations;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
 import com.wizered67.game.Saving.Serializers.GUIState;
-import com.wizered67.game.Saving.SaveManager;
 import com.wizered67.game.Scripting.GroovyScriptManager;
 import com.wizered67.game.Scripting.LuaScriptManager;
 import com.wizered67.game.Scripting.ScriptManager;
@@ -68,11 +63,11 @@ public class ConversationController implements Controllable {
     /** Whether choices are currently being shown to the player. */
     private boolean choiceShowing = false;
     /** Reference to the SceneManager that contains and updates all CharacterSprites. */
-    private SceneManager sceneManager;
+    private com.wizered67.game.GUI.Conversations.scene.SceneManager sceneManager;
     /** A loader used to parse XML into a Conversation. */
     private transient ConversationLoader conversationLoader;
-    /** The CharacterSprite of the current speaker. */
-    private CharacterSprite currentSpeaker;
+    /** The SceneCharacter of the current speaker. */
+    private SceneCharacter currentSpeaker;
     /** Whether all text should be displayed at once without slowly scrolling. */
     private boolean displayAll = false;
     /** Map used to map Strings to the ScriptManager for the language of that name. */
@@ -92,7 +87,7 @@ public class ConversationController implements Controllable {
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new List[choiceButtons.length];
-        sceneManager = new SceneManager(this);
+        sceneManager = new com.wizered67.game.GUI.Conversations.scene.SceneManager(this);
         initScriptManagers();
         /*
         if (!Constants.LOAD) { //todo fix
@@ -156,7 +151,7 @@ public class ConversationController implements Controllable {
         return currentConversation;
     }
     /** Returns the SceneManager being used update and draw CharacterSprites. */
-    public SceneManager sceneManager() {
+    public com.wizered67.game.GUI.Conversations.scene.SceneManager sceneManager() {
         return sceneManager;
     }
     /** Returns the ScriptManager for LANGUAGE. */
@@ -174,7 +169,7 @@ public class ConversationController implements Controllable {
         return currentConversation;
     }
     /** Called every frame and updates the GUI elements by executing commands.
-     * If waitToProceed is false, it continues to go onto the next command. Otherwise
+     * If waitToProceed is false, it continues to go onto the next command within this frame. Otherwise
      * it waits for the current one to be completed. Also calls the SceneManager's update method.
      * DELTA TIME is the time elapsed since the previous frame.
      */
@@ -387,7 +382,7 @@ public class ConversationController implements Controllable {
         textboxLabel.invalidate();
     }
     /** Sets the current speaking character to the one represented by CHARACTER. */
-    public void setSpeaker(CharacterSprite character) {
+    public void setSpeaker(SceneCharacter character) {
         currentSpeaker = character;
     }
     /** Updates the speakerLabel to TEXT. */

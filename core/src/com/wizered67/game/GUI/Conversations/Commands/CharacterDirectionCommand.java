@@ -2,21 +2,21 @@ package com.wizered67.game.GUI.Conversations.Commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CharacterSprite;
+import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 
 import java.io.IOException;
 
 /**
- * A ConversationCommand that changes an existing CharacterSprite's direction.
+ * A ConversationCommand that changes an existing SceneCharacter's direction.
  * Mainly intended for debug use.
  * @author Adam Victor
  */
 public class CharacterDirectionCommand implements ConversationCommand {
-    /** Identifier of the CharacterSprite to change the direction of. */
+    /** Identifier of the SceneCharacter to change the direction of. */
     private String character;
-    /** New direction for the CharacterSprite to face. */
+    /** New direction for the SceneCharacter to face. */
     private int direction;
 
     /** No arguments constructor. */
@@ -24,7 +24,7 @@ public class CharacterDirectionCommand implements ConversationCommand {
         character = "";
         direction = 1;
     }
-    /** Creates a new CharacterDirectionCommand that changes the CharacterSprite
+    /** Creates a new CharacterDirectionCommand that changes the SceneCharacter
      * ID's direction to DIR when executed.
      */
     public CharacterDirectionCommand(String id, int dir) {
@@ -34,7 +34,7 @@ public class CharacterDirectionCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterSprite c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
         if (c == null) {
             return;
         }

@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.GUI.Conversations.scene;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GameManager;
 
 /**
@@ -13,7 +14,7 @@ import com.wizered67.game.GameManager;
  * character's sprite, animation, name, and speaking sound.
  * @author Adam Victor
  */
-public class CharacterSprite {
+public class SceneCharacter extends SceneEntity {
     private String identifier;
     /** TextureRegion to be drawn for the current frame of animation. */
     private transient TextureRegion currentSprite;
@@ -31,7 +32,7 @@ public class CharacterSprite {
     private SceneManager manager;
     /** Whether the animation being displayed has been finished. */
     private boolean wasFinished;
-    /** Whether the character this CharacterSprite represents is currently speaking. */
+    /** Whether the character this SceneCharacter represents is currently speaking. */
     private boolean isSpeaking;
     /** The name to be displayed for the character. */
     private String knownName;
@@ -49,16 +50,16 @@ public class CharacterSprite {
     private Color color;
 
     /** No argument constructor */
-    public CharacterSprite() {
+    public SceneCharacter() {
         sprite = new Sprite();
         identifier = "";
     }
-    /** Creates a CharacterSprite with the default speaking sound. */
-    public CharacterSprite(SceneManager m) {
+    /** Creates a SceneCharacter with the default speaking sound. */
+    public SceneCharacter(SceneManager m) {
         this("", m, DEFAULT_SPEAKING_SOUND);
     }
-    /** Creates a CharacterSprite with id ID and speaking sound SOUND. */
-    public CharacterSprite(String id, SceneManager m, String sound) {
+    /** Creates a SceneCharacter with id ID and speaking sound SOUND. */
+    public SceneCharacter(String id, SceneManager m, String sound) {
         identifier = id;
         manager = m;
         looping = false;
@@ -82,22 +83,22 @@ public class CharacterSprite {
             color = sprite.getColor();
         }
     }
-    /** Reloads CharacterSprite. */
+    /** Reloads SceneCharacter. */
     public void reload() {
         currentAnimation = GameManager.assetManager().getAnimation(animationName);
         updateSprite();
         sprite.setColor(color);
         //sprite.setScale(scale.x, scale.y);
     }
-    /** Returns the name of this CharacterSprite's speaking sound. */
+    /** Returns the name of this SceneCharacter's speaking sound. */
     public String getSpeakingSound() {
         return speakingSound;
     }
-    /** Sets this CharacterSprite's speaking sound to NEWSOUND. */
+    /** Sets this SceneCharacter's speaking sound to NEWSOUND. */
     public void setSpeakingSound(String newSound) {
         speakingSound = newSound;
     }
-    /** Returns the display name of the character represented by this CharacterSprite. */
+    /** Returns the display name of the character represented by this SceneCharacter. */
     public String getKnownName() {
         return knownName;
     }
@@ -106,7 +107,7 @@ public class CharacterSprite {
         knownName = newName;
     }
 
-    /** Switches this CharacterSprite's animation to the one named NAME. Returns true if animation is valid. */
+    /** Switches this SceneCharacter's animation to the one named NAME. Returns true if animation is valid. */
     public boolean setCurrentAnimation(String name) {
         if (!animationName.equalsIgnoreCase(name)) {
             stateTime = 0;
@@ -119,7 +120,7 @@ public class CharacterSprite {
         }
         return currentAnimation != null;
     }
-    /** Returns the name of this CharacterSprite's current Animation. */
+    /** Returns the name of this SceneCharacter's current Animation. */
     public String getAnimationName() {
         return animationName;
     }
@@ -160,7 +161,7 @@ public class CharacterSprite {
             sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
         }
     }
-    /** Draws this CharacterSprite's current sprite to the BATCH. */
+    /** Draws this SceneCharacter's current sprite to the BATCH. */
     public void draw(Batch batch) {
         if (!isVisible() || currentSprite == null) {
             return;
@@ -172,7 +173,7 @@ public class CharacterSprite {
                 currentSprite.getRegionHeight() * scale);
                 */
     }
-    /** Sets this CharacterSprite's current sprite to the TextureRegion TEXTURE. */
+    /** Sets this SceneCharacter's current sprite to the TextureRegion TEXTURE. */
     public void setCurrentSprite(TextureRegion texture) {
         currentSprite = texture;
         sprite.setTexture(currentSprite.getTexture());
@@ -188,11 +189,11 @@ public class CharacterSprite {
     public void setPosition(float newX, float newY) {
         position.set(newX, newY);
     }
-    /** Returns this CharacterSprite's current position. */
+    /** Returns this SceneCharacter's current position. */
     public Vector2 getPosition() {
         return position;
     }
-    /** Sets this CharacterSprite's visibility to VISIBLE. */
+    /** Sets this SceneCharacter's visibility to VISIBLE. */
     public void setFullVisible(boolean visible) {
         if (fadePerSecond != 0) {
             manager.complete(CompleteEvent.fade(manager, this));
@@ -229,12 +230,12 @@ public class CharacterSprite {
         }
         return sprite.getColor();
     }
-    /** Sets the SceneManager for this CharacterSprite to SM and adds the CharacterSprite to that scene. */
+    /** Sets the SceneManager for this SceneCharacter to SM and adds the SceneCharacter to that scene. */
     public void addToScene(SceneManager sm) {
         manager = sm;
         manager.addCharacter(identifier);
     }
-    /** Removes this CharacterSprite from the SceneManager. */
+    /** Removes this SceneCharacter from the SceneManager. */
     public void removeFromScene() {
         if (manager != null) {
             manager.removeCharacter(identifier);
@@ -250,8 +251,8 @@ public class CharacterSprite {
         if (o == this) {
             return true;
         }
-        if (o instanceof CharacterSprite) {
-            return ((CharacterSprite) o).identifier.equals(identifier);
+        if (o instanceof SceneCharacter) {
+            return ((SceneCharacter) o).identifier.equals(identifier);
         }
         return false;
     }

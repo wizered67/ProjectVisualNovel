@@ -1,6 +1,6 @@
 package com.wizered67.game.GUI.Conversations.Commands.images;
 
-import com.wizered67.game.GUI.Conversations.SceneImage;
+import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 
 /**
  * Created by Adam on 1/30/2017.
