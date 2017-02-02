@@ -69,6 +69,7 @@ public class SceneCharacter extends SceneEntity {
     }
     /** Reloads SceneCharacter. */
     public void reload() {
+        manager.allCharacters().put(identifier, this);
         currentAnimation = GameManager.assetManager().getAnimation(animationName);
         updateSprite();
     }

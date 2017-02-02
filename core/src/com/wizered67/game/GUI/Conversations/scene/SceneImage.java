@@ -45,7 +45,8 @@ public class SceneImage extends SceneEntity {
 
     @Override
     public void reload() {
-
+        System.out.println("Reload called!");
+        setTexture(textureName);
     }
 
     public void setTexture(String texture) {

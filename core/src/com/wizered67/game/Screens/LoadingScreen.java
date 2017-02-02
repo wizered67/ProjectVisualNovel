@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Conversation;
+import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Saving.SaveManager;
@@ -86,7 +87,9 @@ public class LoadingScreen implements Screen {
             //GameManager.assetManager().loadRaw("Conversations/super long.conv", Conversation.class);
             SaveManager.init();
             if (Constants.LOAD) { //todo fixme
-                SaveManager.load(Gdx.files.local("Saves/test2.bin"));
+                SaveManager.load(Gdx.files.local("fullsavetest.sav"));
+                ConversationController test = GUIManager.conversationController();
+                System.out.println("Done loading.");
             }
         }
         System.out.println(GameManager.assetManager().getProgress());

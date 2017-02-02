@@ -8,7 +8,13 @@
             delay <delay time="1" skippable="true"/>
         </assign>
 
-        <bg id="testbackground.png"/>
+        <!-- <bg id="testbackground.png"/> -->
+
+        <image instance="bg">
+            <texture id="testbackground.png"/>
+            <position x="0" y="0" depth="-10000"/>
+            <visibility visible="true"/>
+        </image>
 
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>

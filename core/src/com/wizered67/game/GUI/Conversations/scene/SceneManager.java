@@ -1,11 +1,15 @@
 package com.wizered67.game.GUI.Conversations.scene;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GameManager;
+import com.wizered67.game.Saving.SaveManager;
 
 import java.util.*;
 
@@ -24,28 +28,28 @@ public class SceneManager {
     /** SpriteBatch used to draw Sprites for each SceneCharacter. */
     private transient SpriteBatch batch;
     /** Maps character names to their corresponding SceneCharacter. */
-    private static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
+    private transient static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
     /** Texture to draw as background. */
     private transient Texture background;
     /** Identifier used for background texture. */
     private String backgroundIdentifier;
-    /** List of identifiers of CharacterSprites to be removed from the scene at the end of the next update loop. */
-    private List<String> removeList;
+
     private Map<String, Set<SceneImage>> imagesByGroup;
     private Map<String, SceneImage> imagesByInstance;
     private List<SceneEntity> sortedEntities;
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
+        batch = new SpriteBatch();
+        /*
         conversationController = null;
         sceneCharacters = null;
         batch = new SpriteBatch();
-        allCharacters = null;
         background = null;
-        removeList = new ArrayList<>();
         imagesByGroup = new HashMap<>();
         sortedEntities = new ArrayList<>();
         imagesByInstance = new HashMap<>();
+        */
     }
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
@@ -53,7 +57,6 @@ public class SceneManager {
         sceneCharacters = new HashSet<>();
         batch = new SpriteBatch();
         backgroundIdentifier = "";
-        removeList = new ArrayList<>();
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedEntities = new ArrayList<>();
@@ -63,20 +66,30 @@ public class SceneManager {
      * last frame.
      */
     public void update(float delta) {
-        /*
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            SaveManager.save(Gdx.files.local("fullsavetest.sav"));
+        }
+
         if (Gdx.input.justTouched()) {
-            SceneImage newImage = new SceneImage("test", "icons", "icon", 5);
+            SceneImage newImage = new SceneImage("test");
+            newImage.changeGroup(this, "icons");
+            newImage.setDepth(this, 5);
+            newImage.setTexture("icon");
             newImage.addToScene(this);
             newImage.setFade(2f);
             newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            SceneImage newImage = new SceneImage("test2", "icons", "icon2", -5);
+            SceneImage newImage = new SceneImage("test2");
+            newImage.changeGroup(this, "icons");
+            newImage.setDepth(this, -5);
+            newImage.setTexture("icon2");
             newImage.addToScene(this);
             newImage.setFade(1f);
             newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
         }
-        */
+
         batch.begin();
         if (background != null) {
             batch.draw(background, 0, 0);
@@ -93,6 +106,10 @@ public class SceneManager {
             }
         }
         batch.end();
+    }
+
+    public Map<String, SceneCharacter> allCharacters() {
+        return allCharacters;
     }
 
    /** Adds the SceneCharacter with identifier IDENTIFIER to this scene. */

@@ -1,5 +1,6 @@
 package com.wizered67.game.Saving;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,6 +12,8 @@ import com.esotericsoftware.minlog.Log;
 import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.GUI.Conversations.scene.SceneEntity;
+import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
@@ -51,6 +54,9 @@ public class SaveManager {
         kryo.addDefaultSerializer(ScriptManager.class, ScriptManagerSerializer.class);
         kryo.addDefaultSerializer(Conversation.class, ConversationSerializer.class);
         kryo.addDefaultSerializer(Sprite.class, SpriteSerializer.class);
+
+        kryo.addDefaultSerializer(SceneEntity.class, SceneEntitySerializer.class);
+
         kryo.setReferences(true);
         Log.set(Log.LEVEL_TRACE);
         kryo.register(Color.class, new Serializer<Color>() {
@@ -73,7 +79,7 @@ public class SaveManager {
         */
         /*
         Input i = new Input(Gdx.files.local("saveloadtest.sav").read());
-        TestClass test = kryo.readObject(i, TestClass.class);
+        SceneImage test = kryo.readObject(i, SceneImage.class);
         i.close();
         */
         /*
@@ -83,10 +89,13 @@ public class SaveManager {
         sprite.setY(100);
         sprite.setScale(2, 2);
         sprite.setRotation(90);
+        SceneImage image = new SceneImage("Hello world instance id");
+        image.setSprite(sprite);
         Output o = new Output(Gdx.files.local("saveloadtest.sav").write(false));
-        kryo.writeObject(o, sprite);
+        kryo.writeObject(o, image);
         o.close();
         */
+
     }
     /** Saves all game data to the file FILEHANDLE. */
     public static void save(FileHandle fileHandle) {

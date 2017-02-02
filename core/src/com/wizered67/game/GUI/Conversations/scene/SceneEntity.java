@@ -24,6 +24,10 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
 
     public abstract void reload();
 
+    public void save() {
+        System.out.println("Test save.");
+    }
+
     public void update(float deltaTime) {
         updateFade(deltaTime);
     }
@@ -120,6 +124,14 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
             removeFromScene();
         }
         fadePerSecond = 0;
+    }
+
+    public void setSprite(Sprite s) {
+        if (sprite == null) {
+            sprite = s;
+        } else {
+            sprite.set(s);
+        }
     }
 
     public abstract void addToScene(SceneManager sm);
