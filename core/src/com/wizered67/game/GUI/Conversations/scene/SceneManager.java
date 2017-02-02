@@ -34,8 +34,7 @@ public class SceneManager {
     private Map<String, Set<SceneImage>> imagesByGroup;
     private Map<String, SceneImage> imagesByInstance;
     private List<SceneEntity> sortedEntities;
-    /** Dummy added at depth 0. When iterating it is skipped and instead characters are drawn at depth 0. */
-    private final SceneImage zeroDummy = new SceneImage(0);
+
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
         conversationController = null;
@@ -58,7 +57,6 @@ public class SceneManager {
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedEntities = new ArrayList<>();
-        sortedEntities.add(zeroDummy);
     }
     /** Called each frame to draw the background, update the Animation of each SceneCharacter, and
      * then draw them. DELTA is the amount of time that has elapsed since the
@@ -105,10 +103,10 @@ public class SceneManager {
     public void removeCharacter(String identifier) {
         sceneCharacters.remove(allCharacters.get(identifier.toLowerCase()));
     }
-    /** Removes all CharacterSprites from the scene and sets their visibility to false. */
+    /** Removes all CharacterSprites from the scene and sets their visibility to false. */ //todo fix???
     public void removeAllCharacters() {
         for (SceneCharacter sceneCharacter : sceneCharacters) {
-            sceneCharacter.setFullVisible(false);
+            sceneCharacter.finishVisibility(false);
         }
         sceneCharacters.clear();
     }

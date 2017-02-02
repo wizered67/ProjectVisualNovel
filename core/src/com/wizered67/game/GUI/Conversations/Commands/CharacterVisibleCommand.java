@@ -52,7 +52,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
         }
         done = !wait;
         if (fadeTime == 0) {
-            c.setFullVisible(show);
+            c.finishVisibility(show);
             done = true;
         } else {
             float factor = show ? 1f : -1f;

@@ -8,11 +8,13 @@
             delay <delay time="1" skippable="true"/>
         </assign>
 
-        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <bg id="testbackground.png"/>
+
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>
+        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
 
-        <position id="Librarian" x="800" y="160"/>
+        <position id="Librarian" x="600" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
 
         <direction id="Librarian" direction="-1"/>
@@ -20,7 +22,6 @@
         <init language="Groovy">
             work 0
         </init>
-        <bg id="testbackground.png"/>
         <sound id="intense.wav"/>
         <music id="crossexamination.mp3" loop="false"/>
 

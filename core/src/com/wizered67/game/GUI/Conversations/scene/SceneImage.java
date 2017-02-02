@@ -20,32 +20,14 @@ public class SceneImage extends SceneEntity {
     private String instanceIdentifier;
     /** Identifier specified in commands to refer to group of images. */
     private String groupIdentifier;
-    /** The sprite that is drawn by this image. */
-    private transient Sprite sprite;
-    /** Whether this image has already been removed. */
-    private boolean removed;
-    /** The SceneManager this is part of. */
-    private SceneManager manager;
-    /** How much the alpha of the sprite being drawn should change per second. */
-    private float fadePerSecond;
-    /** Depth to draw this image at, lower is closer to background, higher is foreground. */
-    private int depth;
-    /** Whether the depth has been assigned yet. */
-    private boolean hasDepth;
     /** The name of the texture used with this. */
     private String textureName;
     private static int nextInstance;
     static {
         nextInstance = 0;
     }
-
-
+    /** Empty constructor used for serialization. */
     public SceneImage() {}
-
-    /** Used to make dummy image at depth 0. Used in SceneManager. */
-    public SceneImage(int depth) {
-        this.depth = depth;
-    }
 
     public SceneImage(String instance) {
         removed = false;
@@ -66,27 +48,6 @@ public class SceneImage extends SceneEntity {
 
     }
 
-    public void update(float deltaTime) {
-        //System.out.println(fadePerSecond + ", " + sprite.getColor().a);
-        if (fadePerSecond != 0) {
-            float alpha = sprite.getColor().a;
-            alpha += deltaTime * fadePerSecond;
-            sprite.setAlpha(alpha);
-            if (alpha <= 0) {
-                setFullVisible(false);
-            } else if (alpha >= 1) {
-                setFullVisible(true);
-            }
-        }
-    }
-
-    public void draw(Batch batch) {
-        if (sprite == null || sprite.getTexture() == null || sprite.getColor().a == 0 || removed) {
-            return;
-        }
-        sprite.draw(batch);
-    }
-
     public void setTexture(String texture) {
         textureName = texture;
         if (!GameManager.assetManager().isLoaded(texture)) {
@@ -100,44 +61,6 @@ public class SceneImage extends SceneEntity {
         sprite.setSize(t.getWidth(), t.getHeight());
         sprite.setOrigin(t.getWidth() / 2, t.getHeight() / 2);
         //sprite = new Sprite(GameManager.assetManager().get(texture, Texture.class));
-    }
-
-    public void setPosition(Vector2 position) {
-        sprite.setPosition(position.x, position.y);
-    }
-
-    public void setX(float x) {
-        sprite.setPosition(x, sprite.getY());
-    }
-
-    public void setY(float y) {
-        sprite.setPosition(sprite.getX(), y);
-    }
-
-    public void setDepth(SceneManager manager, int d) {
-        if (hasDepth) {
-            manager.removeImageFromSorted(this);
-        }
-        depth = d;
-        manager.addImageToSorted(this);
-        hasDepth = true;
-    }
-
-    public void setFade(float fadeAmount) {
-        fadePerSecond = fadeAmount;
-    }
-
-    public void setFullVisible(boolean visible) {
-        if (fadePerSecond != 0) {
-            manager.complete(CompleteEvent.fade(manager, this));
-        }
-        if (visible) {
-            sprite.setAlpha(1);
-        } else {
-            sprite.setAlpha(0);
-            removeFromScene();
-        }
-        fadePerSecond = 0;
     }
 
     public void addToScene(SceneManager m) {
@@ -164,14 +87,6 @@ public class SceneImage extends SceneEntity {
 
     public String getTextureName() {
         return textureName;
-    }
-
-    public boolean isRemoved() {
-        return removed;
-    }
-
-    public int getDepth() {
-        return depth;
     }
 
     public String getInstanceIdentifier() {

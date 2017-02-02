@@ -46,7 +46,7 @@ class ImageVisibilityCommand implements ConversationCommand {
                     image.addToScene(manager);
                 }
                 if (fadeTime == 0) {
-                    image.setFullVisible(show);
+                    image.finishVisibility(show);
                     done = true;
                 } else {
                     float factor = show ? 1f : -1f;

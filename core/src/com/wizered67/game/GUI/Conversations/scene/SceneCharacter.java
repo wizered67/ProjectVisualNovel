@@ -15,21 +15,16 @@ import com.wizered67.game.GameManager;
  * @author Adam Victor
  */
 public class SceneCharacter extends SceneEntity {
+    /** The unique identifier of this character. Specified in resources.xml. */
     private String identifier;
-    /** TextureRegion to be drawn for the current frame of animation. */
-    private transient TextureRegion currentSprite;
     /** Animation object containing all frames of animation. */
     private transient Animation currentAnimation;
     /** The name of the current animation. Used to tell if the animation is being changed. */
     private String animationName;
-    /** Vector2 containing the position of the sprite to be drawn. */
-    private final Vector2 position = new Vector2();
     /** Whether the Animation should loop. */
     private boolean looping;
     /** The stateTime used by Animation object to determine which frame should be displayed. */
     private float stateTime;
-    /** The SceneManager containing this sprite and all others. */
-    private SceneManager manager;
     /** Whether the animation being displayed has been finished. */
     private boolean wasFinished;
     /** Whether the character this SceneCharacter represents is currently speaking. */
@@ -38,16 +33,8 @@ public class SceneCharacter extends SceneEntity {
     private String knownName;
     /** The sound to be used when the character is speaking. */
     private String speakingSound;
-    /** The Sprite object used to draw frames of animation. */
-    private transient Sprite sprite;
     /** The default speaking sound for all characters. */
     public static final String DEFAULT_SPEAKING_SOUND = "talksoundmale.wav";
-    /** How much the sprite drawn should be scaled. */
-    private Vector2 scale;
-    /** How much the alpha of the sprite being drawn should change per second. */
-    private float fadePerSecond;
-    /** Current Color of the sprite. Used to save data. */
-    private Color color;
 
     /** No argument constructor */
     public SceneCharacter() {
@@ -74,21 +61,16 @@ public class SceneCharacter extends SceneEntity {
         }
         sprite = new Sprite();
         sprite.setAlpha(0);
-        scale = new Vector2(2, 2);
         //sprite.setScale(2, 2);
     }
     /** Stores variables to save important information. */
     public void save() {
-        if (sprite != null) {
-            color = sprite.getColor();
-        }
+
     }
     /** Reloads SceneCharacter. */
     public void reload() {
         currentAnimation = GameManager.assetManager().getAnimation(animationName);
         updateSprite();
-        sprite.setColor(color);
-        //sprite.setScale(scale.x, scale.y);
     }
     /** Returns the name of this SceneCharacter's speaking sound. */
     public String getSpeakingSound() {
@@ -129,18 +111,10 @@ public class SceneCharacter extends SceneEntity {
      * updates the sprite to the Animation's current sprite. If the Animation is
      * completed it alerts the SceneManager. Also updates fading in or out the sprite.
      */
-    public void updateAnimation(float deltaStateTime) {
-        if (fadePerSecond != 0) {
-            float alpha = sprite.getColor().a;
-            alpha += deltaStateTime * fadePerSecond;
-            sprite.setAlpha(alpha);
-            if (alpha <= 0) {
-                setFullVisible(false);
-            } else if (alpha >= 1) {
-                setFullVisible(true);
-            }
-        }
-        if (isVisible() && currentAnimation != null) {
+    @Override
+    public void update(float deltaStateTime) {
+        super.update(deltaStateTime);
+        if (currentAnimation != null) { //todo decide if should check visibility first
             stateTime += deltaStateTime;
             updateSprite();
             //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
@@ -148,63 +122,27 @@ public class SceneCharacter extends SceneEntity {
                 manager.complete(CompleteEvent.animationEnd(animationName));
                 wasFinished = true;
             }
-
         }
     }
     /** Updates the sprite to the correct animation frame. */
     private void updateSprite() {
         if (currentAnimation != null) {
-            currentSprite = currentAnimation.getKeyFrame(stateTime, looping);
-            sprite.setTexture(currentSprite.getTexture());
-            sprite.setRegion(currentSprite);
-            sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
+            TextureRegion currentTexture = currentAnimation.getKeyFrame(stateTime, looping);
+            sprite.setTexture(currentTexture.getTexture());
+            sprite.setRegion(currentTexture);
+            sprite.setSize(sprite.getRegionWidth(), sprite.getRegionHeight());
+            sprite.setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+            //sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
             sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
         }
     }
-    /** Draws this SceneCharacter's current sprite to the BATCH. */
-    public void draw(Batch batch) {
-        if (!isVisible() || currentSprite == null) {
-            return;
-        }
-        sprite.draw(batch);
-        /*
-        batch.draw(currentSprite, position.x + (direction == -1 ? currentSprite.getRegionWidth() * scale : 0), position.y,
-                currentSprite.getRegionWidth() * scale * direction,
-                currentSprite.getRegionHeight() * scale);
-                */
-    }
     /** Sets this SceneCharacter's current sprite to the TextureRegion TEXTURE. */
     public void setCurrentSprite(TextureRegion texture) {
-        currentSprite = texture;
-        sprite.setTexture(currentSprite.getTexture());
-        sprite.setRegion(currentSprite);
-        sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth(), currentSprite.getRegionHeight());
+        TextureRegion currentTexture = texture;
+        sprite.setTexture(currentTexture.getTexture());
+        sprite.setRegion(currentTexture);
+        //sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth(), currentSprite.getRegionHeight());
         sprite.setOrigin(sprite.getWidth() / 2, 0);
-    }
-    /** Sets current position to NEW POSITION. */
-    public void setPosition(Vector2 newPosition){
-        position.set(newPosition);
-    }
-    /** Sets current x to NEWX and current y to NEWY. */
-    public void setPosition(float newX, float newY) {
-        position.set(newX, newY);
-    }
-    /** Returns this SceneCharacter's current position. */
-    public Vector2 getPosition() {
-        return position;
-    }
-    /** Sets this SceneCharacter's visibility to VISIBLE. */
-    public void setFullVisible(boolean visible) {
-        if (fadePerSecond != 0) {
-            manager.complete(CompleteEvent.fade(manager, this));
-        }
-        if (visible) {
-            sprite.setAlpha(1);
-        } else {
-            sprite.setAlpha(0);
-            removeFromScene();
-        }
-        fadePerSecond = 0;
     }
     /** Sets speaking status to SPEAKING. */
     public void setSpeaking(boolean speaking) {
@@ -212,28 +150,14 @@ public class SceneCharacter extends SceneEntity {
     }
     /** Sets the direction of the sprite to DIRECTION. */
     public void setDirection(int direction) {
-        //sprite.setScale(Math.abs(sprite.getScaleX()) * direction, sprite.getScaleY());
-        scale.x = Math.abs(scale.x) * direction;
-    }
-    /** Sets how fast the sprite should fade in or out. FADEAMOUNT is alpha per second. */
-    public void setFade(float fadeAmount) {
-        fadePerSecond = fadeAmount;
-    }
-    /** Whether this sprite is visible (ie alpha is not 0). */
-    public boolean isVisible() {
-        return sprite.getColor().a > 0;
-    }
-    /** Returns the Color of the sprite, including alpha. */
-    public Color getColor() {
-        if (sprite == null) {
-            return null;
-        }
-        return sprite.getColor();
+        sprite.setScale(Math.abs(sprite.getScaleX()) * direction, sprite.getScaleY());
+        //scale.x = Math.abs(scale.x) * direction;
     }
     /** Sets the SceneManager for this SceneCharacter to SM and adds the SceneCharacter to that scene. */
     public void addToScene(SceneManager sm) {
         manager = sm;
         manager.addCharacter(identifier);
+        setDepth(manager, 0);
     }
     /** Removes this SceneCharacter from the SceneManager. */
     public void removeFromScene() {
@@ -241,6 +165,7 @@ public class SceneCharacter extends SceneEntity {
             manager.removeCharacter(identifier);
             manager = null;
         }
+        removed = true;
     }
     @Override
     public int hashCode() {

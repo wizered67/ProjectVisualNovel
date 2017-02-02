@@ -40,8 +40,8 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
 
     protected void updateFade(float deltaTime) {
         if (fadePerSecond != 0) {
-            float alpha = sprite.getColor().a;
-            sprite.setAlpha(alpha + (deltaTime * fadePerSecond));
+            float alpha = sprite.getColor().a + (deltaTime * fadePerSecond);
+            sprite.setAlpha(alpha);
             if (alpha <= 0) {
                 finishVisibility(false);
             } else if (alpha >= 1) {
@@ -77,12 +77,31 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         sprite.setPosition(newX, newY);
     }
 
+    public void setX(float newX) {
+        if (sprite == null) {
+            return;
+        }
+        sprite.setX(newX);
+    }
+
+    public void setY(float newY) {
+        if (sprite == null) {
+            return;
+        }
+        sprite.setY(newY);
+    }
+
+
+    public Vector2 getPosition() {
+        return new Vector2(sprite.getX(), sprite.getY());
+    }
+
     public void setDepth(SceneManager m, int newDepth) {
         if (hasDepth) {
-            manager.removeFromSorted(this);
+            m.removeFromSorted(this);
         }
         depth = newDepth;
-        manager.addToSorted(this);
+        m.addToSorted(this);
         hasDepth = true;
     }
 
