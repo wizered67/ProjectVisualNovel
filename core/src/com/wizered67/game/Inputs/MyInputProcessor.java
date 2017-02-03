@@ -1,24 +1,27 @@
 package com.wizered67.game.Inputs;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-//import com.wizered67.game.Entities.Entity;
+import com.badlogic.gdx.Input.Keys;
 
 import java.util.*;
 
 
+
 public class MyInputProcessor implements InputProcessor {
 	
-    private Map<Integer,InputInfo> touches = new HashMap<Integer,InputInfo>();
-    private Map<Integer,Integer> touchToAction = new HashMap<Integer,Integer>();
-    private Map<Integer, InputInfo> keys = new HashMap<Integer, InputInfo>();
-	//private ArrayList<Entity> controllableEntities = new ArrayList<Entity>();
+
     private Set<Controllable> registeredControllableObjects = new HashSet<Controllable>();
-    private boolean screenTouched = false;
+    //todo map to list of ControlType to allow one key to do multiple things?
+    private HashMap<Integer, ControlType> keyToControl = new HashMap<>();
+
     public MyInputProcessor(){
-    	for(int i = 0; i < 5; i++){
-            touches.put(i, new InputInfo());
-            touchToAction.put(i, null);
-        }
+    	for (ControlType control : ControlType.values()) {
+    		int[] keys = control.keys;
+    		for (int key : keys) {
+    			keyToControl.put(key, control);
+			}
+		}
     }
 
     public void register(Controllable c) {
@@ -26,118 +29,49 @@ public class MyInputProcessor implements InputProcessor {
             registeredControllableObjects.add(c);
         }
     }
-    /*
-    public void addControllableEntity(Entity e){
-		controllableEntities.add(e);
-	}
-	*/
     
     public void update(){
-    	for (InputInfo input : keys.values()){
-    		if (input != null){
-    			input.justTouched = false;
-    		}
-    	}
-    	for (InputInfo input : touches.values()){
-    		if (input != null){
-    			input.justTouched = false;
-    		}
-    	}
+
     }
 
-	private void setInput(int index, InputInfo result){
-		/*
-		for (Entity e : controllableEntities){
-			if (e != null && !e.getDestroyed()) {e.setInput(index, result); }
+    private void fireKey(int key, boolean pressed) {
+		for (Controllable controllable : registeredControllableObjects) {
+			controllable.keyEvent(keyToControl.get(key), key, pressed);
 		}
-		*/
+	}
+
+	private void fireTouch(int screenX, int screenY, int pointer, int button, boolean pressed) {
+    	for (Controllable controllable : registeredControllableObjects) {
+    		controllable.touchEvent(screenX, screenY, pointer, button, pressed);
+		}
 	}
 
     @Override
 	public boolean keyDown(int keycode) {
-    	System.out.println("Pressed: " + keycode);
-		if (!keys.containsKey(keycode) || keys.get(keycode) == null){
-			InputInfo input = new InputInfo();
-			input.justTouched = true;
-			input.touched = true;
-			keys.put(keycode, input);
-			//System.out.println("New Key");
-		}
-		setInput(keycode, keys.get(keycode));
+		fireKey(keycode, true);
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		//System.out.println("Released: " + keycode);
-		if (keys.containsKey(keycode) && keys.get(keycode) != null){
-			keys.get(keycode).touched = false;
-			keys.get(keycode).justTouched = false;
-			keys.put(keycode, null);
-			setInput(keycode, null);
-		}
+    	fireKey(keycode, false);
 		return true;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        boolean justPressed = !screenTouched;
-        screenTouched = true;
-        for (Controllable c : registeredControllableObjects) {
-            c.touchDown(screenX, screenY, pointer, button, justPressed);
-        }
-		/*
-		if(pointer < 5){
-			InputInfo touch = touches.get(pointer);
-            touch.touchX = screenX;
-            touch.touchY = screenY;
-            if (!touch.touched){
-            	touch.justTouched = true;
-            }
-            touch.touched = true;
-            
-            if (screenX < Gdx.graphics.getWidth() / 2 && screenY > Gdx.graphics.getHeight() / 2){
-            	setInput(Input.Keys.LEFT, touch);
-            	touchToAction.put(pointer, Input.Keys.LEFT);
-            }
-            if (screenX > Gdx.graphics.getWidth() / 2 && screenY > Gdx.graphics.getHeight() / 2){
-            	setInput(Input.Keys.RIGHT, touch);
-            	touchToAction.put(pointer, Input.Keys.RIGHT);
-            }
-            
-            if (screenY < Gdx.graphics.getHeight() / 2){
-            	setInput(Input.Keys.UP, touch);
-            	touchToAction.put(pointer, Input.Keys.UP);
-            }
-            
-        }
-		*/
+    	fireTouch(screenX, screenY, pointer, button, true);
         return true;
-
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        screenTouched = false;
-		/*
-		if(pointer < 5){
-			InputInfo touch = touches.get(pointer);
-            touch.touchX = 0;
-            touch.touchY = 0;
-            touch.touched = false;
-            touch.justTouched = false;
-            
-            if (touchToAction.get(pointer) != null){
-            	setInput(touchToAction.get(pointer), null);
-            }
-        }
-        */
+    	fireTouch(screenX, screenY, pointer, button, false);
         return true;
 	}
 	
@@ -158,6 +92,18 @@ public class MyInputProcessor implements InputProcessor {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public enum ControlType {
+		UP(new int[] {Keys.W, Keys.UP}),
+		DOWN(new int[] {Keys.S, Keys.DOWN}),
+		LEFT(new int[] {Keys.A, Keys.LEFT}),
+		RIGHT(new int[] {Keys.D, Keys.RIGHT}),
+		CONFIRM(new int[] {Keys.C, Keys.SPACE});
+    	int[] keys;
+    	ControlType(int[] k) {
+    		keys = k;
+		}
 	}
 
 }

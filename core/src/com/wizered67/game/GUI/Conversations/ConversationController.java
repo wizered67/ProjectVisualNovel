@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -9,6 +10,8 @@ import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
+import com.wizered67.game.Inputs.MyInputProcessor;
+import com.wizered67.game.Inputs.MyInputProcessor.ControlType;
 import com.wizered67.game.Saving.Serializers.GUIState;
 import com.wizered67.game.Scripting.GroovyScriptManager;
 import com.wizered67.game.Scripting.LuaScriptManager;
@@ -50,9 +53,13 @@ public class ConversationController implements Controllable {
     /** Array containing TextButtons to be displayed when the player is offered a choice.
      * A reference to the one in GUIManager. */
     private transient TextButton[] choiceButtons;
+
     /** Array containing lists of ConversationCommands that would be executed when the
      * corresponding choice is made. */
     private List<ConversationCommand>[] choiceCommands;
+    //todo document
+    private int choiceHighlighted = -1;
+
     /** A LinkedList (Queue) containing the ConversationCommands in the current branch, to be
      * executed in sequence. */
     private LinkedList<ConversationCommand> currentBranch;
@@ -429,16 +436,31 @@ public class ConversationController implements Controllable {
         displayAll = display;
     }
 
-    /** Choices Code */
+    /* Choices Code */
 
     /** Sets whether choices should SHOW for the player. */
     public void setChoiceShowing(boolean show) {
+        choiceHighlighted = -1;
         choiceShowing = show;
     }
     /** Sets choice number CHOICE to CHOICE NAME. */
     public void setChoice(int choice, String choiceName) {
         choiceButtons[choice].setVisible(!choiceName.isEmpty());
         choiceButtons[choice].setText(choiceName);
+        choiceButtons[choice].setProgrammaticChangeEvents(false);
+        choiceButtons[choice].setChecked(false);
+        choiceButtons[choice].setProgrammaticChangeEvents(true);
+    }
+    //todo store value so method doesn't need to be recalled?
+    /** The number of visible choices to choose from. */
+    public int numChoices() {
+        int i;
+        for (i = 0; i < choiceButtons.length; i += 1) {
+            if (!choiceButtons[i].isVisible()) {
+                break;
+            }
+        }
+        return i;
     }
     /** Sets choice number CHOICE to execute the list of ConversationCommands COMMANDS. */
     public void setChoiceCommand(int choice, List<ConversationCommand> commands) {
@@ -456,7 +478,8 @@ public class ConversationController implements Controllable {
         currentCommand.complete(CompleteEvent.choice());
     }
 
-    /** Tags Code */
+    /* Tags Code */
+
     /** Returns String S with all tags removed. */
     private String removeTags(String s){
         boolean inTag = false;
@@ -492,17 +515,69 @@ public class ConversationController implements Controllable {
         }
     }
 
-    /** Handles a touch on the screen and passes an Input CompleteEvent to the current
-     * ConversationCommand. If someone is currently speaking, instead set displayAll to true
-     * first. */
-    @Override
-    public void touchDown(int screenX, int screenY, int pointer, int button, boolean justPressed) {
-        if (justPressed) {
+    private void inputConfirm() {
+        if (choiceShowing) {
+            if (choiceHighlighted != -1) {
+                choiceButtons[choiceHighlighted].setChecked(false);
+                choiceButtons[choiceHighlighted].setChecked(true);
+            }
+        } else {
             if (!doneSpeaking()) {
-                displayAll = true;
+                setDisplayAll(true);
             }
             if (currentCommand != null) {
                 currentCommand.complete(CompleteEvent.input());
+            }
+        }
+    }
+
+    private void changeChoice(int amount) {
+        if (!choiceShowing) {
+            return;
+        }
+        if (choiceHighlighted == -1) {
+            choiceHighlighted = 0;
+        } else {
+            choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(false);
+            choiceButtons[choiceHighlighted].setChecked(false);
+            choiceHighlighted += amount;
+            int num = numChoices();
+            if (choiceHighlighted >= num) {
+                choiceHighlighted = choiceHighlighted % num;
+            } else if (choiceHighlighted < 0) {
+                choiceHighlighted += num;
+            }
+        }
+        choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(false);
+        choiceButtons[choiceHighlighted].setChecked(true);
+        choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(true);
+    }
+
+    /** Handles a touch (or click) on the screen and passes an Input CompleteEvent to the current
+     * ConversationCommand. If someone is currently speaking, instead set displayAll to true
+     * first. */
+    @Override
+    public void touchEvent(int screenX, int screenY, int pointer, int button, boolean pressed) {
+        if (button == Input.Buttons.LEFT && pressed) {
+            inputConfirm();
+        }
+    }
+
+    @Override
+    public void keyEvent(ControlType control, int key, boolean pressed) {
+        if (pressed) {
+            switch (control) {
+                case CONFIRM:
+                    inputConfirm();
+                    break;
+                case UP:
+                    changeChoice(-1);
+                    break;
+                case DOWN:
+                    changeChoice(1);
+                    break;
+                default:
+                    break;
             }
         }
     }

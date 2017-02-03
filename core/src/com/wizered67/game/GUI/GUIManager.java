@@ -73,8 +73,8 @@ public class GUIManager {
 	     
 	     TextButtonStyle textButtonStyle = new TextButtonStyle();
 			textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-			textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-			textButtonStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
+			textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
+			textButtonStyle.checked = skin.newDrawable("white", Color.LIGHT_GRAY);
 			textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 			textButtonStyle.font = skin.getFont("default");
 			skin.add("default", textButtonStyle);
@@ -88,6 +88,7 @@ public class GUIManager {
                     System.out.println("Clicked button " + actor.getUserObject());
                     conversationController.processChoice((Integer) actor.getUserObject());
                     event.cancel();
+                    ((Button) actor).setChecked(false);
                 }
             });
             tb.setVisible(false);

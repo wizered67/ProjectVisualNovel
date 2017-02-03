@@ -50,6 +50,7 @@
     </branch>
 
     <branch name="main branch">
+        <!-- <changebranch branch="choices"/> -->
         Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
         <image instance="test">
             <visibility visible="false" fadeTime="0.1" wait="false"/>
