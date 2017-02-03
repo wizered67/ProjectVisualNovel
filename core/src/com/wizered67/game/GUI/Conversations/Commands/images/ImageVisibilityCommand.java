@@ -23,6 +23,8 @@ class ImageVisibilityCommand implements ConversationCommand {
     /** Whether the command is completed and the next one can be executed. */
     private boolean done;
 
+    ImageVisibilityCommand() {}
+
     ImageVisibilityCommand(String instance, String group, boolean visible, float time, boolean w) {
         instanceIdentifier = instance;
         groupIdentifier = group;

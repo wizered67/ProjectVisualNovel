@@ -29,10 +29,6 @@ public class SceneManager {
     private transient SpriteBatch batch;
     /** Maps character names to their corresponding SceneCharacter. */
     private transient static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
-    /** Texture to draw as background. */
-    private transient Texture background;
-    /** Identifier used for background texture. */
-    private String backgroundIdentifier;
 
     private Map<String, Set<SceneImage>> imagesByGroup;
     private Map<String, SceneImage> imagesByInstance;
@@ -56,7 +52,6 @@ public class SceneManager {
         conversationController = mw;
         sceneCharacters = new HashSet<>();
         batch = new SpriteBatch();
-        backgroundIdentifier = "";
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedEntities = new ArrayList<>();
@@ -91,9 +86,6 @@ public class SceneManager {
         }
 
         batch.begin();
-        if (background != null) {
-            batch.draw(background, 0, 0);
-        }
 
         Iterator<SceneEntity> entityIterator = sortedEntities.iterator();
         while (entityIterator.hasNext()) {
@@ -143,20 +135,6 @@ public class SceneManager {
             GameManager.error("No character of name " + identifier.toLowerCase());
         }
         return character;
-    }
-    /** Sets the background to the Texture with identifier IMAGEIDENTIFIER. */
-    public void setBackground(String imageIdentifier) {
-        if (!backgroundIdentifier.equals(imageIdentifier)) {
-            backgroundIdentifier = imageIdentifier;
-            if (!GameManager.assetManager().isLoaded(imageIdentifier)) {
-                GameManager.error("Background with filename " + imageIdentifier + " is not loaded.");
-            }
-            background = GameManager.assetManager().get(imageIdentifier);
-        }
-    }
-    /** Returns the identifier of the current background. */
-    public String getBackgroundIdentifier() {
-        return backgroundIdentifier;
     }
 
     public boolean applyImageCommand(String instance, String group, ImageAction action) {

@@ -43,7 +43,6 @@ public class SaveManager {
     /** Adds all necessary serializers to Kryo for serializing important objects. */
     public static void init() {
         kryo.addDefaultSerializer(MusicManager.class, MusicManagerSerializer.class);
-        kryo.addDefaultSerializer(SceneCharacter.class, CharacterSpriteSerializer.class);
         kryo.addDefaultSerializer(ConversationController.class, ConversationControllerSerializer.class);
         kryo.addDefaultSerializer(SceneManager.class, SceneManagerSerializer.class);
         kryo.addDefaultSerializer(LuaBoolean.class, LuaBooleanSerializer.class);
@@ -54,7 +53,6 @@ public class SaveManager {
         kryo.addDefaultSerializer(ScriptManager.class, ScriptManagerSerializer.class);
         kryo.addDefaultSerializer(Conversation.class, ConversationSerializer.class);
         kryo.addDefaultSerializer(Sprite.class, SpriteSerializer.class);
-
         kryo.addDefaultSerializer(SceneEntity.class, SceneEntitySerializer.class);
 
         kryo.setReferences(true);

@@ -4,12 +4,15 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.GUI.Conversations.scene.SceneImage;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
  * Command to set the scene's background image.
  * @author Adam Victor
  */
 public class BackgroundSetCommand implements ConversationCommand {
+    private static final String BACKGROUND_IDENTIFIER = "bg";
     /** Identifier of the Texture to set as the background. */
     private String imageIdentifier;
 
@@ -22,7 +25,17 @@ public class BackgroundSetCommand implements ConversationCommand {
      */
     @Override
     public void execute(ConversationController conversationController) {
-        conversationController.sceneManager().setBackground(imageIdentifier);
+        SceneManager manager = conversationController.sceneManager();
+        SceneImage bgImage = manager.getImage(BACKGROUND_IDENTIFIER);
+        if (bgImage == null) {
+            bgImage = new SceneImage(BACKGROUND_IDENTIFIER);
+            manager.addImage(bgImage);
+            bgImage.addToScene(manager);
+        }
+        bgImage.setPosition(0, 0);
+        bgImage.setDepth(manager, -99999);
+        bgImage.finishVisibility(true);
+        bgImage.setTexture(imageIdentifier);
     }
     /**
      * Whether to wait before proceeding to the next command in the branch. */
