@@ -78,8 +78,8 @@ has an <if> inside of it, it's only added if the SCRIPT evaluates to a true valu
 <delay time="float" (optional)skippable="boolean"/>
 DelayCommand with delay time TIME. Can be skipped with input if SKIPPABLE.
 
-<textspeed time="integer"/>
-TextSpeedCommand with waiting time TIME.
+<textspeed charsPerSecond="integer"/>
+TextSpeedCommand to display a certain number of characters per second.
 
 <script language="language" (optional)isfile="boolean">
     code or file
@@ -103,8 +103,12 @@ if they have not yet been defined.
 VariableConditionCommand that executes COMMANDS if the SCRIPT results in a true value when executed.
 LANGUAGE is the scripting language being used and ISFILE determines whether a file should be loaded named SCRIPT.
 
-<bg id="background">
+<else> #todo
+
+<bg id="background"> #todo make clear image relationship
 BackgroundSetCommand that sets the scene's background to the image with identifier ID.
+
+<image> #todo
 
 
 

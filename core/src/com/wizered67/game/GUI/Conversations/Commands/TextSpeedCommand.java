@@ -11,23 +11,23 @@ import com.wizered67.game.GUI.Conversations.ConversationController;
  * @author Adam Victor
  */
 public class TextSpeedCommand implements ConversationCommand {
-    /** The number of frames that will be waited before a text update. */
-    private int textSpeed;
+    /** The number of characters to be displayed per second. */
+    private int charsPerSecond;
 
-    /** No arguments constructor. */
+    /** No arguments constructor. Required for serialization. */
     public TextSpeedCommand() {
-        textSpeed = 0;
+
     }
     /** Creates a new TextSpeedCommand that sets the number of frames to wait before a text update
      * to TIME when executed.
      */
-    public TextSpeedCommand(int time) {
-        textSpeed = time;
+    public TextSpeedCommand(int cps) {
+        charsPerSecond = cps;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        conversationController.setTextTimer(textSpeed);
+        conversationController.setTextSpeed(charsPerSecond);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -42,8 +42,8 @@ public class TextSpeedCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static TextSpeedCommand makeCommand(XmlReader.Element element) {
-        int time = element.getIntAttribute("time");
-        return new TextSpeedCommand(time);
+        int cps = element.getIntAttribute("charsPerSecond");
+        return new TextSpeedCommand(cps);
     }
     /** Outputs XML to the XML WRITER for this command. */
     @Override

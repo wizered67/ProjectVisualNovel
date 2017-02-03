@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.wizered67.game.GUI.Conversations.Commands.*;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
 import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
+import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
 import com.wizered67.game.Saving.Serializers.GUIState;
@@ -25,16 +26,21 @@ public class ConversationController implements Controllable {
     private String remainingText = "";
     /** Text left to be displayed, ignoring Color tags. */
     private String remainingTextNoTags = "";
-    /** Number of frames until message text is updated. */
-    private int textTimer = 4;
     /** Number of lines currently in the textbox label. */
     private int numLines = 0;
     /** Padding between text and the left side of the textbox label. */
     private final int LEFT_PADDING = 10;
     /** Whether a dummy tag has just been added. */
     private boolean dummyTagAdded = false;
-    /** Number of frames between each message text update. */
-    private int textTimerDelay = 2;
+
+    /** The number of seconds elapsed for a text update.
+     * Text updates occur when (among other conditions) textTimer > 1 / charsPerSecond. */
+    private float textTimer = 0;
+    /** The number of characters to display per second. */
+    private int charsPerSecond = 30;
+    /** The maximum number of characters that can be displayed in a single frame. */
+    private final int MAX_CHARS_PER_FRAME = 5;
+
     /** Label for the main textbox. Displays text when spoken by characters.
      * A reference to the one in GUIManager.*/
     private transient Label textboxLabel;
@@ -63,7 +69,7 @@ public class ConversationController implements Controllable {
     /** Whether choices are currently being shown to the player. */
     private boolean choiceShowing = false;
     /** Reference to the SceneManager that contains and updates all CharacterSprites. */
-    private com.wizered67.game.GUI.Conversations.scene.SceneManager sceneManager;
+    private SceneManager sceneManager;
     /** A loader used to parse XML into a Conversation. */
     private transient ConversationLoader conversationLoader;
     /** The SceneCharacter of the current speaker. */
@@ -187,16 +193,18 @@ public class ConversationController implements Controllable {
         if (currentConversation == null) {
             return;
         }
-
+        //Keep going to next command as long as there is at least one command left in this branch and there is either no
+        //current command or the current command does not require waiting.
         while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() != 0) {
             nextCommand();
             displayAll = false;
+            textTimer = 0;
         }
         updateText(deltaTime);
         sceneManager.update(deltaTime);
     }
-    /** If there is currently a message being displayed, updates the text timer.
-     * Once the text timer reaches 0 or if all text should be displayed at once it
+    /**If there is currently a message being displayed, updates the text timer.
+     * While text timer is high enough or if all text should be displayed at once, it
      * displays the next character of the message. If a command is encountered in
      * the middle of the message, it executes it and returns if the update should
      * wait for the command to complete. DELTA TIME is the time elapsed since the
@@ -214,84 +222,92 @@ public class ConversationController implements Controllable {
             setSpeakerName(currentSpeaker.getKnownName());
         }
 
-        MessageCommand messageCommand;
-        textTimer = Math.max(textTimer - 1, 0);
-        if (textTimer <= 0 || displayAll) {
-            do {
-                if (currentCommand != null && currentCommand instanceof MessageCommand) {
-                    messageCommand = (MessageCommand) currentCommand;
-                    if (!messageCommand.shouldUpdate()) {
-                        return;
+        int chars = 0;
+        if (currentCommand != null && currentCommand instanceof MessageCommand) {
+            MessageCommand messageCommand = (MessageCommand) currentCommand;
+            if (messageCommand.shouldUpdate() && !doneSpeaking()) {
+                textTimer += deltaTime;
+            }
+            //Keep updating text as long as there is text left, the message command says it should continue
+            // (ie no subcommand is stopping it), and either all text should be displayed or the text timer is
+            //high enough to display at least one more character, but not more than the max number that can be
+            //displayed in a frame.
+            while (messageCommand.shouldUpdate() &&
+                    (displayAll || (textTimer > 1f / charsPerSecond && chars < MAX_CHARS_PER_FRAME))
+                    && !doneSpeaking()) {
+                nextText(messageCommand);
+                textTimer = Math.max(textTimer - 1f / charsPerSecond, 0);
+                chars += 1;
+            }
+        }
+    }
+    //todo make sure this is valid. Can message command ever change?
+    //todo clean up code, implement/discard tag system? Fix \n line breaks.
+    /** Displays the next character of text, executing any commands before it. */
+    private void nextText(MessageCommand messageCommand) {
+        boolean textAdded = false;
+        boolean tagAdded = false;
+        String newText = null;
+        String originalText = textboxLabel.getText().toString();
+        dummyTagAdded = false;
+        while (!textAdded) {
+            String[] words = remainingTextNoTags.split(" ");
+            String nextWord = "";
+            boolean command = true;
+            int index = 0;
+            while (command) {
+                command = false;
+                if (words.length > index) {
+                    nextWord = words[index];
+                    if (nextWord.matches(".*@c\\{(.*)\\}.*")) {
+                        remainingTextNoTags = remainingTextNoTags.substring(nextWord.length() + 1);
+                        remainingText = remainingText.substring(nextWord.length() + 1);
+                        // replaceFirst("(.*)@c\\{.*\\}(.*)", "$1$2");
+                        command = true;
+                        messageCommand.setSubcommand(nextWord);
+                        if (!messageCommand.shouldUpdate()) {
+                            return;
+                        }
                     }
                 } else {
-                    return;
+                    nextWord = "";
                 }
-                boolean textAdded = false;
-                boolean tagAdded = false;
-                String newText = null;
-                String originalText = textboxLabel.getText().toString();
-                if (dummyTagAdded) {
-                    dummyTagAdded = false;
+                index += 1;
+            }
+            String testText = originalText + nextWord;
+            textboxLabel.setText(testText + "nn");
+            textboxLabel.layout();
+            int currentNumLines = textboxLabel.getGlyphLayout().runs.size;
+            newText = originalText;
+            String tag = getTag(remainingText);
+            if (tag == null) {
+                if (currentNumLines != 1 && currentNumLines > numLines) {
+                    newText = newText + "\n";
                 }
-                while (!textAdded) {
-                    String[] words = remainingTextNoTags.split(" ");
-                    String nextWord = "";
-                    boolean command = true;
-                    int index = 0;
-                    while (command) {
-                        command = false;
-                        if (words.length > index) {
-                            nextWord = words[index];
-                            if (nextWord.matches(".*@c\\{(.*)\\}.*")) {
-                                remainingTextNoTags = remainingTextNoTags.substring(nextWord.length() + 1);
-                                remainingText = remainingText.substring(nextWord.length() + 1);
-                                // replaceFirst("(.*)@c\\{.*\\}(.*)", "$1$2");
-                                command = true;
-                                messageCommand.setSubcommand(nextWord);
-                                if (!messageCommand.shouldUpdate()) {
-                                    return;
-                                }
-                            }
-                        } else {
-                            nextWord = "";
-                        }
-                        index += 1;
+                if (remainingText.length() != 0) {
+                    char nextChar = remainingText.charAt(0);
+                    newText += nextChar;
+                    if (nextChar != ' ' && !displayAll) {
+                        playTextSound();
                     }
-                    String testText = originalText + nextWord;
-                    textboxLabel.setText(testText + "nn");
-                    textboxLabel.layout();
-                    int currentNumLines = textboxLabel.getGlyphLayout().runs.size;
-                    newText = originalText;
-                    String tag = getTag(remainingText);
-                    if (tag == null) {
-                        if (currentNumLines != 1 && currentNumLines > numLines) {
-                            newText = newText + "\n";
-                        }
-                        if (remainingText.length() != 0) {
-                            char nextChar = remainingText.charAt(0);
-                            newText += nextChar;
-                            if (nextChar != ' ' && !displayAll) {
-                                playTextSound();
-                            }
-                            remainingText = remainingText.substring(1);
-                            remainingTextNoTags = remainingTextNoTags.substring(1);
-                        }
-                        textAdded = true;
-
-                    } else {
-                        tagAdded = true;
-                        if (tag.equals("[\n]")) {
-                            tag = "\n";
-                        }
-                        newText += tag;
-                        remainingText = remainingText.substring(tag.length());
-                        currentNumLines += 1;
-                    }
-                    numLines = currentNumLines;
-                    originalText = newText;
+                    remainingText = remainingText.substring(1);
+                    remainingTextNoTags = remainingTextNoTags.substring(1);
                 }
-                if (tagAdded) {
-                    String closeTag = getTag(remainingText);
+                textAdded = true;
+            } else {
+                tagAdded = true;
+                if (tag.equals("[\n]")) {
+                    tag = "\n";
+                }
+                newText += tag;
+                remainingText = remainingText.substring(tag.length());
+                currentNumLines += 1;
+            }
+            numLines = currentNumLines;
+            originalText = newText;
+        }
+        if (tagAdded) {
+            String closeTag = getTag(remainingText);
                     /*
                     if (closeTag != null) {
                         //newText += closeTag;
@@ -302,16 +318,15 @@ public class ConversationController implements Controllable {
                         //newText += "[]";
                     }
                     */
-                    dummyTagAdded = (closeTag == null);
-                }
-                textTimer = textTimerDelay;
-                textboxLabel.setText(newText);
-                textboxLabel.layout();
-                numLines = textboxLabel.getGlyphLayout().runs.size;
-                textboxLabel.invalidate();
-            } while (displayAll && !doneSpeaking());
+            dummyTagAdded = (closeTag == null);
         }
+        textboxLabel.setText(newText);
+        textboxLabel.layout();
+        numLines = textboxLabel.getGlyphLayout().runs.size;
+        textboxLabel.invalidate();
     }
+
+
     /** Set the sound to be played for the current speaker to the sound named SOUND. */
     public void setCurrentSpeakerSound(String sound) {
         currentSpeakerSound = sound;
@@ -396,9 +411,9 @@ public class ConversationController implements Controllable {
             speakerLabel.invalidate();
         }
     }
-    /** Sets the textTimerDelay to DELAY. */
-    public void setTextTimer(int delay){
-        textTimerDelay = delay;
+    /** Sets the text speed in characters per second. */
+    public void setTextSpeed(int charsPerSecond) {
+        this.charsPerSecond = charsPerSecond;
     }
     /** Sets whether the textbox and speaker label should SHOW. */
     public void setTextBoxShowing(boolean show){

@@ -79,6 +79,7 @@
     <branch name="choices">
         <choices>
             When did the murder take place?:
+                <textspeed charsPerSecond="70"/>
                 <changebranch branch="when"/>
             How long have you been working for the library?:
                 <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
