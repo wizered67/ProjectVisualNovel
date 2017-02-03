@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
@@ -154,6 +155,10 @@ public class GUIManager {
 	public static Stage getStage(){
 		return stage;
 	}
+	/** Returns the batch being used by the stage. */
+	public static Batch getBatch() {
+	    return stage.getBatch();
+    }
     /** Called every frame. Updates the ConversationController. DELTA TIME is the time
      * elapsed since the last frame.
      */

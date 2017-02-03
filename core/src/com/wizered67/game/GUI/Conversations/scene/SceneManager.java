@@ -3,11 +3,13 @@ package com.wizered67.game.GUI.Conversations.scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Saving.SaveManager;
 
@@ -25,8 +27,8 @@ public class SceneManager {
     /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed. */
     private ConversationController conversationController;
-    /** SpriteBatch used to draw Sprites for each SceneCharacter. */
-    private transient SpriteBatch batch;
+    /** Batch used to draw Sprites for each SceneCharacter. */
+    private transient Batch batch;
     /** Maps character names to their corresponding SceneCharacter. */
     private transient static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
 
@@ -36,7 +38,7 @@ public class SceneManager {
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
-        batch = new SpriteBatch();
+        batch = GUIManager.getBatch();
         /*
         conversationController = null;
         sceneCharacters = null;
