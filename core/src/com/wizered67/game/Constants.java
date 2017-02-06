@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Constants {
 	//Debug Settings
-	public final static boolean DEBUG = false;
+	public final static boolean DEBUG = true;
 
 	//todo fix
 	public final static boolean LOAD = false;

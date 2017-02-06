@@ -121,3 +121,6 @@ desktop/build
 /desktop/src/META-INF/
 /android/assets/saveloadtest.sav
 /android/assets/fullsavetest.sav
+
+/android/assets/Saves/
+!/android/assets/Saves/test save file

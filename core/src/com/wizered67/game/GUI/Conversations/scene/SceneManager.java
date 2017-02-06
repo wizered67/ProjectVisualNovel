@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
@@ -63,28 +64,9 @@ public class SceneManager {
      * last frame.
      */
     public void update(float delta) {
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            SaveManager.save(Gdx.files.local("fullsavetest.sav"));
-        }
-
-        if (Gdx.input.justTouched()) {
-            SceneImage newImage = new SceneImage("test");
-            newImage.changeGroup(this, "icons");
-            newImage.setDepth(this, 5);
-            newImage.setTexture("icon");
-            newImage.addToScene(this);
-            newImage.setFade(2f);
-            newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            SceneImage newImage = new SceneImage("test2");
-            newImage.changeGroup(this, "icons");
-            newImage.setDepth(this, -5);
-            newImage.setTexture("icon2");
-            newImage.addToScene(this);
-            newImage.setFade(1f);
-            newImage.setPosition(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+        //todo remove
+        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            GUIManager.toggleDebugDisplay();
         }
 
         batch.begin();

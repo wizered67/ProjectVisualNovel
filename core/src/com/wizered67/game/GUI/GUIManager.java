@@ -2,6 +2,8 @@ package com.wizered67.game.GUI;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -11,14 +13,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.Constants;
+import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.Saving.SaveManager;
+
 /** Contains GUI elements and the ConversationController which the GUI elements are passed into.
  * Fixes GUI elements if screen is resized.
  * @author Adam Victor
@@ -44,11 +52,23 @@ public class GUIManager {
     private final static int LEFT_PADDING = 10;
     /** Message Window that updates the GUI elements as a Conversation proceeds. */
     private static ConversationController conversationController;
+    /** Default font used for text. */
+    private static BitmapFont defaultFont;
+
+    //debug related variables
+    /** Scrollpane used to contain debug choices -- ie loading conversations, etc. */
+    private static ScrollPane debugPane;
+    /** Contains choices for debug options. */
+    private static HorizontalGroup debugChoices;
+    /** Whether the save input is showing. */
+    private static boolean saveInputShowing = false;
+    /** GUI List that shows all options for debug menu. */
+    private static List<String> debugSelector;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
      */
-    public GUIManager(Stage st){
+    public GUIManager(Stage st) {
 		stage = st;
  		// Generate a 1x1 white texture and store it in the skin named "white".
  		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
@@ -56,7 +76,6 @@ public class GUIManager {
  		pixmap.fill();
  		skin.add("white", new Texture(pixmap));
  		// Store the default libgdx font under the name "default".
-		BitmapFont defaultFont;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
@@ -147,7 +166,7 @@ public class GUIManager {
 		//Table tooltipTable = new Table(skin);
 		//tooltipTable.pad(10).background("default-round");
 		//tooltipTable.add(new TextButton("Fancy tooltip!", skin));
-
+        addDebug();
 	}
     public GUIManager() {
         conversationController = new ConversationController();
@@ -204,5 +223,161 @@ public class GUIManager {
     /** Returns the ConversationController. */
     public static ConversationController conversationController() {
         return conversationController;
+    }
+
+    private static void addDebug() {
+        List.ListStyle listStyle = new List.ListStyle(defaultFont, Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
+        listStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
+        debugSelector = new List<>(listStyle);
+        //debugSelector.setItems("demonstration", "test conversation");
+        //debugSelector.setSelectedIndex(-1);
+        ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
+        debugPane = new ScrollPane(debugSelector, scrollPaneStyle);
+        debugPane.setWidth(Gdx.graphics.getWidth() / 3);
+        debugPane.setHeight(Gdx.graphics.getHeight() / 2);
+        debugPane.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 64, Align.center);
+        debugPane.toFront();
+        debugPane.setUserObject(DebugMode.CONV);
+        stage.addActor(debugPane);
+        debugPane.setVisible(false);
+        debugChoices = new HorizontalGroup();
+        debugChoices.space(15);
+        TextButton convChange = new TextButton("Conversations", skin);
+        convChange.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                debugConversations();
+                event.setCapture(true);
+                event.cancel();
+            }
+        });
+        TextButton branchChange = new TextButton("Branches", skin);
+        branchChange.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                debugBranches();
+                event.setCapture(true);
+                event.cancel();
+            }
+        });
+        TextButton save = new TextButton("Save", skin);
+        save.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                event.setCapture(true);
+                event.cancel();
+                Input.TextInputListener inputListener = new Input.TextInputListener() {
+                    @Override
+                    public void input(String text) {
+                        SaveManager.save(Gdx.files.local("Saves/" + text));
+                        if (debugPane.getUserObject() == DebugMode.LOAD) {
+                            debugLoad();
+                        }
+                        saveInputShowing = false;
+                    }
+
+                    @Override
+                    public void canceled() {
+                        saveInputShowing = false;
+                    }
+                };
+                if (!saveInputShowing) {
+                    Gdx.input.getTextInput(inputListener, "Save File", "new save", "");
+                    saveInputShowing = true;
+                }
+            }
+        });
+        TextButton load = new TextButton("Load", skin);
+        load.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                debugLoad();
+                event.setCapture(true);
+                event.cancel();
+            }
+        });
+        TextButton confirm = new TextButton("Confirm", skin);
+        confirm.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                debugConfirmChoice();
+                event.setCapture(true);
+                event.cancel();
+            }
+        });
+        debugChoices.addActor(convChange);
+        debugChoices.addActor(branchChange);
+        debugChoices.addActor(confirm);
+        debugChoices.addActor(save);
+        debugChoices.addActor(load);
+        debugChoices.setPosition(Gdx.graphics.getWidth() / 2 - debugChoices.getMinWidth() / 2, Gdx.graphics.getHeight() - 64, Align.center);
+        debugChoices.toFront();
+        debugChoices.setVisible(false);
+        stage.addActor(debugChoices);
+    }
+
+    public static void toggleDebugDisplay() {
+        debugChoices.setVisible(!debugChoices.isVisible());
+        if (!debugChoices.isVisible()) {
+            debugPane.setVisible(false);
+        }
+    }
+
+    private static void debugChangePaneType(Array<String> content, DebugMode type) {
+        debugSelector.setItems(content);
+        debugSelector.setSelectedIndex(-1);
+        debugPane.setUserObject(type);
+        debugPane.setVisible(true);
+    }
+
+    private static void debugConversations() {
+        Array<String> fileNames = new Array<>();
+        FileHandle[] files = Gdx.files.local("Conversations/").list();
+        for(FileHandle file: files) {
+            fileNames.add(file.name());
+        }
+        debugChangePaneType(fileNames, DebugMode.CONV);
+    }
+
+    private static void debugBranches() {
+        Conversation currentConv = conversationController.conversation();
+        Array<String> branches = new Array<>();
+        for (String branch : currentConv.getAllBranches()) {
+            branches.add(branch);
+        }
+        debugChangePaneType(branches, DebugMode.BRANCH);
+    }
+
+    private static void debugLoad() {
+        Array<String> fileNames = new Array<>();
+        FileHandle[] files = Gdx.files.local("Saves/").list();
+        for(FileHandle file: files) {
+            fileNames.add(file.name());
+        }
+        debugChangePaneType(fileNames, DebugMode.LOAD);
+    }
+
+    private static void debugConfirmChoice() {
+        int index = debugSelector.getSelectedIndex();
+        if (index < 0) {
+            return;
+        }
+        String selection = debugSelector.getItems().get(debugSelector.getSelectedIndex());
+        switch ((DebugMode) debugPane.getUserObject()) {
+            case CONV:
+                conversationController.loadConversation(selection);
+                conversationController.setBranch("default");
+                break;
+            case BRANCH:
+                conversationController.setBranch(selection);
+                break;
+            case LOAD:
+                SaveManager.load(Gdx.files.internal("Saves/" + selection));
+                break;
+        }
+    }
+
+    private enum DebugMode {
+        CONV, BRANCH, LOAD
     }
 }

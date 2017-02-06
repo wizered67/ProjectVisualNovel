@@ -171,7 +171,7 @@ public class ConversationController implements Controllable {
         return currentConversation;
     }
     /** Returns the SceneManager being used update and draw CharacterSprites. */
-    public com.wizered67.game.GUI.Conversations.scene.SceneManager sceneManager() {
+    public SceneManager sceneManager() {
         return sceneManager;
     }
     /** Returns the ScriptManager for LANGUAGE. */
@@ -376,16 +376,22 @@ public class ConversationController implements Controllable {
         LinkedList<ConversationCommand> branch = currentConversation.getBranch(branchName);
         Object b = branch.clone();
         if (b instanceof LinkedList) {
+            exit(false);
             currentBranch = (LinkedList<ConversationCommand>) b;
         }
     }
-    /** Exits the current conversation. Clears command queue, hides characters, choices, and text. */
-    public void exit() {
-        currentBranch.clear();
+    /** Exits the current conversation. Clears command queue, choices, and text. *
+     * Iff CLEARSCENE then it also hides characters and images in the scene. */
+    public void exit(boolean clearScene) {
+        if (currentBranch != null) {
+            currentBranch.clear();
+        }
         setTextBoxShowing(false);
         //todo fix choice hiding?
         setChoiceShowing(false);
-        sceneManager.removeAllCharacters();
+        if (clearScene) {
+            sceneManager.removeAllCharacters(); //todo hide images too
+        }
     }
     /** Adds the ConversationCommands in COMMANDS to the
      * front of the queue of commands to be executed for this branch.

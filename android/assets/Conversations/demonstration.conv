@@ -65,10 +65,6 @@
 
         Librarian: I'm the head librarian here. It's a pleasure to meet you.
 
-        <image instance="bg">
-            <visibility visible="false" fadeTime="2"/>
-        </image>
-
         <image instance="test2">
             <position depth="20"/>
         </image>
