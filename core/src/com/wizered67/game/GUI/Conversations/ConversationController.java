@@ -157,6 +157,13 @@ public class ConversationController implements Controllable {
         for (int i = 0; i < choiceButtons.length; i += 1) {
             setChoice(i, guiState.choiceButtonText[i]);
         }
+
+        if (choiceHighlighted != -1) {
+            choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(false);
+            choiceButtons[choiceHighlighted].setChecked(true);
+            choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(true);
+        }
+
         numLines = textboxLabel.getGlyphLayout().runs.size;
     }
     /** Returns the current Conversation. */

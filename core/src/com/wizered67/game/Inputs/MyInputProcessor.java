@@ -23,7 +23,7 @@ public class MyInputProcessor implements InputProcessor {
 			}
 		}
     }
-
+    //todo should registered objects be saved?
     public void register(Controllable c) {
         if (!registeredControllableObjects.contains(c)) {
             registeredControllableObjects.add(c);
@@ -36,7 +36,11 @@ public class MyInputProcessor implements InputProcessor {
 
     private void fireKey(int key, boolean pressed) {
 		for (Controllable controllable : registeredControllableObjects) {
-			controllable.keyEvent(keyToControl.get(key), key, pressed);
+			ControlType control = keyToControl.get(key);
+			if (control == null) {
+				control = ControlType.OTHER;
+			}
+			controllable.keyEvent(control, key, pressed);
 		}
 	}
 
@@ -99,7 +103,8 @@ public class MyInputProcessor implements InputProcessor {
 		DOWN(new int[] {Keys.S, Keys.DOWN}),
 		LEFT(new int[] {Keys.A, Keys.LEFT}),
 		RIGHT(new int[] {Keys.D, Keys.RIGHT}),
-		CONFIRM(new int[] {Keys.C, Keys.SPACE});
+		CONFIRM(new int[] {Keys.C, Keys.SPACE}),
+		OTHER(new int[] {});
     	int[] keys;
     	ControlType(int[] k) {
     		keys = k;
