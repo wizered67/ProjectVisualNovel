@@ -25,7 +25,7 @@ public class ConversationLoader {
     /** Used to parse Xml. The MixedXmlReader separates text into its own elements to maintain order. */
     private MixedXmlReader xml = new MixedXmlReader();
     /** Mapping of xml element names to corresponding ConversationCommand class. */
-    private static Map<String, Class> classMapping = new HashMap<String, Class>();
+    private static Map<String, Class> classMapping = new HashMap<>();
     static {
         classMapping.put("assign", AssignCommand.class);
         classMapping.put("bg", BackgroundSetCommand.class);
@@ -45,6 +45,7 @@ public class ConversationLoader {
         classMapping.put("music", PlayMusicCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
         classMapping.put("preload", PreloadCommand.class);
+        classMapping.put("fade", ScreenFadeCommand.class);
         classMapping.put("choices", ShowChoicesCommand.class);
         classMapping.put("textspeed", TextSpeedCommand.class);
         classMapping.put("if", VariableConditionCommand.class);

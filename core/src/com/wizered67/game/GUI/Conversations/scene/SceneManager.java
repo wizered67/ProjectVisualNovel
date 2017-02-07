@@ -44,9 +44,9 @@ public class SceneManager {
     /** A list of all entities to be drawn. Must always be kept in sorted order! Insertion is done with binary search. */
     private List<SceneEntity> sortedEntities;
     /** The Color to be used for the current fading. */
-    private Color fadeColor = Color.WHITE.cpy();
+    private Color fadeColor;
     /** Fade used for keeping track of interpolation type and progress. */
-    private Fade fade = new Fade("fade", 1, 0.5f, -1);
+    private Fade fade;
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
@@ -72,6 +72,11 @@ public class SceneManager {
         sortedEntities = new ArrayList<>();
         createFadeTexture();
     }
+    /** Returns the Conversation Controller associated with this SceneManager. */
+    public ConversationController conversationController() {
+        return conversationController;
+    }
+
     /** Creates the Texture used for fading. */
     private void createFadeTexture() {
         fadeTexture = new Texture(1, 1, Pixmap.Format.RGBA8888);
@@ -122,6 +127,11 @@ public class SceneManager {
                 complete(CompleteEvent.fade(this, this));
             }
         }
+    }
+    /** Used to set the SceneManager's current fade. */
+    public void setFade(Fade fade, Color color) {
+        this.fade = fade;
+        fadeColor = color;
     }
 
     public Map<String, SceneCharacter> allCharacters() {

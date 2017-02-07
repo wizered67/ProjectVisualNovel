@@ -52,12 +52,13 @@
     <branch name="main branch">
         <!-- <changebranch branch="choices"/> -->
         Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
-        <image instance="test">
-            <visibility visible="false" fadeTime="0.1" wait="false"/>
-        </image>
         <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>
 
-        <fade exitTime="1" enterTime="1" color="BLACK" enterType="linear" exitType="fade" wait="true"/>
+        <fade exitTime="1" enterTime="1" color="BLACK" enterType="linear" exitType="fade" wait="true">
+            <image instance="test">
+                <visibility visible="false" fadeTime="0.1" wait="false"/>
+            </image>
+        </fade>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation id="Detective" animation="Edgeworth_Static"/>
