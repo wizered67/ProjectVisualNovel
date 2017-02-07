@@ -1,7 +1,9 @@
 package com.wizered67.game.GUI.Conversations.Commands;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
+import com.wizered67.game.GUI.Conversations.scene.Fade;
 import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
@@ -23,6 +25,8 @@ public class CharacterVisibleCommand implements ConversationCommand {
     private boolean wait;
     /** Whether the command is completed and the next one can be executed. */
     private boolean done;
+    /** The name of the interpolation used for fading in and out. */
+    private String interpolation = "linear";
     /** No arguments constructor. */
     public CharacterVisibleCommand() {
         character = "";
@@ -35,10 +39,11 @@ public class CharacterVisibleCommand implements ConversationCommand {
      * with identifier ID's visibility to VISIBLE when executed.
      * Waits for completion iff W.
      */
-    public CharacterVisibleCommand(String id, boolean visible, float time, boolean w) {
+    public CharacterVisibleCommand(String id, boolean visible, float time, String fadeType, boolean w) {
         character = id;
         show = visible;
         fadeTime = time;
+        interpolation = fadeType;
         wait = w;
         done = !wait;
     }
@@ -55,9 +60,8 @@ public class CharacterVisibleCommand implements ConversationCommand {
             c.finishVisibility(show);
             done = true;
         } else {
-            float factor = show ? 1f : -1f;
-            float fadePerSecond = factor / fadeTime;
-            c.setFade(fadePerSecond);
+            int direction = show ? 1 : -1;
+            c.setFade(new Fade(interpolation, c.getSprite().getColor().a, fadeTime, direction));
         }
         if (show) {
             c.addToScene(conversationController.sceneManager());
@@ -98,8 +102,9 @@ public class CharacterVisibleCommand implements ConversationCommand {
     public static CharacterVisibleCommand makeCommand(XmlReader.Element element) {
         String name = element.getAttribute("id");
         boolean visible = element.getBooleanAttribute("visible", false);
-        float fade = element.getFloatAttribute("fade", 0f);
+        float fade = element.getFloatAttribute("fadeTime", 0f);
+        String fadeType = element.getAttribute("fadeType", "linear");
         boolean wait = element.getBooleanAttribute("wait", true);
-        return new CharacterVisibleCommand(name, visible, fade, wait);
+        return new CharacterVisibleCommand(name, visible, fade, fadeType, wait);
     }
 }

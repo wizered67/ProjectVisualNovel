@@ -39,7 +39,7 @@ public class SceneImage extends SceneEntity {
         }
         sprite = new Sprite();
         sprite.setAlpha(0);
-        fadePerSecond = 0;
+        fade = null;
         hasDepth = false;
     }
 

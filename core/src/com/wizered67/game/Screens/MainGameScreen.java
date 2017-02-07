@@ -99,10 +99,8 @@ public class MainGameScreen implements Screen {
     private void updateGUI(float delta){
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        GUIManager.update(delta);
         hudViewport.apply(true);
-        stage.act(delta);
-        stage.draw();
+        GUIManager.update(delta);
     }
 
     public void updateInput() {

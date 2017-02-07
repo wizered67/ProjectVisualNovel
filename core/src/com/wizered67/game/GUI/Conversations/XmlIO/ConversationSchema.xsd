@@ -41,6 +41,7 @@
                 <xs:element type="bgType" name="bg" maxOccurs="unbounded"/>
                 <xs:element type="changeConversationType" name="changeconv" maxOccurs="unbounded"/>
                 <xs:element type="imageType" name="image" maxOccurs="unbounded"/>
+                <xs:element type="fadeType" name="fade" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -83,7 +84,8 @@
     <xs:complexType name="setvisibleType">
         <xs:attribute type="characterType" name="id" use="required"/>
         <xs:attribute type="xs:boolean" name="visible" use="required"/>
-        <xs:attribute type="xs:float" name="fade" use="optional"/>
+        <xs:attribute type="xs:float" name="fadeTime" use="optional"/>
+        <xs:attribute type="interpolationType" name="fadeType" use="optional"/>
         <xs:attribute type="xs:boolean" name="wait" use="optional"/>
     </xs:complexType>
 
@@ -194,5 +196,62 @@
         <xs:attribute name="visible" type="xs:boolean" use="required"/>
         <xs:attribute name="fadeTime" type="xs:float" use="optional"/>
         <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+        <xs:attribute type="interpolationType" name="fadeType" use="optional"/>
     </xs:complexType>
+
+    <xs:complexType name="fadeType" mixed="true">
+        <xs:sequence minOccurs="0">
+            <xs:group ref="commands"/>
+        </xs:sequence>
+        <xs:attribute name="color" type="xs:string" use="optional"/>
+        <xs:attribute name="exitTime" type="xs:float" use="required"/>
+        <xs:attribute name="enterTime" type="xs:float" use="required"/>
+        <xs:attribute name="exitType" type="interpolationType" use="optional"/>
+        <xs:attribute name="enterType" type="interpolationType" use="optional"/>
+        <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <xs:simpleType name="interpolationType">
+        <xs:restriction>
+            <xs:enumeration value="linear"/>
+            <xs:enumeration value="fade"/>
+            <xs:enumeration value="pow2"/>
+            <xs:enumeration value="pow2In"/>
+            <xs:enumeration value="pow2Out"/>
+            <xs:enumeration value="pow2InInverse"/>
+            <xs:enumeration value="pow2OutInverse"/>
+            <xs:enumeration value="pow3"/>
+            <xs:enumeration value="pow3In"/>
+            <xs:enumeration value="pow3Out"/>
+            <xs:enumeration value="pow3InInverse"/>
+            <xs:enumeration value="pow3OutInverse"/>
+            <xs:enumeration value="pow4"/>
+            <xs:enumeration value="pow4In"/>
+            <xs:enumeration value="pow4Out"/>
+            <xs:enumeration value="pow5"/>
+            <xs:enumeration value="pow5In"/>
+            <xs:enumeration value="pow5Out"/>
+            <xs:enumeration value="sine"/>
+            <xs:enumeration value="sineIn"/>
+            <xs:enumeration value="sineOut"/>
+            <xs:enumeration value="exp10"/>
+            <xs:enumeration value="exp10In"/>
+            <xs:enumeration value="exp10Out"/>
+            <xs:enumeration value="exp5"/>
+            <xs:enumeration value="exp5In"/>
+            <xs:enumeration value="exp5Out"/>
+            <xs:enumeration value="circle"/>
+            <xs:enumeration value="circleIn"/>
+            <xs:enumeration value="cirlceOut"/>
+            <xs:enumeration value="elastic"/>
+            <xs:enumeration value="elasticIn"/>
+            <xs:enumeration value="elasticOut"/>
+            <xs:enumeration value="swing"/>
+            <xs:enumeration value="swingIn"/>
+            <xs:enumeration value="swingOut"/>
+            <xs:enumeration value="bounce"/>
+            <xs:enumeration value="bounceIn"/>
+            <xs:enumeration value="bounceOut"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

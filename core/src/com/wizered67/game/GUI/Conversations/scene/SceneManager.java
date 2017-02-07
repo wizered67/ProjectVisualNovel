@@ -2,9 +2,12 @@ package com.wizered67.game.GUI.Conversations.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
@@ -30,16 +33,25 @@ public class SceneManager {
     private ConversationController conversationController;
     /** Batch used to draw Sprites for each SceneCharacter. */
     private transient Batch batch;
+    /** Texture used for fading screen. */
+    private transient Texture fadeTexture;
     /** Maps character names to their corresponding SceneCharacter. */
     private transient static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
-
+    /** A mapping of image group names to sets of SceneImages in that group. */
     private Map<String, Set<SceneImage>> imagesByGroup;
+    /** A mapping of image instance names to the SceneImage with that name. */
     private Map<String, SceneImage> imagesByInstance;
+    /** A list of all entities to be drawn. Must always be kept in sorted order! Insertion is done with binary search. */
     private List<SceneEntity> sortedEntities;
+    /** The Color to be used for the current fading. */
+    private Color fadeColor = Color.WHITE.cpy();
+    /** Fade used for keeping track of interpolation type and progress. */
+    private Fade fade = new Fade("fade", 1, 0.5f, -1);
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
         batch = GUIManager.getBatch();
+        createFadeTexture();
         /*
         conversationController = null;
         sceneCharacters = null;
@@ -58,13 +70,22 @@ public class SceneManager {
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedEntities = new ArrayList<>();
+        createFadeTexture();
+    }
+    /** Creates the Texture used for fading. */
+    private void createFadeTexture() {
+        fadeTexture = new Texture(1, 1, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fillRectangle(0, 0, 1, 1);
+        fadeTexture.draw(pixmap, 0, 0);
+        pixmap.dispose();
     }
     /** Called each frame to draw the background, update the Animation of each SceneCharacter, and
      * then draw them. DELTA is the amount of time that has elapsed since the
      * last frame.
      */
     public void update(float delta) {
-        //todo remove
         if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             GUIManager.toggleDebugDisplay();
         }
@@ -82,6 +103,25 @@ public class SceneManager {
             }
         }
         batch.end();
+        GUIManager.updateAndRenderStage(delta);
+
+        batch.begin();
+        drawFade(delta);
+        batch.end();
+    }
+    /** Draws the screen fade currently in effect. DELTA TIME is time elapsed since last frame. */
+    private void drawFade(float deltaTime) {
+        if (fade != null) {
+            float alpha = fade.update(deltaTime);
+            fadeColor.a = alpha;
+            batch.setColor(fadeColor);
+            batch.draw(fadeTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.setColor(Color.WHITE);
+            if (alpha <= 0 || alpha >= 1) {
+                fade = null;
+                complete(CompleteEvent.fade(this, this));
+            }
+        }
     }
 
     public Map<String, SceneCharacter> allCharacters() {
@@ -205,6 +245,10 @@ public class SceneManager {
 
     public Set<SceneImage> getImagesByGroup(String group) {
         return imagesByGroup.get(group);
+    }
+
+    public void dispose() {
+        fadeTexture.dispose();
     }
 
     /** Passes the complete event to the ConversationController to be passed to the last executed command. */

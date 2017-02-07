@@ -13,14 +13,14 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     protected SceneManager manager;
     /** The Sprite object used to draw this entity. */
     protected Sprite sprite;
-    /** How much the alpha of the sprite being drawn should change per second. */
-    protected float fadePerSecond;
     /** The depth to draw this entity's Sprite at in the scene. Higher values are rendered on top of lower values. */
     protected int depth;
     /** Whether the depth has been assigned yet. */
     protected boolean hasDepth;
     /** Whether this entity has been removed. */
     protected boolean removed = false;
+    /** Fade object used to control fading in and out. */
+    protected Fade fade;
 
     public abstract void reload();
 
@@ -43,8 +43,8 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     }
 
     protected void updateFade(float deltaTime) {
-        if (fadePerSecond != 0) {
-            float alpha = sprite.getColor().a + (deltaTime * fadePerSecond);
+        if (fade != null) {
+            float alpha = fade.update(deltaTime);
             sprite.setAlpha(alpha);
             if (alpha <= 0) {
                 finishVisibility(false);
@@ -109,12 +109,12 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         hasDepth = true;
     }
 
-    public void setFade(float fadePerSecond) {
-        this.fadePerSecond = fadePerSecond;
+    public void setFade(Fade fade) {
+        this.fade = fade;
     }
 
     public void finishVisibility(boolean visible) {
-        if (fadePerSecond != 0) {
+        if (fade != null) {
             manager.complete(CompleteEvent.fade(manager, this));
         }
         if (visible) {
@@ -123,7 +123,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
             sprite.setAlpha(0);
             removeFromScene();
         }
-        fadePerSecond = 0;
+        fade = null;
     }
 
     public void setSprite(Sprite s) {

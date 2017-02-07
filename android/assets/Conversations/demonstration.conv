@@ -19,7 +19,7 @@
 
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>
-        <visible id="Detective" visible="true" fade="0.5" wait="true"/>
+        <visible id="Detective" visible="true" fadeTime="0.5" wait="true"/>
 
         <position id="Librarian" x="600" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
@@ -55,7 +55,9 @@
         <image instance="test">
             <visibility visible="false" fadeTime="0.1" wait="false"/>
         </image>
-        <visible id="Librarian" visible="true" fade="2" wait="true"/>
+        <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>
+
+        <fade exitTime="1" enterTime="1" color="BLACK" enterType="linear" exitType="fade" wait="true"/>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation id="Detective" animation="Edgeworth_Static"/>
@@ -129,7 +131,7 @@
 
         Detective: (His story's getting phonier by the minute. Now I've just got to break through
         his lies once and for all!)
-        <visible id="Librarian" visible="false" fade="1.5"/>
+        <visible id="Librarian" visible="false" fadeTime="1.5"/>
     </branch>
 
 </conversation>

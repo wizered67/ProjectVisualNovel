@@ -1,10 +1,12 @@
 package com.wizered67.game.GUI.Conversations.Commands.images;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.GUI.Conversations.scene.Fade;
 import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
@@ -22,14 +24,17 @@ class ImageVisibilityCommand implements ConversationCommand {
     private boolean wait;
     /** Whether the command is completed and the next one can be executed. */
     private boolean done;
+    /** The name of the interpolation to use for fading in and out. */
+    private String interpolation = "linear";
 
     ImageVisibilityCommand() {}
 
-    ImageVisibilityCommand(String instance, String group, boolean visible, float time, boolean w) {
+    ImageVisibilityCommand(String instance, String group, boolean visible, float time, String fadeType, boolean w) {
         instanceIdentifier = instance;
         groupIdentifier = group;
         show = visible;
         fadeTime = time;
+        interpolation = fadeType;
         wait = w;
         done = !wait;
     }
@@ -51,9 +56,8 @@ class ImageVisibilityCommand implements ConversationCommand {
                     image.finishVisibility(show);
                     done = true;
                 } else {
-                    float factor = show ? 1f : -1f;
-                    float fadePerSecond = factor / fadeTime;
-                    image.setFade(fadePerSecond);
+                    int direction = show ? 1 : -1;
+                    image.setFade(new Fade(interpolation, image.getSprite().getColor().a, fadeTime, direction));
                 }
             }
         });
@@ -95,8 +99,9 @@ class ImageVisibilityCommand implements ConversationCommand {
     static ImageVisibilityCommand makeCommand(String instance, String group, XmlReader.Element element) {
         boolean show = element.getBooleanAttribute("visible", false);
         float fade = element.getFloatAttribute("fadeTime", 0);
+        String fadeType = element.getAttribute("fadeType", "linear");
         boolean wait = element.getBooleanAttribute("wait", true);
-        return new ImageVisibilityCommand(instance, group, show, fade, wait);
+        return new ImageVisibilityCommand(instance, group, show, fade, fadeType, wait);
     }
 
     /**

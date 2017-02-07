@@ -185,6 +185,12 @@ public class GUIManager {
 	public static void update(float deltaTime){
         conversationController.update(deltaTime);
 	}
+	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
+     * the time elapsed since the last frame. */
+	public static void updateAndRenderStage(float deltaTime) {
+        stage.act(deltaTime);
+        stage.draw();
+    }
     /** Resize all GUI elements when the screen is resized to dimensions
      * WIDTH by HEIGHT. Keeps GUI elements proportional to virtual size.
      */
