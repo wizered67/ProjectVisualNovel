@@ -121,6 +121,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
      * list of entities in the scene, which is O(logN + D), where N is the total number of entities
      * in the list and D is the number of entities with the same depth as this entity's previous depth.
      */
+    //todo split into 2 methods? one changes variable and other updates.
     public void setDepth(SceneManager m, int newDepth) {
         if (inScene) {
             if (hasDepth) {
@@ -132,6 +133,10 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         } else {
             depth = newDepth;
         }
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     public void setFade(Fade fade) {

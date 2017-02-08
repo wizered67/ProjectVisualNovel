@@ -26,16 +26,19 @@ public class CharacterPositionCommand implements ConversationCommand {
     private int depth;
     /** Whether the depth has been specified and should be changed. */
     private boolean depthSpecified;
+    /** Whether changes should be relative to current position. */
+    private boolean relative;
 
     CharacterPositionCommand() {}
 
-    CharacterPositionCommand(String inst, Vector2 pos, int depth) {
+    CharacterPositionCommand(String inst, Vector2 pos, int depth, boolean rel) {
         identifier = inst;
         position = pos;
         this.depth = depth;
         xSpecified = true;
         ySpecified = true;
         depthSpecified = true;
+        relative = rel;
     }
 
     /**
@@ -46,13 +49,25 @@ public class CharacterPositionCommand implements ConversationCommand {
         SceneManager manager = conversationController.sceneManager();
         SceneCharacter character = manager.getCharacterByIdentifier(identifier);
         if (xSpecified) {
-            character.setX(position.x);
+            float newX = position.x;
+            if (relative) {
+                newX += character.getPosition().x;
+            }
+            character.setX(newX);
         }
         if (ySpecified) {
-            character.setY(position.y);
+            float newY = position.y;
+            if (relative) {
+                newY += character.getPosition().y;
+            }
+            character.setY(newY);
         }
         if (depthSpecified) {
-            character.setDepth(manager, depth);
+            int newDepth = depth;
+            if (relative) {
+                newDepth += character.getDepth();
+            }
+            character.setDepth(manager, newDepth);
         }
     }
 
@@ -79,10 +94,11 @@ public class CharacterPositionCommand implements ConversationCommand {
         String xString = element.getAttribute("x", null);
         String yString = element.getAttribute("y", null);
         String depthString = element.getAttribute("depth", null);
+        boolean relative = element.getBooleanAttribute("relative", false);
         float x = (xString != null) ? Float.parseFloat(xString) : 0;
         float y = (yString != null) ? Float.parseFloat(yString) : 0;
         int depth = (depthString != null) ? Integer.parseInt(depthString) : 0;
-        CharacterPositionCommand command = new CharacterPositionCommand(instance, new Vector2(x, y), depth);
+        CharacterPositionCommand command = new CharacterPositionCommand(instance, new Vector2(x, y), depth, relative);
         if (xString == null) {
             command.xSpecified = false;
         }

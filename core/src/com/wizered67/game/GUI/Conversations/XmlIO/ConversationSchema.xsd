@@ -192,6 +192,7 @@
         <xs:attribute name="x" type="xs:float" use="optional"/>
         <xs:attribute name="y" type="xs:float" use="optional"/>
         <xs:attribute name="depth" type="xs:integer" use="optional"/>
+        <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
     </xs:complexType>
 
     <xs:complexType name="visibleType">

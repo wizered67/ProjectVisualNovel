@@ -29,10 +29,12 @@ class ImagePositionCommand implements ConversationCommand {
     private int depth;
     /** Whether the depth has been specified and should be changed. */
     private boolean depthSpecified;
+    /** Whether the changes should be made relative to the current position. */
+    private boolean relative;
 
     ImagePositionCommand() {}
 
-    ImagePositionCommand(String inst, String group, Vector2 pos, int depth) {
+    ImagePositionCommand(String inst, String group, Vector2 pos, int depth, boolean rel) {
         instance = inst;
         groupIdentifier = group;
         position = pos;
@@ -40,6 +42,7 @@ class ImagePositionCommand implements ConversationCommand {
         xSpecified = true;
         ySpecified = true;
         depthSpecified = true;
+        relative = rel;
     }
 
     /**
@@ -52,13 +55,25 @@ class ImagePositionCommand implements ConversationCommand {
             @Override
             public void apply(SceneImage image) {
                 if (xSpecified) {
-                    image.setX(position.x);
+                    float newX = position.x;
+                    if (relative) {
+                        newX += image.getPosition().x;
+                    }
+                    image.setX(newX);
                 }
                 if (ySpecified) {
-                    image.setY(position.y);
+                    float newY = position.y;
+                    if (relative) {
+                        newY += image.getPosition().y;
+                    }
+                    image.setY(newY);
                 }
                 if (depthSpecified) {
-                    image.setDepth(manager, depth);
+                    int newDepth = depth;
+                    if (relative) {
+                        newDepth += image.getDepth();
+                    }
+                    image.setDepth(manager, newDepth);
                 }
             }
         });
@@ -86,10 +101,11 @@ class ImagePositionCommand implements ConversationCommand {
         String xString = element.getAttribute("x", null);
         String yString = element.getAttribute("y", null);
         String depthString = element.getAttribute("depth", null);
+        boolean relative = element.getBooleanAttribute("relative", false);
         float x = (xString != null) ? Float.parseFloat(xString) : 0;
         float y = (yString != null) ? Float.parseFloat(yString) : 0;
         int depth = (depthString != null) ? Integer.parseInt(depthString) : 0;
-        ImagePositionCommand command = new ImagePositionCommand(instance, group, new Vector2(x, y), depth);
+        ImagePositionCommand command = new ImagePositionCommand(instance, group, new Vector2(x, y), depth, relative);
         if (xString == null) {
             command.xSpecified = false;
         }
