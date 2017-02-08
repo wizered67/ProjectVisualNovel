@@ -128,6 +128,10 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         hasDepth = true;
     }
 
+    public boolean hasDepth() {
+        return hasDepth;
+    }
+
     public void setFade(Fade fade) {
         this.fade = fade;
     }

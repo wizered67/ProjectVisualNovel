@@ -36,7 +36,7 @@
             <group>test</group>
             <texture id="icon"/>
             <position x="50" y="160" depth="5"/>
-            <visibility visible="true" fadeTime="1" wait="true" fadeType="pow5Out"/>
+            <visibility visible="true" fadeTime="1" wait="true" fadeType="linear"/>
         </image>
 
         <image instance="test2">
