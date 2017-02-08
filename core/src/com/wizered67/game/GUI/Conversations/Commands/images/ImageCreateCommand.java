@@ -8,9 +8,12 @@ import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
- * Created by Adam on 1/30/2017.
+ * Creates a new image. When executed it instantiates a new SceneImage
+ * with the specified instance identifier and adds it to the SceneManager.
+ * @author Adam Victor
  */
 class ImageCreateCommand implements ConversationCommand {
+    /** The instance identifier the created image will have. Should be unique. */
     private String instance;
 
     ImageCreateCommand() {}

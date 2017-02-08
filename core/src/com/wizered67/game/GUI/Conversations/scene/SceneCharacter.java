@@ -12,6 +12,8 @@ import com.wizered67.game.GameManager;
 /**
  * Represents a character in the game. Contains information about the
  * character's sprite, animation, name, and speaking sound.
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ * It uses depth in compareTo for ordering and uses identifier for equals.
  * @author Adam Victor
  */
 public class SceneCharacter extends SceneEntity {

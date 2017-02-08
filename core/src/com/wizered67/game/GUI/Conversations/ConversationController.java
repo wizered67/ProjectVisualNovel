@@ -10,7 +10,6 @@ import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.Inputs.Controllable;
-import com.wizered67.game.Inputs.MyInputProcessor;
 import com.wizered67.game.Inputs.MyInputProcessor.ControlType;
 import com.wizered67.game.Saving.Serializers.GUIState;
 import com.wizered67.game.Scripting.GroovyScriptManager;
@@ -57,7 +56,7 @@ public class ConversationController implements Controllable {
     /** Array containing lists of ConversationCommands that would be executed when the
      * corresponding choice is made. */
     private List<ConversationCommand>[] choiceCommands;
-    //todo document
+    /** The index of the choice that is currently being highlighted. */
     private int choiceHighlighted = -1;
 
     /** A LinkedList (Queue) containing the ConversationCommands in the current branch, to be
@@ -528,6 +527,10 @@ public class ConversationController implements Controllable {
         }
     }
 
+    /** Called when the left mouse button is clicked or a confirm key is pressed. If there's a
+     * choice being shown, choose the selected one. If there's text being shown, proceed through it
+     * and fire an input CompleteEvent.
+     */
     private void inputConfirm() {
         if (choiceShowing) {
             if (choiceHighlighted != -1) {
@@ -544,6 +547,9 @@ public class ConversationController implements Controllable {
         }
     }
 
+    /** Change the currently selected choice by AMOUNT. If it would be greater than the
+     * number of choices or less than 0, loop around.
+     */
     private void changeChoice(int amount) {
         if (!choiceShowing) {
             return;
@@ -575,7 +581,7 @@ public class ConversationController implements Controllable {
             inputConfirm();
         }
     }
-
+    /** Handles a key event by calling methods depending on the ControlType. */
     @Override
     public void keyEvent(ControlType control, int key, boolean pressed) {
         if (pressed) {

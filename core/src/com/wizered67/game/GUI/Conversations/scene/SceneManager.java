@@ -20,9 +20,8 @@ import com.wizered67.game.Saving.SaveManager;
 import java.util.*;
 
 /**
- * Represents a Scene with a set of characters that are updated
- * and drawn each frame. Alerts the ConversationController when
- * an Animation is completed.
+ * Represents a Scene with a set of entities, in effect characters and images, that are updated
+ * and drawn each frame. Alerts the ConversationController when an animation or fade is completed.
  * @author Adam Victor
  */
 public class SceneManager {
@@ -62,6 +61,7 @@ public class SceneManager {
         imagesByInstance = new HashMap<>();
         */
     }
+
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
         conversationController = mw;
@@ -72,6 +72,7 @@ public class SceneManager {
         sortedEntities = new ArrayList<>();
         createFadeTexture();
     }
+
     /** Returns the Conversation Controller associated with this SceneManager. */
     public ConversationController conversationController() {
         return conversationController;
@@ -86,6 +87,7 @@ public class SceneManager {
         fadeTexture.draw(pixmap, 0, 0);
         pixmap.dispose();
     }
+
     /** Called each frame to draw the background, update the Animation of each SceneCharacter, and
      * then draw them. DELTA is the amount of time that has elapsed since the
      * last frame.
@@ -114,6 +116,7 @@ public class SceneManager {
         drawFade(delta);
         batch.end();
     }
+
     /** Draws the screen fade currently in effect. DELTA TIME is time elapsed since last frame. */
     private void drawFade(float deltaTime) {
         if (fade != null) {
@@ -153,6 +156,10 @@ public class SceneManager {
         }
         sceneCharacters.clear();
     }
+
+    /** Adds to the map of allCharacters a new character with identifier IDENTIFIER,
+     * initial name NAME, and speaking sound SPEAKING SOUND.
+     */
     public static void createCharacter(String identifier, String name, String speakingSound) {
         if (!allCharacters.containsKey(identifier.toLowerCase())) {
             SceneCharacter newCharacter = new SceneCharacter(identifier.toLowerCase(), null, speakingSound);
@@ -160,6 +167,7 @@ public class SceneManager {
             allCharacters.put(identifier.toLowerCase(), newCharacter);
         }
     }
+
     /** Returns the SceneCharacter with the identifier IDENTIFIER, or
      * outputs an error if no such character is in the scene.
      */
@@ -171,6 +179,10 @@ public class SceneManager {
         return character;
     }
 
+    /** Applies some ImageAction ACTION to either a single SceneImage with id INSTANCE or an entire
+     * group with group id GROUP, if INSTANCE is empty. Returns true if the action was successfully
+     * applied to at least one image and false otherwise.
+     */
     public boolean applyImageCommand(String instance, String group, ImageAction action) {
         if (instance.isEmpty() && !group.isEmpty()) {
             Set<SceneImage> images = getImagesByGroup(group);
@@ -191,11 +203,19 @@ public class SceneManager {
         }
     }
 
+    /** Adds the SceneImage IMAGE to the scene by adding it to the correct group
+     * and mapping its instance identifier to it. It is not, however, added to the sorted list.
+     * That is called from within SceneImage once its depth has been set.
+     */
     public void addImage(SceneImage image) {
         addImageToGroup(image, image.getGroup());
         imagesByInstance.put(image.getInstanceIdentifier(), image);
     }
 
+    /** Adds the SceneEntity ENTITY to the proper place in the list of sortedEntities.
+     * Uses binary search on the list to find the correct index to add it to. Therefore, sortedEntities
+     * list must always be kept in sorted order.
+     */
     public void addToSorted(SceneEntity entity) {
         int newIndex = Collections.binarySearch(sortedEntities, entity);
         if (newIndex < 0) {
@@ -204,6 +224,13 @@ public class SceneManager {
         sortedEntities.add(newIndex, entity);
     }
 
+    /** Removes the SceneEntity ENTITY from the sorted list. It uses binary search to locate the
+     * index of the first SceneEntity with the same depth as the entity. From there, it iterates through
+     * the list until it finds ENTITY. Therefore, removing is not O(logN) like adding, but is instead
+     * O(logN + D), where N is the total number of entities and D is the number with the same depth as this
+     * entity. The different, however, should hopefully be negligable in practice, as long as the number of entities
+     * at one depth is not some absurd amount.
+     */
     public void removeFromSorted(SceneEntity entity) {
         int oldIndex = Collections.binarySearch(sortedEntities, entity);
         if (oldIndex < 0) {
@@ -219,16 +246,25 @@ public class SceneManager {
         }
     }
 
+    /** Removes the SceneImage IMAGE from the scene by removing it from its group
+     * and removing the mapping between its instance identifier and it.
+     */
     public void removeImage(SceneImage image) {
         removeImageFromGroup(image, image.getGroup());
         imagesByInstance.remove(image.getInstanceIdentifier());
     }
 
+    /** Changes the image group of SceneImage IMAGE by first removing it from the old group
+     * and then adding it to the new one. Because it is necessary to remove from the old,
+     * the OLD GROUP must be passed in as an argument.
+     */
     public void changeImageGroup(SceneImage image, String oldGroup) {
         removeImageFromGroup(image, oldGroup);
         addImageToGroup(image, image.getGroup());
     }
-
+    /** Adds the SceneImage IMAGE to group GROUP. If the group does not already exist,
+     * it first creates it by mapping the group name to an empty set. Afterwards, or if the
+     * group does exist, IMAGE is added to the set of images in the group. */
     public void addImageToGroup(SceneImage image, String group) {
         if (group != null && !group.isEmpty()) {
             Set<SceneImage> imagesOfGroup = imagesByGroup.get(group);
@@ -239,7 +275,7 @@ public class SceneManager {
             imagesOfGroup.add(image);
         }
     }
-
+    /** Removes the SceneImage IMAGE from the group GROUP. */
     public void removeImageFromGroup(SceneImage image, String group) {
         if (group != null && !group.isEmpty()) {
             Set<SceneImage> imagesOfGroup = imagesByGroup.get(group);
@@ -248,15 +284,15 @@ public class SceneManager {
             }
         }
     }
-
+    /** Returns the SceneImage with identifier INSTANCE IDENTIFIER. */
     public SceneImage getImage(String instanceIdentifier) {
         return imagesByInstance.get(instanceIdentifier);
     }
-
+    /** Returns the Set of all SceneImages with the group identifier GROUP. */
     public Set<SceneImage> getImagesByGroup(String group) {
         return imagesByGroup.get(group);
     }
-
+    /** Disposes resources that can be freed from memory. */
     public void dispose() {
         fadeTexture.dispose();
     }

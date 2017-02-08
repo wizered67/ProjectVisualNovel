@@ -9,11 +9,15 @@ import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
- * Created by Adam on 1/27/2017.
+ * Command that sets the texture of an image or group of images.
+ * @author Adam Victor
  */
 class ImageTextureCommand implements ConversationCommand {
+    /** The resource identifier of the texture the image should be changed to. */
     private String newTexture;
+    /** The instance identifier of the image to change. If empty, the command is applied to a group. */
     private String instanceIdentifier;
+    /** The group of images to change, only used if instanceIdentifier is empty. */
     private String groupIdentifier;
 
     ImageTextureCommand() {}

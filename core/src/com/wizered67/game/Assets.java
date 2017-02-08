@@ -38,10 +38,17 @@ import java.util.regex.Pattern;
  * @author Adam Victor
  */
 public class Assets {
+    /** XML Reader used for reading XML but separating text into its own elements. */
     private MixedXmlReader xmlReader;
+    /** AssetManager used for loading and getting resources.
+     * When its methods are called through this, first map identifier to filename. */
     private AssetManager assetManager;
+    /** Mapping between asset identifiers and the filenames they can be accessed with. */
     private Map<String, String> assetIdentifiers;
+    /** Map between animation names and the Animation object that corresponds to it. */
     private Map<String, Animation> allAnimations;
+    /** The root Element of the loaded XML file. */
+    private Element root;
     private final String RESOURCE_XML = "Resources.xml";
 
     private static final String ANIMATIONS_DIRECTORY = "Animations";
@@ -59,11 +66,11 @@ public class Assets {
     private static final String TEXTURES_TAG = "textures";
 
     private static final Pattern RESOURCE_PATTERN = Pattern.compile("\\s*(.+)\\s+(.+)\\s*");
-
+    /** If no AssetManager is specified, make a new one and load to it. */
     public Assets() {
         this(new AssetManager());
     }
-
+    /** Loads all resources, loading them into AssetManager MANAGER. */
     public Assets(AssetManager manager) {
         assetManager = manager;
         assetIdentifiers = new HashMap<>();
@@ -71,15 +78,15 @@ public class Assets {
         loadResources();
         assetManager.setLoader(Conversation.class, new ConversationAssetLoader(new InternalFileHandleResolver()));
     }
-
+    /** Returns the Animation with identifier IDENTIFIER. */
     public Animation getAnimation(String identifier) {
         return allAnimations.get(identifier);
     }
-
+    /** Loads all resources, except animations themselves which must be loaded once the animation files finish. */
     public void loadResources() {
         xmlReader = new MixedXmlReader();
         try {
-            Element root = xmlReader.parse(Gdx.files.internal(RESOURCE_XML));
+            root = xmlReader.parse(Gdx.files.internal(RESOURCE_XML));
             loadTextures(root);
             loadAnimationFiles(root);
             //loadAnimations(root);
@@ -90,7 +97,8 @@ public class Assets {
             io.printStackTrace();
         }
     }
-
+    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
+     * in the child of ROOT named TEXTURES_TAG. */
     @SuppressWarnings("unchecked")
     private void loadTextures(Element root) {
         Object[] data = getResources(root, TEXTURES_TAG, TEXTURES_DIRECTORY);
@@ -101,6 +109,8 @@ public class Assets {
             load(id, Texture.class);
         }
     }
+    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
+     * in the child of ROOT named ANIMATION_FILES_TAG. */
     @SuppressWarnings("unchecked")
     private void loadAnimationFiles(Element root) {
         Object[] data = getResources(root, ANIMATION_FILES_TAG, ANIMATIONS_DIRECTORY);
@@ -112,30 +122,30 @@ public class Assets {
         }
     }
 
+    /** Must be called once animation files are loaded. Goes through each one and creates Animation
+     * objects with the data based off of the data from the children of the element named ANIMATIONS_TAG.
+     */
     public void loadAnimations() {
-        try {
-            Element root = xmlReader.parse(Gdx.files.internal(RESOURCE_XML));
-            Element anims = root.getChildByName(ANIMATIONS_TAG);
-            for (int c = 0; c < anims.getChildCount(); c += 1) {
-                Element animationData = anims.getChild(c);
-                String atlasAnimation = animationData.getAttribute("id");
-                float duration = animationData.getFloatAttribute("frameDuration");
-                String mode = animationData.getAttribute("playMode", "NORMAL");
-                int index = atlasAnimation.indexOf('_');
-                if (index <= 0) {
-                    GameManager.error("Malformed animation name '" + atlasAnimation + "'.");
-                }
-                String atlasName = atlasAnimation.substring(0, index);
-                String animationName = atlasAnimation.substring(index + 1);
-                TextureAtlas atlas = get(atlasName);
-                Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
-                Animation animation = new Animation(duration, region, Animation.PlayMode.valueOf(mode));
-                allAnimations.put(atlasAnimation, animation);
+        Element anims = root.getChildByName(ANIMATIONS_TAG);
+        for (int c = 0; c < anims.getChildCount(); c += 1) {
+            Element animationData = anims.getChild(c);
+            String atlasAnimation = animationData.getAttribute("id");
+            float duration = animationData.getFloatAttribute("frameDuration");
+            String mode = animationData.getAttribute("playMode", "NORMAL");
+            int index = atlasAnimation.indexOf('_');
+            if (index <= 0) {
+                GameManager.error("Malformed animation name '" + atlasAnimation + "'.");
             }
-        } catch (IOException io) {
-            io.printStackTrace();
+            String atlasName = atlasAnimation.substring(0, index);
+            String animationName = atlasAnimation.substring(index + 1);
+            TextureAtlas atlas = get(atlasName);
+            Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
+            Animation animation = new Animation(duration, region, Animation.PlayMode.valueOf(mode));
+            allAnimations.put(atlasAnimation, animation);
         }
     }
+    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
+     * in the child of ROOT named MUSIC_TAG. */
     @SuppressWarnings("unchecked")
     private void loadMusic(Element root) {
         Object[] data = getResources(root, MUSIC_TAG, MUSIC_DIRECTORY);
@@ -146,6 +156,8 @@ public class Assets {
             load(id, Music.class);
         }
     }
+    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
+     * in the child of ROOT named SOUND_TAG. */
     @SuppressWarnings("unchecked")
     private void loadSounds(Element root) {
         Object[] data = getResources(root, SOUNDS_TAG, SOUNDS_DIRECTORY);
@@ -157,6 +169,8 @@ public class Assets {
         }
     }
 
+    /** Loads, creates, and adds to all SceneManager's map of all characters, the characters containing
+     * in the child of ROOT named CHARACTERS_TAG. */
     private void loadCharacters(Element root) {
         Element characters = root.getChildByName(CHARACTERS_TAG);
         for (int c = 0; c < characters.getChildCount(); c += 1) {
@@ -168,6 +182,11 @@ public class Assets {
         }
     }
 
+    /** Get all resources from the XMLElement ROOT's child with the name TYPE. Looks
+     * for the resources in the directory DIRECTORY. Returns an array containing both
+     * a map of all identifier, filename pairs found and a list of all resources to load
+     * immediately.
+     */
     private Object[] getResources(Element root, String type, String directory) {
         Map<String, String> resources = new HashMap<>();
         List<String> loadList = new ArrayList<>();
@@ -216,11 +235,28 @@ public class Assets {
         }
         return new Object[] { resources, loadList };
     }
-
+    /** Display an error if the identifier is already in use. */
     private static void identifierError(String id) {
-        System.err.println("Identifier '" + id + "' is already in use.");
+        GameManager.error("Identifier '" + id + "' is already in use.");
     }
 
+    /** Tells the AssetManager to load the file of type TYPE with filename FILENAME. In effect, calls the
+     * regular AssetManager load method without first mapping an identifier to a filename.
+     */
+    public synchronized <T> void loadRaw(String fileName, Class<T> type) {
+        assetManager.load(fileName, type);
+    }
+    /** Tells the AssetManager to get the file with filename FILENAME. In effect, calls the
+     * regular AssetManager get method without first mapping an identifier to a filename.
+     */
+    public synchronized <T> T getRaw(String fileName) {
+        return assetManager.get(fileName);
+    }
+
+
+    /** Below are the regular methods of an AssetManager, except many have been changed so that they can be called with
+     * a resource identifier, which is then mapped to the actual filename.
+     */
 
     public synchronized <T> T get(String fileName) {
         return assetManager.get(assetIdentifiers.get(fileName));
@@ -249,15 +285,6 @@ public class Assets {
     public synchronized <T> void load(String fileName, Class<T> type) {
         assetManager.load(assetIdentifiers.get(fileName), type);
     }
-
-    public synchronized <T> void loadRaw(String fileName, Class<T> type) {
-        assetManager.load(fileName, type);
-    }
-    //todo put near top, documentation ^ too
-    public synchronized <T> T getRaw(String fileName) {
-        return assetManager.get(fileName);
-    }
-
 
     public synchronized <T> void load(String fileName, Class<T> type, AssetLoaderParameters<T> parameter) {
         assetManager.load(assetIdentifiers.get(fileName), type, parameter);

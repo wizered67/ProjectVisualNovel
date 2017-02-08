@@ -2,6 +2,7 @@ package com.wizered67.game.GUI.Conversations.scene;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class Fade {
     }
 
     public float update(float delta) {
-        progress += (delta / totalTime);
+        progress = MathUtils.clamp(progress + delta / totalTime, 0, 1);
         Interpolation interpolation = interpolationTypes.get(interpolationType);
         return initialValue + remaining * (interpolation.apply(progress) * Math.signum(direction));
     }

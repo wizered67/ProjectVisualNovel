@@ -68,32 +68,6 @@ public class SaveManager {
                 output.writeInt(Color.rgba8888(color));
             }
         });
-        /*
-        TestClass test = new TestClass();
-        test.test = "Hello world!";
-        Output o = new Output(Gdx.files.local("saveloadtest.sav").write(false));
-        kryo.writeObject(o, test);
-        o.close();
-        */
-        /*
-        Input i = new Input(Gdx.files.local("saveloadtest.sav").read());
-        SceneImage test = kryo.readObject(i, SceneImage.class);
-        i.close();
-        */
-        /*
-        Sprite sprite = new Sprite();
-        sprite.setColor(Color.CYAN);
-        sprite.setX(50);
-        sprite.setY(100);
-        sprite.setScale(2, 2);
-        sprite.setRotation(90);
-        SceneImage image = new SceneImage("Hello world instance id");
-        image.setSprite(sprite);
-        Output o = new Output(Gdx.files.local("saveloadtest.sav").write(false));
-        kryo.writeObject(o, image);
-        o.close();
-        */
-
     }
     /** Saves all game data to the file FILEHANDLE. */
     public static void save(FileHandle fileHandle) {

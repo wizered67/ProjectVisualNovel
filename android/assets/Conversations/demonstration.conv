@@ -19,7 +19,7 @@
 
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>
-        <visible id="Detective" visible="true" fadeTime="0.5" wait="true"/>
+        <visible id="Detective" visible="true" fadeTime="1" wait="true" fadeType="circle"/>
 
         <position id="Librarian" x="600" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
@@ -36,7 +36,7 @@
             <group>test</group>
             <texture id="icon"/>
             <position x="50" y="160" depth="5"/>
-            <visibility visible="true" fadeTime="1" wait="true"/>
+            <visibility visible="true" fadeTime="1" wait="true" fadeType="pow5Out"/>
         </image>
 
         <image instance="test2">
@@ -54,7 +54,7 @@
         Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
         <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>
 
-        <fade exitTime="1" enterTime="1" color="BLACK" enterType="linear" exitType="fade" wait="true">
+        <fade exitTime="0.5" enterTime="0.2" color="WHITE" enterType="linear" exitType="fade" wait="true">
             <image instance="test">
                 <visibility visible="false" fadeTime="0.1" wait="false"/>
             </image>

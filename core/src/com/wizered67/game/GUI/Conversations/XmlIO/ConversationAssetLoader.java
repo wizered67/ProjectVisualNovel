@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.GUIManager;
 
-
+/** Extends AsynchronousAssetLoader in order to load a Conversation asynchronously. */
 public class ConversationAssetLoader extends AsynchronousAssetLoader<Conversation, ConversationAssetLoader.ConvParameter> {
 
     private Conversation result;

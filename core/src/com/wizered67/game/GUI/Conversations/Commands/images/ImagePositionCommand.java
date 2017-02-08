@@ -10,15 +10,24 @@ import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
- * Created by Adam on 1/27/2017.
+ * Command that sets the position and depth of an image or group of images.
+ * Any component not specified is left unchanged.
+ * @author Adam Victor
  */
 class ImagePositionCommand implements ConversationCommand {
+    /** The instance identifier of the image to act on, or empty if it should be a group. */
     private String instance;
+    /** The group of images to act on, only used if instance identifier is left empty. */
     private String groupIdentifier;
+    /** The new position to set the image to, if specified. */
     private Vector2 position;
+    /** Whether the x component of position has been specified and should be changed. */
     private boolean xSpecified;
+    /** Whether the y component of position has been specified and should be changed. */
     private boolean ySpecified;
+    /** The new depth to set the image to, if specified. */
     private int depth;
+    /** Whether the depth has been specified and should be changed. */
     private boolean depthSpecified;
 
     ImagePositionCommand() {}

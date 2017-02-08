@@ -1,6 +1,5 @@
 package com.wizered67.game.GUI.Conversations.Commands.images;
 
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
@@ -11,10 +10,15 @@ import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
- * Created by Adam on 1/27/2017.
+ * Command that changes the visibility of an image or group of images. Can instantly change
+ * or fade in/out using interpolation.
+ * @author Adam Victor
  */
 class ImageVisibilityCommand implements ConversationCommand {
+    /** The instance identifier of the image to change the visibility of.
+     * If empty, the groupIdentifier is used to apply it to a group. */
     private String instanceIdentifier;
+    /** The identifier of the group of images to apply this command to. */
     private String groupIdentifier;
     /** Whether the SceneImage should be visible. */
     private boolean show;
@@ -80,6 +84,9 @@ class ImageVisibilityCommand implements ConversationCommand {
      */
     @Override
     public void complete(CompleteEvent c) {
+        //if it is a fade end event, extract data about event to see if the ended Entity
+        //matches the instance associated with the identifier of this command. If applied
+        //to a group, this is completed as soon as the first one is done.
         if (c.type == CompleteEvent.Type.FADE_END) {
             Object[] data = (Object[]) c.data;
             SceneManager manager = (SceneManager) data[0];

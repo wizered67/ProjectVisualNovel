@@ -9,11 +9,19 @@ import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
 /**
- * Created by Adam on 1/30/2017.
+ * A command for changing the group of a single image or a group of images, depending
+ * on whether an instanceIdentifier was specified or left empty. Executing this command
+ * invokes the changeGroup method on specified image(s).
+ * @author Adam Victor
  */
 class ImageGroupChangeCommand implements ConversationCommand {
+    /** The instance identifier of the image to change, or empty if an
+     * entire group should be changed. */
     private String instanceIdentifier;
+    /** The group identifier of the set of images to change, used only if
+     * instanceIdentifier is empty. */
     private String groupIdentifier;
+    /** The new group that the image or set of images should be assigned to. */
     private String newGroup;
 
     ImageGroupChangeCommand() {}

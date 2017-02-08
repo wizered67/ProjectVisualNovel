@@ -86,11 +86,6 @@ public class LoadingScreen implements Screen {
             GUIManager.conversationController().setBranch("default");
             //GameManager.assetManager().loadRaw("Conversations/super long.conv", Conversation.class);
             SaveManager.init();
-            if (Constants.LOAD) { //todo fixme
-                SaveManager.load(Gdx.files.local("fullsavetest.sav"));
-                ConversationController test = GUIManager.conversationController();
-                System.out.println("Done loading.");
-            }
         }
         System.out.println(GameManager.assetManager().getProgress());
 

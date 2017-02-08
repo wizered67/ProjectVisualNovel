@@ -5,9 +5,18 @@ import com.wizered67.game.GUI.Conversations.Commands.CommandSequence;
 
 
 /**
- * Created by Adam on 1/27/2017.
+ * This class is mapped to the <image> command so that the makeCommand
+ * method is called for any image related command. Inside the image tag,
+ * there are a number of different elements for modifying properties of images.
+ * The makeCommand method will automatically create the commands necessary
+ * to make the changes. The result of makeCommand is a CommandSequence which
+ * contains all the necessary commands so that they can be executed in sequence.
+ * @author Adam Victor
  */
 public class ModifyImageCommandCreator {
+    /** Extracts all information from the <image> element and uses it to create
+     * the subcommands necessary to modify its state as specified.
+     */
     public static CommandSequence makeCommand(XmlReader.Element element) {
         CommandSequence result = new CommandSequence();
         String instance = element.getAttribute("instance", "");
