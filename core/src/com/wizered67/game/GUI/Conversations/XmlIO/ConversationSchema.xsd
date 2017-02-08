@@ -115,8 +115,10 @@
 
     <xs:complexType name="setpositionType">
         <xs:attribute type="characterType" name="id" use="required"/>
-        <xs:attribute type="xs:float" name="x" use="required"/>
-        <xs:attribute type="xs:float" name="y" use="required"/>
+        <xs:attribute type="xs:float" name="x" use="optional"/>
+        <xs:attribute type="xs:float" name="y" use="optional"/>
+        <xs:attribute type="xs:integer" name="depth" use="optional"/>
+        <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
     </xs:complexType>
 
     <xs:complexType name="delayType">

@@ -160,7 +160,9 @@ public class SceneCharacter extends SceneEntity {
     public void addToScene(SceneManager sm) {
         manager = sm;
         manager.addCharacter(identifier);
-        setDepth(manager, 0);
+        inScene = true;
+        setDepth(manager, depth);
+        //setDepth(manager, 0);
     }
     /** Removes this SceneCharacter from the SceneManager. */
     public void removeFromScene() {
@@ -169,6 +171,7 @@ public class SceneCharacter extends SceneEntity {
             manager = null;
         }
         removed = true;
+        inScene = false;
     }
     @Override
     public int hashCode() {

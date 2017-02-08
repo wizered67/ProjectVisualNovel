@@ -59,10 +59,6 @@ class ImagePositionCommand implements ConversationCommand {
                 }
                 if (depthSpecified) {
                     image.setDepth(manager, depth);
-                } else {
-                    if (!image.hasDepth()) {
-                        image.setDepth(manager, 0);
-                    }
                 }
             }
         });

@@ -22,6 +22,8 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     protected boolean hasDepth;
     /** Whether this entity has been removed. */
     protected boolean removed = false;
+    /** Whether this entity has been added to the scene yet. */
+    protected boolean inScene = false;
     /** Fade object used to control fading in and out. */
     protected Fade fade;
     /** Method called to restore state after saved variables are reloaded. */
@@ -120,16 +122,16 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
      * in the list and D is the number of entities with the same depth as this entity's previous depth.
      */
     public void setDepth(SceneManager m, int newDepth) {
-        if (hasDepth) {
-            m.removeFromSorted(this);
+        if (inScene) {
+            if (hasDepth) {
+                m.removeFromSorted(this);
+            }
+            depth = newDepth;
+            m.addToSorted(this);
+            hasDepth = true;
+        } else {
+            depth = newDepth;
         }
-        depth = newDepth;
-        m.addToSorted(this);
-        hasDepth = true;
-    }
-
-    public boolean hasDepth() {
-        return hasDepth;
     }
 
     public void setFade(Fade fade) {
