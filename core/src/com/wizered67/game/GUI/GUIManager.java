@@ -22,9 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.GUI.Conversations.Transcript;
 import com.wizered67.game.Saving.SaveManager;
 
 /** Contains GUI elements and the ConversationController which the GUI elements are passed into.
@@ -64,6 +66,9 @@ public class GUIManager {
     private static boolean saveInputShowing = false;
     /** GUI List that shows all options for debug menu. */
     private static List<String> debugSelector;
+
+    private static ScrollPane transcriptPane;
+    private static Label transcriptLabel;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
@@ -167,6 +172,7 @@ public class GUIManager {
 		//tooltipTable.pad(10).background("default-round");
 		//tooltipTable.add(new TextButton("Fancy tooltip!", skin));
         addDebug();
+        addTranscript();
 	}
     public GUIManager() {
         conversationController = new ConversationController();
@@ -184,6 +190,17 @@ public class GUIManager {
      */
 	public static void update(float deltaTime){
         conversationController.update(deltaTime);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) {
+            transcriptPane.setVisible(!transcriptPane.isVisible());
+            updateTranscript(); //todo fix. part of hacky solution to make update first time
+            //transcriptPane.invalidate();
+            transcriptPane.validate();
+            transcriptPane.setScrollPercentY(1f);
+            transcriptPane.updateVisualScroll();
+            transcriptPane.setVelocityY(0);
+            stage.setScrollFocus(transcriptPane);
+        }
+        updateTranscript(); //todo remove, only do so when transcript is visible
 	}
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
@@ -229,6 +246,35 @@ public class GUIManager {
     /** Returns the ConversationController. */
     public static ConversationController conversationController() {
         return conversationController;
+    }
+
+    private static void addTranscript() {
+        transcriptLabel = new Label("", skin);
+        transcriptLabel.setAlignment(Align.topLeft);
+        transcriptLabel.setWidth(Gdx.graphics.getWidth() - 64);
+        ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
+        transcriptPane = new ScrollPane(transcriptLabel, scrollPaneStyle);
+        transcriptPane.setOverscroll(false, false);
+        transcriptPane.setWidth(transcriptLabel.getWidth());
+        transcriptPane.setHeight(Gdx.graphics.getHeight() - 64);
+        transcriptPane.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, Align.center);
+        transcriptPane.toFront();
+        transcriptPane.setVisible(false);
+        stage.addActor(transcriptPane);
+    }
+
+    private static void updateTranscript() {
+        if (!transcriptPane.isVisible()) {
+            return;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Transcript.TranscriptMessage message : conversationController.getTranscript().getTranscriptMessages()) {
+            stringBuilder.append("[CYAN]").append(message.getSpeaker()).append(": [WHITE]\n");
+            stringBuilder.append(message.getMessage()).append("\n\n");
+        }
+        transcriptLabel.setText(stringBuilder);
+        transcriptLabel.invalidate();
+        transcriptLabel.getPrefHeight(); //fixme part of hacky solution to get size correct for first time
     }
 
     private static void addDebug() {

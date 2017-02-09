@@ -86,6 +86,8 @@ public class ConversationController implements Controllable {
     private transient static Map<String, ScriptManager> scriptManagers;
     /** State of GUI elements, like labels. Used to save and load data. */
     private GUIState guiState;
+    /** Stores a record of messages and their speakers. */
+    private Transcript transcript;
 
     public ConversationController() {
         initScriptManagers();
@@ -99,8 +101,9 @@ public class ConversationController implements Controllable {
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new List[choiceButtons.length];
-        sceneManager = new com.wizered67.game.GUI.Conversations.scene.SceneManager(this);
+        sceneManager = new SceneManager(this);
         initScriptManagers();
+        transcript = new Transcript();
         /*
         if (!Constants.LOAD) { //todo fix
             loadConversation("super long.conv");
@@ -256,6 +259,7 @@ public class ConversationController implements Controllable {
     }
     //todo make sure this is valid. Can message command ever change?
     //todo clean up code, implement/discard tag system? Fix \n line breaks.
+    //todo use String Builder?
     /** Displays the next character of text, executing any commands before it. */
     private void nextText(MessageCommand messageCommand) {
         boolean textAdded = false;
@@ -337,8 +341,15 @@ public class ConversationController implements Controllable {
         textboxLabel.layout();
         numLines = textboxLabel.getGlyphLayout().runs.size;
         textboxLabel.invalidate();
+        //If just finished speaking, add to the transcript.
+        if (doneSpeaking()) {
+            transcript.addMessage(currentSpeaker.getKnownName(), textboxLabel.getText().toString());
+        }
     }
 
+    public Transcript getTranscript() {
+        return transcript;
+    }
 
     /** Set the sound to be played for the current speaker to the sound named SOUND. */
     public void setCurrentSpeakerSound(String sound) {
