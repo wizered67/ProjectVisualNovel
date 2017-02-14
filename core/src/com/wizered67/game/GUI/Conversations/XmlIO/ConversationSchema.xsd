@@ -42,6 +42,8 @@
                 <xs:element type="changeConversationType" name="changeconv" maxOccurs="unbounded"/>
                 <xs:element type="imageType" name="image" maxOccurs="unbounded"/>
                 <xs:element type="fadeType" name="fade" maxOccurs="unbounded"/>
+                <xs:element type="exitType" name="exit" maxOccurs="unbounded"/>
+                <xs:element type="waitUntilType" name="waitUntil" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -161,12 +163,21 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="waitUntilType" mixed="true">
+        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
     <xs:complexType name="bgType">
         <xs:attribute name="id" type="textureResource" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="changeConversationType">
         <xs:attribute name="conv" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="exitType">
+        <xs:attribute name="clearScene" type="xs:boolean" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="imageType">

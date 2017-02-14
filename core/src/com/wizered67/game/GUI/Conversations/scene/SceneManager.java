@@ -93,10 +93,6 @@ public class SceneManager {
      * last frame.
      */
     public void update(float delta) {
-        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            GUIManager.toggleDebugDisplay();
-        }
-
         batch.begin();
 
         Iterator<SceneEntity> entityIterator = sortedEntities.iterator();
@@ -105,7 +101,9 @@ public class SceneManager {
             if (entity.isRemoved()) {
                 entityIterator.remove();
             } else {
-                entity.update(delta);
+                if (!conversationController.isPaused()) {
+                    entity.update(delta);
+                }
                 entity.draw(batch);
             }
         }
@@ -120,7 +118,12 @@ public class SceneManager {
     /** Draws the screen fade currently in effect. DELTA TIME is time elapsed since last frame. */
     private void drawFade(float deltaTime) {
         if (fade != null) {
-            float alpha = fade.update(deltaTime);
+            float alpha;
+            if (!conversationController.isPaused()) {
+                alpha = fade.update(deltaTime);
+            } else {
+                alpha = fade.update(0);
+            }
             fadeColor.a = alpha;
             batch.setColor(fadeColor);
             batch.draw(fadeTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -149,12 +152,15 @@ public class SceneManager {
     public void removeCharacter(String identifier) {
         sceneCharacters.remove(allCharacters.get(identifier.toLowerCase()));
     }
-    /** Removes all CharacterSprites from the scene and sets their visibility to false. */ //todo fix???
-    public void removeAllCharacters() {
-        for (SceneCharacter sceneCharacter : sceneCharacters) {
-            sceneCharacter.finishVisibility(false);
-        }
+    /** Removes all SceneEntities from the scene and sets their visibility to false. */
+    public void removeAllEntities() {
         sceneCharacters.clear();
+        imagesByInstance.clear();
+        imagesByGroup.clear();
+        for (SceneEntity entity : sortedEntities) {
+            entity.finishVisibility(false);
+        }
+        sortedEntities.clear();
     }
 
     /** Adds to the map of allCharacters a new character with identifier IDENTIFIER,

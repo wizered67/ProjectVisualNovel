@@ -9,19 +9,37 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;
+import com.wizered67.game.Inputs.Controllable;
 import com.wizered67.game.Inputs.MyInputProcessor;
 import com.wizered67.game.Saving.SaveManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Main Game Screen for initializing and updating GUIManager.
  * @author Adam Victor
  */
-public class MainGameScreen implements Screen {
+public class MainGameScreen implements Screen, Controllable {
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private OrthographicCamera hudCamera;
@@ -33,10 +51,30 @@ public class MainGameScreen implements Screen {
     private GUIManager gui;
     private ShapeRenderer shapes;
 
+    TiledMapRenderer mapRenderer;
+    Map<Shape2D, String> clickableShapes = new HashMap<>();
+
     public MainGameScreen() {
         initRendering();
         initInput();
         setupGUI();
+        TmxMapLoader.Parameters parameters = new TmxMapLoader.Parameters();
+        //parameters.flipY = false;
+        TiledMap map = new TmxMapLoader().load("investigation demo.tmx", parameters);
+        MapObjects objects = map.getLayers().get("clickables").getObjects();
+        for (MapObject shape : objects) {
+            String branch = shape.getProperties().get("branch", String.class);
+            if (shape instanceof PolygonMapObject) {
+                clickableShapes.put(((PolygonMapObject) shape).getPolygon(), branch);
+            } else if (shape instanceof RectangleMapObject) {
+                clickableShapes.put(((RectangleMapObject) shape).getRectangle(), branch);
+            }
+        }
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
+        GUIManager.conversationController().loadConversation(map.getProperties().get("conversation", String.class));
+        GUIManager.conversationController().setBranch("default");
+        inputProcessor.register(this);
+
     }
 
     public void setupGUI() {
@@ -87,9 +125,24 @@ public class MainGameScreen implements Screen {
     }
 
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         updateCameras(delta);
+        mapRenderer.setView(hudCamera);
+        mapRenderer.render();
         updateGUI(delta);
         updateInput();
+
+        shapes.begin(ShapeRenderer.ShapeType.Line);
+        for (Shape2D shape : clickableShapes.keySet()) {
+            if (shape instanceof Polygon) {
+                shapes.polygon(((Polygon) shape).getVertices());
+            } else if (shape instanceof Rectangle) {
+                shapes.rect(((Rectangle) shape).getX(), ((Rectangle) shape).getY(), ((Rectangle) shape).getWidth(), ((Rectangle) shape).getHeight());
+            }
+        }
+        shapes.end();
     }
 
     private void updateCameras(float delta) {
@@ -97,8 +150,6 @@ public class MainGameScreen implements Screen {
     }
 
     private void updateGUI(float delta){
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         hudViewport.apply(true);
         GUIManager.update(delta);
     }
@@ -138,5 +189,31 @@ public class MainGameScreen implements Screen {
         font.dispose();
         batch.dispose();
         shapes.dispose();
+    }
+
+    /**
+     * A touch event at position SCREENX, SCREENY involving pointer POINTER, and
+     * mouse button BUTTON. PRESSED is whether it was pressed (true) or released (false).
+     */
+    @Override
+    public void touchEvent(int screenX, int screenY, int pointer, int button, boolean pressed) {
+        if (pressed) {
+            screenY = Gdx.graphics.getHeight() - 1 - screenY;
+            for (Shape2D shape : clickableShapes.keySet()) {
+                if (shape.contains(screenX, screenY)) {
+                    GUIManager.conversationController().setBranch(clickableShapes.get(shape));
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * A key event involving key KEY mapped to ControlType CONTROL.
+     * PRESSED is whether it was pressed (true) or released (false).
+     */
+    @Override
+    public void keyEvent(MyInputProcessor.ControlType control, int key, boolean pressed) {
+
     }
 }

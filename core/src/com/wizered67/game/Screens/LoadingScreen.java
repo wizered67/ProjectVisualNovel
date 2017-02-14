@@ -59,7 +59,7 @@ public class LoadingScreen implements Screen {
         bar.setAnimateDuration(2);
         table.add(bar);
         debugRenderer = new ShapeRenderer();
-        GameManager.assetManager().loadRaw("Conversations/demonstration.conv", Conversation.class);
+        //GameManager.assetManager().loadRaw("Conversations/demonstration.conv", Conversation.class);
         //GameManager.assetManager().loadResources();
     }
 
@@ -81,9 +81,9 @@ public class LoadingScreen implements Screen {
         //System.out.println(System.nanoTime() / 1000000);
         if (GameManager.assetManager().update()) {
             GameManager.assetManager().loadAnimations();
-            GameManager.game.setScreen(nextScreen);
-            GUIManager.conversationController().setConv((Conversation) GameManager.assetManager().getRaw("Conversations/demonstration.conv"));
-            GUIManager.conversationController().setBranch("default");
+            GameManager.game.setScreen(nextScreen); //todo deal with this loading stuff
+            //GUIManager.conversationController().setConv((Conversation) GameManager.assetManager().getRaw("Conversations/demonstration.conv"));
+            //GUIManager.conversationController().setBranch("default");
             //GameManager.assetManager().loadRaw("Conversations/super long.conv", Conversation.class);
             SaveManager.init();
         }

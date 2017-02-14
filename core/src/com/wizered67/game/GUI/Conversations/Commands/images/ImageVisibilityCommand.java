@@ -6,6 +6,7 @@ import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
 import com.wizered67.game.GUI.Conversations.CompleteEvent;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.scene.Fade;
+import com.wizered67.game.GUI.Conversations.scene.SceneEntity;
 import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 
@@ -92,7 +93,8 @@ class ImageVisibilityCommand implements ConversationCommand {
             SceneManager manager = (SceneManager) data[0];
             Object entity = data[1];
             if (instanceIdentifier != null && !instanceIdentifier.isEmpty()) {
-                if (manager.getImage(instanceIdentifier).equals(entity)) {
+                SceneImage image = manager.getImage(instanceIdentifier);
+                if (image != null && image.equals(entity)) {
                     done = true;
                 }
             } else if (groupIdentifier != null && !groupIdentifier.isEmpty()) {

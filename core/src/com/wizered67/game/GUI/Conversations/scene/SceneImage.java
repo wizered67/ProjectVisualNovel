@@ -76,6 +76,7 @@ public class SceneImage extends SceneEntity {
         manager.addImage(this);
         inScene = true;
         setDepth(manager, depth);
+        removed = false;
     }
 
     public void removeFromScene() {

@@ -40,6 +40,7 @@ public class ConversationLoader {
         classMapping.put("debug", DebugCommand.class);
         classMapping.put("delay", DelayCommand.class);
         classMapping.put("script", ExecuteScriptCommand.class);
+        classMapping.put("exit", ExitCommand.class);
         classMapping.put("text", MessageCommand.class);
         classMapping.put("music", PlayMusicCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
@@ -49,6 +50,7 @@ public class ConversationLoader {
         classMapping.put("textspeed", TextSpeedCommand.class);
         classMapping.put("if", VariableConditionCommand.class);
         classMapping.put("init", VariableInitializeCommand.class);
+        classMapping.put("waitUntil", WaitUntilVariableCommand.class);
         classMapping.put("image", ModifyImageCommandCreator.class);
     }
 

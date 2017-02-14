@@ -1,5 +1,6 @@
 package com.wizered67.game.GUI.Conversations;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -88,6 +89,8 @@ public class ConversationController implements Controllable {
     private GUIState guiState;
     /** Stores a record of messages and their speakers. */
     private Transcript transcript;
+    /** Whether the conversation controller is paused. When paused, commands don't update. The scene will render but not update. */
+    private boolean paused;
 
     public ConversationController() {
         initScriptManagers();
@@ -104,6 +107,7 @@ public class ConversationController implements Controllable {
         sceneManager = new SceneManager(this);
         initScriptManagers();
         transcript = new Transcript();
+        paused = false;
         /*
         if (!Constants.LOAD) { //todo fix
             loadConversation("super long.conv");
@@ -190,6 +194,12 @@ public class ConversationController implements Controllable {
         conversationName = fileName;
         return currentConversation;
     }
+    public void setPaused(boolean pause) {
+        paused = pause;
+    }
+    public boolean isPaused() {
+        return paused;
+    }
     /** Called every frame and updates the GUI elements by executing commands.
      * If waitToProceed is false, it continues to go onto the next command within this frame. Otherwise
      * it waits for the current one to be completed. Also calls the SceneManager's update method.
@@ -205,18 +215,20 @@ public class ConversationController implements Controllable {
             */
             System.out.println(GameManager.assetManager().getProgress());
         }
-
-        if (currentConversation == null) {
-            return;
+        if (!paused && currentConversation != null) {
+            //Keep going to next command as long as there is at least one command left in this branch and there is either no
+            //current command or the current command does not require waiting.
+            while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() > 0) {
+                nextCommand();
+                displayAll = false;
+                textTimer = 0;
+            }
+            if (currentBranch.size() == 0 && currentCommand != null && !currentCommand.waitToProceed()) {
+                exit(false);
+                currentCommand = null;
+            }
+            updateText(deltaTime);
         }
-        //Keep going to next command as long as there is at least one command left in this branch and there is either no
-        //current command or the current command does not require waiting.
-        while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() != 0) {
-            nextCommand();
-            displayAll = false;
-            textTimer = 0;
-        }
-        updateText(deltaTime);
         sceneManager.update(deltaTime);
     }
     /**If there is currently a message being displayed, updates the text timer.
@@ -234,7 +246,7 @@ public class ConversationController implements Controllable {
             return;
         }
 
-        if (currentSpeaker != null) {
+        if (currentSpeaker != null && !currentSpeaker.getKnownName().equals(speakerLabel.getText().toString())) {
             setSpeakerName(currentSpeaker.getKnownName());
         }
 
@@ -370,14 +382,10 @@ public class ConversationController implements Controllable {
     }
     /** If there are more commands, execute the next one. */
     public void nextCommand() {
-        if (currentBranch.size() != 0) {
-            ConversationCommand command = currentBranch.remove();
-            command.execute(this);
-            //System.out.println("Executed command: " + command.toString());
-            currentCommand = command;
-        } else {
-            setTextBoxShowing(false);
-        }
+        ConversationCommand command = currentBranch.remove();
+        command.execute(this);
+        //System.out.println("Executed command: " + command.toString());
+        currentCommand = command;
     }
     /** Sets the current branch to a copy of the list of ConversationCommands
      * corresponding to the branch in Conversation named BRANCH. */
@@ -396,11 +404,12 @@ public class ConversationController implements Controllable {
         if (currentBranch != null) {
             currentBranch.clear();
         }
+        currentCommand = null;
+        remainingText = "";
         setTextBoxShowing(false);
-        //todo fix choice hiding?
         setChoiceShowing(false);
         if (clearScene) {
-            sceneManager.removeAllCharacters(); //todo hide images too
+            sceneManager.removeAllEntities();
         }
     }
     /** Adds the ConversationCommands in COMMANDS to the
@@ -465,6 +474,11 @@ public class ConversationController implements Controllable {
     public void setChoiceShowing(boolean show) {
         choiceHighlighted = -1;
         choiceShowing = show;
+        if (!show) {
+            for (TextButton b : choiceButtons) {
+                b.setVisible(false);
+            }
+        }
     }
     /** Sets choice number CHOICE to CHOICE NAME. */
     public void setChoice(int choice, String choiceName) {
@@ -492,10 +506,7 @@ public class ConversationController implements Controllable {
     /** Adds to the front of the command queue the list of commands corresponding to CHOICE
      * and send a CompleteEvent to the current command. */
     public void processChoice(int choice) {
-        choiceShowing = false;
-        for (TextButton b : choiceButtons) {
-            b.setVisible(false);
-        }
+        setChoiceShowing(false);
         List<ConversationCommand> commands = choiceCommands[choice];
         insertCommands(commands);
         currentCommand.complete(CompleteEvent.choice());
@@ -595,6 +606,9 @@ public class ConversationController implements Controllable {
     /** Handles a key event by calling methods depending on the ControlType. */
     @Override
     public void keyEvent(ControlType control, int key, boolean pressed) {
+        if (key == Input.Keys.SHIFT_LEFT) {
+            exit(true);
+        }
         if (pressed) {
             switch (control) {
                 case CONFIRM:

@@ -162,6 +162,7 @@ public class SceneCharacter extends SceneEntity {
         manager.addCharacter(identifier);
         inScene = true;
         setDepth(manager, depth);
+        removed = false;
         //setDepth(manager, 0);
     }
     /** Removes this SceneCharacter from the SceneManager. */

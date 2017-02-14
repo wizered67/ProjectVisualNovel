@@ -191,17 +191,27 @@ public class GUIManager {
 	public static void update(float deltaTime){
         conversationController.update(deltaTime);
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) {
-            transcriptPane.setVisible(!transcriptPane.isVisible());
-            updateTranscript(); //todo fix. part of hacky solution to make update first time
-            //transcriptPane.invalidate();
-            transcriptPane.validate();
-            transcriptPane.setScrollPercentY(1f);
-            transcriptPane.updateVisualScroll();
-            transcriptPane.setVelocityY(0);
-            stage.setScrollFocus(transcriptPane);
+            toggleTranscript();
+        }
+        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            toggleDebugDisplay();
+            conversationController.setPaused(debugChoices.isVisible());
         }
         updateTranscript(); //todo remove, only do so when transcript is visible
 	}
+	/** Toggles whether the transcript is being shown. */
+	public static void toggleTranscript() {
+        transcriptPane.setVisible(!transcriptPane.isVisible());
+        conversationController.setPaused(transcriptPane.isVisible());
+        updateTranscript(); //todo fix. part of hacky solution to make update first time
+        //transcriptPane.invalidate();
+        transcriptPane.validate();
+        transcriptPane.setScrollPercentY(1f);
+        transcriptPane.updateVisualScroll();
+        transcriptPane.setVelocityY(0);
+        stage.setScrollFocus(transcriptPane);
+    }
+
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
 	public static void updateAndRenderStage(float deltaTime) {

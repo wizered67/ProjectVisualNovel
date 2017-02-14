@@ -54,7 +54,7 @@
         Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
         <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>
 
-        <fade exitTime="0.5" enterTime="0.2" color="WHITE" enterType="linear" exitType="fade" wait="true">
+        <fade exitTime="1" enterTime="1" color="WHITE" enterType="linear" exitType="fade" wait="true">
             <image instance="test">
                 <visibility visible="false" fadeTime="0.1" wait="false"/>
             </image>

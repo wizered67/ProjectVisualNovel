@@ -22,7 +22,7 @@ public class MusicManager {
     /** Initialize MusicManager with no music being played. */
     public MusicManager() {
         currentMusic = null;
-        currentMusicName = "";
+        currentMusicName = null;
         paused = false;
     }
 
@@ -42,7 +42,7 @@ public class MusicManager {
      * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
      */
     public void playMusic(Music music, String name, boolean loops, float volume) {
-        if (currentMusicName.equals(name)) {
+        if (currentMusicName != null && currentMusicName.equals(name)) {
             if (paused) {
                 resumeMusic();
             }
@@ -60,7 +60,7 @@ public class MusicManager {
     public void stopMusic() {
         if (currentMusic != null) {
             currentMusic.stop();
-            currentMusicName = "";
+            currentMusicName = null;
             currentMusic = null;
         }
     }

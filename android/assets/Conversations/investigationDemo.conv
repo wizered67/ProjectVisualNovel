@@ -1,0 +1,59 @@
+<conversation xmlns="urn:conversations">
+    <branch name="default">
+        <visible id="Detective" visible="true" fadeTime="1" wait="true"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+
+        <script language="Lua" isfile="false">
+            <![CDATA[
+            arr = {}
+            for i=1, 1000 do
+                arr[i] = i
+            end
+            ]]>
+        </script>
+
+        <script language="Lua">
+            <![CDATA[
+             for i=1, 20 do
+                print(game:randomRange(5, 20))
+             end
+             game:printAll(arr)
+            ]]>
+        </script>
+
+    </branch>
+
+    <branch name="lamp">
+        <animation id="Detective" animation="Edgeworth_Static"/>
+        Detective: What a strange lamp that is... I wonder what it means?
+        <script language="Lua">rand = game:randomRange(1, 50)</script>
+        Detective: The random number is @v{Lua_rand}.
+        <script language="Lua">game:addToTranscript(rand, "Hello world!")</script>
+    </branch>
+
+    <branch name="ladder">
+        <animation id="Detective" animation="Edgeworth_Static"/>
+        Detective: That's a nice ladder. Not the tallest one here though!
+    </branch>
+    
+    <branch name="big ladder">
+        Detective: That is the nicest ladder I've ever seen!
+        <animation id="Detective" animation="Edgeworth_Static"/>
+    </branch>
+
+    <branch name="door">
+        <animation id="Detective" animation="Edgeworth_Static"/>
+        Detective: I wonder where that door leads...
+        <script language="Lua">game:getInput("input")</script>
+        <waitUntil language="Lua">return input ~= nil</waitUntil>
+        <if language="Lua">{input == "transcript"}
+            <script language="Lua">game:openTranscript()</script>
+            <else>
+                <if language="Lua">{input ~= -1}
+                    Detective: Yes, it probably leads to @v{Lua_input}!
+                    <else>Detective: I guess I don't know...</else>
+                </if>
+            </else>
+        </if>
+    </branch>
+</conversation>

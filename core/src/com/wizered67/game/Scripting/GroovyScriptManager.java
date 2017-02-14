@@ -9,6 +9,7 @@ import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,10 +20,12 @@ public  class GroovyScriptManager implements ScriptManager {
     private GroovyShell groovyShell;
     private Binding binding;
     static final String SCRIPT_DIRECTORY = "Scripts/";
+    private HashMap<String, GameScript> savedScripts;
     /** Initializes GroovyShell and Binding. */
     public GroovyScriptManager() {
         binding = new Binding();
         groovyShell = new GroovyShell(binding);
+        savedScripts = new HashMap<>();
     }
     /** Returns the name of the language used for this ScriptManager. */
     @Override
@@ -54,13 +57,21 @@ public  class GroovyScriptManager implements ScriptManager {
     }
 
     /**
+     * Whether 'return' is required when getting the value of an expression in this language.
+     */
+    @Override
+    public boolean requiresReturn() {
+        return false;
+    }
+
+    /**
      * Returns the boolean value of Object O, where O is assumed to be some
      * type specific to the scripting language.
      */
     @Override
     public boolean objectToBoolean(Object o) {
         if (o instanceof Boolean) {
-            return ((Boolean) o).booleanValue();
+            return (Boolean) o;
         } else {
             return false;
         }
@@ -90,11 +101,84 @@ public  class GroovyScriptManager implements ScriptManager {
     }
 
     /**
+     * Returns the double value of Object O, where O is assumed to be some
+     * type specific to the scripting language.
+     */
+    @Override
+    public double objectToDouble(Object o) {
+        if (o instanceof Double) {
+            return (Double) o;
+        } else if (o instanceof Float) {
+            return (double) ((Float) o);
+        } else {
+            GameManager.error("Tried to convert non double object to double.");
+            return 0;
+        }
+    }
+
+    /**
      * Returns the value of variable VAR in a language specific object type.
      */
     @Override
     public Object getValue(String var) {
         return binding.getProperty(var);
+    }
+
+    /**
+     * Returns the value of executing expression EXPR in a language specific object type.
+     * Caches the script created.
+     */
+    @Override
+    public Object getExpressionValue(String expr) {
+        return getExpressionValue(expr, true);
+    }
+
+    /**
+     * Returns the value of executing expression EXPR in a language specific object type.
+     * If cache, stores the script result for later use.
+     */
+    @Override
+    public Object getExpressionValue(String expr, boolean cache) {
+        if (savedScripts.containsKey(expr)) {
+            return savedScripts.get(expr).execute();
+        }
+        GameScript script = load(expr, false);
+        if (cache) {
+            savedScripts.put(expr, script);
+        }
+        return script.execute();
+    }
+
+    /**
+     * Returns the value of variable VAR as a Java integer.
+     */
+    @Override
+    public int getIntegerValue(String var) {
+        return objectToInteger(getValue(var));
+    }
+
+    /**
+     * Returns the value of variable VAR as a Java double.
+     */
+    @Override
+    public double getDoubleValue(String var) {
+        return objectToDouble(getValue(var));
+    }
+
+    /**
+     * Returns the value of variable VAR as a Java String.
+     */
+    @Override
+    public String getStringValue(String var) {
+        return objectToString(getValue(var));
+    }
+
+    /**
+     * Returns the value of variable VAR as a Java boolean.
+     */
+    @Override
+    public boolean getBooleanValue(String var) {
+        return objectToBoolean(getValue(var));
     }
 
     /**
