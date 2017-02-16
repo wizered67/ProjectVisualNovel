@@ -85,7 +85,7 @@ public class MessageCommand implements ConversationCommand {
             String language = matcher.group(1);
             String variable = matcher.group(2);
             ScriptManager manager = ConversationController.scriptManager(language);
-            String variableString = manager.objectToString(manager.getValue(variable));
+            String variableString = manager.objectToString(manager.getLanguageValue(variable));
             nextText = nextText.replaceFirst(scriptVariablePattern.toString(), variableString);
         }
         conversationController.setRemainingText(nextText);

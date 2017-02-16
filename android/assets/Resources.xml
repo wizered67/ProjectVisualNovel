@@ -1,6 +1,6 @@
 <resources xmlns="urn:resourceXml" strict="true">
     <animation_files>
-        !Edgeworth Edgeworth.pack
+        Edgeworth Edgeworth.pack
         Test Test.pack
         test4.png
     </animation_files>
@@ -14,21 +14,21 @@
     </animations>
 
     <textures>
-        !icon testicon.png
-        !testbackground.png
-        !icon2 testicon2.png
+        icon testicon.png
+        testbackground.png
+        icon2 testicon2.png
     </textures>
 
     <music>
-        !crossexamination.mp3
+        crossexamination.mp3
         new music.mp3
         newsong thistest.mp3
     </music>
 
     <sounds>
-        !intense.wav
-        !talksoundfemale.wav
-        !talksoundmale.wav
+        intense.wav
+        talksoundfemale.wav
+        talksoundmale.wav
         new sound for this file
         newsound thissound.wav
     </sounds>
@@ -38,4 +38,15 @@
         <character id="Librarian" name="???" sound="talksoundmale.wav"/>
         <character id="Buddy" name="YOLO SWAGGINS"  sound="talksoundmale.wav"/>
     </characters>
+
+    <groups>
+        <group name="common">
+            <load>testbackground.png</load>
+            <load>new sound for this</load>
+        </group>
+        <group name="group2">
+            <load>intense.wav</load>
+            <load>icon2</load>
+        </group>
+    </groups>
 </resources>

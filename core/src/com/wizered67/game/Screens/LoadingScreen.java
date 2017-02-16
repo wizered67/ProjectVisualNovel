@@ -60,7 +60,7 @@ public class LoadingScreen implements Screen {
         table.add(bar);
         debugRenderer = new ShapeRenderer();
         //GameManager.assetManager().loadRaw("Conversations/demonstration.conv", Conversation.class);
-        //GameManager.assetManager().loadResources();
+        //GameManager.assetManager().initResources();
     }
 
 

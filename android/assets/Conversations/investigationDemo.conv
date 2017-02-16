@@ -34,6 +34,11 @@
     <branch name="ladder">
         <animation id="Detective" animation="Edgeworth_Static"/>
         Detective: That's a nice ladder. Not the tallest one here though!
+        <script language="Lua">
+            arr2 = {}
+            arr2["sigma"] = "hero"
+            arr2["delta"] = "complex motives"
+        </script>
     </branch>
     
     <branch name="big ladder">

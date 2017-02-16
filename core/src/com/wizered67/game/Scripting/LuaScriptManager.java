@@ -1,9 +1,10 @@
 package com.wizered67.game.Scripting;
 
 import com.badlogic.gdx.Gdx;
-import com.wizered67.game.GameManager;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
+import org.luaj.vm2.lib.jse.CoerceLuaToJava;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import java.util.HashMap;
@@ -35,7 +36,6 @@ public class LuaScriptManager implements ScriptManager {
     private void setDefaultJavaMethods() {
         globals.load(new LuajavaGdxReflection());
         LuaGameMethods luaGameMethods = new LuaGameMethods();
-        LuaGameMethods.randomRange(1, 2);
         Gdx.app.log("Test", "Trying to set game methods class.");
         globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.Scripting.LuaGameMethods")));
         System.out.println("Got game methods class.");
@@ -101,7 +101,7 @@ public class LuaScriptManager implements ScriptManager {
 
     /** Returns the value of variable VAR in a language specific object type. */
     @Override
-    public LuaValue getValue(String var) {
+    public LuaValue getLanguageValue(String var) {
         return globals.get(var);
     }
 
@@ -134,12 +134,19 @@ public class LuaScriptManager implements ScriptManager {
         return script.execute();
     }
 
+    /** Returns the value of VAR as type TYPE. */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String var, Class<T> type) {
+        return (T) CoerceLuaToJava.coerce(globals.get(var), type);
+    }
+
     /**
      * Returns the value of variable VAR as a Java integer.
      */
     @Override
     public int getIntegerValue(String var) {
-        return objectToInteger(getValue(var));
+        return objectToInteger(getLanguageValue(var));
     }
 
     /**
@@ -147,7 +154,7 @@ public class LuaScriptManager implements ScriptManager {
      */
     @Override
     public double getDoubleValue(String var) {
-        return objectToDouble(getValue(var));
+        return objectToDouble(getLanguageValue(var));
     }
 
     /**
@@ -155,7 +162,7 @@ public class LuaScriptManager implements ScriptManager {
      */
     @Override
     public String getStringValue(String var) {
-        return objectToString(getValue(var));
+        return objectToString(getLanguageValue(var));
     }
 
     /**
@@ -163,13 +170,13 @@ public class LuaScriptManager implements ScriptManager {
      */
     @Override
     public boolean getBooleanValue(String var) {
-        return objectToBoolean(getValue(var));
+        return objectToBoolean(getLanguageValue(var));
     }
 
     /** Returns whether a variable named VAR has been defined. */
     @Override
     public boolean isDefined(String var) {
-        return !getValue(var).isnil();
+        return !getLanguageValue(var).isnil();
     }
     /** Returns a GameScript that, when executed, assigns variable named VAR to VALUE. */
     @Override
@@ -200,19 +207,7 @@ public class LuaScriptManager implements ScriptManager {
     /** Assign variable of name NAME to be equal to VALUE. */
     @Override
     public void setValue(String name, Object value) {
-        if (value == LuaValue.NIL) {
-            globals.set(name, LuaValue.NIL);
-        } else if (value instanceof Integer) {
-            globals.set(name, (Integer) value);
-        } else if (value instanceof String) {
-            globals.set(name, (String) value);
-        } else if (value instanceof Boolean) {
-            globals.set(name, LuaValue.valueOf((Boolean) value));
-        } else if (value instanceof Float || value instanceof Double) {
-            globals.set(name, (double) value);
-        } else {
-            GameManager.error("Trying to set Lua variable '" + name + "' to unsupported type.");
-        }
+        globals.set(name, CoerceJavaToLua.coerce(value));
     }
 
 }

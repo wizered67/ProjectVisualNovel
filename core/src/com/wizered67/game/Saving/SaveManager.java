@@ -29,6 +29,7 @@ import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaDouble;
 import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaString;
+import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
@@ -42,6 +43,7 @@ public class SaveManager {
     private static Kryo kryo = new Kryo();
     /** Adds all necessary serializers to Kryo for serializing important objects. */
     public static void init() {
+        kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
         kryo.addDefaultSerializer(MusicManager.class, MusicManagerSerializer.class);
         kryo.addDefaultSerializer(ConversationController.class, ConversationControllerSerializer.class);
         kryo.addDefaultSerializer(SceneManager.class, SceneManagerSerializer.class);

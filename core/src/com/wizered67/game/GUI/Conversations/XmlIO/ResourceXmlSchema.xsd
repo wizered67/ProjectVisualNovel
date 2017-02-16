@@ -24,6 +24,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element type="groupsType" name="groups" maxOccurs="unbounded"/>
             </xs:all>
             <xs:attribute name="strict" type="xs:boolean" use="required"/>
         </xs:complexType>
@@ -50,5 +51,19 @@
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute> 
+    </xs:complexType>
+
+    <xs:complexType name="groupsType">
+        <xs:sequence maxOccurs="unbounded" minOccurs="1">
+            <xs:element name="group">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" minOccurs="1">
+                        <xs:element name="load" type="resourceType"/>
+                    </xs:choice>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
     </xs:complexType>
 </xs:schema>

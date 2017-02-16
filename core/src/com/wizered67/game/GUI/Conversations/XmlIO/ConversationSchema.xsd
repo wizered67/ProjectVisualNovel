@@ -44,6 +44,8 @@
                 <xs:element type="fadeType" name="fade" maxOccurs="unbounded"/>
                 <xs:element type="exitType" name="exit" maxOccurs="unbounded"/>
                 <xs:element type="waitUntilType" name="waitUntil" maxOccurs="unbounded"/>
+                <xs:element type="resourceType" name="load" maxOccurs="unbounded"/>
+                <xs:element type="resourceGroupType" name="loadGroup" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>

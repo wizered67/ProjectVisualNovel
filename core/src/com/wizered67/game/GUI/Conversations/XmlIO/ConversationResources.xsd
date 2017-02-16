@@ -67,4 +67,10 @@
 			<xs:enumeration value="newsound"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="resourceGroupType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="common"/>
+			<xs:enumeration value="group2"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

@@ -1,6 +1,5 @@
 package com.wizered67.game.Scripting;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.wizered67.game.GameManager;
@@ -117,10 +116,32 @@ public  class GroovyScriptManager implements ScriptManager {
     }
 
     /**
+     * Returns the value of VAR as type TYPE.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String var, Class<T> type) {
+        Object languageValue = getLanguageValue(var);
+        if (type == Double.class) {
+            return (T) Double.valueOf(languageValue.toString());
+        } else if (type == Float.class) {
+            return (T) Float.valueOf(languageValue.toString());
+        } else if (type == Integer.class) {
+            return (T) Integer.valueOf(languageValue.toString());
+        } else if (type == String.class) {
+            return (T) languageValue.toString();
+        } else if (type == Boolean.class) {
+            return (T) Boolean.valueOf(languageValue.toString());
+        } else {
+            return (T) languageValue;
+        }
+    }
+
+    /**
      * Returns the value of variable VAR in a language specific object type.
      */
     @Override
-    public Object getValue(String var) {
+    public Object getLanguageValue(String var) {
         return binding.getProperty(var);
     }
 
@@ -154,7 +175,7 @@ public  class GroovyScriptManager implements ScriptManager {
      */
     @Override
     public int getIntegerValue(String var) {
-        return objectToInteger(getValue(var));
+        return objectToInteger(getLanguageValue(var));
     }
 
     /**
@@ -162,7 +183,7 @@ public  class GroovyScriptManager implements ScriptManager {
      */
     @Override
     public double getDoubleValue(String var) {
-        return objectToDouble(getValue(var));
+        return objectToDouble(getLanguageValue(var));
     }
 
     /**
@@ -170,7 +191,7 @@ public  class GroovyScriptManager implements ScriptManager {
      */
     @Override
     public String getStringValue(String var) {
-        return objectToString(getValue(var));
+        return objectToString(getLanguageValue(var));
     }
 
     /**
@@ -178,7 +199,7 @@ public  class GroovyScriptManager implements ScriptManager {
      */
     @Override
     public boolean getBooleanValue(String var) {
-        return objectToBoolean(getValue(var));
+        return objectToBoolean(getLanguageValue(var));
     }
 
     /**

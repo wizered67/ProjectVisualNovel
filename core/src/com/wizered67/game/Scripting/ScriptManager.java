@@ -28,8 +28,10 @@ public interface ScriptManager {
      * type specific to the scripting language. */
     double objectToDouble(Object o);
 
+    /** Returns the value of VAR as type TYPE. */
+    <T> T getValue(String var, Class<T> type);
     /** Returns the value of variable VAR in a language specific object type. */
-    Object getValue(String var);
+    Object getLanguageValue(String var);
 
     /** Returns the value of executing expression EXPR in a language specific object type.
      * Caches the script created.
