@@ -46,11 +46,16 @@
                 <xs:element type="waitUntilType" name="waitUntil" maxOccurs="unbounded"/>
                 <xs:element type="resourceType" name="load" maxOccurs="unbounded"/>
                 <xs:element type="resourceGroupType" name="loadGroup" maxOccurs="unbounded"/>
+                <xs:element type="resourceType" name="unload" maxOccurs="unbounded"/>
+                <xs:element type="resourceGroupType" name="unloadGroup" maxOccurs="unbounded"/>
+                <xs:element type="emptyType" name="waitForLoading" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
 
+    <xs:complexType name="emptyType">
 
+    </xs:complexType>
 
     <xs:complexType name="choicesType" mixed="true">
         <xs:group ref="commands" minOccurs="0"/>

@@ -45,9 +45,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <imagelayer name="background">
-  <image source="Textures/testbackground.png" width="1024" height="640"/>
- </imagelayer>
+
  <objectgroup name="clickables">
   <object id="3" x="593.667" y="109" width="42.6667" height="74.6667">
    <properties>

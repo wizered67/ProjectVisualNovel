@@ -71,8 +71,8 @@ public class MainGameScreen implements Screen, Controllable {
             }
         }
         mapRenderer = new OrthogonalTiledMapRenderer(map);
-        GUIManager.conversationController().loadConversation(map.getProperties().get("conversation", String.class));
-        GUIManager.conversationController().setBranch("default");
+        //GUIManager.conversationController().loadConversation(map.getProperties().get("conversation", String.class));
+        //GUIManager.conversationController().setBranch("default");
         inputProcessor.register(this);
 
     }

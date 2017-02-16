@@ -1,25 +1,17 @@
 <conversation xmlns="urn:conversations">
     <branch name="default">
-        <visible id="Detective" visible="true" fadeTime="1" wait="true"/>
-        <animation id="Detective" animation="Edgeworth_Static"/>
-
-        <script language="Lua" isfile="false">
-            <![CDATA[
-            arr = {}
-            for i=1, 1000 do
-                arr[i] = i
-            end
-            ]]>
-        </script>
-
-        <script language="Lua">
-            <![CDATA[
-             for i=1, 20 do
-                print(game:randomRange(5, 20))
-             end
-             game:printAll(arr)
-            ]]>
-        </script>
+        <visible id="Detective" visible="true" fadeTime="0" fadeType="linear" wait="true"/>
+        <animation id="Detective" animation="Edgeworth_Edgeworth" wait="false"/>
+        <loadGroup>common</loadGroup>
+        <fade exitTime="1" enterTime="1" wait="true" color="BLACK">
+            <waitForLoading/>
+            <bg id="testbackground.png"/>
+            <image instance="hello">
+                <position x="50" y="120"/>
+                <texture id="icon2"/>
+                <visibility visible="true"/>
+            </image>
+        </fade>
 
     </branch>
 

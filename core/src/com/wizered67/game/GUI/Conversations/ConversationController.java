@@ -213,6 +213,7 @@ public class ConversationController implements Controllable {
                 setBranch("default real");
             }
             */
+            GameManager.assetManager().update();
             System.out.println(GameManager.assetManager().getProgress());
         }
         if (!paused && currentConversation != null) {

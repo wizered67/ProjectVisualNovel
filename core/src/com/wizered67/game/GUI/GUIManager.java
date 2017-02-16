@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -27,6 +28,7 @@ import com.wizered67.game.Constants;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.Transcript;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.Saving.SaveManager;
 
 /** Contains GUI elements and the ConversationController which the GUI elements are passed into.
@@ -196,6 +198,7 @@ public class GUIManager {
         if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             toggleDebugDisplay();
             conversationController.setPaused(debugChoices.isVisible());
+            GameManager.assetManager().load("Edgeworth", TextureAtlas.class);//todo remove
         }
         updateTranscript(); //todo remove, only do so when transcript is visible
 	}

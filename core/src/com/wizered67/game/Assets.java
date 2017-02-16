@@ -267,6 +267,19 @@ public class Assets {
         }
     }
 
+    /** Load and unload Conversations through the asset manager. */
+    public synchronized void loadConversation(String conversation) {
+        assetManager.load("Conversations/" + conversation, Conversation.class);
+    }
+
+    public synchronized void unloadConversation(String conversation) {
+        assetManager.unload("Conversations/" + conversation);
+    }
+
+    public synchronized Conversation getConversation(String conversation) {
+        return assetManager.get("Conversations/" + conversation, Conversation.class);
+    }
+
     /** Tells the AssetManager to load the file of type TYPE with filename FILENAME. In effect, calls the
      * regular AssetManager load method without first mapping an identifier to a filename.
      */
@@ -290,46 +303,49 @@ public class Assets {
      * a resource identifier, which is then mapped to the actual filename.
      */
 
-    public synchronized <T> T get(String fileName) {
-        return assetManager.get(assetIdentifiers.get(fileName).fileName);
+    public synchronized <T> T get(String identifier) {
+        return assetManager.get(assetIdentifiers.get(identifier).fileName);
     }
 
-    public synchronized <T> T get(String fileName, Class<T> type) {
-        return assetManager.get(assetIdentifiers.get(fileName).fileName, type);
-    }
-
-
-    public synchronized void unload(String fileName) {
-        assetManager.unload(assetIdentifiers.get(fileName).fileName);
+    public synchronized <T> T get(String identifier, Class<T> type) {
+        return assetManager.get(assetIdentifiers.get(identifier).fileName, type);
     }
 
 
-    public synchronized boolean isLoaded(String fileName) {
-        return assetManager.isLoaded(assetIdentifiers.get(fileName).fileName);
+    public synchronized void unload(String identifier) {
+        assetManager.unload(assetIdentifiers.get(identifier).fileName);
     }
 
 
-    public synchronized boolean isLoaded(String fileName, Class type) {
-        return assetManager.isLoaded(assetIdentifiers.get(fileName).fileName, type);
+    public synchronized boolean isLoaded(String identifier) {
+        return assetManager.isLoaded(assetIdentifiers.get(identifier).fileName);
     }
 
 
-    public synchronized <T> void load(String fileName, Class<T> type) {
-        assetManager.load(assetIdentifiers.get(fileName).fileName, type);
+    public synchronized boolean isLoaded(String identifier, Class type) {
+        return assetManager.isLoaded(assetIdentifiers.get(identifier).fileName, type);
     }
 
-    public synchronized <T> void load(String fileName, Class<T> type, AssetLoaderParameters<T> parameter) {
-        assetManager.load(assetIdentifiers.get(fileName).fileName, type, parameter);
+    public synchronized void load(String identifier) {
+        assetManager.load(assetIdentifiers.get(identifier));
+    }
+
+    public synchronized <T> void load(String identifier, Class<T> type) {
+        assetManager.load(assetIdentifiers.get(identifier).fileName, type);
+    }
+
+    public synchronized <T> void load(String identifier, Class<T> type, AssetLoaderParameters<T> parameter) {
+        assetManager.load(assetIdentifiers.get(identifier).fileName, type, parameter);
     }
 
 
-    public void finishLoadingAsset(String fileName) {
-        assetManager.finishLoadingAsset(assetIdentifiers.get(fileName).fileName);
+    public void finishLoadingAsset(String identifier) {
+        assetManager.finishLoadingAsset(assetIdentifiers.get(identifier).fileName);
     }
 
 
-    public synchronized Class getAssetType(String fileName) {
-        return assetManager.getAssetType(assetIdentifiers.get(fileName).fileName);
+    public synchronized Class getAssetType(String identifier) {
+        return assetManager.getAssetType(assetIdentifiers.get(identifier).fileName);
     }
 
 

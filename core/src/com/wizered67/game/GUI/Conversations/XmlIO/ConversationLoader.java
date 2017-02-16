@@ -41,15 +41,19 @@ public class ConversationLoader {
         classMapping.put("delay", DelayCommand.class);
         classMapping.put("script", ExecuteScriptCommand.class);
         classMapping.put("exit", ExitCommand.class);
+        classMapping.put("load", LoadUnloadCommand.class);
+        classMapping.put("unload", LoadUnloadCommand.class);
+        classMapping.put("loadGroup", LoadUnloadCommand.class);
+        classMapping.put("unloadGroup", LoadUnloadCommand.class);
         classMapping.put("text", MessageCommand.class);
         classMapping.put("music", PlayMusicCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
-        classMapping.put("preload", PreloadCommand.class);
         classMapping.put("fade", ScreenFadeCommand.class);
         classMapping.put("choices", ShowChoicesCommand.class);
         classMapping.put("textspeed", TextSpeedCommand.class);
         classMapping.put("if", VariableConditionCommand.class);
         classMapping.put("init", VariableInitializeCommand.class);
+        classMapping.put("waitForLoading", WaitForLoadingCommand.class);
         classMapping.put("waitUntil", WaitUntilVariableCommand.class);
         classMapping.put("image", ModifyImageCommandCreator.class);
     }

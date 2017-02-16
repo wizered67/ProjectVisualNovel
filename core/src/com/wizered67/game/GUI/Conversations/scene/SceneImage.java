@@ -59,7 +59,8 @@ public class SceneImage extends SceneEntity {
     public void setTexture(String texture) {
         textureName = texture;
         if (!GameManager.assetManager().isLoaded(texture)) {
-            GameManager.assetManager().finishLoadingAsset(texture);
+            GameManager.error("Texture " + texture + " was not yet loaded.");
+            return;
         }
         //sprite.setTexture();
         //sprite.setRegion(GameManager.assetManager().get(texture, Texture.class));
