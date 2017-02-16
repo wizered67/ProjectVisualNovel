@@ -42,7 +42,13 @@
     <groups>
         <group name="common">
             <load>testbackground.png</load>
-            <load>new sound for this</load>
+            <load>Edgeworth</load>
+            <load>icon</load>
+            <load>icon2</load>
+            <load>crossexamination.mp3</load>
+            <load>intense.wav</load>
+            <load>talksoundmale.wav</load>
+            <load>talksoundfemale.wav</load>
         </group>
         <group name="group2">
             <load>intense.wav</load>

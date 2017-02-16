@@ -245,12 +245,26 @@ public class Assets {
 
     /** Loads all resources in the asset group with name GROUP. */
     public void loadGroup(String groupName) {
-
+        Set<AssetDescriptor> group = assetGroups.get(groupName);
+        if (group == null) {
+            GameManager.error("No such group with name " + groupName);
+            return;
+        }
+        for (AssetDescriptor descriptor : group) {
+            load(descriptor);
+        }
     }
 
     /** Unloads all resources in the asset group with name GROUP. */
     public void unloadGroup(String groupName) {
-
+        Set<AssetDescriptor> group = assetGroups.get(groupName);
+        if (group == null) {
+            GameManager.error("No such group with name " + groupName);
+            return;
+        }
+        for (AssetDescriptor descriptor : group) {
+            unload(descriptor.fileName);
+        }
     }
 
     /** Tells the AssetManager to load the file of type TYPE with filename FILENAME. In effect, calls the
@@ -266,6 +280,11 @@ public class Assets {
         return assetManager.get(fileName);
     }
 
+    /** Tells the AssetManager to unload the file with filename FILENAME. In effect, calls the
+     * regular AssetManager load method without first mapping an identifier to a filename. */
+    public synchronized <T> void unloadRaw(String fileName) {
+        assetManager.unload(fileName);
+    }
 
     /** Below are the regular methods of an AssetManager, except many have been changed so that they can be called with
      * a resource identifier, which is then mapped to the actual filename.
