@@ -420,7 +420,6 @@ public class GUIManager {
             fileNames.add(file.name());
         }
         debugChangePaneType(fileNames, DebugMode.LOAD);
-
     }
 
     private static void debugConfirmChoice() {

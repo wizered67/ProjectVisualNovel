@@ -109,7 +109,9 @@ public class Assets {
             return;
         }
         for (AnimationData data : allData) {
-            allAnimations.put(data.getAtlasAnimation(), data.createAnimation(atlas));
+            if (allAnimations.get(data.getAtlasAnimation()) == null) {
+                allAnimations.put(data.getAtlasAnimation(), data.createAnimation(atlas));
+            }
         }
     }
     /** Returns the Animation with identifier IDENTIFIER. */
