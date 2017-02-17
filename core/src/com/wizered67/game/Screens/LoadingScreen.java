@@ -83,7 +83,7 @@ public class LoadingScreen implements Screen {
         testStage.draw();
         //System.out.println(System.nanoTime() / 1000000);
         if (GameManager.assetManager().update()) {
-            GameManager.assetManager().loadAnimations();
+            GameManager.assetManager().loadAnimation("Edgeworth");
             //GameManager.assetManager().unload("Edgeworth"); //todo remove, debug
             GameManager.game.setScreen(nextScreen); //todo deal with this loading stuff
             //GUIManager.conversationController().setConv((Conversation) GameManager.assetManager().getRaw("Conversations/demonstration.conv"));

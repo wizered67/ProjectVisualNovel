@@ -1,5 +1,6 @@
 package com.wizered67.game.Saving;
 
+import com.wizered67.game.Assets;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.MusicManager;
 
@@ -15,4 +16,5 @@ public class SaveData {
     public ConversationController conversationController;
     /** Maps scripting language names to a map of variable names to values. */
     public Map<String, Map<String, Object>> scriptingVariables = new HashMap<String, Map<String, Object>>();
+    public Assets assets;
 }

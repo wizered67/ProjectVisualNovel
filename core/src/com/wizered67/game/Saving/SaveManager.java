@@ -9,6 +9,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.minlog.Log;
+import com.wizered67.game.Assets;
 import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
@@ -56,6 +57,7 @@ public class SaveManager {
         kryo.addDefaultSerializer(Conversation.class, ConversationSerializer.class);
         kryo.addDefaultSerializer(Sprite.class, SpriteSerializer.class);
         kryo.addDefaultSerializer(SceneEntity.class, SceneEntitySerializer.class);
+        kryo.addDefaultSerializer(Assets.class, AssetsSerializer.class);
 
         kryo.setReferences(true);
         Log.set(Log.LEVEL_TRACE);
@@ -77,6 +79,7 @@ public class SaveManager {
         data.musicManager = GameManager.musicManager();
         ConversationController conversationController = GUIManager.conversationController();
         data.conversationController = conversationController;
+        data.assets = GameManager.assetManager();
         //LuaScriptManager sm = (LuaScriptManager) ConversationController.scriptManager("Lua");
         Map<String, ScriptManager> managers = ConversationController.allScriptManagers();
         for (String name : managers.keySet()) {

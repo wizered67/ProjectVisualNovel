@@ -56,7 +56,7 @@ public class GameManager {
 		assetManager.load("Backgrounds/testbackground.png", Texture.class);
 	}
 
-	public static void loadAnimations() {
+	public static void createAnimationData() {
 		AssetManager assetManager = assetManager();
 		TextureAtlas atlas = assetManager.get("Animations/Edgeworth.pack", TextureAtlas.class);
 		Array<TextureAtlas.AtlasRegion> think = atlas.findRegions("Edgeworth");

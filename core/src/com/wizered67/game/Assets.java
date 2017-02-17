@@ -45,6 +45,8 @@ public class Assets {
     private Map<String, AssetDescriptor> assetIdentifiers;
     /** Mapping between XML tag and Class of resources in that tag. */
     private Map<String, Class> tagToClass;
+    /** Mapping between animation atlas identifier and set of AnimationData associated with that atlas. */
+    private Map<String, Set<AnimationData>> atlasToAnimationData;
     /** Map between animation names and the Animation object that corresponds to it. */
     private Map<String, Animation> allAnimations;
     /** Map between names of asset groups and the set of assets they contain.
@@ -79,6 +81,7 @@ public class Assets {
         allAnimations = new HashMap<>();
         tagToClass = new HashMap<>();
         assetGroups = new HashMap<>();
+        atlasToAnimationData = new HashMap<>();
         initTagsToClass();
         initResources();
         assetManager.setLoader(Conversation.class, new ConversationAssetLoader(new InternalFileHandleResolver()));
@@ -89,6 +92,11 @@ public class Assets {
         tagToClass.put(MUSIC_TAG, Music.class);
         tagToClass.put(SOUNDS_TAG, Sound.class);
         tagToClass.put(TEXTURES_TAG, Texture.class);
+    }
+    public void loadAnimation(String atlasIdentifier) {
+        for (AnimationData data : atlasToAnimationData.get(atlasIdentifier)) {
+            allAnimations.put(data.getAtlasAnimation(), data.createAnimation());
+        }
     }
     /** Returns the Animation with identifier IDENTIFIER. */
     public Animation getAnimation(String identifier) {
@@ -101,7 +109,7 @@ public class Assets {
             root = xmlReader.parse(Gdx.files.internal(RESOURCE_XML));
             mapTextures(root);
             mapAnimationFiles(root);
-            //loadAnimations(root);
+            createAnimationData(root);
             mapMusic(root);
             mapSounds(root);
             loadCharacters(root);
@@ -128,7 +136,7 @@ public class Assets {
     /** Must be called once animation files are loaded. Goes through each one and creates Animation
      * objects with the data based off of the data from the children of the element named ANIMATIONS_TAG.
      */
-    public void loadAnimations() {
+    public void createAnimationData(Element root) {
         Element anims = root.getChildByName(ANIMATIONS_TAG);
         for (int c = 0; c < anims.getChildCount(); c += 1) {
             Element animationData = anims.getChild(c);
@@ -141,10 +149,16 @@ public class Assets {
             }
             String atlasName = atlasAnimation.substring(0, index);
             String animationName = atlasAnimation.substring(index + 1);
-            TextureAtlas atlas = get(atlasName);
-            Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
-            Animation animation = new Animation(duration, region, Animation.PlayMode.valueOf(mode));
-            allAnimations.put(atlasAnimation, animation);
+            Set<AnimationData> dataSet = atlasToAnimationData.get(atlasName);
+            if (dataSet == null) {
+                dataSet = new HashSet<>();
+                atlasToAnimationData.put(atlasName, dataSet);
+            }
+            dataSet.add(new AnimationData(atlasName, animationName, duration, Animation.PlayMode.valueOf(mode)));
+            //TextureAtlas atlas = get(atlasName);
+            //Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
+            //Animation animation = new Animation(duration, region, Animation.PlayMode.valueOf(mode));
+            //allAnimations.put(atlasAnimation, animation);
         }
     }
     /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
@@ -343,6 +357,10 @@ public class Assets {
         assetManager.finishLoadingAsset(assetIdentifiers.get(identifier).fileName);
     }
 
+
+    public synchronized Class getAssetTypeRaw(String filename) {
+        return assetManager.getAssetType(filename);
+    }
 
     public synchronized Class getAssetType(String identifier) {
         return assetManager.getAssetType(assetIdentifiers.get(identifier).fileName);
