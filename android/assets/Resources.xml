@@ -49,6 +49,7 @@
             <load>intense.wav</load>
             <load>talksoundmale.wav</load>
             <load>talksoundfemale.wav</load>
+            <load>investigationDemo.conv</load>
         </group>
         <group name="group2">
             <load>intense.wav</load>

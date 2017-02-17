@@ -62,8 +62,9 @@ public class LoadingScreen implements Screen {
         //GameManager.assetManager().loadRaw("Conversations/demonstration.conv", Conversation.class);
         //GameManager.assetManager().initResources();
         //GameManager.assetManager().loadGroup("common");
-        GameManager.assetManager().loadConversation("investigationDemo.conv");
+        //GameManager.assetManager().loadConversation("investigationDemo.conv");
         //GameManager.assetManager().load("Edgeworth");
+        GameManager.assetManager().loadGroup("common");
     }
 
 

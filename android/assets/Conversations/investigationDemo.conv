@@ -1,17 +1,17 @@
 <conversation xmlns="urn:conversations">
     <branch name="default">
-        <visible id="Detective" visible="true" fadeTime="0" fadeType="linear" wait="true"/>
-        <animation id="Detective" animation="Edgeworth_Edgeworth" wait="false"/>
-        <!-- <loadGroup>common</loadGroup> -->
-        <fade exitTime="1" enterTime="1" wait="true" color="BLACK">
+        <fade exitTime="0" enterTime="0" wait="true" color="BLACK">
             <waitForLoading/>
             <bg id="testbackground.png"/>
             <image instance="hello">
-                <position x="50" y="120"/>
+                <position x="50" y="120" depth="-1"/>
                 <texture id="icon2"/>
                 <visibility visible="true"/>
             </image>
         </fade>
+        <animation id="Detective" animation="Edgeworth_Edgeworth" wait="false"/>
+        <visible id="Detective" visible="true" fadeTime="2" fadeType="linear" wait="true"/>
+        <!-- <loadGroup>common</loadGroup> -->
 
     </branch>
 

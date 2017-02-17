@@ -180,7 +180,7 @@
     </xs:complexType>
 
     <xs:complexType name="changeConversationType">
-        <xs:attribute name="conv" type="xs:string" use="required"/>
+        <xs:attribute name="conv" type="conversationType" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="exitType">

@@ -60,6 +60,8 @@ public class Assets {
     private static final String MUSIC_DIRECTORY = "Music";
     private static final String SOUNDS_DIRECTORY = "Sounds";
     private static final String TEXTURES_DIRECTORY = "Textures";
+    private static final String CONVERSATION_DIRECTORY = "Conversations";
+    private static final String CONVERSATION_EXTENSION = ".conv";
 
     private static final String ANIMATION_FILES_TAG = "animation_files";
     private static final String ANIMATIONS_TAG = "animations";
@@ -219,6 +221,10 @@ public class Assets {
                     //has to get text element because using Mixed XML Reader
                     String identifier = asset.getChildByName("text").getText();
                     AssetDescriptor descriptor = assetIdentifiers.get(identifier);
+                    if (identifier.endsWith(CONVERSATION_EXTENSION)) {
+                        descriptor = new AssetDescriptor(CONVERSATION_DIRECTORY + "/" + identifier, Conversation.class);
+                    }
+
                     if (descriptor == null) {
                         GameManager.error("No such resource with name " + identifier);
                     }
@@ -300,15 +306,15 @@ public class Assets {
 
     /** Load and unload Conversations through the asset manager. */
     public synchronized void loadConversation(String conversation) {
-        assetManager.load("Conversations/" + conversation, Conversation.class);
+        assetManager.load(CONVERSATION_DIRECTORY + "/" + conversation, Conversation.class);
     }
 
     public synchronized void unloadConversation(String conversation) {
-        assetManager.unload("Conversations/" + conversation);
+        assetManager.unload(CONVERSATION_DIRECTORY + "/" + conversation);
     }
 
     public synchronized Conversation getConversation(String conversation) {
-        return assetManager.get("Conversations/" + conversation, Conversation.class);
+        return assetManager.get(CONVERSATION_DIRECTORY + "/" + conversation, Conversation.class);
     }
 
     /** Tells the AssetManager to load the file of type TYPE with filename FILENAME. In effect, calls the
@@ -335,6 +341,9 @@ public class Assets {
      */
 
     public synchronized <T> T get(String identifier) {
+        if (identifier.endsWith(".conv")) {
+            return (T) getConversation(identifier);
+        }
         return assetManager.get(assetIdentifiers.get(identifier).fileName);
     }
 
@@ -344,6 +353,9 @@ public class Assets {
 
 
     public synchronized void unload(String identifier) {
+        if (identifier.endsWith(".conv")) {
+            unloadConversation(identifier);
+        }
         assetManager.unload(assetIdentifiers.get(identifier).fileName);
     }
 
@@ -358,10 +370,16 @@ public class Assets {
     }
 
     public synchronized void load(String identifier) {
+        if (identifier.endsWith(".conv")) {
+            loadConversation(identifier);
+        }
         assetManager.load(assetIdentifiers.get(identifier));
     }
 
     public synchronized <T> void load(String identifier, Class<T> type) {
+        if (type == Conversation.class) {
+            loadConversation(identifier);
+        }
         assetManager.load(assetIdentifiers.get(identifier).fileName, type);
     }
 
