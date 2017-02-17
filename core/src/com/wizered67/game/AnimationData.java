@@ -36,6 +36,11 @@ public class AnimationData {
         return new Animation(frameDuration, region, playMode);
     }
 
+    public Animation createAnimation(TextureAtlas atlas) {
+        Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
+        return new Animation(frameDuration, region, playMode);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof AnimationData)) {

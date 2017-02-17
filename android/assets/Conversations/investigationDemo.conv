@@ -34,6 +34,7 @@
     </branch>
     
     <branch name="big ladder">
+        <animation id="Detective" animation="Edgeworth_Point" wait="true"/>
         Detective: That is the nicest ladder I've ever seen!
         <animation id="Detective" animation="Edgeworth_Static"/>
     </branch>

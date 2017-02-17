@@ -10,7 +10,7 @@
         <animation id="Edgeworth_Accuse" frameDuration="0.05"/>
         <animation id="Edgeworth_Confront" frameDuration="1"/>
         <animation id="Edgeworth_Edgeworth" frameDuration="0.3"/>
-        <animation id="Edgeworth_Point" frameDuration="1"/>
+        <animation id="Edgeworth_Point" frameDuration="0.2"/>
     </animations>
 
     <textures>

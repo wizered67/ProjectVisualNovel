@@ -63,7 +63,7 @@ public class LoadingScreen implements Screen {
         //GameManager.assetManager().initResources();
         //GameManager.assetManager().loadGroup("common");
         GameManager.assetManager().loadConversation("investigationDemo.conv");
-        GameManager.assetManager().load("Edgeworth");
+        //GameManager.assetManager().load("Edgeworth");
     }
 
 
@@ -83,7 +83,7 @@ public class LoadingScreen implements Screen {
         testStage.draw();
         //System.out.println(System.nanoTime() / 1000000);
         if (GameManager.assetManager().update()) {
-            GameManager.assetManager().loadAnimation("Edgeworth");
+            //GameManager.assetManager().loadAnimation("Edgeworth");
             //GameManager.assetManager().unload("Edgeworth"); //todo remove, debug
             GameManager.game.setScreen(nextScreen); //todo deal with this loading stuff
             //GUIManager.conversationController().setConv((Conversation) GameManager.assetManager().getRaw("Conversations/demonstration.conv"));
