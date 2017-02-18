@@ -1,8 +1,8 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Game;
-import com.wizered67.game.Screens.LoadingScreen;
-import com.wizered67.game.Screens.MainGameScreen;
+import com.wizered67.game.screens.LoadingScreen;
+import com.wizered67.game.screens.MainGameScreen;
 import com.wizered67.game.assets.Assets;
 
 public class MainGame extends Game {

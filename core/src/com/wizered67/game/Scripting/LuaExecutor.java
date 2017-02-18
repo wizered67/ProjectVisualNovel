@@ -1,6 +1,6 @@
-package com.wizered67.game.Scripting;
+package com.wizered67.game.scripting;
 
-import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.gui.conversations.ConversationController;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaTable;

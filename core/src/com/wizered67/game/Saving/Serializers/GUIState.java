@@ -1,4 +1,4 @@
-package com.wizered67.game.Saving.Serializers;
+package com.wizered67.game.saving.serializers;
 
 /**
  * Stores states of GUI elements to be saved and loaded later.

@@ -1,11 +1,11 @@
-package com.wizered67.game.Saving.Serializers;
+package com.wizered67.game.saving.serializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.Scripting.ScriptManager;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.scripting.ScriptManager;
 
 /**
  * Used to serialize ScriptManagers for saving and loading. Only saves language name to load from there.

@@ -1,4 +1,4 @@
-package com.wizered67.game.Screens;
+package com.wizered67.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -24,15 +23,12 @@ import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Inputs.Controllable;
-import com.wizered67.game.Inputs.MyInputProcessor;
-import com.wizered67.game.Saving.SaveManager;
+import com.wizered67.game.inputs.Controllable;
+import com.wizered67.game.inputs.MyInputProcessor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

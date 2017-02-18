@@ -1,14 +1,14 @@
-package com.wizered67.game.GUI.Conversations.Commands;
+package com.wizered67.game.gui.conversations.commands;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.Conversations.scene.Fade;
-import com.wizered67.game.GUI.Conversations.scene.SceneManager;
+import com.wizered67.game.gui.conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.gui.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.gui.conversations.scene.Fade;
+import com.wizered67.game.gui.conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
 
 import java.util.ArrayList;

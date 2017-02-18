@@ -1,30 +1,19 @@
-package com.wizered67.game.Screens;
+package com.wizered67.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Array;
-import com.wizered67.game.Constants;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Saving.SaveManager;
-
-import java.util.HashMap;
+import com.wizered67.game.saving.SaveManager;
 
 /**
  * Screen shown while loading all assets needed for the game, at least initially.

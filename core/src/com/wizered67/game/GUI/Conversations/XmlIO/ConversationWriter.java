@@ -1,10 +1,10 @@
-package com.wizered67.game.GUI.Conversations.XmlIO;
+package com.wizered67.game.gui.conversations.xmlio;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
-import com.wizered67.game.GUI.Conversations.Conversation;
+import com.wizered67.game.gui.conversations.commands.ConversationCommand;
+import com.wizered67.game.gui.conversations.Conversation;
 
 import java.io.IOException;
 import java.io.Writer;

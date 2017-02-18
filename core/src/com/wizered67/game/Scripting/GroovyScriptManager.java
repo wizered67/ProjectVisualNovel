@@ -1,4 +1,4 @@
-package com.wizered67.game.Scripting;
+package com.wizered67.game.scripting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

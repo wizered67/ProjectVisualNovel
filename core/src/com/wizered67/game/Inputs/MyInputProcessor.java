@@ -1,4 +1,4 @@
-package com.wizered67.game.Inputs;
+package com.wizered67.game.inputs;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;

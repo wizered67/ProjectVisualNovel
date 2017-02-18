@@ -1,7 +1,6 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.audio.Music;
-import com.wizered67.game.Saving.SaveData;
 
 /**
  * Used to set the current music to be played to ensure that only one is played at a time.

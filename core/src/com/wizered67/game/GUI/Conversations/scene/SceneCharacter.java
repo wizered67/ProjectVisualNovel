@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations.scene;
+package com.wizered67.game.gui.conversations.scene;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.CompleteEvent;
 import com.wizered67.game.GameManager;
 
 /**

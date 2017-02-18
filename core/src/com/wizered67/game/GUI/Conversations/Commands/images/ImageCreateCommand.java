@@ -1,11 +1,11 @@
-package com.wizered67.game.GUI.Conversations.Commands.images;
+package com.wizered67.game.gui.conversations.commands.images;
 
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.scene.SceneImage;
-import com.wizered67.game.GUI.Conversations.scene.SceneManager;
+import com.wizered67.game.gui.conversations.commands.ConversationCommand;
+import com.wizered67.game.gui.conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.gui.conversations.scene.SceneImage;
+import com.wizered67.game.gui.conversations.scene.SceneManager;
 
 /**
  * Creates a new image. When executed it instantiates a new SceneImage

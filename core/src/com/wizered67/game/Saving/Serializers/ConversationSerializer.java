@@ -1,11 +1,11 @@
-package com.wizered67.game.Saving.Serializers;
+package com.wizered67.game.saving.serializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.gui.conversations.Conversation;
+import com.wizered67.game.gui.GUIManager;
 
 import java.util.HashMap;
 

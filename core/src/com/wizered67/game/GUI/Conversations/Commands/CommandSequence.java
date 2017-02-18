@@ -1,10 +1,10 @@
-package com.wizered67.game.GUI.Conversations.Commands;
+package com.wizered67.game.gui.conversations.commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
+import com.wizered67.game.gui.conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.gui.conversations.xmlio.ConversationLoader;
 
 import java.io.IOException;
 import java.util.LinkedList;

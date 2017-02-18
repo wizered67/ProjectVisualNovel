@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations.XmlIO;
+package com.wizered67.game.gui.conversations.xmlio;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.*;

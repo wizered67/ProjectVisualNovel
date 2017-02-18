@@ -1,13 +1,13 @@
-package com.wizered67.game.GUI.Conversations.Commands;
+package com.wizered67.game.gui.conversations.commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.gui.conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Scripting.GameScript;
-import com.wizered67.game.Scripting.ScriptManager;
+import com.wizered67.game.scripting.GameScript;
+import com.wizered67.game.scripting.ScriptManager;
 
 /**
  * ConversationCommand for executing lines of code or a file containing lines of code

@@ -1,4 +1,6 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.gui.conversations;
+
+import com.wizered67.game.gui.conversations.scene.SceneManager;
 
 /** Contains information to be passed to the current ConversationCommand
  * about an event that has occurred that could lead to its completion.
@@ -45,7 +47,7 @@ public class CompleteEvent {
         return ANIMATION_END_EVENT;
     }
 
-    public static CompleteEvent fade(com.wizered67.game.GUI.Conversations.scene.SceneManager manager, Object entity) {
+    public static CompleteEvent fade(SceneManager manager, Object entity) {
         FADE_END_EVENT.data = new Object[] { manager, entity };
         return FADE_END_EVENT;
     }

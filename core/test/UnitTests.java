@@ -1,11 +1,11 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.wizered67.game.GUI.Conversations.Commands.*;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.gui.conversations.Commands.*;
+import com.wizered67.game.gui.conversations.Conversation;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.gui.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.gui.GUIManager;
 import junitx.util.PrivateAccessor;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

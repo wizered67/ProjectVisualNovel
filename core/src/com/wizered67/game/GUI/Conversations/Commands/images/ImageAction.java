@@ -1,6 +1,6 @@
-package com.wizered67.game.GUI.Conversations.Commands.images;
+package com.wizered67.game.gui.conversations.commands.images;
 
-import com.wizered67.game.GUI.Conversations.scene.SceneImage;
+import com.wizered67.game.gui.conversations.scene.SceneImage;
 
 /**
  * Represents an action to be applied on an image. The apply method

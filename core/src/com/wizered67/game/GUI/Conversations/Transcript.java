@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.gui.conversations;
 
 import java.util.LinkedList;
 

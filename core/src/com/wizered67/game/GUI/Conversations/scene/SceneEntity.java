@@ -1,9 +1,9 @@
-package com.wizered67.game.GUI.Conversations.scene;
+package com.wizered67.game.gui.conversations.scene;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.CompleteEvent;
 
 /**
  * Abstract superclass of all entities drawn and updated in a scene, including CharacterSprites and SceneImages.

@@ -1,21 +1,16 @@
-package com.wizered67.game.GUI.Conversations.scene;
+package com.wizered67.game.gui.conversations.scene;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
-import com.wizered67.game.Constants;
-import com.wizered67.game.GUI.Conversations.Commands.images.ImageAction;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.gui.conversations.commands.images.ImageAction;
+import com.wizered67.game.gui.conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Saving.SaveManager;
 
 import java.util.*;
 

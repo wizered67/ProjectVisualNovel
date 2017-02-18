@@ -1,4 +1,4 @@
-package com.wizered67.game.Inputs;
+package com.wizered67.game.inputs;
 
 /**
  * Interface for all objects that should receive events when a touch or key event occur.

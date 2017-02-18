@@ -1,4 +1,4 @@
-package com.wizered67.game.Saving.Serializers.LuaSerializers;
+package com.wizered67.game.saving.serializers.luaserializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;

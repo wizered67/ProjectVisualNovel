@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations.scene;
+package com.wizered67.game.gui.conversations.scene;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;

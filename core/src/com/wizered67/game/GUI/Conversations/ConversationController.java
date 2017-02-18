@@ -1,21 +1,20 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.gui.conversations;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.wizered67.game.GUI.Conversations.Commands.*;
-import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
-import com.wizered67.game.GUI.Conversations.scene.SceneManager;
+import com.wizered67.game.gui.conversations.commands.*;
+import com.wizered67.game.gui.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.gui.conversations.scene.SceneCharacter;
+import com.wizered67.game.gui.conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.Inputs.Controllable;
-import com.wizered67.game.Inputs.MyInputProcessor.ControlType;
-import com.wizered67.game.Saving.Serializers.GUIState;
-import com.wizered67.game.Scripting.GroovyScriptManager;
-import com.wizered67.game.Scripting.LuaScriptManager;
-import com.wizered67.game.Scripting.ScriptManager;
+import com.wizered67.game.inputs.Controllable;
+import com.wizered67.game.inputs.MyInputProcessor.ControlType;
+import com.wizered67.game.saving.serializers.GUIState;
+import com.wizered67.game.scripting.GroovyScriptManager;
+import com.wizered67.game.scripting.LuaScriptManager;
+import com.wizered67.game.scripting.ScriptManager;
 
 import java.util.*;
 

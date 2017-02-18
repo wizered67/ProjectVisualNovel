@@ -1,9 +1,9 @@
-package com.wizered67.game.GUI.Conversations.Commands;
+package com.wizered67.game.gui.conversations.commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.GUI.Conversations.CompleteEvent;
-import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.gui.conversations.CompleteEvent;
+import com.wizered67.game.gui.conversations.ConversationController;
 
 /**
  * A ConversationCommand that sets the speed of the text being

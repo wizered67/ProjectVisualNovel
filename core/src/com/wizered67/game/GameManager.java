@@ -1,7 +1,7 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
-import com.wizered67.game.Inputs.MyInputProcessor;
+import com.wizered67.game.inputs.MyInputProcessor;
 import com.wizered67.game.assets.Assets;
 
 public class GameManager {

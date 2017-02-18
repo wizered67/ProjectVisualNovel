@@ -1,7 +1,7 @@
-package com.wizered67.game.Saving;
+package com.wizered67.game.saving;
 
 import com.wizered67.game.assets.Assets;
-import com.wizered67.game.GUI.Conversations.ConversationController;
+import com.wizered67.game.gui.conversations.ConversationController;
 import com.wizered67.game.MusicManager;
 
 import java.util.HashMap;

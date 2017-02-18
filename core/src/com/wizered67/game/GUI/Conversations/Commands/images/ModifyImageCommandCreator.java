@@ -1,7 +1,7 @@
-package com.wizered67.game.GUI.Conversations.Commands.images;
+package com.wizered67.game.gui.conversations.commands.images;
 
 import com.badlogic.gdx.utils.XmlReader;
-import com.wizered67.game.GUI.Conversations.Commands.CommandSequence;
+import com.wizered67.game.gui.conversations.commands.CommandSequence;
 
 
 /**

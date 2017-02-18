@@ -1,4 +1,4 @@
-package com.wizered67.game.Scripting;
+package com.wizered67.game.scripting;
 
 /**
  * Interface for all GameScripts. Scripts of a specific language should

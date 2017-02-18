@@ -1,4 +1,4 @@
-package com.wizered67.game.GUI.Conversations.XmlIO;
+package com.wizered67.game.gui.conversations.xmlio;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -7,9 +7,9 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.wizered67.game.GUI.Conversations.Commands.*;
-import com.wizered67.game.GUI.Conversations.Commands.images.ModifyImageCommandCreator;
-import com.wizered67.game.GUI.Conversations.Conversation;
+import com.wizered67.game.gui.conversations.commands.*;
+import com.wizered67.game.gui.conversations.commands.images.ModifyImageCommandCreator;
+import com.wizered67.game.gui.conversations.Conversation;
 
 import java.io.IOException;
 import java.util.HashMap;

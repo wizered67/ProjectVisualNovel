@@ -1,4 +1,4 @@
-package com.wizered67.game.Scripting;
+package com.wizered67.game.scripting;
 
 import com.badlogic.gdx.Gdx;
 import org.luaj.vm2.Globals;
@@ -37,7 +37,7 @@ public class LuaScriptManager implements ScriptManager {
         globals.load(new LuajavaGdxReflection());
         LuaGameMethods luaGameMethods = new LuaGameMethods();
         Gdx.app.log("Test", "Trying to set game methods class.");
-        globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.Scripting.LuaGameMethods")));
+        globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.scripting.LuaGameMethods")));
         System.out.println("Got game methods class.");
     }
 

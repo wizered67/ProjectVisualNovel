@@ -1,6 +1,6 @@
-package com.wizered67.game.GUI.Conversations;
+package com.wizered67.game.gui.conversations;
 
-import com.wizered67.game.GUI.Conversations.Commands.ConversationCommand;
+import com.wizered67.game.gui.conversations.commands.ConversationCommand;
 
 import java.util.HashMap;
 import java.util.LinkedList;
