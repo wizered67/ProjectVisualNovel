@@ -1,7 +1,8 @@
-package com.wizered67.game;
+package com.wizered67.game.assets;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.wizered67.game.GameManager;
 
 /**
  * Same behavior as regular TextureAtlases, but also unloads Animations when disposed.

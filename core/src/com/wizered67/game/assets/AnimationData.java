@@ -1,8 +1,9 @@
-package com.wizered67.game;
+package com.wizered67.game.assets;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.wizered67.game.GameManager;
 
 /**
  * Stores the information necessary to create a specific Animation of a TextureAtlas.

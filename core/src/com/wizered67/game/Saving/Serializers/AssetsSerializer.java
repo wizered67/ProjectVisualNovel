@@ -5,9 +5,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.wizered67.game.Assets;
+import com.wizered67.game.assets.Assets;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.StoredAssetData;
+import com.wizered67.game.assets.StoredAssetData;
 
 import java.util.ArrayList;
 import java.util.List;

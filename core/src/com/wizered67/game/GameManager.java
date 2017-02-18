@@ -1,16 +1,8 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.Inputs.MyInputProcessor;
-
-import java.util.*;
+import com.wizered67.game.assets.Assets;
 
 public class GameManager {
 	public static MainGame game;

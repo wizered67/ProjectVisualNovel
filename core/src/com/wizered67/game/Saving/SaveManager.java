@@ -1,6 +1,5 @@
 package com.wizered67.game.Saving;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,12 +8,10 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.minlog.Log;
-import com.wizered67.game.Assets;
-import com.wizered67.game.GUI.Conversations.scene.SceneCharacter;
+import com.wizered67.game.assets.Assets;
 import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.GUI.Conversations.scene.SceneEntity;
-import com.wizered67.game.GUI.Conversations.scene.SceneImage;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GUI.GUIManager;
 import com.wizered67.game.GameManager;

@@ -1,4 +1,4 @@
-package com.wizered67.game;
+package com.wizered67.game.assets;
 
 /**
  * Stores data for a loaded asset. Used for serialization.

@@ -1,6 +1,6 @@
 package com.wizered67.game.Saving;
 
-import com.wizered67.game.Assets;
+import com.wizered67.game.assets.Assets;
 import com.wizered67.game.GUI.Conversations.ConversationController;
 import com.wizered67.game.MusicManager;
 

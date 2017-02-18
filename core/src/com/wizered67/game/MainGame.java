@@ -1,15 +1,9 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.wizered67.game.Saving.SaveManager;
 import com.wizered67.game.Screens.LoadingScreen;
 import com.wizered67.game.Screens.MainGameScreen;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.wizered67.game.assets.Assets;
 
 public class MainGame extends Game {
 	MainGameScreen gameScreen;

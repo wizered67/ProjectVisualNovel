@@ -1,4 +1,4 @@
-package com.wizered67.game;
+package com.wizered67.game.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -21,6 +21,7 @@ import com.wizered67.game.GUI.Conversations.Conversation;
 import com.wizered67.game.GUI.Conversations.XmlIO.ConversationAssetLoader;
 import com.wizered67.game.GUI.Conversations.scene.SceneManager;
 import com.wizered67.game.GUI.Conversations.XmlIO.MixedXmlReader;
+import com.wizered67.game.GameManager;
 
 import static com.badlogic.gdx.utils.XmlReader.Element;
 
