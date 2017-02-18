@@ -16,6 +16,7 @@
     </branch>
 
     <branch name="lamp">
+        <load>Edgeworth</load>
         <animation id="Detective" animation="Edgeworth_Static"/>
         Detective: What a strange lamp that is... I wonder what it means?
         <script language="Lua">rand = game:randomRange(1, 50)</script>
@@ -26,11 +27,7 @@
     <branch name="ladder">
         <animation id="Detective" animation="Edgeworth_Static"/>
         Detective: That's a nice ladder. Not the tallest one here though!
-        <script language="Lua">
-            arr2 = {}
-            arr2["sigma"] = "hero"
-            arr2["delta"] = "complex motives"
-        </script>
+        <unload>Edgeworth</unload>
     </branch>
     
     <branch name="big ladder">

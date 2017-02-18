@@ -32,7 +32,8 @@ import java.util.regex.Pattern;
 
 /**
  * Manages resources by adapting an AssetManager and using identifiers, not filenames, for resources.
- * When created, loads identifier-filename mapping from RESOURCE_XML.
+ * When created, loads identifier-filename mapping from RESOURCE_XML. Also used for loading animations,
+ * asset groups, and characters.
  * @author Adam Victor
  */
 public class Assets {
@@ -45,8 +46,8 @@ public class Assets {
     private Map<String, AssetDescriptor> assetIdentifiers;
     /** Mapping between XML tag and Class of resources in that tag. */
     private Map<String, Class> tagToClass;
-    /** Mapping between animation atlas identifier and set of AnimationData associated with that atlas. */
-    private Map<String, Set<AnimationData>> atlasToAnimationData;
+    /** Mapping between animation file path and set of AnimationData associated with that atlas. */
+    private Map<String, Set<AnimationData>> atlasFileToAnimationData;
     /** Map between animation names and the Animation object that corresponds to it. */
     private Map<String, Animation> allAnimations;
     /** Map between names of asset groups and the set of assets they contain.
@@ -79,25 +80,26 @@ public class Assets {
     /** Loads all resources, loading them into AssetManager MANAGER. */
     public Assets(AssetManager manager) {
         assetManager = manager;
+        assetManager.getLogger().setLevel(Logger.DEBUG);
         assetIdentifiers = new HashMap<>();
         allAnimations = new HashMap<>();
         tagToClass = new HashMap<>();
         assetGroups = new HashMap<>();
-        atlasToAnimationData = new HashMap<>();
+        atlasFileToAnimationData = new HashMap<>();
         initTagsToClass();
         initResources();
         assetManager.setLoader(Conversation.class, new ConversationAssetLoader(new InternalFileHandleResolver()));
-        assetManager.setLoader(TextureAtlas.class, new TextureAtlasAnimationLoader(new InternalFileHandleResolver()));
+        assetManager.setLoader(AnimationTextureAtlas.class, new TextureAtlasAnimationLoader(new InternalFileHandleResolver()));
     }
     /** Sets all mappings between tags and classes needed for loading. */
     private void initTagsToClass() {
-        tagToClass.put(ANIMATION_FILES_TAG, TextureAtlas.class);
+        tagToClass.put(ANIMATION_FILES_TAG, AnimationTextureAtlas.class);
         tagToClass.put(MUSIC_TAG, Music.class);
         tagToClass.put(SOUNDS_TAG, Sound.class);
         tagToClass.put(TEXTURES_TAG, Texture.class);
     }
     public void loadAnimation(String atlasFilename) {
-        Set<AnimationData> allData = atlasToAnimationData.get(atlasFilename);
+        Set<AnimationData> allData = atlasFileToAnimationData.get(atlasFilename);
         if (allData == null) {
             return;
         }
@@ -106,7 +108,7 @@ public class Assets {
         }
     }
     public void loadAnimation(String atlasFilename, TextureAtlas atlas) {
-        Set<AnimationData> allData = atlasToAnimationData.get(atlasFilename);
+        Set<AnimationData> allData = atlasFileToAnimationData.get(atlasFilename);
         if (allData == null) {
             return;
         }
@@ -114,6 +116,15 @@ public class Assets {
             if (allAnimations.get(data.getAtlasAnimation()) == null) {
                 allAnimations.put(data.getAtlasAnimation(), data.createAnimation(atlas));
             }
+        }
+    }
+    public void unloadAnimations(String atlasFilename) {
+        Set<AnimationData> allData = atlasFileToAnimationData.get(atlasFilename);
+        if (allData == null) {
+            return;
+        }
+        for (AnimationData data : allData) {
+            allAnimations.put(data.getAtlasAnimation(), null);
         }
     }
     /** Returns the Animation with identifier IDENTIFIER. */
@@ -168,10 +179,10 @@ public class Assets {
             String atlasName = atlasAnimation.substring(0, index);
             String animationName = atlasAnimation.substring(index + 1);
             String atlasFilename = assetIdentifiers.get(atlasName).fileName;
-            Set<AnimationData> dataSet = atlasToAnimationData.get(atlasFilename);
+            Set<AnimationData> dataSet = atlasFileToAnimationData.get(atlasFilename);
             if (dataSet == null) {
                 dataSet = new HashSet<>();
-                atlasToAnimationData.put(atlasFilename, dataSet);
+                atlasFileToAnimationData.put(atlasFilename, dataSet);
             }
             dataSet.add(new AnimationData(atlasName, animationName, duration, Animation.PlayMode.valueOf(mode)));
             //TextureAtlas atlas = get(atlasName);

@@ -50,11 +50,6 @@ public class ScreenFadeCommand implements ConversationCommand {
     public void execute(ConversationController conversationController) {
         done = !wait;
         conversationController.sceneManager().setFade(new Fade(exitType, 0, exitTime, 1), color);
-        /* okay here's the gist. it should execute the fade out (exit). Once it receives a
-        complete event corresponding to the SceneManager being done fading, it should add to the command
-        queue all of the commands passed in. And after those it should add to the command queue the fade in
-        command?
-         */
     }
 
     private void addEnterCommands(ConversationController conversationController) {
