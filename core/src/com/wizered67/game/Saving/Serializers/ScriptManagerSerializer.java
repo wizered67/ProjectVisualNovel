@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.scripting.ScriptManager;
 
 /**

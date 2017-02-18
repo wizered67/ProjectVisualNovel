@@ -16,11 +16,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.XmlReader;
-import com.wizered67.game.gui.conversations.scene.SceneCharacter;
-import com.wizered67.game.gui.conversations.Conversation;
-import com.wizered67.game.gui.conversations.xmlio.ConversationAssetLoader;
-import com.wizered67.game.gui.conversations.scene.SceneManager;
-import com.wizered67.game.gui.conversations.xmlio.MixedXmlReader;
+import com.wizered67.game.conversations.scene.SceneCharacter;
+import com.wizered67.game.conversations.Conversation;
+import com.wizered67.game.conversations.xmlio.ConversationAssetLoader;
+import com.wizered67.game.conversations.scene.SceneManager;
+import com.wizered67.game.conversations.xmlio.MixedXmlReader;
 import com.wizered67.game.GameManager;
 
 import static com.badlogic.gdx.utils.XmlReader.Element;

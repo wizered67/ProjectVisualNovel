@@ -1,15 +1,10 @@
 package com.wizered67.game.scripting;
 
-import com.wizered67.game.gui.conversations.ConversationController;
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.Lua;
-import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import java.io.StringReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Adam on 12/11/2016.

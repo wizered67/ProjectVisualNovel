@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,10 +22,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.wizered67.game.Constants;
-import com.wizered67.game.gui.conversations.Conversation;
-import com.wizered67.game.gui.conversations.ConversationController;
-import com.wizered67.game.gui.conversations.Transcript;
-import com.wizered67.game.GameManager;
+import com.wizered67.game.conversations.Conversation;
+import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.Transcript;
 import com.wizered67.game.saving.SaveManager;
 
 /** Contains GUI elements and the ConversationController which the GUI elements are passed into.

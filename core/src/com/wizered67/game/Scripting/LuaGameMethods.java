@@ -3,7 +3,7 @@ package com.wizered67.game.scripting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
-import com.wizered67.game.gui.conversations.ConversationController;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
 import org.luaj.vm2.LuaValue;
 
