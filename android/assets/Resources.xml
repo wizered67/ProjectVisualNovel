@@ -1,8 +1,6 @@
-<resources xmlns="urn:resourceXml" strict="true">
+<resources xmlns="urn:resourceXml" strict="true" dest="../../core/src/com/wizered67/game/conversations/xmlio/ConversationResources.xsd">
     <animation_files>
-        Edgeworth Edgeworth.pack
-        Test Test.pack
-        test4.png
+        Edgeworth "Edgeworth.pack"
     </animation_files>
 
     <animations>
@@ -14,23 +12,19 @@
     </animations>
 
     <textures>
-        icon testicon.png
-        testbackground.png
-        icon2 testicon2.png
+        icon "testicon.png"
+        "testbackground.png"
+        icon2 "testicon2.png"
     </textures>
 
     <music>
-        crossexamination.mp3
-        new music.mp3
-        newsong thistest.mp3
+        "crossexamination.mp3"
     </music>
 
     <sounds>
-        intense.wav
-        talksoundfemale.wav
-        talksoundmale.wav
-        new sound for this file
-        newsound thissound.wav
+        "intense.wav"
+        "talksoundfemale.wav"
+        "talksoundmale.wav"
     </sounds>
 
     <characters>
@@ -50,10 +44,6 @@
             <load>talksoundmale.wav</load>
             <load>talksoundfemale.wav</load>
             <load>investigationDemo.conv</load>
-        </group>
-        <group name="group2">
-            <load>intense.wav</load>
-            <load>icon2</load>
         </group>
     </groups>
 </resources>

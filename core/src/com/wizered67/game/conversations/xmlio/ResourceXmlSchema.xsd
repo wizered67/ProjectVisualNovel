@@ -26,7 +26,8 @@
                 </xs:element>
                 <xs:element type="groupsType" name="groups" maxOccurs="unbounded"/>
             </xs:all>
-            <xs:attribute name="strict" type="xs:boolean" use="required"/>
+            <xs:attribute name="strict" type="xs:boolean" use="optional"/>
+            <xs:attribute name="dest" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 
