@@ -24,6 +24,8 @@ public class CompleteEvent {
     private static final CompleteEvent FADE_END_EVENT = new CompleteEvent(Type.FADE_END);
     /** A CompleteEvent for when all current text has been displayed. */
     private static final CompleteEvent TEXT_END_EVENT = new CompleteEvent(Type.TEXT);
+    /** A CompleteEvent for when a position interpolation ends. */
+    private static final CompleteEvent POSITION_INTERPOLATION_END_EVENT = new CompleteEvent(Type.POSITION_INTERPOLATION);
 
     public CompleteEvent(Type t) {
         this(t, null);
@@ -56,7 +58,12 @@ public class CompleteEvent {
         return TEXT_END_EVENT;
     }
 
+    public static CompleteEvent positionInterpolation(SceneManager manager, Object entity) {
+        POSITION_INTERPOLATION_END_EVENT.data = new Object[] { manager, entity };
+        return POSITION_INTERPOLATION_END_EVENT;
+    }
+
     public enum Type {
-        INPUT, CHOICE, ANIMATION_END, FADE_END, TEXT
+        INPUT, CHOICE, ANIMATION_END, FADE_END, TEXT, POSITION_INTERPOLATION
     }
 }

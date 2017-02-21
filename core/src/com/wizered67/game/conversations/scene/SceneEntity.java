@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.conversations.CompleteEvent;
+import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
+import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
 
 /**
  * Abstract superclass of all entities drawn and updated in a scene, including CharacterSprites and SceneImages.
@@ -24,8 +26,10 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     protected boolean removed = false;
     /** Whether this entity has been added to the scene yet. */
     protected boolean inScene = false;
-    /** Fade object used to control fading in and out. */
-    protected Fade fade;
+    /** FloatInterpolation object used to control fading in and out. */
+    protected FloatInterpolation fade;
+    /** PositionInterpolation object used to control position change interpolation. */
+    protected PositionInterpolation positionInterpolation;
     /** Method called to restore state after saved variables are reloaded. */
     public abstract void reload();
 
@@ -39,6 +43,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
      */
     public void update(float deltaTime) {
         updateFade(deltaTime);
+        updatePosition(deltaTime);
     }
 
     public void draw(Batch batch) {
@@ -66,6 +71,24 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
                 }
             }
         }
+    }
+
+    /** Updates the position of this entity's sprite. Called every update frame.
+     * DELTA TIME is the time elapsed since the last frame.
+     */
+    protected void updatePosition(float deltaTime) {
+        if (positionInterpolation != null) {
+            Vector2 newPos = positionInterpolation.update(deltaTime);
+            sprite.setPosition(newPos.x, newPos.y);
+            if (positionInterpolation.isDone()) {
+               finishPositionInterpolation();
+            }
+        }
+    }
+    /** Ends the position interpolation and sends a CompleteEvent. */
+    private void finishPositionInterpolation() {
+        positionInterpolation = null;
+        manager.complete(CompleteEvent.positionInterpolation(manager, this));
     }
 
     /** Returns whether the sprite should be drawn. By default it draws if visibility conditions
@@ -141,7 +164,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         return depth;
     }
 
-    public void setFade(Fade fade) {
+    public void setFade(FloatInterpolation fade) {
         this.fade = fade;
     }
 

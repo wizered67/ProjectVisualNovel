@@ -2,7 +2,7 @@ package com.wizered67.game.conversations.commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.conversations.scene.Fade;
+import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
@@ -59,8 +59,8 @@ public class CharacterVisibleCommand implements ConversationCommand {
             c.finishVisibility(show);
             done = true;
         } else {
-            int direction = show ? 1 : -1;
-            c.setFade(new Fade(interpolation, c.getSprite().getColor().a, fadeTime, direction));
+            int end = show ? 1 : 0;
+            c.setFade(new FloatInterpolation(interpolation, c.getSprite().getColor().a, end, fadeTime));
         }
         if (show) {
             c.addToScene(conversationController.sceneManager());

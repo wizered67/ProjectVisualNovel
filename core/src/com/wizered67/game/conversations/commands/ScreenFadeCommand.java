@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.xmlio.ConversationLoader;
-import com.wizered67.game.conversations.scene.Fade;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
 
@@ -49,7 +49,7 @@ public class ScreenFadeCommand implements ConversationCommand {
     @Override
     public void execute(ConversationController conversationController) {
         done = !wait;
-        conversationController.sceneManager().setFade(new Fade(exitType, 0, exitTime, 1), color);
+        conversationController.sceneManager().setFade(new FloatInterpolation(exitType, 0, 1, exitTime), color);
     }
 
     private void addEnterCommands(ConversationController conversationController) {
@@ -118,7 +118,7 @@ public class ScreenFadeCommand implements ConversationCommand {
         @Override
         public void execute(ConversationController conversationController) {
             isDone = !wait;
-            conversationController.sceneManager().setFade(new Fade(enterType, 1, enterTime, -1), color);
+            conversationController.sceneManager().setFade(new FloatInterpolation(enterType, 1, 0, enterTime), color);
         }
 
         @Override

@@ -1,4 +1,4 @@
-package com.wizered67.game.conversations.scene;
+package com.wizered67.game.conversations.scene.interpolations;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,36 +9,35 @@ import java.util.Map;
 /**
  * Used to store progress, type, and other information about an interpolation.
  * Classes wishing to utilize an interpolation can just have a fade field, initialize it,
- * and then update each frame.
+ * and then update each frame. Has specific subtypes for different objects to interpolate.
  * @author Adam Victor
  */
-public class Fade {
-    private float progress;
-    private String interpolationType;
-    private float totalTime;
+public abstract class UpdatedInterpolation<T> {
+    protected float progress;
+    protected String interpolationType;
+    protected float totalTime;
+    protected T initialValue;
+    protected T endValue;
     /** Direction of the fade, positive for going from 0->1 and negative for 1->0.*/
-    private int direction;
-    private float initialValue;
-    private float remaining;
     private transient static Map<String, Interpolation> interpolationTypes;
 
-    public Fade(String type, float start, float length, int dir) {
+    public UpdatedInterpolation() {}
+
+    public UpdatedInterpolation(String type, T start, T end, float length) {
+        initialValue = start;
+        endValue = end;
         interpolationType = type;
         totalTime = length;
-        direction = dir;
-        initialValue = start;
-        if (direction > 0) {
-            remaining = 1 - initialValue;
-        } else {
-            remaining = initialValue;
-        }
     }
 
-    public float update(float delta) {
+    protected float updateInterpolation(float delta) {
         progress = MathUtils.clamp(progress + delta / totalTime, 0, 1);
         Interpolation interpolation = interpolationTypes.get(interpolationType);
-        return initialValue + remaining * (interpolation.apply(progress) * Math.signum(direction));
+        return interpolation.apply(progress);
     }
+    /** Updates the interpolation and returns the interpolated version. */
+    public abstract T update(float delta);
+
 
     public boolean isDone() {
         return progress >= 1;

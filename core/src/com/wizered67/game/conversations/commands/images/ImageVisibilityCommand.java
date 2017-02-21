@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.commands.ConversationCommand;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.conversations.scene.Fade;
+import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.SceneImage;
 import com.wizered67.game.conversations.scene.SceneManager;
 
@@ -60,8 +60,8 @@ class ImageVisibilityCommand implements ConversationCommand {
                     image.finishVisibility(show);
                     done = true;
                 } else {
-                    int direction = show ? 1 : -1;
-                    image.setFade(new Fade(interpolation, image.getSprite().getColor().a, fadeTime, direction));
+                    int end = show ? 1 : 0;
+                    image.setFade(new FloatInterpolation(interpolation, image.getSprite().getColor().a, end, fadeTime));
                 }
             }
         });

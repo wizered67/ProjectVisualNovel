@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.wizered67.game.conversations.commands.images.ImageAction;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
 
@@ -39,8 +39,8 @@ public class SceneManager {
     private List<SceneEntity> sortedEntities;
     /** The Color to be used for the current fading. */
     private Color fadeColor;
-    /** Fade used for keeping track of interpolation type and progress. */
-    private Fade fade;
+    /** UpdatedInterpolation used for keeping track of interpolation type and progress. */
+    private FloatInterpolation fade;
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
@@ -121,7 +121,7 @@ public class SceneManager {
         }
     }
     /** Used to set the SceneManager's current fade. */
-    public void setFade(Fade fade, Color color) {
+    public void setFade(FloatInterpolation fade, Color color) {
         this.fade = fade;
         fadeColor = color;
     }
