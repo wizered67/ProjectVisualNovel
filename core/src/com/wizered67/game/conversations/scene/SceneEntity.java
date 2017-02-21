@@ -163,9 +163,13 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     public int getDepth() {
         return depth;
     }
-
+    /** Sets the interpolation used for fading to FADE. */
     public void setFade(FloatInterpolation fade) {
         this.fade = fade;
+    }
+    /** Sets the interpolation used for changing position to INTERPOLATION. */
+    public void setPositionInterpolation(PositionInterpolation interpolation) {
+        positionInterpolation = interpolation;
     }
 
     /** Called to set the visibility to either full visibility or no visibility. This, in

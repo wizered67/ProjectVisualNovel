@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.wizered67.game.conversations.commands.images.ImageAction;
+import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
@@ -195,11 +195,11 @@ public class SceneManager {
         return character;
     }
 
-    /** Applies some ImageAction ACTION to either a single SceneImage with id INSTANCE or an entire
+    /** Applies some EntityAction ACTION to either a single SceneImage with id INSTANCE or an entire
      * group with group id GROUP, if INSTANCE is empty. Returns true if the action was successfully
      * applied to at least one image and false otherwise.
      */
-    public boolean applyImageCommand(String instance, String group, ImageAction action) {
+    public boolean applyImageCommand(String instance, String group, EntityAction<SceneImage> action) {
         if (instance.isEmpty() && !group.isEmpty()) {
             Set<SceneImage> images = getImagesByGroup(group);
             if (images == null || images.size() == 0) {
@@ -217,6 +217,35 @@ public class SceneManager {
             }
             return false;
         }
+    }
+
+    /** Applies some EntityAction ACTION to a SceneCharacter. Returns true if the action was successfully
+     * applied to at least one image and false otherwise.
+     */
+    public boolean applyCharacterCommand(String instance, EntityAction<SceneCharacter> action) {
+            SceneCharacter character = getCharacterByIdentifier(instance);
+            if (character != null) {
+                action.apply(character);
+                return true;
+            }
+            return false;
+    }
+
+    /** Applies some EntityAction ACTION to a SceneCharacter. Returns true if the action was successfully
+     * applied to at least one image and false otherwise.
+     */
+    public boolean applyEntityCommand(String instance, boolean isCharacter, EntityAction<SceneEntity> action) {
+        SceneEntity entity;
+        if (isCharacter) {
+            entity = getCharacterByIdentifier(instance);
+        } else {
+            entity = getImage(instance);
+        }
+        if (entity != null) {
+            action.apply(entity);
+            return true;
+        }
+        return false;
     }
 
     /** Adds the SceneImage IMAGE to the scene by adding it to the correct group

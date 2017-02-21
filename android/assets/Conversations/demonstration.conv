@@ -68,10 +68,6 @@
 
         Librarian: I'm the head librarian here. It's a pleasure to meet you.
 
-        <image instance="test2">
-            <position depth="20"/>
-        </image>
-
         !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
         <changebranch branch="choices"/>
     </branch>
@@ -79,10 +75,11 @@
     <branch name="choices">
         <choices>
             When did the murder take place?:
-                <textspeed charsPerSecond="70"/>
+                <position id="Detective" x="400" y="300" interpolation="linear" time="3" wait="true"/>
                 <changebranch branch="when"/>
             How long have you been working for the library?:
                 <if language="Lua"><![CDATA[ {work < 2} ]]></if>
+                <position id="Detective" x="100" y="600" interpolation="bounce" time="5" wait="true"/>
                 <changebranch branch="work"/>
             Did you know the victim?:
                 <changebranch branch="know"/>

@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.commands.ConversationCommand;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.SceneImage;
 import com.wizered67.game.conversations.scene.SceneManager;
@@ -50,7 +51,7 @@ class ImageVisibilityCommand implements ConversationCommand {
     public void execute(ConversationController conversationController) {
         done = !wait;
         final SceneManager manager = conversationController.sceneManager();
-        boolean result = manager.applyImageCommand(instanceIdentifier, groupIdentifier, new ImageAction() {
+        boolean result = manager.applyImageCommand(instanceIdentifier, groupIdentifier, new EntityAction<SceneImage>() {
             @Override
             public void apply(SceneImage image) {
                 if (show) {

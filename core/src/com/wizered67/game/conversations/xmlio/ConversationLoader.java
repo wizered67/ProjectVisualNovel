@@ -34,7 +34,7 @@ public class ConversationLoader {
         classMapping.put("animation", CharacterAnimationCommand.class);
         classMapping.put("direction", CharacterDirectionCommand.class);
         classMapping.put("name", CharacterNameCommand.class);
-        classMapping.put("position", CharacterPositionCommand.class);
+        classMapping.put("position", EntityPositionCommand.class);
         classMapping.put("visible", CharacterVisibleCommand.class);
         classMapping.put("clearScene", ClearSceneCommand.class);
         classMapping.put("sequence", CommandSequence.class);

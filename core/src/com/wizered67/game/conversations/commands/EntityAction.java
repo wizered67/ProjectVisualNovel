@@ -1,6 +1,6 @@
-package com.wizered67.game.conversations.commands.images;
+package com.wizered67.game.conversations.commands;
 
-import com.wizered67.game.conversations.scene.SceneImage;
+import com.wizered67.game.conversations.scene.SceneEntity;
 
 /**
  * Represents an action to be applied on an image. The apply method
@@ -8,6 +8,6 @@ import com.wizered67.game.conversations.scene.SceneImage;
  * groups of images.
  * @author Adam Victor
  */
-public interface ImageAction {
-    void apply(SceneImage image);
+public interface EntityAction<T extends SceneEntity> {
+    void apply(T entity);
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.commands.ConversationCommand;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.scene.SceneImage;
 import com.wizered67.game.conversations.scene.SceneManager;
 
@@ -33,7 +34,7 @@ class ImageTextureCommand implements ConversationCommand {
     @Override
     public void execute(ConversationController conversationController) {
         SceneManager manager = conversationController.sceneManager();
-        manager.applyImageCommand(instanceIdentifier, groupIdentifier, new ImageAction() {
+        manager.applyImageCommand(instanceIdentifier, groupIdentifier, new EntityAction<SceneImage>() {
             @Override
             public void apply(SceneImage image) {
                 image.setTexture(newTexture);

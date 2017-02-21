@@ -128,6 +128,9 @@
         <xs:attribute type="xs:float" name="x" use="optional"/>
         <xs:attribute type="xs:float" name="y" use="optional"/>
         <xs:attribute type="xs:integer" name="depth" use="optional"/>
+        <xs:attribute type="interpolationType" name="interpolation" use="optional"/>
+        <xs:attribute type="xs:float" name="time" use="optional"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
         <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
     </xs:complexType>
 
@@ -212,6 +215,9 @@
         <xs:attribute name="x" type="xs:float" use="optional"/>
         <xs:attribute name="y" type="xs:float" use="optional"/>
         <xs:attribute name="depth" type="xs:integer" use="optional"/>
+        <xs:attribute type="interpolationType" name="interpolation" use="optional"/>
+        <xs:attribute type="xs:float" name="time" use="optional"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
         <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
     </xs:complexType>
 
