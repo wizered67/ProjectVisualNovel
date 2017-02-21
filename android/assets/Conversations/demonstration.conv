@@ -138,10 +138,8 @@
         <animation id="Detective" animation="Edgeworth_Static"/>
 
         Librarian: It was. We aren't sure how he got in here in the first place.
-        <!-- If a message immediately follows a message by the same speaker but should be in a separate message box,
-        an optional shortcut may be used by ommitting the speaker name and just using ': message'. In this case, it is
-        equivalent to another 'Librarian: message'. -->
-        : Does that answer all of your questions?
+        <!-- Same speaker, but a new message command so that it goes into a separate text box. -->
+        Librarian: Does that answer all of your questions?
 
         !Detective: Didn't I also want to ask about...
         <changebranch branch="choices"/>
@@ -179,6 +177,10 @@
         Detective: (His story's getting phonier by the minute. Now I've just got to break through
         his lies once and for all!)
         <visible id="Librarian" visible="false" fadeTime="1.5"/>
+        <!-- Applies the commands inside the tag to all images in the group 'test'. In this case, sets them all to not visible. -->
+        <image group="test">
+            <visibility visible="false"/>
+        </image>
     </branch>
 
 </conversation>
