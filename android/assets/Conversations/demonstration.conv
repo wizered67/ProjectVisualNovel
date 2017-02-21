@@ -1,54 +1,127 @@
 <conversation xmlns="urn:conversations">
     <branch name="default">
-
+        <!-- Assign these names to the following commands. For example, the name 'think' is assigned to the
+        command that sets the Detective's animation to Edgeworth_Edgeworth. Once a command has been assigned to
+        a shortcut, it can be executed in a message with the syntax @c{NAME}. -->
         <assign>
-            anim <animation name="Detective" animation="Think" wait="true"/>
-            think <animation name="Detective" animation="Think" wait="true"/>
-            confront <animation name="Detective" animation="Confront"/>
+            think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
+            confront <animation id="Detective" animation="Edgeworth_Confront"/>
             delay <delay time="1" skippable="true"/>
         </assign>
+        <!-- Sets the background to the image in the Texture's directory with identifier 'testbackground.png'.
+         Backgrounds are just an image with the id 'bg' so they can be modified later. -->
+        <bg id="testbackground.png"/>
 
-        <character name="Detective" animations="Edgeworth"/>
-        <visible name="Detective" visible="true" fade="0.5" wait="true"/>
-        <position name="Detective" x="10" y="160"/>
-        <animation name="Detective" animation="Idle"/>
+        <!-- Initializes the Detective character's position and animation. Then, fades in over a 1 sec period
+        with a linearly interpolated fade, waiting until it is done to move on. -->
+        <position id="Detective" x="10" y="160"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
+        <visible id="Detective" visible="true" fadeTime="1" wait="true" fadeType="linear"/>
 
-        <character name="Librarian" animations="Edgeworth"/>
-        <position name="Librarian" x="800" y="160"/>
-        <animation name="Librarian" animation="Idle"/>
+        <!-- Initialize the position, animation, and direction of the Librarian character, but does not set it to be visible yet. -->
+        <position id="Librarian" x="600" y="160"/>
+        <animation id="Librarian" animation="Edgeworth_Static"/>
+        <direction id="Librarian" direction="-1"/>
+        <!-- Sets the displayname of the Librarian to '???' because the player doesn't know who they are yet. -->
+        <name id="Librarian" displayname="???"/>
 
-        <direction name="Librarian" direction="-1"/>
-        <name name="Librarian" displayname="???"/>
-
-        <init language="Groovy">
+        <!-- Init tags are used to set variable values, only execute if the variable was previously undefined!
+        For example, this tag is equivalent to "if work == nil then work = 0 end"
+        Each line in the init tag should be of the form VARIABLE_NAME INITIAL_VALUE. -->
+        <init language="Lua">
             work 0
         </init>
-        <bg image="Backgrounds/testbackground.png"/>
+
+        <!-- Play the sound in the Sounds directory with the identifier 'intense.wav'. -->
+        <sound id="intense.wav"/>
+        <!-- Play the music in the Music directory with the identifier 'discussion.mp3'. -->
+        <music id="discussion.mp3" loop="false"/>
+
+        <!-- Create an image with the instance identifier 'test'. Then, add it to a group named 'test', creating
+        the group if it didn't yet exist, set its texture to the texture in the Textures folder with identifier 'icon',
+        set its position to (50, 240), and fade it in over a 1 sec period with a linear fade, waiting for the fade to complete
+        before moving on. -->
+        <image instance="test">
+            <group>test</group>
+            <texture id="icon"/>
+            <position x="50" y="240"/>
+            <visibility visible="true" fadeTime="1" wait="true" fadeType="linear"/>
+        </image>
+        <!-- Similarly, this creates an image with instance identifier 'test2'. Then, it adds it to the 'test' group,
+        sets its texture and position, including giving it a lower depth. Lower depths are drawn behind images and characters
+        with higher depths. Set this image to be visible immediately without any fade. -->
+        <image instance="test2">
+            <group>test</group>
+            <texture id="icon"/>
+            <position x="650" y="300" depth="-5"/>
+            <visibility visible="true"/>
+        </image>
+        <!-- Change the current branch to the one named 'main branch' -->
         <changebranch branch="main branch"/>
     </branch>
 
     <branch name="main branch">
-        Detective: The body was found in the library.... Now why would that be? @c{anim} Unless...
-        <visible name="Librarian" visible="true" fade="0.5"/>
+        <!-- Dialogue spoken by the detective character. Dialogue is in the form Speaker: Message.
+        Notice how a command is embedded in the message with the syntax @c{think}. As assigned in
+        the assigned tag, this sets the Detective's animation to the think animation and waits for
+        it to complete before advancing to the rest of the message. -->
+        Detective: The body was found in the library.... Now why would that be? @c{think} Unless...
+
+        <!-- Fade in the Librarian over 2 seconds, waiting for the fade to be done before moving on.
+        Since no interpolation type is set, it defaults to linear. -->
+        <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>
+        <!-- Fades the entire screen to create a sort of screen flash. In this case, the screen will flash white
+        and will take 1 second to become entirely white (exit), using a fade interpolation type. Once the screen is entirely white,
+        the commands inside the fade tag are executed. This is the perfect time to change things because the player won't be able
+        to see the changes until the fade is over, making them less jarring. Once the commands inside the tag are executed, the white screen
+        will fade back to normal (enter) over 0.5 seconds using a linear fade. Since wait is true, the fade must complete before moving on
+        to the next set of commands. -->
+        <fade exitTime="1" enterTime="0.5" color="WHITE" enterType="linear" exitType="fade" wait="true">
+            <image instance="test">
+                <visibility visible="false"/>
+            </image>
+        </fade>
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
-        <animation name="Detective" animation="Idle"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
 
         Detective: And you are...?
-        <name name="Librarian" displayname="Librarian"/>
+        <!-- The Librarian character is about to introduce themselves so now is a good time to set
+        the name the player sees when they speak. -->
+        <name id="Librarian" displayname="Librarian"/>
 
         Librarian: I'm the head librarian here. It's a pleasure to meet you.
-
+        <!-- The exclamation point in front of the speaker here is not necessary, but means that the next command
+        will be executed as soon as the text is fully displayed, WITHOUT requiring an additional player click. Try removing
+        the exclamation point and see the difference! -->
         !Detective: Ah, good. I had a few questions for you. I guess I was mostly wondering...
+
+        <!-- Go to the choices branch now to give some choices! -->
         <changebranch branch="choices"/>
     </branch>
 
     <branch name="choices">
+        <!-- The choices tag should contain all the choices the player can choose from. Each choice is denoted by having some text
+        followed by a colon (:). The text before the colon is the text the player sees in the button corresponding to that choice.
+        When the player chooses that choice, all commands inside that choice (meaning until the end of the choices tag or the next choice line
+        ending in a colon) are executed. Then, commands after the choices tag are executed. -->
         <choices>
             When did the murder take place?:
+                <!-- Just a silly example of position interpolation. Moves the Detective character to (400, 300) over a 3 second period, using
+                linear interpolation and waiting for it to complete before moving on. -->
+                <position id="Detective" x="400" y="300" interpolation="linear" time="3" wait="true"/>
                 <changebranch branch="when"/>
             How long have you been working for the library?:
-                <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+                <!-- When an if statement is the first command after a choice option, it is considered to be the condition for displaying that
+                choice! The if tag does not execute as normal. For example, in this case, this choice "How long..." will only be shown
+                if 'work' is less than 2. If it is greater than or equal to 2, the choice will simply not appear.
+                A few notes on syntax: notice that there are { } around the condition. This is to ensure that the condition is separated from
+                text commands and is necessary. Also notice that it is surrounded by CDATA (a shortcut for doing this in IntelliJ is
+                typing CD and hitting enter). CDATA means that the text is used as raw text and not XML. This is necessary in this case because
+                otherwie using '<' would imply the start of a tag and result in a syntax error. -->
+                <if language="Lua"><![CDATA[ {work < 2} ]]></if>
+                <!-- Another position interpolation example, this time using bounce interpolation over 5 seconds. See the difference! -->
+                <position id="Detective" x="100" y="600" interpolation="bounce" time="5" wait="true"/>
                 <changebranch branch="work"/>
             Did you know the victim?:
                 <changebranch branch="know"/>
@@ -62,10 +135,11 @@
         showed suspicious activity around 2:30 AM last night.
 
         Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
-        <animation name="Detective" animation="Idle"/>
+        <animation id="Detective" animation="Edgeworth_Static"/>
 
         Librarian: It was. We aren't sure how he got in here in the first place.
-        : Does that answer all of your questions?
+        <!-- Same speaker, but a new message command so that it goes into a separate text box. -->
+        Librarian: Does that answer all of your questions?
 
         !Detective: Didn't I also want to ask about...
         <changebranch branch="choices"/>
@@ -73,12 +147,16 @@
 
     <branch name="work">
         Detective: How long have you been working here?
-        <script language="Groovy"> work += 1</script>
+        <!-- This executes a script in Lua that increments work! The content of the script tag is the text that should be used a script.
+        If the isFile attribute is true, then the content is instead a filename in the Scripts directory. -->
+        <script language="Lua"> work = work + 1</script>
 
         Librarian: For 5 years now. But how is that relevant?
 
         Detective: Oh... I guess it's not.
-        <if language="Groovy"> {work == 2}
+        <!-- An if command that checks if work is equal to 2. If so, it executes the commands inside the 'if' tag. Otherwise it moves on.
+        Notice how the condition of if statements must be surrounded by { }. -->
+        <if language="Lua"> {work == 2}
             Librarian: I already answered your pointless question! Now stop bothering me!
         </if>
 
@@ -98,7 +176,11 @@
 
         Detective: (His story's getting phonier by the minute. Now I've just got to break through
         his lies once and for all!)
-        <visible name="Librarian" visible="false" fade="1.5"/>
+        <visible id="Librarian" visible="false" fadeTime="1.5"/>
+        <!-- Applies the commands inside the tag to all images in the group 'test'. In this case, sets them all to not visible. -->
+        <image group="test">
+            <visibility visible="false"/>
+        </image>
     </branch>
 
 </conversation>

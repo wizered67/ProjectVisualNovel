@@ -1,0 +1,91 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:simpleType name="anyType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="animationAtlasResource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Edgeworth"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="animationResource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Edgeworth_Edgeworth"/>
+			<xs:enumeration value="Edgeworth_Static"/>
+			<xs:enumeration value="Edgeworth_Accuse"/>
+			<xs:enumeration value="Edgeworth_Confront"/>
+			<xs:enumeration value="Edgeworth_Point"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="textureResource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="icon"/>
+			<xs:enumeration value="testbackground.png"/>
+			<xs:enumeration value="icon2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="musicResource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value=""/>
+			<xs:enumeration value="discussion.mp3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="soundResource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="talksoundfemale.wav"/>
+			<xs:enumeration value="intense.wav"/>
+			<xs:enumeration value="talksoundmale.wav"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="characterType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Librarian"/>
+			<xs:enumeration value="Detective"/>
+			<xs:enumeration value="Buddy"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="conversationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="rpg.conv"/>
+			<xs:enumeration value="Test.conv"/>
+			<xs:enumeration value="demonstrationLua.conv"/>
+			<xs:enumeration value="saveTest.conv"/>
+			<xs:enumeration value="super long.conv"/>
+			<xs:enumeration value="demonstrationGroovy.conv"/>
+			<xs:enumeration value="testConversation3.conv"/>
+			<xs:enumeration value="mixedTest.conv"/>
+			<xs:enumeration value="testConversation2.conv"/>
+			<xs:enumeration value="testConversation4.conv"/>
+			<xs:enumeration value="demonstration.conv"/>
+			<xs:enumeration value="christine.conv"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="resourceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="rpg.conv"/>
+			<xs:enumeration value="demonstrationLua.conv"/>
+			<xs:enumeration value="saveTest.conv"/>
+			<xs:enumeration value="super long.conv"/>
+			<xs:enumeration value="icon"/>
+			<xs:enumeration value="mixedTest.conv"/>
+			<xs:enumeration value="testConversation4.conv"/>
+			<xs:enumeration value="testbackground.png"/>
+			<xs:enumeration value="intense.wav"/>
+			<xs:enumeration value="icon2"/>
+			<xs:enumeration value="talksoundmale.wav"/>
+			<xs:enumeration value="Test.conv"/>
+			<xs:enumeration value="Edgeworth"/>
+			<xs:enumeration value="demonstrationGroovy.conv"/>
+			<xs:enumeration value="testConversation3.conv"/>
+			<xs:enumeration value="talksoundfemale.wav"/>
+			<xs:enumeration value="testConversation2.conv"/>
+			<xs:enumeration value="discussion.mp3"/>
+			<xs:enumeration value="demonstration.conv"/>
+			<xs:enumeration value="christine.conv"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="resourceGroupType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="common"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

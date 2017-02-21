@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--XML Schema for all conversations. Used to help autocompletion when writing conversations. -->
+<xs:schema targetNamespace="urn:conversations"
+           xmlns="urn:conversations"
+           attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="ConversationResources.xsd"/>
+    <xs:element name="conversation">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="branchType" name="branch" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+
+    </xs:element>
+
+
+    <xs:group name="commands">
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element type="changebranchType" name="changebranch" maxOccurs="unbounded"/>
+                <xs:element type="setanimationType" name="animation" maxOccurs="unbounded"/>
+                <xs:element type="setdirectionType" name="direction" maxOccurs="unbounded"/>
+                <xs:element type="setnameType" name="name" maxOccurs="unbounded"/>
+                <xs:element type="setpositionType" name="position" maxOccurs="unbounded"/>
+                <xs:element type="setvisibleType" name="visible" maxOccurs="unbounded"/>
+                <xs:element type="sequenceType" name="sequence" maxOccurs="unbounded"/>
+                <xs:element type="debugType" name="debug" maxOccurs="unbounded"/>
+                <xs:element type="playmusicType" name="music" maxOccurs="unbounded"/>
+                <xs:element type="xs:string" name="pausemusic" maxOccurs="unbounded"/>
+                <xs:element type="xs:string" name="resumemusic" maxOccurs="unbounded"/>
+                <xs:element type="playsoundType" name="sound" maxOccurs="unbounded"/>
+                <xs:element type="choicesType" name="choices" maxOccurs="unbounded"/>
+                <xs:element type="assignType" name="assign" maxOccurs="unbounded"/>
+                <xs:element type="delayType" name="delay" maxOccurs="unbounded"/>
+                <xs:element type="textSpeedType" name="textspeed" maxOccurs="unbounded"/>
+                <xs:element type="scriptType" name="script" maxOccurs="unbounded"/>
+                <xs:element type="initType" name="init" maxOccurs="unbounded"/>
+                <xs:element type="ifType" name="if" maxOccurs="unbounded"/>
+                <xs:element type="bgType" name="bg" maxOccurs="unbounded"/>
+                <xs:element type="changeConversationType" name="changeconv" maxOccurs="unbounded"/>
+                <xs:element type="imageType" name="image" maxOccurs="unbounded"/>
+                <xs:element type="fadeType" name="fade" maxOccurs="unbounded"/>
+                <xs:element type="emptyType" name="exit" maxOccurs="unbounded"/>
+                <xs:element type="waitUntilType" name="waitUntil" maxOccurs="unbounded"/>
+                <xs:element type="resourceType" name="load" maxOccurs="unbounded"/>
+                <xs:element type="resourceGroupType" name="loadGroup" maxOccurs="unbounded"/>
+                <xs:element type="resourceType" name="unload" maxOccurs="unbounded"/>
+                <xs:element type="resourceGroupType" name="unloadGroup" maxOccurs="unbounded"/>
+                <xs:element type="emptyType" name="waitForLoading" maxOccurs="unbounded"/>
+                <xs:element type="clearType" name="clearScene" maxOccurs="unbounded"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:complexType name="emptyType">
+
+    </xs:complexType>
+
+    <xs:complexType name="choicesType" mixed="true">
+        <xs:group ref="commands" minOccurs="0"/>
+    </xs:complexType>
+
+    <xs:complexType name="debugType">
+        <xs:attribute type="xs:string" name="message" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setnameType">
+        <xs:attribute type="characterType" name="id" use="required"/>
+        <xs:attribute type="xs:string" name="displayname" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="sequenceType">
+        <xs:group ref="commands"/>
+    </xs:complexType>
+
+    <xs:complexType name="addcharacterType">
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="xs:string" name="animations" use="optional"/>
+        <xs:attribute type="xs:string" name="sound" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="playmusicType">
+        <xs:attribute type="musicResource" name="id" use="required"/>
+        <xs:attribute type="xs:boolean" name="loop" use="required"/>
+        <xs:attribute type="xs:float" name="volume" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="playsoundType">
+        <xs:attribute type="soundResource" name="id" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setvisibleType">
+        <xs:attribute type="characterType" name="id" use="required"/>
+        <xs:attribute type="xs:boolean" name="visible" use="required"/>
+        <xs:attribute type="xs:float" name="fadeTime" use="optional"/>
+        <xs:attribute type="interpolationType" name="fadeType" use="optional"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="changebranchType">
+            <xs:attribute type="xs:string" name="branch" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setanimationType">
+            <xs:attribute type="characterType" name="id" use="required"/>
+            <xs:attribute type="animationResource" name="animation" use="required"/>
+            <xs:attribute type="xs:boolean" name="wait" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="assignType" mixed="true">
+        <xs:group ref="commands"/>
+    </xs:complexType>
+
+    <xs:complexType name="setdirectionType">
+        <xs:attribute type="characterType" name="id" use="required"/>
+        <xs:attribute type="xs:integer" name="direction" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="branchType" mixed="true">
+        <xs:group ref="commands"/>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="setpositionType">
+        <xs:attribute type="characterType" name="id" use="required"/>
+        <xs:attribute type="xs:float" name="x" use="optional"/>
+        <xs:attribute type="xs:float" name="y" use="optional"/>
+        <xs:attribute type="xs:integer" name="depth" use="optional"/>
+        <xs:attribute type="interpolationType" name="interpolation" use="optional"/>
+        <xs:attribute type="xs:float" name="time" use="optional"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
+        <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="delayType">
+        <xs:attribute type="xs:float" name="time" use="required"/>
+        <xs:attribute type="xs:boolean" name="skippable" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="textSpeedType">
+        <xs:attribute type="xs:integer" name="charsPerSecond" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="languages">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Lua"/>
+            <xs:enumeration value="Groovy"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="scriptType" mixed="true">
+        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="initType" mixed="true">
+        <xs:attribute type="languages" name="language" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ifType" mixed="true">
+        <xs:sequence minOccurs="0">
+            <xs:group ref="commands" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element type="elseType" name="else" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="elseType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="commands" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="waitUntilType" mixed="true">
+        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="bgType">
+        <xs:attribute name="id" type="textureResource" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="changeConversationType">
+        <xs:attribute name="conv" type="conversationType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="clearType">
+        <xs:attribute name="clearImages" type="xs:boolean" use="required"/>
+        <xs:attribute name="clearCharacters" type="xs:boolean" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="imageType">
+        <xs:group ref="imageProperties" minOccurs="1"/>
+        <xs:attribute name="instance" type="xs:string" use="optional"/>
+        <xs:attribute name="group" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:group name="imageProperties">
+        <xs:all>
+            <xs:element name="group" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="texture" type="imageTexture" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="position" type="positionDepthType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="visibility" type="visibleType" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:group>
+
+    <xs:complexType name="imageTexture">
+        <xs:attribute name="id" type="textureResource" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="positionDepthType">
+        <xs:attribute name="x" type="xs:float" use="optional"/>
+        <xs:attribute name="y" type="xs:float" use="optional"/>
+        <xs:attribute name="depth" type="xs:integer" use="optional"/>
+        <xs:attribute type="interpolationType" name="interpolation" use="optional"/>
+        <xs:attribute type="xs:float" name="time" use="optional"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
+        <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="visibleType">
+        <xs:attribute name="visible" type="xs:boolean" use="required"/>
+        <xs:attribute name="fadeTime" type="xs:float" use="optional"/>
+        <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+        <xs:attribute type="interpolationType" name="fadeType" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="fadeType" mixed="true">
+        <xs:sequence minOccurs="0">
+            <xs:group ref="commands"/>
+        </xs:sequence>
+        <xs:attribute name="color" type="xs:string" use="optional"/>
+        <xs:attribute name="exitTime" type="xs:float" use="required"/>
+        <xs:attribute name="enterTime" type="xs:float" use="required"/>
+        <xs:attribute name="exitType" type="interpolationType" use="optional"/>
+        <xs:attribute name="enterType" type="interpolationType" use="optional"/>
+        <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <xs:simpleType name="interpolationType">
+        <xs:restriction>
+            <xs:enumeration value="linear"/>
+            <xs:enumeration value="fade"/>
+            <xs:enumeration value="pow2"/>
+            <xs:enumeration value="pow2In"/>
+            <xs:enumeration value="pow2Out"/>
+            <xs:enumeration value="pow2InInverse"/>
+            <xs:enumeration value="pow2OutInverse"/>
+            <xs:enumeration value="pow3"/>
+            <xs:enumeration value="pow3In"/>
+            <xs:enumeration value="pow3Out"/>
+            <xs:enumeration value="pow3InInverse"/>
+            <xs:enumeration value="pow3OutInverse"/>
+            <xs:enumeration value="pow4"/>
+            <xs:enumeration value="pow4In"/>
+            <xs:enumeration value="pow4Out"/>
+            <xs:enumeration value="pow5"/>
+            <xs:enumeration value="pow5In"/>
+            <xs:enumeration value="pow5Out"/>
+            <xs:enumeration value="sine"/>
+            <xs:enumeration value="sineIn"/>
+            <xs:enumeration value="sineOut"/>
+            <xs:enumeration value="exp10"/>
+            <xs:enumeration value="exp10In"/>
+            <xs:enumeration value="exp10Out"/>
+            <xs:enumeration value="exp5"/>
+            <xs:enumeration value="exp5In"/>
+            <xs:enumeration value="exp5Out"/>
+            <xs:enumeration value="circle"/>
+            <xs:enumeration value="circleIn"/>
+            <xs:enumeration value="cirlceOut"/>
+            <xs:enumeration value="elastic"/>
+            <xs:enumeration value="elasticIn"/>
+            <xs:enumeration value="elasticOut"/>
+            <xs:enumeration value="swing"/>
+            <xs:enumeration value="swingIn"/>
+            <xs:enumeration value="swingOut"/>
+            <xs:enumeration value="bounce"/>
+            <xs:enumeration value="bounceIn"/>
+            <xs:enumeration value="bounceOut"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

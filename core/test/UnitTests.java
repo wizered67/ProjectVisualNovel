@@ -1,14 +1,10 @@
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.wizered67.game.GUI.Conversations.Commands.*;
-import com.wizered67.game.GUI.Conversations.Conversation;
-import com.wizered67.game.GUI.Conversations.ConversationController;
-import com.wizered67.game.GUI.Conversations.XmlIO.ConversationLoader;
-import com.wizered67.game.GUI.GUIManager;
+import com.wizered67.game.conversations.Commands.*;
+import com.wizered67.game.conversations.Conversation;
+import com.wizered67.game.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.gui.GUIManager;
 import junitx.util.PrivateAccessor;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,7 +13,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 @RunWith(GdxTestRunner.class)

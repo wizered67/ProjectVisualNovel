@@ -1,7 +1,6 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.audio.Music;
-import com.wizered67.game.Saving.SaveData;
 
 /**
  * Used to set the current music to be played to ensure that only one is played at a time.
@@ -22,15 +21,27 @@ public class MusicManager {
     /** Initialize MusicManager with no music being played. */
     public MusicManager() {
         currentMusic = null;
-        currentMusicName = "";
+        currentMusicName = null;
         paused = false;
+    }
+
+    /** Plays the music with identifier NAME. If it was already playing but paused, resume it.
+     * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
+     */
+    public void playMusic(String id, boolean loops, float volume) {
+        if (GameManager.assetManager().isLoaded(id)) {
+            Music music = GameManager.assetManager().get(id);
+            playMusic(music, id, loops, volume);
+        } else {
+            GameManager.error("Music '" + id + "' was not loaded first.");
+        }
     }
 
     /** Plays the Music object MUSIC named NAME. If it was already playing but paused, resume it.
      * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
      */
-    public void playMusic(Music music, String name, boolean loops) {
-        if (currentMusicName.equals(name)) {
+    public void playMusic(Music music, String name, boolean loops, float volume) {
+        if (currentMusicName != null && currentMusicName.equals(name)) {
             if (paused) {
                 resumeMusic();
             }
@@ -40,14 +51,15 @@ public class MusicManager {
         stopMusic();
         currentMusic = music;
         currentMusicName = name;
-        music.play();
         setLooping(loops);
+        setVolume(volume);
+        music.play();
     }
     /** Stops the music currently being played and resets currentMusic and currentMusicName. */
     public void stopMusic() {
         if (currentMusic != null) {
             currentMusic.stop();
-            currentMusicName = "";
+            currentMusicName = null;
             currentMusic = null;
         }
     }

@@ -83,23 +83,11 @@ build/
 /android/assets/outline_pixel.glsl
 
 
-/android/assets/Grass.pack
-/android/assets/grasslands1.tmx
-/android/assets/Wheatley.png
-/android/assets/Grass.png
-/android/assets/Knight.png
-/android/assets/Textures/
-/android/assets/badlogic.jpg
+
 /android/assets/arial.ttf
 /android/assets/default_vertex.glsl
-/android/assets/Music/
 /android/assets/Grass.tsx
 /android/assets/Wheatley.pack
-/core/src/com/wizered67/game/Screens/GameScreen.java
-/core/src/com/wizered67/game/EntityManager.java
-/core/src/com/wizered67/game/WorldManager.java
-/core/src/com/wizered67/game/CustomExtendViewport.java
-/core/src/com/wizered67/game/CustomMapLoader.java
 /html/
 /ios/
 /core/src/box2dLight/
@@ -117,3 +105,20 @@ desktop/build
 /core/build/
 /android/build/
 /android/assets/Sounds/sfxblipmale.wav
+/desktop/build/
+/desktop/src/META-INF/
+/android/assets/saveloadtest.sav
+/android/assets/fullsavetest.sav
+
+/android/assets/Saves/
+!/android/assets/Saves/test save file
+
+/android/assets/Saves/choice save
+/android/assets/Saves/test save file
+/android/assets/Saves/test
+/android/assets/Saves/new save
+/android/assets/Conversations/super long.conv
+/android/assets/Conversations/Test.conv
+/android/assets/investigation demo.tmx
+/android/assets/Music/crossexamination.mp3
+/android/assets/Music/Pursuit.mp3

@@ -1,0 +1,49 @@
+<resources xmlns="urn:resourceXml" strict="true" dest="../../core/src/com/wizered67/game/conversations/xmlio/ConversationResources.xsd">
+    <animation_files>
+        Edgeworth "Edgeworth.pack"
+    </animation_files>
+
+    <animations>
+        <animation id="Edgeworth_Static" frameDuration="1" playMode="NORMAL"/>
+        <animation id="Edgeworth_Accuse" frameDuration="0.05"/>
+        <animation id="Edgeworth_Confront" frameDuration="1"/>
+        <animation id="Edgeworth_Edgeworth" frameDuration="0.3"/>
+        <animation id="Edgeworth_Point" frameDuration="0.2"/>
+    </animations>
+
+    <textures>
+        icon "testicon.png"
+        "testbackground.png"
+        icon2 "testicon2.png"
+    </textures>
+
+    <music>
+        "discussion.mp3"
+    </music>
+
+    <sounds>
+        "intense.wav"
+        "talksoundfemale.wav"
+        "talksoundmale.wav"
+    </sounds>
+
+    <characters>
+        <character id="Detective" name="Detective" sound="talksoundmale.wav"/>
+        <character id="Librarian" name="???" sound="talksoundmale.wav"/>
+        <character id="Buddy" name="YOLO SWAGGINS"  sound="talksoundmale.wav"/>
+    </characters>
+
+    <groups>
+        <group name="common">
+            <load>testbackground.png</load>
+            <load>Edgeworth</load>
+            <load>icon</load>
+            <load>icon2</load>
+            <load>discussion.mp3</load>
+            <load>intense.wav</load>
+            <load>talksoundmale.wav</load>
+            <load>talksoundfemale.wav</load>
+            <load>demonstration.conv</load>
+        </group>
+    </groups>
+</resources>

@@ -1,0 +1,115 @@
+<branch name="string">
+specifies a branch with name NAME.
+
+<changebranch branch="string"/>
+ChangeBranchCommand that switches branch to BRANCH.
+
+<character id="character" (optional)animations="string" (optional)sound="string"/>
+CharacterAddCommand that adds character with id ID, animations named ANIMATIONS, and speaking sound SOUND.
+
+<animation id="character" animation="string" wait="boolean"/>
+CharacterAnimationCommand that sets character ID to have animation ANIMATION. Waits to go on to next command iff WAIT.
+
+<direction id="character" direction="int"/>
+CharacterDirectionCommand that sets character ID to have direction DIRECTION.
+
+<name id="character" newname="string"/>
+CharacterNameCommand that sets character ID to have display name NEWNAME.
+
+<position id="character" position="string"/>
+CharacterPositionCommand that sets character ID to have the position mapped to POSITION.
+
+<visible id="character" visible="boolean" (optional)fade="float" (optional)wait="boolean"/>
+CharacterVisibleCommand that sets character ID to have visibility VISIBLE. If FADE is specified it denotes
+over how many seconds the character's sprite should fade in or out. If WAIT is specified, it denotes whether
+to wait for the end of the fade before going to the next command. True by default.
+
+<sequence>
+    <command/>
+    <command/>
+    <command/>
+</sequence>
+CommandSequence with a series of COMMANDS.
+
+<debug message="string"/>
+DebugCommand that prints MESSAGE.
+
+<assign>
+    name <command/>
+    name <command/>
+</assign>
+AssignCommand that assigns each name to the following command for use in the conversation.
+Assigned commands can then be called in messages with @c{name}.
+
+speaker: text text text
+Message command spoken by character named SPEAKER. WAIT is true by default
+and determines if player input is necessary to proceed to the next command. To
+disable wait, put an exclamation point in front of speaker, like !speaker:. If no speaker
+the text is considered a continuation of the previous line and appears in the same message box.
+If speaker is empty, ie ": text" then it continues with the same speaker but appears in a new
+message box.
+
+<music id="music" loop="boolean"/>
+PlayMusicCommand that plays music with identifier ID and sets looping to LOOP.
+
+<pausemusic/>
+PlayMusicCommand that pauses music.
+
+<resumemusic/>
+PlayMusicCommand that resumes music.
+
+<sound id="sound"/>
+PlaySoundCommand that plays sound with identifier ID.
+
+<preload > #TODO
+
+<choices>
+    choice 1:
+        (optional)<if ...> script </if>
+        <command/>
+    choice 2:
+        <command/>
+        <command/>
+    etc
+</choices>
+ShowChoicesCommand with text array of each choice and command array of the commands. When a choice
+has an <if> inside of it, it's only added if the SCRIPT evaluates to a true value.
+
+<delay time="float" (optional)skippable="boolean"/>
+DelayCommand with delay time TIME. Can be skipped with input if SKIPPABLE.
+
+<textspeed charsPerSecond="integer"/>
+TextSpeedCommand to display a certain number of characters per second.
+
+<script language="language" (optional)isfile="boolean">
+    code or file
+</script>
+ExecuteScriptCommand that executes the code or contents of the file (if isfile) in LANGUAGE.
+
+<init language="language">
+    name value
+    name value
+    name value
+</init>
+VariableInitializeCommand that initializes the variables of language LANGUAGE to VALUEs
+if they have not yet been defined.
+
+<if language="language" (optional)isfile="boolean">
+    {script}
+    <command/>
+    <command/>
+    <command/>
+</if>
+VariableConditionCommand that executes COMMANDS if the SCRIPT results in a true value when executed.
+LANGUAGE is the scripting language being used and ISFILE determines whether a file should be loaded named SCRIPT.
+
+<else> #todo
+
+<bg id="background"> #todo make clear image relationship
+BackgroundSetCommand that sets the scene's background to the image with identifier ID.
+
+<image> #todo
+
+
+
+
