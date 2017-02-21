@@ -26,7 +26,7 @@
 	<xs:simpleType name="musicResource">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value=""/>
-			<xs:enumeration value="crossexamination.mp3"/>
+			<xs:enumeration value="discussion.mp3"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="soundResource">
@@ -76,9 +76,9 @@
 			<xs:enumeration value="Edgeworth"/>
 			<xs:enumeration value="demonstrationGroovy.conv"/>
 			<xs:enumeration value="testConversation3.conv"/>
-			<xs:enumeration value="crossexamination.mp3"/>
 			<xs:enumeration value="talksoundfemale.wav"/>
 			<xs:enumeration value="testConversation2.conv"/>
+			<xs:enumeration value="discussion.mp3"/>
 			<xs:enumeration value="demonstration.conv"/>
 			<xs:enumeration value="christine.conv"/>
 		</xs:restriction>

@@ -18,7 +18,7 @@
     </textures>
 
     <music>
-        "crossexamination.mp3"
+        "discussion.mp3"
     </music>
 
     <sounds>
@@ -39,7 +39,7 @@
             <load>Edgeworth</load>
             <load>icon</load>
             <load>icon2</load>
-            <load>crossexamination.mp3</load>
+            <load>discussion.mp3</load>
             <load>intense.wav</load>
             <load>talksoundmale.wav</load>
             <load>talksoundfemale.wav</load>
