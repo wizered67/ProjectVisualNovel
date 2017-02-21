@@ -1,5 +1,0 @@
-<conversation xmlns="urn:conversations">
-    <branch name="default">
-        <animation id="Detective" animation="Edgeworth_Point"/>
-    </branch>
-</conversation>
