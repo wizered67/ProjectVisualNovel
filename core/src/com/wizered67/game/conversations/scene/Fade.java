@@ -40,6 +40,10 @@ public class Fade {
         return initialValue + remaining * (interpolation.apply(progress) * Math.signum(direction));
     }
 
+    public boolean isDone() {
+        return progress >= 1;
+    }
+
     static {
         interpolationTypes = new HashMap<>();
         interpolationTypes.put("linear", Interpolation.linear);

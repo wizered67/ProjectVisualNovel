@@ -100,6 +100,9 @@ public class SceneCharacter extends SceneEntity {
         if (currentAnimation == null) {
             GameManager.error("No animation found: " + name);
         }
+        if (!isVisible()) {
+            return false;
+        }
         return currentAnimation != null;
     }
     /** Returns the name of this SceneCharacter's current Animation. */

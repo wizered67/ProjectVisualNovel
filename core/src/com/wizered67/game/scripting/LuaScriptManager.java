@@ -20,7 +20,7 @@ public class LuaScriptManager implements ScriptManager {
     static final String SCRIPT_DIRECTORY = "Scripts/";
     /** Globals used for loading and executing Lua scripts. */
     Globals globals;
-    private HashMap<String, com.wizered67.game.scripting.GameScript> savedScripts;
+    private HashMap<String, GameScript> savedScripts;
     private Set<LuaValue> defaultKeys;
     /** Initializes globals to the Standard Globals. */
     public LuaScriptManager() {
@@ -34,8 +34,8 @@ public class LuaScriptManager implements ScriptManager {
     }
 
     private void setDefaultJavaMethods() {
-        globals.load(new com.wizered67.game.scripting.LuajavaGdxReflection());
-        com.wizered67.game.scripting.LuaGameMethods luaGameMethods = new com.wizered67.game.scripting.LuaGameMethods();
+        globals.load(new LuajavaGdxReflection());
+        LuaGameMethods luaGameMethods = new LuaGameMethods();
         Gdx.app.log("Test", "Trying to set game methods class.");
         globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.scripting.LuaGameMethods")));
         System.out.println("Got game methods class.");
@@ -48,8 +48,8 @@ public class LuaScriptManager implements ScriptManager {
     }
 
     @Override
-    public com.wizered67.game.scripting.GameScript load(String script, boolean isFile) {
-        com.wizered67.game.scripting.GameScript gs = new com.wizered67.game.scripting.LuaScript(this, script, isFile);
+    public GameScript load(String script, boolean isFile) {
+        GameScript gs = new LuaScript(this, script, isFile);
         gs.isFile = isFile;
         gs.script = script;
         gs.language = "Lua";
@@ -122,7 +122,7 @@ public class LuaScriptManager implements ScriptManager {
         if (savedScripts.containsKey(expr)) {
             return savedScripts.get(expr).execute();
         }
-        com.wizered67.game.scripting.GameScript script;
+        GameScript script;
         if (!expr.matches(".*return .*")) {
             script = load("return " + expr, false);
         } else {
@@ -180,8 +180,8 @@ public class LuaScriptManager implements ScriptManager {
     }
     /** Returns a GameScript that, when executed, assigns variable named VAR to VALUE. */
     @Override
-    public com.wizered67.game.scripting.GameScript createSetScript(String var, String value) {
-        return new com.wizered67.game.scripting.LuaScript(this, var + " = " + value, false);
+    public GameScript createSetScript(String var, String value) {
+        return new LuaScript(this, var + " = " + value, false);
     }
     @Override
     /** Returns a Map of variables names to values for variables that aren't predefined. */

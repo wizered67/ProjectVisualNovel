@@ -19,14 +19,14 @@
 
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>
-        <visible id="Detective" visible="true" fadeTime="1" wait="true" fadeType="circle"/>
+        <visible id="Detective" visible="true" fadeTime="1" wait="true" fadeType="linear"/>
 
         <position id="Librarian" x="600" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
 
         <direction id="Librarian" direction="-1"/>
         <name id="Librarian" displayname="???"/>
-        <init language="Groovy">
+        <init language="Lua">
             work 0
         </init>
         <sound id="intense.wav"/>
@@ -82,7 +82,7 @@
                 <textspeed charsPerSecond="70"/>
                 <changebranch branch="when"/>
             How long have you been working for the library?:
-                <if language="Groovy"><![CDATA[ {work < 2} ]]></if>
+                <if language="Lua"><![CDATA[ {work < 2} ]]></if>
                 <changebranch branch="work"/>
             Did you know the victim?:
                 <changebranch branch="know"/>
@@ -107,12 +107,12 @@
 
     <branch name="work">
         Detective: How long have you been working here?
-        <script language="Groovy"> work += 1</script>
+        <script language="Lua"> work = work + 1</script>
 
         Librarian: For 5 years now. But how is that relevant?
 
         Detective: Oh... I guess it's not.
-        <if language="Groovy"> {work == 2}
+        <if language="Lua"> {work == 2}
             Librarian: I already answered your pointless question! Now stop bothering me!
         </if>
 

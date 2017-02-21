@@ -72,8 +72,7 @@ public class Assets {
     private static final String CHARACTERS_TAG = "characters";
     private static final String TEXTURES_TAG = "textures";
     private static final String GROUPS_TAG = "groups";
-
-    private static final Pattern RESOURCE_PATTERN = Pattern.compile("\\s*(.+)\\s+(.+)\\s*");
+    private static final Pattern RESOURCE_PATTERN = Pattern.compile("\\s*(.+)\\s+\"(.+)\"\\s*");
     /** If no AssetManager is specified, make a new one and load to it. */
     public Assets() {
         this(new AssetManager());
@@ -269,6 +268,7 @@ public class Assets {
                         identifier = matcher.group(1);
                         filename = matcher.group(2);
                     } else {
+                        line = line.replaceAll("\"", "");
                         identifier = line;
                         filename = line;
                     }

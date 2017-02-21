@@ -9,6 +9,7 @@ import com.wizered67.game.conversations.xmlio.ConversationLoader;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
+import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.MyInputProcessor.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
@@ -224,7 +225,7 @@ public class ConversationController implements Controllable {
                 textTimer = 0;
             }
             if (currentBranch.size() == 0 && currentCommand != null && !currentCommand.waitToProceed()) {
-                exit(false);
+                exit();
                 currentCommand = null;
             }
             updateText(deltaTime);
@@ -394,23 +395,17 @@ public class ConversationController implements Controllable {
         LinkedList<ConversationCommand> branch = currentConversation.getBranch(branchName);
         Object b = branch.clone();
         if (b instanceof LinkedList) {
-            exit(false);
+            exit();
             currentBranch = (LinkedList<ConversationCommand>) b;
         }
     }
     /** Exits the current conversation. Clears command queue, choices, and text. *
      * Iff CLEARSCENE then it also hides characters and images in the scene. */
-    public void exit(boolean clearScene) {
-        if (currentBranch != null) {
-            currentBranch.clear();
-        }
+    public void exit() {
         currentCommand = null;
         remainingText = "";
         setTextBoxShowing(false);
         setChoiceShowing(false);
-        if (clearScene) {
-            sceneManager.removeAllEntities();
-        }
     }
     /** Adds the ConversationCommands in COMMANDS to the
      * front of the queue of commands to be executed for this branch.
@@ -556,7 +551,9 @@ public class ConversationController implements Controllable {
     private void inputConfirm() {
         if (choiceShowing) {
             if (choiceHighlighted != -1) {
+                choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(false);
                 choiceButtons[choiceHighlighted].setChecked(false);
+                choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(true);
                 choiceButtons[choiceHighlighted].setChecked(true);
             }
         } else {
@@ -606,21 +603,35 @@ public class ConversationController implements Controllable {
     /** Handles a key event by calling methods depending on the ControlType. */
     @Override
     public void keyEvent(ControlType control, int key, boolean pressed) {
-        if (key == Input.Keys.SHIFT_LEFT) {
-            exit(true);
-        }
         if (pressed) {
             switch (control) {
                 case CONFIRM:
                     inputConfirm();
                     break;
                 case UP:
-                    changeChoice(-1);
+                    if (GUIManager.isTranscriptVisible()) {
+                        GUIManager.scrollTranscript(-1);
+                    } else if (choiceShowing) {
+                        changeChoice(-1);
+                    }
                     break;
                 case DOWN:
-                    changeChoice(1);
+                    if (GUIManager.isTranscriptVisible()) {
+                        GUIManager.scrollTranscript(1);
+                    } else if (choiceShowing) {
+                        changeChoice(1);
+                    }
                     break;
                 default:
+                    break;
+            }
+        } else { //released
+            switch (control) {
+                case UP:
+                    GUIManager.stopTranscriptScrolling();
+                    break;
+                case DOWN:
+                    GUIManager.stopTranscriptScrolling();
                     break;
             }
         }

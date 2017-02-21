@@ -19,7 +19,7 @@ public  class GroovyScriptManager implements ScriptManager {
     private GroovyShell groovyShell;
     private Binding binding;
     static final String SCRIPT_DIRECTORY = "Scripts/";
-    private HashMap<String, com.wizered67.game.scripting.GameScript> savedScripts;
+    private HashMap<String, GameScript> savedScripts;
     /** Initializes GroovyShell and Binding. */
     public GroovyScriptManager() {
         binding = new Binding();
@@ -36,7 +36,7 @@ public  class GroovyScriptManager implements ScriptManager {
      * Loads and returns the GameScript SCRIPT. If ISFILE it loads it from the filed named SCRIPT.
      */
     @Override
-    public com.wizered67.game.scripting.GameScript load(String script, boolean isFile) {
+    public GameScript load(String script, boolean isFile) {
         Script groovyScript = null;
         if (!isFile) {
             groovyScript = groovyShell.parse(script);
@@ -48,7 +48,7 @@ public  class GroovyScriptManager implements ScriptManager {
                 Gdx.app.error("Script", e.getMessage());
             }
         }
-        com.wizered67.game.scripting.GameScript gs = new com.wizered67.game.scripting.GroovyScript(groovyScript, this);
+        GameScript gs = new GroovyScript(groovyScript, this);
         gs.language = "Groovy";
         gs.isFile = isFile;
         gs.script = script;
@@ -214,7 +214,7 @@ public  class GroovyScriptManager implements ScriptManager {
      * Returns a GameScript that, when executed, assigns variable named VAR to VALUE.
      */
     @Override
-    public com.wizered67.game.scripting.GameScript createSetScript(String var, String value) {
+    public GameScript createSetScript(String var, String value) {
         return load(var + " = " + value, false);
     }
 

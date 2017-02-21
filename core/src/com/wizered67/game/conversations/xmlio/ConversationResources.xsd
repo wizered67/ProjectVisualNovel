@@ -46,16 +46,15 @@
 	<xs:simpleType name="conversationType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="rpg.conv"/>
+			<xs:enumeration value="Test.conv"/>
 			<xs:enumeration value="demonstrationLua.conv"/>
 			<xs:enumeration value="saveTest.conv"/>
 			<xs:enumeration value="super long.conv"/>
-			<xs:enumeration value="mixedTest.conv"/>
-			<xs:enumeration value="testConversation4.conv"/>
-			<xs:enumeration value="Test.conv"/>
 			<xs:enumeration value="demonstrationGroovy.conv"/>
-			<xs:enumeration value="investigationDemo.conv"/>
 			<xs:enumeration value="testConversation3.conv"/>
+			<xs:enumeration value="mixedTest.conv"/>
 			<xs:enumeration value="testConversation2.conv"/>
+			<xs:enumeration value="testConversation4.conv"/>
 			<xs:enumeration value="demonstration.conv"/>
 			<xs:enumeration value="christine.conv"/>
 		</xs:restriction>
@@ -76,7 +75,6 @@
 			<xs:enumeration value="Test.conv"/>
 			<xs:enumeration value="Edgeworth"/>
 			<xs:enumeration value="demonstrationGroovy.conv"/>
-			<xs:enumeration value="investigationDemo.conv"/>
 			<xs:enumeration value="testConversation3.conv"/>
 			<xs:enumeration value="crossexamination.mp3"/>
 			<xs:enumeration value="talksoundfemale.wav"/>

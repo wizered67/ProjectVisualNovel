@@ -1,6 +1,8 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.wizered67.game.inputs.MyInputProcessor;
 import com.wizered67.game.assets.Assets;
 
@@ -28,6 +30,10 @@ public class GameManager {
 		return game.assetManager;
 	}
 
+	public static SpriteBatch mainBatch() {
+		return game.mainBatch;
+	}
+
 	public static void error(String error) {
 		Gdx.app.error("ERROR", error);
 	}
@@ -36,38 +42,4 @@ public class GameManager {
         return game.musicManager;
     }
 
-    /*
-	public static void loadDefault() {
-		AssetManager assetManager = assetManager();
-		assetManager.load("Sounds/talksoundmale.wav", Sound.class);
-		assetManager.load("Sounds/talksoundfemale.wav", Sound.class);
-		//assetManager.load("Sounds/sfxblipmale.wav", Sound.class);
-		//assetManager.load("Sounds/intense.wav", Sound.class);
-		//assetManager.load("Music/crossexamination.mp3", Music.class);
-		assetManager.load("Animations/Edgeworth.pack", TextureAtlas.class);
-		assetManager.load("Backgrounds/testbackground.png", Texture.class);
-	}
-
-	public static void createAnimationData() {
-		AssetManager assetManager = assetManager();
-		TextureAtlas atlas = assetManager.get("Animations/Edgeworth.pack", TextureAtlas.class);
-		Array<TextureAtlas.AtlasRegion> think = atlas.findRegions("Edgeworth");
-		Array<TextureAtlas.AtlasRegion> idle = atlas.findRegions("Static");
-		Array<TextureAtlas.AtlasRegion> confront = atlas.findRegions("Confront");
-		Array<TextureAtlas.AtlasRegion> point = atlas.findRegions("Point");
-		Array<TextureAtlas.AtlasRegion> accuse = atlas.findRegions("Accuse");
-		Animation thinkAnim = new Animation(0.3f, think);
-		Animation idleAnim = new Animation(1, idle);
-		Animation confrontAnim = new Animation(1, confront);
-		Animation pointAnim = new Animation(1, point);
-		Animation accuseAnim = new Animation(0.05f, accuse);
-		HashMap<String, Animation> edgeworthAnimations = new HashMap<String, Animation>();
-		edgeworthAnimations.put("Think", thinkAnim);
-		edgeworthAnimations.put("Idle", idleAnim);
-		edgeworthAnimations.put("Confront", confrontAnim);
-		edgeworthAnimations.put("Point", pointAnim);
-		edgeworthAnimations.put("Accuse", accuseAnim);
-		loadedAnimations().put("Edgeworth", edgeworthAnimations);
-	}
-	*/
 }

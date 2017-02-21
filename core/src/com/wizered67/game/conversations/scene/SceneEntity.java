@@ -58,10 +58,12 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         if (fade != null) {
             float alpha = fade.update(deltaTime);
             sprite.setAlpha(alpha);
-            if (alpha <= 0) {
-                finishVisibility(false);
-            } else if (alpha >= 1) {
-                finishVisibility(true);
+            if (fade.isDone()) {
+                if (alpha <= 0.5) {
+                    finishVisibility(false);
+                } else if (alpha >= 0.5) {
+                    finishVisibility(true);
+                }
             }
         }
     }

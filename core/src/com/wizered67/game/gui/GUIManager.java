@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -67,6 +68,7 @@ public class GUIManager {
 
     private static ScrollPane transcriptPane;
     private static Label transcriptLabel;
+    private static float transcriptScrolling = 0;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
@@ -110,7 +112,9 @@ public class GUIManager {
                     System.out.println("Clicked button " + actor.getUserObject());
                     conversationController.processChoice((Integer) actor.getUserObject());
                     event.cancel();
+                    ((Button) actor).setProgrammaticChangeEvents(false);
                     ((Button) actor).setChecked(false);
+                    ((Button) actor).setProgrammaticChangeEvents(true);
                 }
             });
             tb.setVisible(false);
@@ -194,6 +198,14 @@ public class GUIManager {
         if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             toggleDebugDisplay();
             conversationController.setPaused(debugChoices.isVisible());
+        }
+        if (transcriptPane.isVisible()) {
+            if (transcriptScrolling != 0) {
+                float velocity = transcriptPane.getVelocityY();
+                transcriptPane.fling(1, 0, velocity);
+                transcriptPane.setVelocityY(velocity + 4 * Math.signum(velocity));
+            }
+            //transcriptPane.setScrollY(transcriptPane.getScrollY() + transcriptScrolling);
         }
         updateTranscript(); //todo remove, only do so when transcript is visible
 	}
@@ -283,6 +295,21 @@ public class GUIManager {
         transcriptLabel.setText(stringBuilder);
         transcriptLabel.invalidate();
         transcriptLabel.getPrefHeight(); //fixme part of hacky solution to get size correct for first time
+    }
+
+    public static boolean isTranscriptVisible() {
+        return transcriptPane.isVisible();
+    }
+
+    public static void scrollTranscript(int direction) {
+        transcriptPane.fling(1, 0, -direction * 50);
+        transcriptScrolling = direction * 0.005f * transcriptPane.getHeight();
+        System.out.println("Velocity set to " + transcriptPane.getVelocityY());
+    }
+
+    public static void stopTranscriptScrolling() {
+        transcriptScrolling = 0;
+        transcriptPane.setVelocityY(0);
     }
 
     private static void addDebug() {

@@ -36,6 +36,7 @@ public class ConversationLoader {
         classMapping.put("name", CharacterNameCommand.class);
         classMapping.put("position", CharacterPositionCommand.class);
         classMapping.put("visible", CharacterVisibleCommand.class);
+        classMapping.put("clearScene", ClearSceneCommand.class);
         classMapping.put("sequence", CommandSequence.class);
         classMapping.put("debug", DebugCommand.class);
         classMapping.put("delay", DelayCommand.class);

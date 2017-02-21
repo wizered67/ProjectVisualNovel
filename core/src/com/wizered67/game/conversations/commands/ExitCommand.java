@@ -10,19 +10,14 @@ import com.wizered67.game.conversations.ConversationController;
  * @author Adam Victor
  */
 public class ExitCommand implements ConversationCommand {
-    private boolean hideEntities;
     public ExitCommand() {}
-
-    public ExitCommand(boolean remove) {
-        hideEntities = remove;
-    }
 
     /**
      * Executes the command on the CONVERSATION CONTROLLER.
      */
     @Override
     public void execute(ConversationController conversationController) {
-        conversationController.exit(hideEntities);
+        conversationController.exit();
     }
 
     /**
@@ -51,7 +46,6 @@ public class ExitCommand implements ConversationCommand {
     }
 
     public static ExitCommand makeCommand(XmlReader.Element element) {
-        boolean remove = element.getBooleanAttribute("clearScene", false);
-        return new ExitCommand(remove);
+        return new ExitCommand();
     }
 }

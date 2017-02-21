@@ -44,24 +44,15 @@ public class SceneManager {
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
-        batch = GUIManager.getBatch();
+        batch = GameManager.mainBatch();
         createFadeTexture();
-        /*
-        conversationController = null;
-        sceneCharacters = null;
-        batch = new SpriteBatch();
-        background = null;
-        imagesByGroup = new HashMap<>();
-        sortedEntities = new ArrayList<>();
-        imagesByInstance = new HashMap<>();
-        */
     }
 
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
         conversationController = mw;
         sceneCharacters = new HashSet<>();
-        batch = new SpriteBatch();
+        batch = GameManager.mainBatch();
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedEntities = new ArrayList<>();
@@ -156,6 +147,30 @@ public class SceneManager {
             entity.finishVisibility(false);
         }
         sortedEntities.clear();
+    }
+
+    /** Removes all SceneImages and sets their visibility to false. */
+    public void removeAllImages() {
+        imagesByGroup.clear();
+        List<SceneImage> images = new ArrayList<>();
+        for (SceneImage image : imagesByInstance.values()) {
+            images.add(image);
+        }
+        for (SceneImage image : images) {
+            image.finishVisibility(false);
+        }
+        imagesByInstance.clear();
+    }
+
+    public void removeAllCharacters() {
+        List<SceneCharacter> characters = new ArrayList<>();
+        for (SceneCharacter character : sceneCharacters) {
+            characters.add(character);
+        }
+        for (SceneCharacter character : characters) {
+            character.finishVisibility(false);
+        }
+        sceneCharacters.clear();
     }
 
     /** Adds to the map of allCharacters a new character with identifier IDENTIFIER,

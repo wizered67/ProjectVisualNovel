@@ -42,13 +42,14 @@
                 <xs:element type="changeConversationType" name="changeconv" maxOccurs="unbounded"/>
                 <xs:element type="imageType" name="image" maxOccurs="unbounded"/>
                 <xs:element type="fadeType" name="fade" maxOccurs="unbounded"/>
-                <xs:element type="exitType" name="exit" maxOccurs="unbounded"/>
+                <xs:element type="emptyType" name="exit" maxOccurs="unbounded"/>
                 <xs:element type="waitUntilType" name="waitUntil" maxOccurs="unbounded"/>
                 <xs:element type="resourceType" name="load" maxOccurs="unbounded"/>
                 <xs:element type="resourceGroupType" name="loadGroup" maxOccurs="unbounded"/>
                 <xs:element type="resourceType" name="unload" maxOccurs="unbounded"/>
                 <xs:element type="resourceGroupType" name="unloadGroup" maxOccurs="unbounded"/>
                 <xs:element type="emptyType" name="waitForLoading" maxOccurs="unbounded"/>
+                <xs:element type="clearType" name="clearScene" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -183,8 +184,9 @@
         <xs:attribute name="conv" type="conversationType" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="exitType">
-        <xs:attribute name="clearScene" type="xs:boolean" use="required"/>
+    <xs:complexType name="clearType">
+        <xs:attribute name="clearImages" type="xs:boolean" use="required"/>
+        <xs:attribute name="clearCharacters" type="xs:boolean" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="imageType">
