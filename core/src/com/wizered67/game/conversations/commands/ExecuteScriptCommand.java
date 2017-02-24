@@ -69,7 +69,7 @@ public class ExecuteScriptCommand implements ConversationCommand {
         XmlReader.Element textElement = element.getChild(0);
         String script = textElement != null ? textElement.getText() : "";
         boolean isFile = element.getBoolean("isfile", false);
-        String language = element.getAttribute("language");
+        String language = element.getAttribute("language", ConversationController.defaultScriptingLanguage());
         return new ExecuteScriptCommand(script, isFile, language);
     }
 }

@@ -17,7 +17,7 @@
         <position id="Detective" x="10" y="160"/>
         <animation id="Detective" animation="Edgeworth_Static"/>
         <visible id="Detective" visible="true" fadeTime="1" wait="true" fadeType="linear"/>
-
+        
         <!-- Initialize the position, animation, and direction of the Librarian character, but does not set it to be visible yet. -->
         <position id="Librarian" x="600" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
@@ -28,7 +28,7 @@
         <!-- Init tags are used to set variable values, only execute if the variable was previously undefined!
         For example, this tag is equivalent to "if work == nil then work = 0 end"
         Each line in the init tag should be of the form VARIABLE_NAME INITIAL_VALUE. -->
-        <init language="Lua">
+        <init>
             work 0
         </init>
 
@@ -119,7 +119,7 @@
                 text commands and is necessary. Also notice that it is surrounded by CDATA (a shortcut for doing this in IntelliJ is
                 typing CD and hitting enter). CDATA means that the text is used as raw text and not XML. This is necessary in this case because
                 otherwie using '<' would imply the start of a tag and result in a syntax error. -->
-                <if language="Lua"><![CDATA[ {work < 2} ]]></if>
+                <if><![CDATA[ {work < 2} ]]></if>
                 <!-- Another position interpolation example, this time using bounce interpolation over 5 seconds. See the difference! -->
                 <position id="Detective" x="100" y="600" interpolation="bounce" time="5" wait="true"/>
                 <changebranch branch="work"/>
@@ -149,14 +149,14 @@
         Detective: How long have you been working here?
         <!-- This executes a script in Lua that increments work! The content of the script tag is the text that should be used a script.
         If the isFile attribute is true, then the content is instead a filename in the Scripts directory. -->
-        <script language="Lua"> work = work + 1</script>
+        <script> work = work + 1</script>
 
         Librarian: For 5 years now. But how is that relevant?
 
         Detective: Oh... I guess it's not.
         <!-- An if command that checks if work is equal to 2. If so, it executes the commands inside the 'if' tag. Otherwise it moves on.
         Notice how the condition of if statements must be surrounded by { }. -->
-        <if language="Lua"> {work == 2}
+        <if> {work == 2}
             Librarian: I already answered your pointless question! Now stop bothering me!
         </if>
 

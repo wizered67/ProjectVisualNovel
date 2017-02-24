@@ -71,7 +71,7 @@ public class WaitUntilVariableCommand implements ConversationCommand {
 
     /** Static method to create a new command from XML Element ELEMENT. */
     public static WaitUntilVariableCommand makeCommand(XmlReader.Element element) {
-        String language = element.getAttribute("language");
+        String language = element.getAttribute("language", ConversationController.defaultScriptingLanguage());
         boolean isFile = element.getBoolean("isfile", false);
         String text = element.getChild(0).getText().trim();
         return new WaitUntilVariableCommand(text, isFile, language);

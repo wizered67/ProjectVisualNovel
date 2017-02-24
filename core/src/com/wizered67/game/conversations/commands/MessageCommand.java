@@ -40,8 +40,10 @@ public class MessageCommand implements ConversationCommand {
     private ArrayList<Boolean> waitForInput;
     /** Index of the message currently being displayed. */
     private int index;
-    /** Regex pattern used to match variables in messages. */
-    public transient static Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
+    /** Regex pattern used to match variables in messages when language is specified. */
+    public transient static Pattern scriptVariableLanguagePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
+    /** Regex pattern used to match variables in messages when no language is specified. */
+    public transient static Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)\\}");
     /** Regex pattern used to match messages with a speaker. */
     public transient static Pattern speakerMessagePattern = Pattern.compile("\\s*(\\S*)\\s*(?<!\\\\):(.+)");
 
@@ -80,11 +82,19 @@ public class MessageCommand implements ConversationCommand {
     /** Increments index of current text being displayed as well as speaker. */
     public void updateText() {
         String nextText = storedText.get(index);
-        Matcher matcher = scriptVariablePattern.matcher(nextText);
+        Matcher matcher = scriptVariableLanguagePattern.matcher(nextText);
         while (matcher.find()) {
             String language = matcher.group(1);
             String variable = matcher.group(2);
             ScriptManager manager = ConversationController.scriptManager(language);
+            String variableString = manager.objectToString(manager.getLanguageValue(variable));
+            nextText = nextText.replaceFirst(scriptVariableLanguagePattern.toString(), variableString);
+        }
+        matcher = scriptVariablePattern.matcher(nextText);
+        //replace any variable text without language specified.
+        while (matcher.find()) {
+            String variable = matcher.group(1);
+            ScriptManager manager = ConversationController.scriptManager(ConversationController.defaultScriptingLanguage());
             String variableString = manager.objectToString(manager.getLanguageValue(variable));
             nextText = nextText.replaceFirst(scriptVariablePattern.toString(), variableString);
         }

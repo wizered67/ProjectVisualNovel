@@ -146,17 +146,16 @@
     <xs:simpleType name="languages">
         <xs:restriction base="xs:string">
             <xs:enumeration value="Lua"/>
-            <xs:enumeration value="Groovy"/>
         </xs:restriction>
     </xs:simpleType>
 
     <xs:complexType name="scriptType" mixed="true">
-        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="languages" name="language" use="optional"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="initType" mixed="true">
-        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="languages" name="language" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="ifType" mixed="true">
@@ -164,7 +163,7 @@
             <xs:group ref="commands" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element type="elseType" name="else" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
-        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="languages" name="language" use="optional"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
     </xs:complexType>
 
@@ -175,7 +174,7 @@
     </xs:complexType>
 
     <xs:complexType name="waitUntilType" mixed="true">
-        <xs:attribute type="languages" name="language" use="required"/>
+        <xs:attribute type="languages" name="language" use="optional"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
     </xs:complexType>
 

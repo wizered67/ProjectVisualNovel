@@ -13,7 +13,6 @@ import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.MyInputProcessor.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
-import com.wizered67.game.scripting.GroovyScriptManager;
 import com.wizered67.game.scripting.LuaScriptManager;
 import com.wizered67.game.scripting.ScriptManager;
 
@@ -119,12 +118,6 @@ public class ConversationController implements Controllable {
        //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
     }
-    /** Initializes all script managers. */
-    private void initScriptManagers() {
-        scriptManagers = new HashMap<String, ScriptManager>();
-        scriptManagers.put("Lua", new LuaScriptManager());
-        scriptManagers.put("Groovy", new GroovyScriptManager());
-    }
 
     public ConversationLoader loader() { //todo fixme
         return conversationLoader;
@@ -179,6 +172,16 @@ public class ConversationController implements Controllable {
     /** Returns the SceneManager being used update and draw CharacterSprites. */
     public SceneManager sceneManager() {
         return sceneManager;
+    }
+    /** Initializes all script managers. */
+    private void initScriptManagers() {
+        scriptManagers = new HashMap<>();
+        scriptManagers.put("Lua", new LuaScriptManager());
+        //scriptManagers.put("Groovy", new GroovyScriptManager());
+    }
+    /** Returns the default scripting language to be used if none is specified. */
+    public static String defaultScriptingLanguage() {
+        return "Lua";
     }
     /** Returns the ScriptManager for LANGUAGE. */
     public static ScriptManager scriptManager(String language) {

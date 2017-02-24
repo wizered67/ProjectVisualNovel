@@ -91,7 +91,7 @@ public class VariableConditionCommand implements ConversationCommand {
 
     /** Static method to create a new command from XML Element ELEMENT. */
     public static VariableConditionCommand makeCommand(XmlReader.Element element) {
-        String language = element.getAttribute("language");
+        String language = element.getAttribute("language", ConversationController.defaultScriptingLanguage());
         boolean isFile = element.getBoolean("isfile", false);
         List<ConversationCommand> commands = new ArrayList<ConversationCommand>();
         List<ConversationCommand> elseCommands = new ArrayList<>();

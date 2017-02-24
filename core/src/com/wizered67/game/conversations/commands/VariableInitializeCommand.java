@@ -90,7 +90,7 @@ public class VariableInitializeCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static VariableInitializeCommand makeCommand(XmlReader.Element element) {
-        String language = element.getAttribute("language");
+        String language = element.getAttribute("language", ConversationController.defaultScriptingLanguage());
         XmlReader.Element textElement = element.getChild(0);
         String text = textElement != null ? textElement.getText() : "";
         List<String> vars = new ArrayList<String>();

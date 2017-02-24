@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.wizered67.game"
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 20
         multiDexEnabled true
     }

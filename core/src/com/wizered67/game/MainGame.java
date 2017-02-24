@@ -23,7 +23,7 @@ public class MainGame extends Game {
 		SaveManager.init();
 		gameScreen = new MainGameScreen();
 		GameManager.assetManager().loadGroup("common");
-        setScreen(new LoadingScreen(new LoadingScreen.LoadResult() {
+		setScreen(new LoadingScreen(new LoadingScreen.LoadResult() {
 			@Override
 			public void finishLoading() {
 				GameManager.game.setScreen(gameScreen);
