@@ -46,6 +46,9 @@ public abstract class UpdatedInterpolation<T> {
     static {
         interpolationTypes = new HashMap<>();
         interpolationTypes.put("linear", Interpolation.linear);
+        interpolationTypes.put("smooth", Interpolation.smooth);
+        interpolationTypes.put("smooth2", Interpolation.smooth2);
+        interpolationTypes.put("smoother", Interpolation.smoother);
         interpolationTypes.put("fade", Interpolation.fade);
 
         interpolationTypes.put("pow2", Interpolation.pow2);

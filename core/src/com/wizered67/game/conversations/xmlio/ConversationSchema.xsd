@@ -242,6 +242,9 @@
     <xs:simpleType name="interpolationType">
         <xs:restriction>
             <xs:enumeration value="linear"/>
+            <xs:enumeration value="smooth"/>
+            <xs:enumeration value="smooth2"/>
+            <xs:enumeration value="smoother"/>
             <xs:enumeration value="fade"/>
             <xs:enumeration value="pow2"/>
             <xs:enumeration value="pow2In"/>

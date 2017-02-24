@@ -122,3 +122,5 @@ desktop/build
 /android/assets/investigation demo.tmx
 /android/assets/Music/crossexamination.mp3
 /android/assets/Music/Pursuit.mp3
+/android/libs/arm64-v8a/
+/android/libs/x86_64/

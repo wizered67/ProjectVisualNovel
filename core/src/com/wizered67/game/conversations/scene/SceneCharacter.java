@@ -17,7 +17,7 @@ public class SceneCharacter extends SceneEntity {
     /** The unique identifier of this character. Specified in resources.xml. */
     private String identifier;
     /** Animation object containing all frames of animation. */
-    private transient Animation currentAnimation;
+    private transient Animation<TextureRegion> currentAnimation;
     /** The name of the current animation. Used to tell if the animation is being changed. */
     private String animationName;
     /** Whether the Animation should loop. */

@@ -13,6 +13,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.XmlReader;
@@ -50,7 +51,7 @@ public class Assets {
     /** Mapping between animation file path and set of AnimationData associated with that atlas. */
     private Map<String, Set<AnimationData>> atlasFileToAnimationData;
     /** Map between animation names and the Animation object that corresponds to it. */
-    private Map<String, Animation> allAnimations;
+    private Map<String, Animation<TextureRegion>> allAnimations;
     /** Map between names of asset groups and the set of assets they contain.
      * Used to load/unload many resources with one call. */
     private Map<String, Set<AssetDescriptor>> assetGroups;
@@ -128,7 +129,7 @@ public class Assets {
         }
     }
     /** Returns the Animation with identifier IDENTIFIER. */
-    public Animation getAnimation(String identifier) {
+    public Animation<TextureRegion> getAnimation(String identifier) {
         return allAnimations.get(identifier);
     }
     /** Maps all identifiers to Asset Descriptors, loads characters, and creates asset groups. */
