@@ -30,6 +30,7 @@
         Each line in the init tag should be of the form VARIABLE_NAME INITIAL_VALUE. -->
         <init>
             work 0
+            test "burgers"
         </init>
 
         <!-- Play the sound in the Sounds directory with the identifier 'intense.wav'. -->
@@ -65,7 +66,7 @@
         Notice how a command is embedded in the message with the syntax @c{think}. As assigned in
         the assigned tag, this sets the Detective's animation to the think animation and waits for
         it to complete before advancing to the rest of the message. -->
-        Detective: The body was found in the library.... Now why would that be? @c{think} Unless...
+        Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the @v{test} {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
 
         <!-- Fade in the Librarian over 2 seconds, waiting for the fade to be done before moving on.
         Since no interpolation type is set, it defaults to linear. -->
@@ -82,15 +83,15 @@
             </image>
         </fade>
 
-        Librarian: Excuse me, Detective, I heard you wanted to see me?
+        Librarian: Excuse me, @v{work} Detective, I heard you wanted to see me?
         <animation id="Detective" animation="Edgeworth_Static"/>
 
-        Detective: And you are...?
+        Detective: And you @v{Lua_test} are...?
         <!-- The Librarian character is about to introduce themselves so now is a good time to set
         the name the player sees when they speak. -->
         <name id="Librarian" displayname="Librarian"/>
 
-        Librarian: I'm the head librarian here. It's a pleasure to meet you.
+        Librarian: I'm the {JUMP}head librarian{ENDJUMP} here. It's a pleasure to meet you.
         <!-- The exclamation point in front of the speaker here is not necessary, but means that the next command
         will be executed as soon as the text is fully displayed, WITHOUT requiring an additional player click. Try removing
         the exclamation point and see the difference! -->
@@ -134,7 +135,7 @@
         Librarian: I wasn't there when it happened, but the security cameras
         showed suspicious activity around 2:30 AM last night.
 
-        Detective: 2:30 AM... @c{think} Shouldn't the library have been closed at that time?
+        Detective: 2:30 AM...@c{think} Shouldn't the library have been closed at that time?
         <animation id="Detective" animation="Edgeworth_Static"/>
 
         Librarian: It was. We aren't sure how he got in here in the first place.
@@ -172,7 +173,7 @@
         Detective: Chefs? I don't recall mentioning that the victim was a chef.
         @c{confront} Just how did you know that?
 
-        Librarian: I... uh... @c{delay} saw his chef's hat.
+        Librarian: I... uh...@c{delay} saw his chef's hat.
 
         Detective: (His story's getting phonier by the minute. Now I've just got to break through
         his lies once and for all!)

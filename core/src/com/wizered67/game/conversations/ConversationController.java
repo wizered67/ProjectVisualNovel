@@ -1,9 +1,12 @@
 package com.wizered67.game.conversations;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.wizered67.game.Constants;
+import com.wizered67.game.CustomTypingLabel;
 import com.wizered67.game.conversations.commands.*;
 import com.wizered67.game.conversations.xmlio.ConversationLoader;
 import com.wizered67.game.conversations.scene.SceneCharacter;
@@ -45,7 +48,7 @@ public class ConversationController implements Controllable {
 
     /** Label for the main textbox. Displays text when spoken by characters.
      * A reference to the one in GUIManager.*/
-    private transient Label textboxLabel;
+    private transient CustomTypingLabel textboxLabel;
     /** Label to display the name of the current speaker.
      * A reference to the one in GUIManager. */
     private transient Label speakerLabel;
@@ -97,9 +100,11 @@ public class ConversationController implements Controllable {
     /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
     @SuppressWarnings("unchecked")
-    public ConversationController(Label textbox, Label speaker, TextButton[] choices) {
+    public ConversationController(CustomTypingLabel textbox, Label speaker, TextButton[] choices) {
         conversationLoader = new ConversationLoader();
         textboxLabel = textbox;
+        textboxLabel.setTypingListener(new ConversationTypingListener(this));
+        Constants.initTextboxSettings();
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new List[choiceButtons.length];
@@ -254,113 +259,37 @@ public class ConversationController implements Controllable {
             setSpeakerName(currentSpeaker.getKnownName());
         }
 
-        int chars = 0;
         if (currentCommand != null && currentCommand instanceof MessageCommand) {
             MessageCommand messageCommand = (MessageCommand) currentCommand;
             if (messageCommand.shouldUpdate() && !doneSpeaking()) {
                 textTimer += deltaTime;
             }
-            //Keep updating text as long as there is text left, the message command says it should continue
-            // (ie no subcommand is stopping it), and either all text should be displayed or the text timer is
-            //high enough to display at least one more character, but not more than the max number that can be
-            //displayed in a frame.
-            while (messageCommand.shouldUpdate() &&
-                    (displayAll || (textTimer > 1f / charsPerSecond && chars < MAX_CHARS_PER_FRAME))
-                    && !doneSpeaking()) {
-                nextText(messageCommand);
-                textTimer = Math.max(textTimer - 1f / charsPerSecond, 0);
-                chars += 1;
+            //Update text if there is text left and no subcommand is halting text progression. Keep updating if displayAll.
+            while (messageCommand.shouldUpdate() && !doneSpeaking()) {
+                textboxLabel.controlledAct(Math.min(deltaTime, 1 / 30f));
+                if (!displayAll) {
+                    //playTextSound(); todo fix text sounds
+                    break;
+                }
+            }
+
+            if (doneSpeaking()) {
+                transcript.addMessage(currentSpeaker.getKnownName(), textboxLabel.getText().toString());
             }
         }
     }
-    //todo make sure this is valid. Can message command ever change?
-    //todo clean up code, implement/discard tag system? Fix \n line breaks.
-    //todo use String Builder?
-    /** Displays the next character of text, executing any commands before it. */
-    private void nextText(MessageCommand messageCommand) {
-        boolean textAdded = false;
-        boolean tagAdded = false;
-        String newText = null;
-        String originalText = textboxLabel.getText().toString();
-        dummyTagAdded = false;
-        while (!textAdded) {
-            String[] words = remainingTextNoTags.split(" ");
-            String nextWord = "";
-            boolean command = true;
-            int index = 0;
-            while (command) {
-                command = false;
-                if (words.length > index) {
-                    nextWord = words[index];
-                    if (nextWord.matches(".*@c\\{(.*)\\}.*")) {
-                        remainingTextNoTags = remainingTextNoTags.substring(nextWord.length() + 1);
-                        remainingText = remainingText.substring(nextWord.length() + 1);
-                        // replaceFirst("(.*)@c\\{.*\\}(.*)", "$1$2");
-                        command = true;
-                        messageCommand.setSubcommand(nextWord);
-                        if (!messageCommand.shouldUpdate()) {
-                            return;
-                        }
-                    }
-                } else {
-                    nextWord = "";
-                }
-                index += 1;
-            }
-            String testText = originalText + nextWord;
-            textboxLabel.setText(testText + "nn");
-            textboxLabel.layout();
-            int currentNumLines = textboxLabel.getGlyphLayout().runs.size;
-            newText = originalText;
-            String tag = getTag(remainingText);
-            if (tag == null) {
-                if (currentNumLines != 1 && currentNumLines > numLines) {
-                    newText = newText + "\n";
-                }
-                if (remainingText.length() != 0) {
-                    char nextChar = remainingText.charAt(0);
-                    newText += nextChar;
-                    if (nextChar != ' ' && !displayAll) {
-                        playTextSound();
-                    }
-                    remainingText = remainingText.substring(1);
-                    remainingTextNoTags = remainingTextNoTags.substring(1);
-                }
-                textAdded = true;
-            } else {
-                tagAdded = true;
-                if (tag.equals("[\n]")) {
-                    tag = "\n";
-                }
-                newText += tag;
-                remainingText = remainingText.substring(tag.length());
-                currentNumLines += 1;
-            }
-            numLines = currentNumLines;
-            originalText = newText;
+
+    public void setMessageSubcommand(String subcommand) {
+        if (currentCommand instanceof MessageCommand) {
+            MessageCommand messageCommand = (MessageCommand) currentCommand;
+            messageCommand.setSubcommand(subcommand);
+        } else {
+            GameManager.error("Trying to set subcommand of non message command.");
         }
-        if (tagAdded) {
-            String closeTag = getTag(remainingText);
-                    /*
-                    if (closeTag != null) {
-                        //newText += closeTag;
-                        //remainingText = remainingText.substring(closeTag.length());
-                        dummyTagAdded = false;
-                    } else {
-                        dummyTagAdded = true;
-                        //newText += "[]";
-                    }
-                    */
-            dummyTagAdded = (closeTag == null);
-        }
-        textboxLabel.setText(newText);
-        textboxLabel.layout();
-        numLines = textboxLabel.getGlyphLayout().runs.size;
-        textboxLabel.invalidate();
-        //If just finished speaking, add to the transcript.
-        if (doneSpeaking()) {
-            transcript.addMessage(currentSpeaker.getKnownName(), textboxLabel.getText().toString());
-        }
+    }
+
+    public void endText() {
+        textboxLabel.restart();
     }
 
     public Transcript getTranscript() {
@@ -380,10 +309,7 @@ public class ConversationController implements Controllable {
         }
         playSoundNow = !playSoundNow;
     }
-    //TODO Fix this method and \n in messages later.
-    private int numNewLineTags(String word) {
-        return word.length() - word.replaceAll("\n", "").length();
-    }
+
     /** If there are more commands, execute the next one. */
     public void nextCommand() {
         ConversationCommand command = currentBranch.remove();
@@ -398,12 +324,11 @@ public class ConversationController implements Controllable {
         LinkedList<ConversationCommand> branch = currentConversation.getBranch(branchName);
         Object b = branch.clone();
         if (b instanceof LinkedList) {
-            exit();
+            //exit();
             currentBranch = (LinkedList<ConversationCommand>) b;
         }
     }
-    /** Exits the current conversation. Clears command queue, choices, and text. *
-     * Iff CLEARSCENE then it also hides characters and images in the scene. */
+    /** Exits the current conversation. Clears command queue, choices, and text. */
     public void exit() {
         currentCommand = null;
         remainingText = "";
@@ -424,14 +349,11 @@ public class ConversationController implements Controllable {
     }
     /** Returns whether there is no more text to display. */
     public boolean doneSpeaking() {
-        return remainingText.isEmpty();
+        return textboxLabel.hasEnded();
     }
     /** Sets the remaining text to be displayed to TEXT. */
-    public void setRemainingText(String text){
-        remainingText = text;
-        remainingTextNoTags = removeTags(text);
-        textboxLabel.setText("");
-        textboxLabel.invalidate();
+    public void setText(String text){
+        textboxLabel.restart(text);
     }
     /** Sets the current speaking character to the one represented by CHARACTER. */
     public void setSpeaker(SceneCharacter character) {
@@ -508,43 +430,6 @@ public class ConversationController implements Controllable {
         List<ConversationCommand> commands = choiceCommands[choice];
         insertCommands(commands);
         currentCommand.complete(CompleteEvent.choice());
-    }
-
-    /* Tags Code */
-
-    /** Returns String S with all tags removed. */
-    private String removeTags(String s){
-        boolean inTag = false;
-        String output = "";
-        for (int i = 0; i < s.length(); i++){
-            char newChar = s.charAt(i);
-            if (!inTag){ //not in tag so keep char unless starting tag
-                if (newChar != '[') //todo, allow escape character [[?
-                    output += newChar;
-                else
-                    inTag = true;
-            }
-            else{ //in tag so don't keep char. If closing bracket end tag
-                if (newChar == ']')
-                    inTag = false;
-            }
-        }
-        return output;
-    }
-    /** Returns the tag in S. */ //TODO Update this and rework tags
-    private String getTag(String s){
-        if (s.length() == 0 || s.charAt(0) != '[')
-            return null;
-        else{
-            String tag = "";
-            for (int i = 0; i < s.length(); i++){
-                char nextChar = s.charAt(i);
-                tag += nextChar;
-                if (nextChar == ']')
-                    break;
-            }
-            return tag;
-        }
     }
 
     /** Called when the left mouse button is clicked or a confirm key is pressed. If there's a

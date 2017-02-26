@@ -84,7 +84,6 @@ build/
 
 
 
-/android/assets/arial.ttf
 /android/assets/default_vertex.glsl
 /android/assets/Grass.tsx
 /android/assets/Wheatley.pack
@@ -124,3 +123,4 @@ desktop/build
 /android/assets/Music/Pursuit.mp3
 /android/libs/arm64-v8a/
 /android/libs/x86_64/
+/desktop/src/com/wizered67/game/desktop/java/

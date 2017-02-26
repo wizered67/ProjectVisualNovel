@@ -95,6 +95,7 @@ project(":core") {
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
         compile "org.luaj:luaj-jse:3.0"
         compile 'com.esotericsoftware:kryo:4.0.0'
+        compile "com.rafaskoberg.gdx:typing-label:1.0.2"
 
         testCompile "junit:junit:4.11"
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"

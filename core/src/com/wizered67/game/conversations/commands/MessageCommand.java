@@ -41,11 +41,12 @@ public class MessageCommand implements ConversationCommand {
     /** Index of the message currently being displayed. */
     private int index;
     /** Regex pattern used to match variables in messages when language is specified. */
-    public transient static Pattern scriptVariableLanguagePattern = Pattern.compile("@v\\{(.*?)_(.*?)\\}");
+    public transient static final Pattern SCRIPT_VARIABLE_LANGUAGE_PATTERN = Pattern.compile("@v\\{(\\S+?)_(\\S+?)\\}");
     /** Regex pattern used to match variables in messages when no language is specified. */
-    public transient static Pattern scriptVariablePattern = Pattern.compile("@v\\{(.*?)\\}");
+    public transient static final Pattern SCRIPT_VARIABLE_PATTERN = Pattern.compile("@v\\{(\\S+?)\\}");
     /** Regex pattern used to match messages with a speaker. */
-    public transient static Pattern speakerMessagePattern = Pattern.compile("\\s*(\\S*)\\s*(?<!\\\\):(.+)");
+    public transient static final Pattern SPEAKER_MESSAGE_PATTERN = Pattern.compile("\\s*(\\S*)\\s*(?<!\\\\):(.+)");
+    public transient static final Pattern COMMAND_PATTERN = Pattern.compile("@c\\{(\\S+?)\\}");
 
     /** No arguments constructor. */
     public MessageCommand() {
@@ -82,23 +83,7 @@ public class MessageCommand implements ConversationCommand {
     /** Increments index of current text being displayed as well as speaker. */
     public void updateText() {
         String nextText = storedText.get(index);
-        Matcher matcher = scriptVariableLanguagePattern.matcher(nextText);
-        while (matcher.find()) {
-            String language = matcher.group(1);
-            String variable = matcher.group(2);
-            ScriptManager manager = ConversationController.scriptManager(language);
-            String variableString = manager.objectToString(manager.getLanguageValue(variable));
-            nextText = nextText.replaceFirst(scriptVariableLanguagePattern.toString(), variableString);
-        }
-        matcher = scriptVariablePattern.matcher(nextText);
-        //replace any variable text without language specified.
-        while (matcher.find()) {
-            String variable = matcher.group(1);
-            ScriptManager manager = ConversationController.scriptManager(ConversationController.defaultScriptingLanguage());
-            String variableString = manager.objectToString(manager.getLanguageValue(variable));
-            nextText = nextText.replaceFirst(scriptVariablePattern.toString(), variableString);
-        }
-        conversationController.setRemainingText(nextText);
+        conversationController.setText(nextText);
         SceneCharacter characterSpeaking = conversationController.sceneManager().getCharacterByIdentifier(getSpeaker());
         conversationController.setSpeaker(characterSpeaking);
         conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
@@ -110,8 +95,7 @@ public class MessageCommand implements ConversationCommand {
         return currentSubcommand == null || !currentSubcommand.waitToProceed();
     }
     /** Sets the current subcommand to the one contained in COMMAND STRING. */
-    public void setSubcommand(String commandString) {
-        String commandName = commandString.replaceAll("@c\\{(.*)\\}", "$1");
+    public void setSubcommand(String commandName) {
         ConversationCommand command = conversationController.conversation().getAssignment(commandName);
         if (command != null) {
             currentSubcommand = command;
@@ -135,11 +119,11 @@ public class MessageCommand implements ConversationCommand {
             currentSubcommand.complete(c);
         }
         if (c.type == CompleteEvent.Type.INPUT && conversationController.doneSpeaking()) {
+            conversationController.setDisplayAll(false);
             if (index >= storedText.size()) {
                 done = true;
             } else {
                 updateText();
-                conversationController.setDisplayAll(false);
             }
         }
         if (c.type == CompleteEvent.Type.TEXT) {
@@ -165,15 +149,19 @@ public class MessageCommand implements ConversationCommand {
         ArrayList<Boolean> waitToProceed = new ArrayList<Boolean>();
         ArrayList<String> speakers = new ArrayList<String>();
         text = text.replaceAll("\\r", "");
+        text = text.replaceAll(COMMAND_PATTERN.toString(), "{EVENT=COMMAND_$1}");
+        text = text.replaceAll(SCRIPT_VARIABLE_LANGUAGE_PATTERN.toString(), "{VAR=SCRIPTING_$1_$2}");
+        text = text.replaceAll(SCRIPT_VARIABLE_PATTERN.toString(), "{VAR=SCRIPTING_$1}");
         String[] lines = text.split("\\n");
         for (String line : lines) {
             line = line.trim();
             if (line.isEmpty()) {
                 continue;
             }
-            Matcher matcher = speakerMessagePattern.matcher(line);
+            Matcher matcher = SPEAKER_MESSAGE_PATTERN.matcher(line);
             if (matcher.matches()) {
-                storedText.add(matcher.group(2).trim());
+                String messageText = matcher.group(2).trim().replaceAll("@n", "\n");
+                storedText.add(messageText);
                 String speakerText = matcher.group(1);
                 if (!speakerText.isEmpty() && speakerText.charAt(0) == '!') {
                     waitToProceed.add(false);

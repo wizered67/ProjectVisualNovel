@@ -22,7 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
+import com.wizered67.game.CustomTypingLabel;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
@@ -38,7 +40,7 @@ public class GUIManager {
     /** Skin used by all GUI elements. */
 	private static Skin skin = new Skin();
     /** Label for the main textbox. Displays text when spoken by characters. */
-	private static Label textboxLabel;
+	private static CustomTypingLabel textboxLabel;
     /** Label to display the name of the current speaker. */
     private static Label speakerLabel;
     /** Array containing TextButtons to be displayed when the player is offered a choice. */
@@ -79,7 +81,7 @@ public class GUIManager {
  		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
  		pixmap.setColor(Color.WHITE);
  		pixmap.fill();
- 		skin.add("white", new Texture(pixmap));
+
  		// Store the default libgdx font under the name "default".
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -87,8 +89,10 @@ public class GUIManager {
         parameter.size = Math.round(densityIndependentSize);
 		defaultFont = generator.generateFont(parameter); // font size 12 pixels
         defaultFont.getData().markupEnabled = true;
+
+        skin.add("white", new Texture(pixmap));
+        skin.add("default", defaultFont);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
- 		skin.add("default", defaultFont);
     	 table = new Table();
     	 table.setFillParent(true);
     	 stage.addActor(table);
@@ -130,7 +134,7 @@ public class GUIManager {
 		//newDrawable.setRightWidth(20);
 		labelStyle.background = newDrawable;
 		skin.add("default", labelStyle);
-		textboxLabel = new Label("", skin);
+		textboxLabel = new CustomTypingLabel("", skin);
 		textboxLabel.setAlignment(Align.topLeft);
 		textboxLabel.setStyle(labelStyle);
         textboxLabel.setWrap(true);
@@ -313,7 +317,7 @@ public class GUIManager {
     }
 
     private static void addDebug() {
-        List.ListStyle listStyle = new List.ListStyle(defaultFont, Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
+        List.ListStyle listStyle = new List.ListStyle(skin.getFont("default"), Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
         listStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
         debugSelector = new List<>(listStyle);
         //debugSelector.setItems("demonstration", "test conversation");
