@@ -1,12 +1,11 @@
 package com.wizered67.game.conversations;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
-import com.wizered67.game.CustomTypingLabel;
 import com.wizered67.game.conversations.commands.*;
 import com.wizered67.game.conversations.xmlio.ConversationLoader;
 import com.wizered67.game.conversations.scene.SceneCharacter;
@@ -27,28 +26,9 @@ import java.util.*;
  * @author Adam Victor
  */
 public class ConversationController implements Controllable {
-    /** Text left to be displayed. May include some tags. */
-    private String remainingText = "";
-    /** Text left to be displayed, ignoring Color tags. */
-    private String remainingTextNoTags = "";
-    /** Number of lines currently in the textbox label. */
-    private int numLines = 0;
-    /** Padding between text and the left side of the textbox label. */
-    private final int LEFT_PADDING = 10;
-    /** Whether a dummy tag has just been added. */
-    private boolean dummyTagAdded = false;
-
-    /** The number of seconds elapsed for a text update.
-     * Text updates occur when (among other conditions) textTimer > 1 / charsPerSecond. */
-    private float textTimer = 0;
-    /** The number of characters to display per second. */
-    private int charsPerSecond = 30;
-    /** The maximum number of characters that can be displayed in a single frame. */
-    private final int MAX_CHARS_PER_FRAME = 5;
-
     /** Label for the main textbox. Displays text when spoken by characters.
      * A reference to the one in GUIManager.*/
-    private transient CustomTypingLabel textboxLabel;
+    private transient TypingLabel textboxLabel;
     /** Label to display the name of the current speaker.
      * A reference to the one in GUIManager. */
     private transient Label speakerLabel;
@@ -69,8 +49,6 @@ public class ConversationController implements Controllable {
     private ConversationCommand currentCommand;
     /** The current Conversation containing all possible branches. */
     private Conversation currentConversation;
-    /** Filename of current conversation. */
-    private String conversationName;
     /** Whether the speaking sound should be played this frame. */
     private boolean playSoundNow = true;
     /** Name of the sound used for the current speaker. */
@@ -100,7 +78,7 @@ public class ConversationController implements Controllable {
     /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
      * Also loads and begins a default conversation for testing purposes. */
     @SuppressWarnings("unchecked")
-    public ConversationController(CustomTypingLabel textbox, Label speaker, TextButton[] choices) {
+    public ConversationController(TypingLabel textbox, Label speaker, TextButton[] choices) {
         conversationLoader = new ConversationLoader();
         textboxLabel = textbox;
         textboxLabel.setTypingListener(new ConversationTypingListener(this));
@@ -112,23 +90,14 @@ public class ConversationController implements Controllable {
         initScriptManagers();
         transcript = new Transcript();
         paused = false;
-        /*
-        if (!Constants.LOAD) { //todo fix
-            loadConversation("super long.conv");
-            System.out.println(System.nanoTime() / 1000000);
-            setBranch("default");
-        }
-        */
-        //remainingText =
-       //remainingTextNoTags = removeTags(remainingText);
         GameManager.getMainInputProcessor().register(this);
     }
 
-    public ConversationLoader loader() { //todo fixme
+    public ConversationLoader loader() {
         return conversationLoader;
     }
 
-    public void setConv(Conversation conv) { //todo fixme
+    public void setConv(Conversation conv) {
         currentConversation = conv;
     }
 
@@ -137,7 +106,7 @@ public class ConversationController implements Controllable {
         guiState = new GUIState();
         guiState.speakerLabelText = speakerLabel.getText().toString();
         guiState.speakerLabelVisible = speakerLabel.isVisible();
-        guiState.textboxLabelText = textboxLabel.getText().toString();
+        guiState.textboxLabelText = textboxLabel.getOriginalText().toString();//textboxLabel.getText().toString();
         guiState.textboxLabelVisible = textboxLabel.isVisible();
         String[] choiceText = new String[choiceButtons.length];
         for (int i = 0; i < choiceText.length; i += 1) {
@@ -156,7 +125,8 @@ public class ConversationController implements Controllable {
         }
         setSpeakerName(guiState.speakerLabelText);
         speakerLabel.setVisible(guiState.speakerLabelVisible);
-        textboxLabel.setText(guiState.textboxLabelText);
+        //textboxLabel.setText(guiState.textboxLabelText);
+        textboxLabel.restart(guiState.textboxLabelText);
         textboxLabel.setVisible(guiState.textboxLabelVisible);
         for (int i = 0; i < choiceButtons.length; i += 1) {
             setChoice(i, guiState.choiceButtonText[i]);
@@ -167,8 +137,6 @@ public class ConversationController implements Controllable {
             choiceButtons[choiceHighlighted].setChecked(true);
             choiceButtons[choiceHighlighted].setProgrammaticChangeEvents(true);
         }
-
-        numLines = textboxLabel.getGlyphLayout().runs.size;
     }
     /** Returns the current Conversation. */
     public Conversation conversation() {
@@ -199,7 +167,6 @@ public class ConversationController implements Controllable {
     /** Loads the Conversation with filename FILENAME. */
     public Conversation loadConversation(String fileName) {
         currentConversation = conversationLoader.loadConversation(fileName);
-        conversationName = fileName;
         return currentConversation;
     }
     public void setPaused(boolean pause) {
@@ -215,26 +182,21 @@ public class ConversationController implements Controllable {
      */
     public void update(float deltaTime) {
         if (GameManager.assetManager().getQueuedAssets() != 0) {
-            /*
-            if (GameManager.assetManager().update()) { //todo fixme
-                setConv((Conversation) GameManager.assetManager().getRaw("Conversations/super long.conv"));
-                setBranch("default real");
-            }
-            */
             GameManager.assetManager().update();
             System.out.println(GameManager.assetManager().getProgress());
         }
-        if (!paused && currentConversation != null) {
-            //Keep going to next command as long as there is at least one command left in this branch and there is either no
-            //current command or the current command does not require waiting.
-            while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() > 0) {
-                nextCommand();
-                displayAll = false;
-                textTimer = 0;
-            }
-            if (currentBranch.size() == 0 && currentCommand != null && !currentCommand.waitToProceed()) {
-                exit();
-                currentCommand = null;
+        if (currentConversation != null) {
+            if (!paused) {
+                //Keep going to next command as long as there is at least one command left in this branch and there is either no
+                //current command or the current command does not require waiting.
+                while ((currentCommand == null || !currentCommand.waitToProceed()) && currentBranch.size() > 0) {
+                    nextCommand();
+                    displayAll = false;
+                }
+                if (currentBranch.size() == 0 && currentCommand != null && !currentCommand.waitToProceed()) {
+                    exit();
+                    currentCommand = null;
+                }
             }
             updateText(deltaTime);
         }
@@ -247,7 +209,7 @@ public class ConversationController implements Controllable {
      * wait for the command to complete. DELTA TIME is the time elapsed since the
      * previous frame.
      */
-    public void updateText(float deltaTime) {
+    private void updateText(float deltaTime) {
         if (doneSpeaking()) {
             if (currentCommand != null) {
                 currentCommand.complete(CompleteEvent.text());
@@ -261,25 +223,15 @@ public class ConversationController implements Controllable {
 
         if (currentCommand != null && currentCommand instanceof MessageCommand) {
             MessageCommand messageCommand = (MessageCommand) currentCommand;
-            if (messageCommand.shouldUpdate() && !doneSpeaking()) {
-                textTimer += deltaTime;
-            }
 
-            //if (displayAll) {
-            //    textboxLabel.skipToTheEnd(false, false);
-            //}
-
-            //Update text if there is text left and no subcommand is halting text progression. Keep updating if displayAll.
-            while (messageCommand.shouldUpdate() && !doneSpeaking()) {
-                textboxLabel.controlledAct(Math.min(deltaTime, 1 / 30f));
-                if (!displayAll) {
-                    //playTextSound(); todo fix text sounds
-                    break;
+            if (messageCommand.shouldUpdate() && !doneSpeaking() && !paused) {
+                if (displayAll) {
+                    textboxLabel.skipToTheEnd(false, false);
                 }
-            }
-
-            if (doneSpeaking()) {
-                transcript.addMessage(currentSpeaker.getKnownName(), textboxLabel.getText().toString());
+                textboxLabel.resume();
+            } else {
+                textboxLabel.pause();
+                textboxLabel.cancelSkipping();
             }
         }
     }
@@ -288,6 +240,10 @@ public class ConversationController implements Controllable {
         if (currentCommand instanceof MessageCommand) {
             MessageCommand messageCommand = (MessageCommand) currentCommand;
             messageCommand.setSubcommand(subcommand);
+            if (!messageCommand.shouldUpdate()) {
+                textboxLabel.pause();
+                textboxLabel.cancelSkipping();
+            }
         } else {
             GameManager.error("Trying to set subcommand of non message command.");
         }
@@ -301,14 +257,20 @@ public class ConversationController implements Controllable {
         return transcript;
     }
 
+    public void addToTranscript() {
+        if (textboxLabel.getText() != null && !textboxLabel.getText().toString().isEmpty()) {
+            transcript.addMessage(currentSpeaker.getKnownName(), textboxLabel.getText().toString());
+        }
+    }
+
     /** Set the sound to be played for the current speaker to the sound named SOUND. */
     public void setCurrentSpeakerSound(String sound) {
         currentSpeakerSound = sound;
     }
     /** If the text sounds should be played, it gets it from the AssetManager and plays it.
      * Toggles whether the sound should be played next frame. */
-    private void playTextSound() {
-        if (playSoundNow) {
+    public void playTextSound() {
+        if (!displayAll && playSoundNow) {
             Sound s = GameManager.assetManager().get(currentSpeakerSound, Sound.class);
             s.play();
         }
@@ -316,7 +278,7 @@ public class ConversationController implements Controllable {
     }
 
     /** If there are more commands, execute the next one. */
-    public void nextCommand() {
+    private void nextCommand() {
         ConversationCommand command = currentBranch.remove();
         command.execute(this);
         //System.out.println("Executed command: " + command.toString());
@@ -336,7 +298,6 @@ public class ConversationController implements Controllable {
     /** Exits the current conversation. Clears command queue, choices, and text. */
     public void exit() {
         currentCommand = null;
-        remainingText = "";
         setTextBoxShowing(false);
         setChoiceShowing(false);
     }
@@ -365,7 +326,7 @@ public class ConversationController implements Controllable {
         currentSpeaker = character;
     }
     /** Updates the speakerLabel to TEXT. */
-    public void setSpeakerName(String text){
+    private void setSpeakerName(String text){
         if (text.isEmpty()) {
             speakerLabel.setVisible(false);
         } else {
@@ -375,10 +336,7 @@ public class ConversationController implements Controllable {
             speakerLabel.invalidate();
         }
     }
-    /** Sets the text speed in characters per second. */
-    public void setTextSpeed(int charsPerSecond) {
-        this.charsPerSecond = charsPerSecond;
-    }
+
     /** Sets whether the textbox and speaker label should SHOW. */
     public void setTextBoxShowing(boolean show){
         textboxLabel.setVisible(show);
@@ -415,7 +373,7 @@ public class ConversationController implements Controllable {
     }
     //todo store value so method doesn't need to be recalled?
     /** The number of visible choices to choose from. */
-    public int numChoices() {
+    private int numChoices() {
         int i;
         for (i = 0; i < choiceButtons.length; i += 1) {
             if (!choiceButtons[i].isVisible()) {

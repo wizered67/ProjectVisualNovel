@@ -40,7 +40,7 @@ public class ConversationTypingListener implements TypingListener {
      */
     @Override
     public void end() {
-
+        conversationController.addToTranscript();
     }
 
     /**
@@ -67,5 +67,18 @@ public class ConversationTypingListener implements TypingListener {
             return ConversationController.scriptManager(ConversationController.defaultScriptingLanguage()).getStringValue(var);
         }
         return null;
+    }
+
+    /**
+     * Called when a new character is displayed. May be called many times per frame depending on the label configurations and text
+     * speed. Useful to do a certain action each time a character is displayed, like playing a sound effect.
+     *
+     * @param ch
+     */
+    @Override
+    public void onChar(Character ch) {
+        if (!Character.isSpaceChar(ch)) {
+            conversationController.playTextSound();
+        }
     }
 }

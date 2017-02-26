@@ -51,7 +51,6 @@ public class ConversationLoader {
         classMapping.put("sound", PlaySoundCommand.class);
         classMapping.put("fade", ScreenFadeCommand.class);
         classMapping.put("choices", ShowChoicesCommand.class);
-        classMapping.put("textspeed", TextSpeedCommand.class);
         classMapping.put("if", VariableConditionCommand.class);
         classMapping.put("init", VariableInitializeCommand.class);
         classMapping.put("waitForLoading", WaitForLoadingCommand.class);

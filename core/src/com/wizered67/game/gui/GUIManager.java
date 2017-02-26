@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,7 +23,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
-import com.wizered67.game.CustomTypingLabel;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
@@ -40,7 +38,7 @@ public class GUIManager {
     /** Skin used by all GUI elements. */
 	private static Skin skin = new Skin();
     /** Label for the main textbox. Displays text when spoken by characters. */
-	private static CustomTypingLabel textboxLabel;
+	private static TypingLabel textboxLabel;
     /** Label to display the name of the current speaker. */
     private static Label speakerLabel;
     /** Array containing TextButtons to be displayed when the player is offered a choice. */
@@ -148,7 +146,7 @@ public class GUIManager {
 		//newDrawable.setRightWidth(20);
 		labelStyle.background = newDrawable;
 		skin.add("default", labelStyle);
-		textboxLabel = new CustomTypingLabel("", skin);
+		textboxLabel = new TypingLabel("", skin);
 		textboxLabel.setAlignment(Align.topLeft);
 		textboxLabel.setStyle(labelStyle);
         textboxLabel.setWrap(true);
@@ -231,7 +229,7 @@ public class GUIManager {
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
 	public static void updateAndRenderStage(float deltaTime) {
-        stage.act(deltaTime);
+        stage.act(Math.min(1 / 30f, deltaTime));
         stage.draw();
     }
     /** Resize all GUI elements when the screen is resized to dimensions
