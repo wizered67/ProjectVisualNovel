@@ -11,6 +11,7 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel;
  * @author Adam Victor
  */
 public class CustomTypingLabel extends TypingLabel {
+    boolean acted = false;
     public CustomTypingLabel(CharSequence text, LabelStyle style) {
         super(text, style);
     }
@@ -33,10 +34,16 @@ public class CustomTypingLabel extends TypingLabel {
 
     @Override
     public void act (float delta) {
-
+        if (!acted) {
+            pause();
+            super.act(delta);
+            resume();
+        }
+        acted = false;
     }
 
     public void controlledAct(float delta) {
         super.act(delta);
+        acted = true;
     }
 }

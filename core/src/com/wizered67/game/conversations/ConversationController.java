@@ -264,6 +264,11 @@ public class ConversationController implements Controllable {
             if (messageCommand.shouldUpdate() && !doneSpeaking()) {
                 textTimer += deltaTime;
             }
+
+            //if (displayAll) {
+            //    textboxLabel.skipToTheEnd(false, false);
+            //}
+
             //Update text if there is text left and no subcommand is halting text progression. Keep updating if displayAll.
             while (messageCommand.shouldUpdate() && !doneSpeaking()) {
                 textboxLabel.controlledAct(Math.min(deltaTime, 1 / 30f));

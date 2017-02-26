@@ -126,6 +126,20 @@ public class GUIManager {
             stage.addActor(tb);
         }
 
+        Label.LabelStyle speakerLabelStyle = new Label.LabelStyle();
+        speakerLabelStyle.font = skin.getFont("default");
+        Drawable speakerDrawable = skin.newDrawable("white", Color.GRAY);
+        speakerDrawable.setLeftWidth(5);
+        //speakerDrawable.setRightWidth(5);
+        //newDrawable.setRightWidth(20);
+        speakerLabelStyle.background = speakerDrawable;
+        skin.add("speaker", speakerLabelStyle);
+        speakerLabel = new Label("Really long speaker name", skin, "speaker");
+        speakerLabel.toBack();
+        //speakerLabel.setStyle(speakerLabelStyle);
+        speakerLabel.setAlignment(Align.center);
+        stage.addActor(speakerLabel);
+
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = skin.getFont("default");
 		Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
@@ -138,20 +152,8 @@ public class GUIManager {
 		textboxLabel.setAlignment(Align.topLeft);
 		textboxLabel.setStyle(labelStyle);
         textboxLabel.setWrap(true);
+        textboxLabel.toFront();
         stage.addActor(textboxLabel);
-
-        Label.LabelStyle speakerLabelStyle = new Label.LabelStyle();
-        speakerLabelStyle.font = skin.getFont("default");
-        Drawable speakerDrawable = skin.newDrawable("white", Color.GRAY);
-        speakerDrawable.setLeftWidth(5);
-        //speakerDrawable.setRightWidth(5);
-        //newDrawable.setRightWidth(20);
-        speakerLabelStyle.background = speakerDrawable;
-        skin.add("speaker", speakerLabelStyle);
-        speakerLabel = new Label("Really long speaker name", skin, "speaker");
-        //speakerLabel.setStyle(speakerLabelStyle);
-        speakerLabel.setAlignment(Align.center);
-        stage.addActor(speakerLabel);
 
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
@@ -274,6 +276,7 @@ public class GUIManager {
 
     private static void addTranscript() {
         transcriptLabel = new Label("", skin);
+        transcriptLabel.setWrap(true);
         transcriptLabel.setAlignment(Align.topLeft);
         transcriptLabel.setWidth(Gdx.graphics.getWidth() - 64);
         ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
