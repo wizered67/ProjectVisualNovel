@@ -65,6 +65,7 @@ public class SceneImage extends SceneEntity {
         //sprite.setTexture();
         //sprite.setRegion(GameManager.assetManager().get(texture, Texture.class));
         Texture t = GameManager.assetManager().get(texture, Texture.class);
+        t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         sprite.setTexture(t);
         sprite.setRegion(t);
         sprite.setSize(t.getWidth(), t.getHeight());

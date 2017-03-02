@@ -1,8 +1,10 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.wizered67.game.inputs.MyInputProcessor;
 import com.wizered67.game.assets.Assets;
 
@@ -32,6 +34,18 @@ public class GameManager {
 
 	public static SpriteBatch mainBatch() {
 		return game.mainBatch;
+	}
+
+	public static OrthographicCamera mainCamera() {
+		return game.mainCamera;
+	}
+
+	public static Viewport mainViewport() {
+		return game.mainViewport;
+	}
+
+	public static Viewport guiViewport() {
+		return game.guiViewport;
 	}
 
 	public static void error(String error) {

@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
@@ -34,7 +35,7 @@ import com.wizered67.game.saving.SaveManager;
  */
 public class GUIManager {
     /** Main Table that all GUI elements are added to. */
-	private static Table table;
+	private static Table dialogueElementsTable;
     /** Skin used by all GUI elements. */
 	private static Skin skin = new Skin();
     /** Label for the main textbox. Displays text when spoken by characters. */
@@ -65,9 +66,13 @@ public class GUIManager {
     private static boolean saveInputShowing = false;
     /** GUI List that shows all options for debug menu. */
     private static List<String> debugSelector;
-
+    /** Table used to contain elements for the transcript. */
+    private static Table transcriptTable;
+    /** Scrollpane used to contain the transcript label. */
     private static ScrollPane transcriptPane;
+    /** Label used for displaying transcript text. */
     private static Label transcriptLabel;
+    /** Whether the transcript is scrolling, and in which direction. */
     private static float transcriptScrolling = 0;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
@@ -90,11 +95,20 @@ public class GUIManager {
 
         skin.add("white", new Texture(pixmap));
         skin.add("default", defaultFont);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
+        newDrawable.setLeftWidth(LEFT_PADDING);
+        newDrawable.setLeftWidth(LEFT_PADDING);
+        //newDrawable.setRightWidth(20);
+        labelStyle.background = newDrawable;
+        skin.add("default", labelStyle);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
-    	 table = new Table();
-    	 table.setFillParent(true);
-    	 stage.addActor(table);
-	     table.setDebug(true); // This is optional, but enables debug lines for tables.
+    	 dialogueElementsTable = new Table();
+    	 dialogueElementsTable.setFillParent(true);
+    	 stage.addActor(dialogueElementsTable);
+	     dialogueElementsTable.setDebug(Constants.DEBUG); // This is optional, but enables debug lines for tables.
     	    // Add widgets to the table here.
 	     
 	     TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -104,7 +118,10 @@ public class GUIManager {
 			textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 			textButtonStyle.font = skin.getFont("default");
 			skin.add("default", textButtonStyle);
-
+        Table choiceTable = new Table();
+        choiceTable.setDebug(Constants.DEBUG);
+        dialogueElementsTable.add(choiceTable).top().grow();//.expand().fill();
+        dialogueElementsTable.row();
         choiceButtons = new TextButton[4];
         for (int i = 0; i < choiceButtons.length; i += 1) {
             TextButton tb = new TextButton("", skin);
@@ -121,7 +138,13 @@ public class GUIManager {
             });
             tb.setVisible(false);
             choiceButtons[i] = tb;
-            stage.addActor(tb);
+            Cell cell = choiceTable.top().add(tb).expandX().fillX().padLeft(100).padRight(100).padBottom(30).minHeight(35);
+            if (i == 0) {
+                cell.padTop(30);
+            }
+            if (i < choiceButtons.length - 1) {
+                choiceTable.row();
+            }
         }
 
         Label.LabelStyle speakerLabelStyle = new Label.LabelStyle();
@@ -136,23 +159,52 @@ public class GUIManager {
         speakerLabel.toBack();
         //speakerLabel.setStyle(speakerLabelStyle);
         speakerLabel.setAlignment(Align.center);
-        stage.addActor(speakerLabel);
 
-		Label.LabelStyle labelStyle = new Label.LabelStyle();
-		labelStyle.font = skin.getFont("default");
-		Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
-		newDrawable.setLeftWidth(LEFT_PADDING);
-        newDrawable.setLeftWidth(LEFT_PADDING);
-		//newDrawable.setRightWidth(20);
-		labelStyle.background = newDrawable;
-		skin.add("default", labelStyle);
+        //stage.addActor(speakerLabel);
+        Table aboveTextboxTable = new Table();
+        aboveTextboxTable.setDebug(Constants.DEBUG);
+        dialogueElementsTable.add(aboveTextboxTable).expandX().fillX().colspan(3).padLeft(40).padRight(40).minHeight(40);
+
+        aboveTextboxTable.left().add(speakerLabel).minWidth(80).maxWidth(150).minHeight(40);
+        Table menuButtonsTable = new Table();
+        menuButtonsTable.setDebug(Constants.DEBUG);
+        aboveTextboxTable.add(menuButtonsTable).expandX().fillX();
+
+        TextButton transcriptButton = new TextButton("T", skin);
+        transcriptButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                event.cancel();
+                toggleTranscript();
+            }
+        });
+        menuButtonsTable.right().add(transcriptButton).minWidth(40).minHeight(40).padRight(20);
+        TextButton saveButton = new TextButton("S", skin);
+        saveButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                event.cancel();
+                SaveManager.save(Gdx.files.local("Saves/game.sav"));
+            }
+        });
+        menuButtonsTable.add(saveButton).minWidth(40).minHeight(40).padRight(20);
+        TextButton loadButton = new TextButton("L", skin);
+        loadButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                event.cancel();
+                SaveManager.load(Gdx.files.local("Saves/game.sav"));
+            }
+        });
+        menuButtonsTable.add(loadButton).minWidth(40).minHeight(40);
+        dialogueElementsTable.row();
 		textboxLabel = new TypingLabel("", skin);
 		textboxLabel.setAlignment(Align.topLeft);
 		textboxLabel.setStyle(labelStyle);
         textboxLabel.setWrap(true);
         textboxLabel.toFront();
-        stage.addActor(textboxLabel);
-
+        dialogueElementsTable.bottom().add(textboxLabel).expandX().fillX().minHeight(150).maxHeight(150).padLeft(40).padRight(40).padBottom(40).colspan(3);
+        //stage.addActor(textboxLabel);
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
         //System.out.println(remainingTextNoTags);
@@ -215,8 +267,8 @@ public class GUIManager {
 	}
 	/** Toggles whether the transcript is being shown. */
 	public static void toggleTranscript() {
-        transcriptPane.setVisible(!transcriptPane.isVisible());
-        conversationController.setPaused(transcriptPane.isVisible());
+        transcriptTable.setVisible(!transcriptTable.isVisible());
+        conversationController.setPaused(transcriptTable.isVisible());
         updateTranscript(); //todo fix. part of hacky solution to make update first time
         //transcriptPane.invalidate();
         transcriptPane.validate();
@@ -229,36 +281,17 @@ public class GUIManager {
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
 	public static void updateAndRenderStage(float deltaTime) {
+        GameManager.guiViewport().apply(true);
         stage.act(Math.min(1 / 30f, deltaTime));
         stage.draw();
     }
     /** Resize all GUI elements when the screen is resized to dimensions
      * WIDTH by HEIGHT. Keeps GUI elements proportional to virtual size.
      */
-	public static void resize(int width, int height){
-		textboxLabel.setSize(TEXTBOX_SIZE.x * width / Constants.VIRTUAL_WIDTH,
-				TEXTBOX_SIZE.y * height / Constants.VIRTUAL_HEIGHT);
-		textboxLabel.setPosition((width - textboxLabel.getWidth()) / 2,
-				height / 16); //actor position is from bottom left of it
-        textboxLabel.invalidate();
-        //numLines = textboxLabel.getGlyphLayout().runs.size;
-        speakerLabel.setPosition(textboxLabel.getX(), textboxLabel.getY() + textboxLabel.getHeight());
-        speakerLabel.invalidate();
+	public static void resize(int width, int height) {
 
-        resizeChoices(width, height);
 	}
-    /** Resizes the TextButtons used for choices. Keeps them evenly spaced apart. */
-    private static void resizeChoices(int width, int height) {
-        for (int i = 0; i < choiceButtons.length; i += 1) {
-            TextButton tb = choiceButtons[i];
-            tb.setSize(CHOICES_SIZE.x * width / Constants.VIRTUAL_WIDTH, CHOICES_SIZE.y * height / Constants.VIRTUAL_HEIGHT);
-            float textBoxTop = textboxLabel.getTop();
-            float gap = (height - textBoxTop - choiceButtons.length * tb.getHeight()) / (choiceButtons.length + 1);
-            float yPos = textBoxTop + (gap + tb.getHeight() / 2) * ((choiceButtons.length - i - 1) + 1);
-            tb.setPosition((width - tb.getWidth()) / 2, yPos);
-            tb.invalidate();
-        }
-    }
+
     /** Returns the y position of the top of the textbox label. */
     public static float getTextboxTop() {
         return textboxLabel.getTop();
@@ -273,6 +306,12 @@ public class GUIManager {
     }
 
     private static void addTranscript() {
+        transcriptTable = new Table();
+        transcriptTable.setDebug(Constants.DEBUG);
+        transcriptTable.setFillParent(true);
+        transcriptTable.setVisible(false);
+        transcriptTable.toFront();
+
         transcriptLabel = new Label("", skin);
         transcriptLabel.setWrap(true);
         transcriptLabel.setAlignment(Align.topLeft);
@@ -284,12 +323,13 @@ public class GUIManager {
         transcriptPane.setHeight(Gdx.graphics.getHeight() - 64);
         transcriptPane.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, Align.center);
         transcriptPane.toFront();
-        transcriptPane.setVisible(false);
-        stage.addActor(transcriptPane);
+        //transcriptPane.setVisible(false);
+        stage.addActor(transcriptTable);
+        transcriptTable.add(transcriptPane).expand().fill().pad(40);
     }
 
     private static void updateTranscript() {
-        if (!transcriptPane.isVisible()) {
+        if (!transcriptTable.isVisible()) {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -303,7 +343,7 @@ public class GUIManager {
     }
 
     public static boolean isTranscriptVisible() {
-        return transcriptPane.isVisible();
+        return transcriptTable.isVisible();
     }
 
     public static void scrollTranscript(int direction) {

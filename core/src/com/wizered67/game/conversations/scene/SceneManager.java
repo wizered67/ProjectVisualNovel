@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
@@ -41,6 +42,7 @@ public class SceneManager {
     private Color fadeColor;
     /** UpdatedInterpolation used for keeping track of interpolation type and progress. */
     private FloatInterpolation fade;
+
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
@@ -79,6 +81,8 @@ public class SceneManager {
      * last frame.
      */
     public void update(float delta) {
+        GameManager.mainViewport().apply();
+        batch.setProjectionMatrix(GameManager.mainCamera().combined);
         batch.begin();
 
         Iterator<SceneEntity> entityIterator = sortedEntities.iterator();
@@ -111,8 +115,9 @@ public class SceneManager {
                 alpha = fade.update(0);
             }
             fadeColor.a = alpha;
+            batch.setProjectionMatrix(GameManager.mainCamera().combined);
             batch.setColor(fadeColor);
-            batch.draw(fadeTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.draw(fadeTexture, 0, 0, GameManager.mainCamera().viewportWidth, GameManager.mainCamera().viewportHeight);
             batch.setColor(Color.WHITE);
             if (alpha <= 0 || alpha >= 1) {
                 fade = null;

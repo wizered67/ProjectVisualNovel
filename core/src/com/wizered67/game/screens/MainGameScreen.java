@@ -1,5 +1,6 @@
 package com.wizered67.game.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -21,8 +22,10 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.wizered67.game.Constants;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.inputs.Controllable;
@@ -37,11 +40,7 @@ import java.util.Map;
  */
 public class MainGameScreen implements Screen, Controllable {
     private SpriteBatch batch;
-    private OrthographicCamera camera;
-    private OrthographicCamera hudCamera;
-    private OrthographicCamera debugCamera;
     private BitmapFont font;
-    private Viewport hudViewport;
     private MyInputProcessor inputProcessor;
     private Stage stage;
     private GUIManager gui;
@@ -64,14 +63,11 @@ public class MainGameScreen implements Screen, Controllable {
         font = new BitmapFont(false);
         font.setColor(Color.WHITE);
         batch = GameManager.mainBatch();
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false);//, Constants.VIRTUAL_WIDTH ,Constants.VIRTUAL_HEIGHT);
         //camera.zoom = cameraZoom;
         //myViewport = new CustomExtendViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, mapWidthInPixels, mapHeightInPixels, camera);
         //myViewport.setScreenSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //myViewport.apply();
-
+        /*
         hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.
                 getHeight());
         hudCamera.setToOrtho(false); //was true prior to scene2D
@@ -80,11 +76,10 @@ public class MainGameScreen implements Screen, Controllable {
 
         //myViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hudViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        debugCamera = new OrthographicCamera();
         //debugCamera.setToOrtho(false, Constants.toMeters(myViewport.getWorldWidth()), Constants.toMeters(myViewport.getWorldHeight()));
         //debugCamera.zoom = camera.zoom;
-
-        stage = new Stage(hudViewport);
+        */
+        stage = new Stage(GameManager.guiViewport());
 
         shapes = new ShapeRenderer();
     }
@@ -104,7 +99,7 @@ public class MainGameScreen implements Screen, Controllable {
     }
 
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         updateCameras(delta);
@@ -117,7 +112,8 @@ public class MainGameScreen implements Screen, Controllable {
     }
 
     private void updateGUI(float delta){
-        hudViewport.apply(true);
+        //hudViewport.apply(true);
+        GameManager.mainViewport().apply();
         GUIManager.update(delta);
     }
 
@@ -128,10 +124,13 @@ public class MainGameScreen implements Screen, Controllable {
     @Override
     public void resize(int width, int height) {
         //myViewport.update(width, height);
-        hudViewport.update(width, height);
+        //hudViewport.update(width, height);
         //debugCamera.viewportWidth = Constants.toMeters(myViewport.getWorldWidth());//Constants.toMeters(width / myViewport.getScale());
         //debugCamera.viewportHeight = Constants.toMeters(myViewport.getWorldHeight());//Constants.toMeters(height / myViewport.getScale());
         //debugCamera.update();
+        //GUIManager.resize(width, height);
+        GameManager.mainViewport().update(width, height, true); //todo figure out if center camera is always correct
+        GameManager.guiViewport().update(width, height);
         GUIManager.resize(width, height);
     }
 

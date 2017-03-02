@@ -332,8 +332,8 @@ public class ConversationController implements Controllable {
         } else {
             speakerLabel.setVisible(true);
             speakerLabel.setText(text + "  ");
-            speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
-            speakerLabel.invalidate();
+            //speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
+            //speakerLabel.invalidate();
         }
     }
 
