@@ -323,7 +323,13 @@ public class ConversationController implements Controllable {
     }
     /** Sets the current speaking character to the one represented by CHARACTER. */
     public void setSpeaker(SceneCharacter character) {
+        if (currentSpeaker != null) {
+            currentSpeaker.setSpeaking(false);
+        }
         currentSpeaker = character;
+        if (character != null) {
+            currentSpeaker.setSpeaking(true);
+        }
     }
     /** Updates the speakerLabel to TEXT. */
     private void setSpeakerName(String text){

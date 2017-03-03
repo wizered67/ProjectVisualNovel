@@ -48,6 +48,8 @@ public class ConversationLoader {
         classMapping.put("unloadGroup", LoadUnloadCommand.class);
         classMapping.put("text", MessageCommand.class);
         classMapping.put("music", PlayMusicCommand.class);
+        classMapping.put("resumemusic", PlayMusicCommand.class);
+        classMapping.put("pausemusic", PlayMusicCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
         classMapping.put("fade", ScreenFadeCommand.class);
         classMapping.put("choices", ShowChoicesCommand.class);
