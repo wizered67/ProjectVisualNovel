@@ -120,7 +120,7 @@ public class GUIManager {
 			skin.add("default", textButtonStyle);
         Table choiceTable = new Table();
         choiceTable.setDebug(Constants.DEBUG);
-        dialogueElementsTable.add(choiceTable).top().grow();//.expand().fill();
+        dialogueElementsTable.add(choiceTable).top().grow().padBottom(40).padTop(40);//.expand().fill();
         dialogueElementsTable.row();
         choiceButtons = new TextButton[4];
         for (int i = 0; i < choiceButtons.length; i += 1) {
@@ -138,7 +138,7 @@ public class GUIManager {
             });
             tb.setVisible(false);
             choiceButtons[i] = tb;
-            Cell cell = choiceTable.top().add(tb).expandX().fillX().padLeft(100).padRight(100).padBottom(30).minHeight(35);
+            Cell cell = choiceTable.top().add(tb).expand().fill().padLeft(100).padRight(100).padBottom(30).minHeight(35);
             if (i == 0) {
                 cell.padTop(30);
             }
@@ -203,7 +203,7 @@ public class GUIManager {
 		textboxLabel.setStyle(labelStyle);
         textboxLabel.setWrap(true);
         textboxLabel.toFront();
-        dialogueElementsTable.bottom().add(textboxLabel).expandX().fillX().minHeight(150).maxHeight(150).padLeft(40).padRight(40).padBottom(40).colspan(3);
+        dialogueElementsTable.bottom().add(textboxLabel).expandX().fillX().expandY().fillY().minHeight(150).padLeft(40).padRight(40).padBottom(40).colspan(3);
         //stage.addActor(textboxLabel);
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
