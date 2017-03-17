@@ -34,6 +34,10 @@ import com.wizered67.game.saving.SaveManager;
  * @author Adam Victor
  */
 public class GUIManager {
+
+    private DialogueElementsUI dialogueElementsUI;
+
+
     /** Main Table that all GUI elements are added to. */
 	private static Table dialogueElementsTable;
     /** Skin used by all GUI elements. */
@@ -75,6 +79,13 @@ public class GUIManager {
     /** Whether the transcript is scrolling, and in which direction. */
     private static float transcriptScrolling = 0;
 
+    //temporary hacky solution. It was foolish to ever make GUI Manager static in its current form.
+    //very soon I will need to plan my course of action and change GUI Manager to nonstatic. Potentially
+    //I could use a singleton. Probably not preferred but let's be honest, better than a stupidly static class.
+    public void resizeNonstatic(int width, int height) { //todo remove
+        dialogueElementsUI.resize(width, height);
+    }
+
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
      */
@@ -82,70 +93,22 @@ public class GUIManager {
 		stage = st;
  		// Generate a 1x1 white texture and store it in the skin named "white".
  		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
- 		pixmap.setColor(Color.WHITE);
+ 		pixmap.setColor(1, 1, 1, 0.75f);
  		pixmap.fill();
 
- 		// Store the default libgdx font under the name "default".
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
-        parameter.size = Math.round(densityIndependentSize);
-		defaultFont = generator.generateFont(parameter); // font size 12 pixels
-        defaultFont.getData().markupEnabled = true;
+ 		initFont();
 
         skin.add("white", new Texture(pixmap));
-        skin.add("default", defaultFont);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
         newDrawable.setLeftWidth(LEFT_PADDING);
-        newDrawable.setLeftWidth(LEFT_PADDING);
+        newDrawable.setRightWidth(LEFT_PADDING);
+        newDrawable.setTopHeight(LEFT_PADDING / 2);
         //newDrawable.setRightWidth(20);
         labelStyle.background = newDrawable;
         skin.add("default", labelStyle);
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
-    	 dialogueElementsTable = new Table();
-    	 dialogueElementsTable.setFillParent(true);
-    	 stage.addActor(dialogueElementsTable);
-	     dialogueElementsTable.setDebug(Constants.DEBUG); // This is optional, but enables debug lines for tables.
-    	    // Add widgets to the table here.
-	     
-	     TextButtonStyle textButtonStyle = new TextButtonStyle();
-			textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-			textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
-			textButtonStyle.checked = skin.newDrawable("white", Color.LIGHT_GRAY);
-			textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-			textButtonStyle.font = skin.getFont("default");
-			skin.add("default", textButtonStyle);
-        Table choiceTable = new Table();
-        choiceTable.setDebug(Constants.DEBUG);
-        dialogueElementsTable.add(choiceTable).top().grow().padBottom(40).padTop(40);//.expand().fill();
-        dialogueElementsTable.row();
-        choiceButtons = new TextButton[4];
-        for (int i = 0; i < choiceButtons.length; i += 1) {
-            TextButton tb = new TextButton("", skin);
-            tb.setUserObject(i);
-            tb.addListener(new ChangeListener() {
-                public void changed (ChangeEvent event, Actor actor) {
-                    System.out.println("Clicked button " + actor.getUserObject());
-                    conversationController.processChoice((Integer) actor.getUserObject());
-                    event.cancel();
-                    ((Button) actor).setProgrammaticChangeEvents(false);
-                    ((Button) actor).setChecked(false);
-                    ((Button) actor).setProgrammaticChangeEvents(true);
-                }
-            });
-            tb.setVisible(false);
-            choiceButtons[i] = tb;
-            Cell cell = choiceTable.top().add(tb).expand().fill().padLeft(100).padRight(100).padBottom(30).minHeight(35);
-            if (i == 0) {
-                cell.padTop(30);
-            }
-            if (i < choiceButtons.length - 1) {
-                choiceTable.row();
-            }
-        }
 
         Label.LabelStyle speakerLabelStyle = new Label.LabelStyle();
         speakerLabelStyle.font = skin.getFont("default");
@@ -154,95 +117,52 @@ public class GUIManager {
         //speakerDrawable.setRightWidth(5);
         //newDrawable.setRightWidth(20);
         speakerLabelStyle.background = speakerDrawable;
-        skin.add("speaker", speakerLabelStyle);
-        speakerLabel = new Label("Really long speaker name", skin, "speaker");
-        speakerLabel.toBack();
-        //speakerLabel.setStyle(speakerLabelStyle);
-        speakerLabel.setAlignment(Align.center);
+        skin.add("speakerStyle", speakerLabelStyle);
 
-        //stage.addActor(speakerLabel);
-        Table aboveTextboxTable = new Table();
-        aboveTextboxTable.setDebug(Constants.DEBUG);
-        dialogueElementsTable.add(aboveTextboxTable).expandX().fillX().colspan(3).padLeft(40).padRight(40).minHeight(40);
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
 
-        aboveTextboxTable.left().add(speakerLabel).minWidth(80).maxWidth(150).minHeight(40);
-        Table menuButtonsTable = new Table();
-        menuButtonsTable.setDebug(Constants.DEBUG);
-        aboveTextboxTable.add(menuButtonsTable).expandX().fillX();
-
-        TextButton transcriptButton = new TextButton("T", skin);
-        transcriptButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                event.cancel();
-                toggleTranscript();
-            }
-        });
-        menuButtonsTable.right().add(transcriptButton).minWidth(40).minHeight(40).padRight(20);
-        TextButton saveButton = new TextButton("S", skin);
-        saveButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                event.cancel();
-                SaveManager.save(Gdx.files.local("Saves/game.sav"));
-            }
-        });
-        menuButtonsTable.add(saveButton).minWidth(40).minHeight(40).padRight(20);
-        TextButton loadButton = new TextButton("L", skin);
-        loadButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                event.cancel();
-                SaveManager.load(Gdx.files.local("Saves/game.sav"));
-            }
-        });
-        menuButtonsTable.add(loadButton).minWidth(40).minHeight(40);
-        dialogueElementsTable.row();
-		textboxLabel = new TypingLabel("", skin);
-		textboxLabel.setAlignment(Align.topLeft);
-		textboxLabel.setStyle(labelStyle);
-        textboxLabel.setWrap(true);
-        textboxLabel.toFront();
-        dialogueElementsTable.bottom().add(textboxLabel).expandX().fillX().expandY().fillY().minHeight(150).padLeft(40).padRight(40).padBottom(40).colspan(3);
-        //stage.addActor(textboxLabel);
+        //todo init and add dialogue elements UI
+        dialogueElementsUI = new DialogueElementsUI(this, skin);
+        stage.addActor(dialogueElementsUI.getMainTable());
+        textboxLabel = dialogueElementsUI.getTextboxLabel();
+        speakerLabel = dialogueElementsUI.getSpeakerLabel();
+        choiceButtons = dialogueElementsUI.getChoiceButtons();
+        dialogueElementsTable = dialogueElementsUI.getMainTable();
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
-        //System.out.println(remainingTextNoTags);
-        //remainingText = "this is a new message just so you know.";
-		//textboxLabel.setText("TESTING A MESSAGE BRO");
-		//textboxLabel = new Label("this is a really long test message and I want to see if word wrap is doing anything? Test MessageCommand!", labelStyle);
 
-		//textboxLabel.setPosition(200, 400);
-		//textboxLabel.setSize(350, 60);
-		//textboxLabel.setFullVisible(false);
-		/*
-        TextTooltip.TextTooltipStyle textTooltipStyle = new TextTooltip.TextTooltipStyle();
-		textTooltipStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
-		textTooltipStyle.label = labelStyle;
-		textTooltipStyle.wrapWidth = 300;
-		skin.add("default", textTooltipStyle);
-		TextTooltip textTooltip = new TextTooltip("This [GREEN]is [WHITE]a tooltip! This is a tooltip! This is a tooltip! This is a tooltip! This is a tooltip! This is a tooltip!", skin);
-		//textTooltip.setAlways(true);
-		textTooltip.setInstant(true);
-		button.addListener(textTooltip);
-		*/
-		//Table tooltipTable = new Table(skin);
-		//tooltipTable.pad(10).background("default-round");
-		//tooltipTable.add(new TextButton("Fancy tooltip!", skin));
+
+
         addDebug();
         addTranscript();
 	}
     public GUIManager() {
         conversationController = new ConversationController();
     }
+
+    /** Initializes the font that will be used. */
+    private void initFont() {
+        // Store the default libgdx font under the name "default".
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        //float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
+        parameter.size = (int) (Constants.REGULAR_FONT_SIZE * Gdx.graphics.getHeight() / Constants.VIRTUAL_HEIGHT);//Math.round(densityIndependentSize);
+        defaultFont = generator.generateFont(parameter); // font size 12 pixels
+        defaultFont.getData().markupEnabled = true;
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        skin.add("default", defaultFont);
+    }
+
     /** Returns the Stage used to display GUI elements. */
-	public static Stage getStage(){
+	public Stage getStage(){
 		return stage;
 	}
-	/** Returns the batch being used by the stage. */
-	public static Batch getBatch() {
-	    return stage.getBatch();
-    }
     /** Called every frame. Updates the ConversationController. DELTA TIME is the time
      * elapsed since the last frame.
      */
@@ -289,13 +209,17 @@ public class GUIManager {
      * WIDTH by HEIGHT. Keeps GUI elements proportional to virtual size.
      */
 	public static void resize(int width, int height) {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        //float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
+        parameter.size = (int) (Constants.REGULAR_FONT_SIZE * Gdx.graphics.getHeight() / Constants.VIRTUAL_HEIGHT);//Math.round(densityIndependentSize);
+        defaultFont = generator.generateFont(parameter); // font size 12 pixels
+        defaultFont.getData().markupEnabled = true;
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        skin.add("default", defaultFont);
 
 	}
 
-    /** Returns the y position of the top of the textbox label. */
-    public static float getTextboxTop() {
-        return textboxLabel.getTop();
-    }
     /** Sets the visibility of the textbox and speaker label to SHOW. */
     public static void setTextboxShowing(boolean show) {
         conversationController.setTextBoxShowing(show);

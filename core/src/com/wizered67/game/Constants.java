@@ -16,11 +16,11 @@ public class Constants {
 
 	//Game Settings
 	public final static String GAME_NAME = "Visual Novel";
-	public final static int DEFAULT_WIDTH = 800; //1920
-	public final static int DEFAULT_HEIGHT = 600; //1080
+	public final static int DEFAULT_WIDTH = 800;//1920;
+	public final static int DEFAULT_HEIGHT = 600;//1080;
 	public final static boolean FULLSCREEN = false;
 	public final static boolean RESIZABLE = true;
-	public final static int REGULAR_FONT_SIZE = Gdx.app.getType() == Application.ApplicationType.Android ? (12) : 36;
+	public final static int REGULAR_FONT_SIZE = Gdx.app.getType() == Application.ApplicationType.Android ? (12) : 24;
 	public final static float VIRTUAL_WIDTH = 800; //400
 	public final static float VIRTUAL_HEIGHT = 600; //240
 	//Tile Settings

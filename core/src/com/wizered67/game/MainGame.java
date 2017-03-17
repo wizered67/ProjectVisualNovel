@@ -36,8 +36,8 @@ public class MainGame extends Game {
 
 		GameManager.init(this);
 		SaveManager.init();
-		gameScreen = new MainGameScreen();
 		GameManager.assetManager().loadGroup("common");
+		gameScreen = new MainGameScreen();
 		setScreen(new LoadingScreen(new LoadingScreen.LoadResult() {
 			@Override
 			public void finishLoading() {

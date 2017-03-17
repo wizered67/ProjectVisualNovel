@@ -132,6 +132,8 @@ public class MainGameScreen implements Screen, Controllable {
         GameManager.mainViewport().update(width, height, true); //todo figure out if center camera is always correct
         GameManager.guiViewport().update(width, height);
         GUIManager.resize(width, height);
+
+        gui.resizeNonstatic(width, height);
     }
 
     @Override
