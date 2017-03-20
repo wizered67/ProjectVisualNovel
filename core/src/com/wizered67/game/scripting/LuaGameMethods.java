@@ -3,6 +3,7 @@ package com.wizered67.game.scripting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
 import org.luaj.vm2.LuaValue;
@@ -23,11 +24,11 @@ public class LuaGameMethods {
     }
 
     public static void addToTranscript(String speaker, String phrase) {
-        GUIManager.conversationController().getTranscript().addMessage(speaker, phrase);
+        GameManager.conversationController().getTranscript().addMessage(speaker, phrase);
     }
 
     public static void openTranscript() {
-        GUIManager.toggleTranscript();
+        GameManager.guiManager().toggleTranscript();
     }
 
     public static void getInput(final String variableName) {

@@ -117,7 +117,7 @@ public class SceneManager {
             }
         }
         batch.end();
-        GUIManager.updateAndRenderStage(delta);
+        GameManager.guiManager().updateAndRenderStage(delta); //todo reevaluate how updating works...
 
         batch.begin();
         drawFade(delta);

@@ -478,15 +478,15 @@ public class ConversationController implements Controllable {
                     inputConfirm();
                     break;
                 case UP:
-                    if (GUIManager.isTranscriptVisible()) {
-                        GUIManager.scrollTranscript(-1);
+                    if (GameManager.guiManager().isTranscriptVisible()) {
+                        GameManager.guiManager().scrollTranscript(-1);
                     } else if (choiceShowing) {
                         changeChoice(-1);
                     }
                     break;
                 case DOWN:
-                    if (GUIManager.isTranscriptVisible()) {
-                        GUIManager.scrollTranscript(1);
+                    if (GameManager.guiManager().isTranscriptVisible()) {
+                        GameManager.guiManager().scrollTranscript(1);
                     } else if (choiceShowing) {
                         changeChoice(1);
                     }
@@ -497,10 +497,10 @@ public class ConversationController implements Controllable {
         } else { //released
             switch (control) {
                 case UP:
-                    GUIManager.stopTranscriptScrolling();
+                    GameManager.guiManager().stopTranscriptScrolling();
                     break;
                 case DOWN:
-                    GUIManager.stopTranscriptScrolling();
+                    GameManager.guiManager().stopTranscriptScrolling();
                     break;
             }
         }

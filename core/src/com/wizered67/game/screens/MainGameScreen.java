@@ -41,22 +41,12 @@ import java.util.Map;
 public class MainGameScreen implements Screen, Controllable {
     private SpriteBatch batch;
     private BitmapFont font;
-    private MyInputProcessor inputProcessor;
-    private Stage stage;
-    private GUIManager gui;
     private ShapeRenderer shapes;
 
     public MainGameScreen() {
         initRendering();
-        initInput();
-        setupGUI();
+        GameManager.getMainInputProcessor().register(this);
 
-        inputProcessor.register(this);
-
-    }
-
-    public void setupGUI() {
-        gui = new GUIManager(stage);
     }
 
     private void initRendering() {
@@ -79,19 +69,9 @@ public class MainGameScreen implements Screen, Controllable {
         //debugCamera.setToOrtho(false, Constants.toMeters(myViewport.getWorldWidth()), Constants.toMeters(myViewport.getWorldHeight()));
         //debugCamera.zoom = camera.zoom;
         */
-        stage = new Stage(GameManager.guiViewport());
-
         shapes = new ShapeRenderer();
     }
 
-    public void initInput(){
-        inputProcessor = new MyInputProcessor();
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(inputProcessor);
-        GameManager.setMainInputProcessor(inputProcessor);
-        Gdx.input.setInputProcessor(multiplexer);
-    }
 
     @Override
     public void show() {
@@ -114,11 +94,11 @@ public class MainGameScreen implements Screen, Controllable {
     private void updateGUI(float delta){
         //hudViewport.apply(true);
         GameManager.mainViewport().apply();
-        GUIManager.update(delta);
+        GameManager.guiManager().update(delta);
     }
 
     public void updateInput() {
-        inputProcessor.update();
+        GameManager.getMainInputProcessor().update();
     }
 
     @Override
@@ -131,9 +111,7 @@ public class MainGameScreen implements Screen, Controllable {
         //GUIManager.resize(width, height);
         GameManager.mainViewport().update(width, height, true); //todo figure out if center camera is always correct
         GameManager.guiViewport().update(width, height);
-        GUIManager.resize(width, height);
-
-        gui.resizeNonstatic(width, height);
+        GameManager.guiManager().resize(width, height);
     }
 
     @Override
@@ -153,10 +131,12 @@ public class MainGameScreen implements Screen, Controllable {
 
     @Override
     public void dispose() {
+        /*
         stage.dispose();
         font.dispose();
         batch.dispose();
         shapes.dispose();
+        */
     }
 
     /**

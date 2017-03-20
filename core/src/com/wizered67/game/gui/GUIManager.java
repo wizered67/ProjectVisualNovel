@@ -39,52 +39,41 @@ public class GUIManager {
 
 
     /** Main Table that all GUI elements are added to. */
-	private static Table dialogueElementsTable;
+	private Table dialogueElementsTable;
     /** Skin used by all GUI elements. */
-	private static Skin skin = new Skin();
+	private Skin skin = new Skin();
     /** Label for the main textbox. Displays text when spoken by characters. */
-	private static TypingLabel textboxLabel;
+	private TypingLabel textboxLabel;
     /** Label to display the name of the current speaker. */
-    private static Label speakerLabel;
+    private Label speakerLabel;
     /** Array containing TextButtons to be displayed when the player is offered a choice. */
-	private static TextButton[] choiceButtons;
+	private TextButton[] choiceButtons;
     /** The stage to which the GUI elements are added. Part of Scene2D. */
-	private static Stage stage;
-    /** Constant Vector2 containing textbox dimensions. */
-	private final static Vector2 TEXTBOX_SIZE = new Vector2(360, 50);
-    /** Constant Vector2 containing choice button dimensions. */
-    private final static Vector2 CHOICES_SIZE = new Vector2(300, 22);
+	private Stage stage;
     /** Constant denoting space between left side of the textbox and text. */
-    private final static int LEFT_PADDING = 10;
+    private final int LEFT_PADDING = 10;
     /** Message Window that updates the GUI elements as a Conversation proceeds. */
-    private static ConversationController conversationController;
+    private ConversationController conversationController;
     /** Default font used for text. */
-    private static BitmapFont defaultFont;
+    private BitmapFont defaultFont;
 
     //debug related variables
     /** Scrollpane used to contain debug choices -- ie loading conversations, etc. */
-    private static ScrollPane debugPane;
+    private ScrollPane debugPane;
     /** Contains choices for debug options. */
-    private static HorizontalGroup debugChoices;
+    private HorizontalGroup debugChoices;
     /** Whether the save input is showing. */
-    private static boolean saveInputShowing = false;
+    private boolean saveInputShowing = false;
     /** GUI List that shows all options for debug menu. */
-    private static List<String> debugSelector;
+    private List<String> debugSelector;
     /** Table used to contain elements for the transcript. */
-    private static Table transcriptTable;
+    private Table transcriptTable;
     /** Scrollpane used to contain the transcript label. */
-    private static ScrollPane transcriptPane;
+    private ScrollPane transcriptPane;
     /** Label used for displaying transcript text. */
-    private static Label transcriptLabel;
+    private Label transcriptLabel;
     /** Whether the transcript is scrolling, and in which direction. */
-    private static float transcriptScrolling = 0;
-
-    //temporary hacky solution. It was foolish to ever make GUI Manager static in its current form.
-    //very soon I will need to plan my course of action and change GUI Manager to nonstatic. Potentially
-    //I could use a singleton. Probably not preferred but let's be honest, better than a stupidly static class.
-    public void resizeNonstatic(int width, int height) { //todo remove
-        dialogueElementsUI.resize(width, height);
-    }
+    private float transcriptScrolling = 0;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
@@ -166,7 +155,7 @@ public class GUIManager {
     /** Called every frame. Updates the ConversationController. DELTA TIME is the time
      * elapsed since the last frame.
      */
-	public static void update(float deltaTime){
+	public void update(float deltaTime){
         conversationController.update(deltaTime);
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) {
             toggleTranscript();
@@ -186,7 +175,7 @@ public class GUIManager {
         updateTranscript(); //todo remove, only do so when transcript is visible
 	}
 	/** Toggles whether the transcript is being shown. */
-	public static void toggleTranscript() {
+	public void toggleTranscript() {
         transcriptTable.setVisible(!transcriptTable.isVisible());
         conversationController.setPaused(transcriptTable.isVisible());
         updateTranscript(); //todo fix. part of hacky solution to make update first time
@@ -200,7 +189,7 @@ public class GUIManager {
 
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
-	public static void updateAndRenderStage(float deltaTime) {
+	public void updateAndRenderStage(float deltaTime) {
         GameManager.guiViewport().apply(true);
         stage.act(Math.min(1 / 30f, deltaTime));
         stage.draw();
@@ -208,7 +197,8 @@ public class GUIManager {
     /** Resize all GUI elements when the screen is resized to dimensions
      * WIDTH by HEIGHT. Keeps GUI elements proportional to virtual size.
      */
-	public static void resize(int width, int height) {
+	public void resize(int width, int height) {
+	    /*
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         //float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
@@ -217,19 +207,20 @@ public class GUIManager {
         defaultFont.getData().markupEnabled = true;
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
         skin.add("default", defaultFont);
-
+        */
+        dialogueElementsUI.resize(width, height);
 	}
 
     /** Sets the visibility of the textbox and speaker label to SHOW. */
-    public static void setTextboxShowing(boolean show) {
+    public void setTextboxShowing(boolean show) {
         conversationController.setTextBoxShowing(show);
     }
     /** Returns the ConversationController. */
-    public static ConversationController conversationController() {
+    public ConversationController conversationController() {
         return conversationController;
     }
 
-    private static void addTranscript() {
+    private void addTranscript() {
         transcriptTable = new Table();
         transcriptTable.setDebug(Constants.DEBUG);
         transcriptTable.setFillParent(true);
@@ -252,7 +243,7 @@ public class GUIManager {
         transcriptTable.add(transcriptPane).expand().fill().pad(40);
     }
 
-    private static void updateTranscript() {
+    private void updateTranscript() {
         if (!transcriptTable.isVisible()) {
             return;
         }
@@ -266,22 +257,22 @@ public class GUIManager {
         transcriptLabel.getPrefHeight(); //fixme part of hacky solution to get size correct for first time
     }
 
-    public static boolean isTranscriptVisible() {
+    public boolean isTranscriptVisible() {
         return transcriptTable.isVisible();
     }
 
-    public static void scrollTranscript(int direction) {
+    public void scrollTranscript(int direction) {
         transcriptPane.fling(1, 0, -direction * 50);
         transcriptScrolling = direction * 0.005f * transcriptPane.getHeight();
         System.out.println("Velocity set to " + transcriptPane.getVelocityY());
     }
 
-    public static void stopTranscriptScrolling() {
+    public void stopTranscriptScrolling() {
         transcriptScrolling = 0;
         transcriptPane.setVelocityY(0);
     }
 
-    private static void addDebug() {
+    private void addDebug() {
         List.ListStyle listStyle = new List.ListStyle(skin.getFont("default"), Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
         listStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
         debugSelector = new List<>(listStyle);
@@ -372,21 +363,21 @@ public class GUIManager {
         stage.addActor(debugChoices);
     }
 
-    public static void toggleDebugDisplay() {
+    public void toggleDebugDisplay() {
         debugChoices.setVisible(!debugChoices.isVisible());
         if (!debugChoices.isVisible()) {
             debugPane.setVisible(false);
         }
     }
 
-    private static void debugChangePaneType(Array<String> content, DebugMode type) {
+    private void debugChangePaneType(Array<String> content, DebugMode type) {
         debugSelector.setItems(content);
         debugSelector.setSelectedIndex(-1);
         debugPane.setUserObject(type);
         debugPane.setVisible(true);
     }
 
-    private static void debugConversations() {
+    private void debugConversations() {
         Array<String> fileNames = new Array<>();
         FileHandle[] files = Gdx.files.local("Conversations/").list();
         for(FileHandle file: files) {
@@ -395,7 +386,7 @@ public class GUIManager {
         debugChangePaneType(fileNames, DebugMode.CONV);
     }
 
-    private static void debugBranches() {
+    private void debugBranches() {
         Conversation currentConv = conversationController.conversation();
         Array<String> branches = new Array<>();
         for (String branch : currentConv.getAllBranches()) {
@@ -404,7 +395,7 @@ public class GUIManager {
         debugChangePaneType(branches, DebugMode.BRANCH);
     }
 
-    private static void debugLoad() {
+    private void debugLoad() {
         Array<String> fileNames = new Array<>();
         FileHandle[] files = Gdx.files.local("Saves/").list();
         for(FileHandle file: files) {
@@ -413,7 +404,7 @@ public class GUIManager {
         debugChangePaneType(fileNames, DebugMode.LOAD);
     }
 
-    private static void debugConfirmChoice() {
+    private void debugConfirmChoice() {
         int index = debugSelector.getSelectedIndex();
         if (index < 0) {
             return;

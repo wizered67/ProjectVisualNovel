@@ -117,7 +117,10 @@
 
         Librarian: I'm the {JUMP}head librarian{ENDJUMP} here. It's a pleasure to meet you.
 
-        <setScene name="otherScene"/>
+        <fade exitTime="0.5" enterTime="0.5" color="RED" wait="true">
+            <setScene name="otherScene"/>
+        </fade>
+
 
         <!-- The exclamation point in front of the speaker here is not necessary, but means that the next command
         will be executed as soon as the text is fully displayed, WITHOUT requiring an additional player click. Try removing
