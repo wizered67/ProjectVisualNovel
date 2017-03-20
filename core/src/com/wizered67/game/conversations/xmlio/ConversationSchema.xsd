@@ -49,6 +49,8 @@
                 <xs:element type="resourceGroupType" name="unloadGroup" maxOccurs="unbounded"/>
                 <xs:element type="emptyType" name="waitForLoading" maxOccurs="unbounded"/>
                 <xs:element type="clearType" name="clearScene" maxOccurs="unbounded"/>
+                <xs:element type="cameraType" name="camera" maxOccurs="unbounded"/>
+                <xs:element type="setSceneType" name="setScene" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -181,6 +183,10 @@
         <xs:attribute name="id" type="textureResource" use="required"/>
     </xs:complexType>
 
+    <xs:complexType name="setSceneType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
     <xs:complexType name="changeConversationType">
         <xs:attribute name="conv" type="conversationType" use="required"/>
     </xs:complexType>
@@ -219,6 +225,15 @@
         <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
     </xs:complexType>
 
+    <xs:complexType name="positionType">
+        <xs:attribute name="x" type="xs:float" use="optional"/>
+        <xs:attribute name="y" type="xs:float" use="optional"/>
+        <xs:attribute type="interpolationType" name="interpolation" use="optional"/>
+        <xs:attribute type="xs:float" name="time" use="optional"/>
+        <xs:attribute type="xs:boolean" name="wait" use="optional"/>
+        <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
+    </xs:complexType>
+
     <xs:complexType name="visibleType">
         <xs:attribute name="visible" type="xs:boolean" use="required"/>
         <xs:attribute name="fadeTime" type="xs:float" use="optional"/>
@@ -236,6 +251,21 @@
         <xs:attribute name="exitType" type="interpolationType" use="optional"/>
         <xs:attribute name="enterType" type="interpolationType" use="optional"/>
         <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="cameraType">
+        <xs:all>
+            <xs:element name="position" type="positionType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="zoom" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:attribute name="amount" type="xs:float" use="required"/>
+                    <xs:attribute name="time" type="xs:float" use="optional"/>
+                    <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+                    <xs:attribute name="relative" type="xs:boolean" use="optional"/>
+                    <xs:attribute name="interpolation" type="interpolationType" use="optional"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
     </xs:complexType>
 
     <xs:simpleType name="interpolationType">

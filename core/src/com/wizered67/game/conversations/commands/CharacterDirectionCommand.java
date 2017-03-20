@@ -34,7 +34,7 @@ public class CharacterDirectionCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.currentSceneManager().getOrAddCharacterByIdentifier(character);
         if (c == null) {
             return;
         }

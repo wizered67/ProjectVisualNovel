@@ -38,7 +38,7 @@ class ImageGroupChangeCommand implements ConversationCommand {
      */
     @Override
     public void execute(ConversationController conversationController) {
-        final SceneManager manager = conversationController.sceneManager();
+        final SceneManager manager = conversationController.currentSceneManager();
         manager.applyImageCommand(instanceIdentifier, groupIdentifier, new EntityAction<SceneImage>() {
             @Override
             public void apply(SceneImage image) {

@@ -76,7 +76,6 @@ public class SceneImage extends SceneEntity {
     public void addToScene(SceneManager m) {
         manager = m;
         manager.addImage(this);
-        inScene = true;
         setDepth(manager, depth);
         removed = false;
     }
@@ -86,7 +85,6 @@ public class SceneImage extends SceneEntity {
             manager.removeImage(this);
         }
         removed = true;
-        inScene = false;
     }
 
     public void changeGroup(SceneManager manager, String newGroup) {

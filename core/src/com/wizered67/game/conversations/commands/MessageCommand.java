@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.scripting.ScriptManager;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -84,7 +83,7 @@ public class MessageCommand implements ConversationCommand {
     public void updateText() {
         String nextText = storedText.get(index);
         conversationController.setText(nextText);
-        SceneCharacter characterSpeaking = conversationController.sceneManager().getCharacterByIdentifier(getSpeaker());
+        SceneCharacter characterSpeaking = conversationController.currentSceneManager().getOrAddCharacterByIdentifier(getSpeaker());
         conversationController.setSpeaker(characterSpeaking);
         conversationController.setCurrentSpeakerSound(characterSpeaking.getSpeakingSound());
         index += 1;

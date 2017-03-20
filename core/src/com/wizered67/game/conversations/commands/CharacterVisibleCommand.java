@@ -49,7 +49,7 @@ public class CharacterVisibleCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
+        SceneCharacter c = conversationController.currentSceneManager().getOrAddCharacterByIdentifier(character);
         if (c == null) {
             done = true;
             return;
@@ -62,9 +62,6 @@ public class CharacterVisibleCommand implements ConversationCommand {
             int end = show ? 1 : 0;
             c.setFade(new FloatInterpolation(interpolation, c.getSprite().getColor().a, end, fadeTime));
         }
-        if (show) {
-            c.addToScene(conversationController.sceneManager());
-        }
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -75,13 +72,15 @@ public class CharacterVisibleCommand implements ConversationCommand {
      * and if so acts accordingly. */
     @Override
     public void complete(CompleteEvent c) {
-        if (c.type == CompleteEvent.Type.FADE_END) {
+        if (c.type == CompleteEvent.Type.INTERPOLATION) {
             Object[] data = (Object[]) c.data;
-            SceneManager manager = (SceneManager) data[0];
-            Object entity = data[1];
-            SceneCharacter cs = manager.getCharacterByIdentifier(character);
-            if (cs != null && cs.equals(entity)) {
-                done = true;
+            if (data[2] == CompleteEvent.InterpolationEventType.FADE) {
+                SceneManager manager = (SceneManager) data[0];
+                Object entity = data[1];
+                SceneCharacter cs = manager.getOrAddCharacterByIdentifier(character);
+                if (cs != null && cs.equals(entity)) {
+                    done = true;
+                }
             }
         }
     }

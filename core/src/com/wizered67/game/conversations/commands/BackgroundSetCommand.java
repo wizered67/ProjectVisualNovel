@@ -25,7 +25,7 @@ public class BackgroundSetCommand implements ConversationCommand {
      */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneManager manager = conversationController.sceneManager();
+        SceneManager manager = conversationController.currentSceneManager();
         SceneImage bgImage = manager.getImage(BACKGROUND_IDENTIFIER);
         if (bgImage == null) {
             bgImage = new SceneImage(BACKGROUND_IDENTIFIER);

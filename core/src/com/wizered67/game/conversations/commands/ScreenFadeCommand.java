@@ -49,7 +49,7 @@ public class ScreenFadeCommand implements ConversationCommand {
     @Override
     public void execute(ConversationController conversationController) {
         done = !wait;
-        conversationController.sceneManager().setFade(new FloatInterpolation(exitType, 0, 1, exitTime), color);
+        conversationController.currentSceneManager().setFade(new FloatInterpolation(exitType, 0, 1, exitTime), color);
     }
 
     private void addEnterCommands(ConversationController conversationController) {
@@ -70,13 +70,15 @@ public class ScreenFadeCommand implements ConversationCommand {
      */
     @Override
     public void complete(CompleteEvent c) {
-        if (c.type == CompleteEvent.Type.FADE_END) {
+        if (c.type == CompleteEvent.Type.INTERPOLATION) {
             Object[] data = (Object[]) c.data;
-            SceneManager manager = (SceneManager) data[0];
-            Object entity = data[1];
-            if (manager == entity) {
-                done = true;
-                addEnterCommands(manager.conversationController());
+            if (data[2] == CompleteEvent.InterpolationEventType.FADE) {
+                SceneManager manager = (SceneManager) data[0];
+                Object entity = data[1];
+                if (manager == entity) {
+                    done = true;
+                    addEnterCommands(manager.conversationController());
+                }
             }
         }
     }
@@ -118,7 +120,7 @@ public class ScreenFadeCommand implements ConversationCommand {
         @Override
         public void execute(ConversationController conversationController) {
             isDone = !wait;
-            conversationController.sceneManager().setFade(new FloatInterpolation(enterType, 1, 0, enterTime), color);
+            conversationController.currentSceneManager().setFade(new FloatInterpolation(enterType, 1, 0, enterTime), color);
         }
 
         @Override
@@ -128,12 +130,14 @@ public class ScreenFadeCommand implements ConversationCommand {
 
         @Override
         public void complete(CompleteEvent c) {
-            if (c.type == CompleteEvent.Type.FADE_END) {
+            if (c.type == CompleteEvent.Type.INTERPOLATION) {
                 Object[] data = (Object[]) c.data;
-                SceneManager manager = (SceneManager) data[0];
-                Object entity = data[1];
-                if (manager == entity) {
-                    isDone = true;
+                if (data[2] == CompleteEvent.InterpolationEventType.FADE) {
+                    SceneManager manager = (SceneManager) data[0];
+                    Object entity = data[1];
+                    if (manager == entity) {
+                        isDone = true;
+                    }
                 }
             }
         }

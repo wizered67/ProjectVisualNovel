@@ -1,15 +1,16 @@
 package com.wizered67.game.conversations.scene;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
+import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
 
@@ -21,17 +22,17 @@ import java.util.*;
  * @author Adam Victor
  */
 public class SceneManager {
-    /** Set of all CharacterSprites in this scene. */
-    private Set<SceneCharacter> sceneCharacters;
+    /** Map of identifiers to SceneCharacters in this scene. */
+    private Map<String, SceneCharacter> sceneCharacters;
     /** Reference to the current ConversationController so that it can be alerted of
      * Animations being completed. */
     private ConversationController conversationController;
     /** Batch used to draw Sprites for each SceneCharacter. */
     private transient Batch batch;
     /** Texture used for fading screen. */
-    private transient Texture fadeTexture;
-    /** Maps character names to their corresponding SceneCharacter. */
-    private transient static HashMap<String, SceneCharacter> allCharacters = new HashMap<String, SceneCharacter>();
+    private static transient Texture fadeTexture;
+    /** Maps character names to their corresponding CharacterDefinitions. */
+    private transient static HashMap<String, CharacterDefinition> characterDefinitions = new HashMap<>();
     /** A mapping of image group names to sets of SceneImages in that group. */
     private Map<String, Set<SceneImage>> imagesByGroup;
     /** A mapping of image instance names to the SceneImage with that name. */
@@ -39,26 +40,43 @@ public class SceneManager {
     /** A list of all entities to be drawn. Must always be kept in sorted order! Insertion is done with binary search. */
     private List<SceneEntity> sortedEntities;
     /** The Color to be used for the current fading. */
-    private Color fadeColor;
+    private static Color fadeColor;
     /** UpdatedInterpolation used for keeping track of interpolation type and progress. */
-    private FloatInterpolation fade;
+    private static FloatInterpolation fade;
+
+
+    private OrthographicCamera camera;
+    /** Used to update Camera's position according to the interpolation. */
+    private PositionInterpolation cameraPositionInterpolation;
+    /** Used to update Camera's zoom according to the interpolation. */
+    private FloatInterpolation cameraZoomInterpolation;
 
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
         batch = GameManager.mainBatch();
         createFadeTexture();
+        initCamera();
     }
 
     /** Creates a new SceneManager with ConversationController MW and no CharacterSprites. */
     public SceneManager(ConversationController mw) {
         conversationController = mw;
-        sceneCharacters = new HashSet<>();
+        sceneCharacters = new HashMap<>();
         batch = GameManager.mainBatch();
         imagesByGroup = new HashMap<>();
         imagesByInstance = new HashMap<>();
         sortedEntities = new ArrayList<>();
-        createFadeTexture();
+        if (fadeTexture == null) {
+            createFadeTexture();
+        }
+        initCamera();
+    }
+
+    private void initCamera() {
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false);
+        GameManager.mainViewport().setCamera(camera);
     }
 
     /** Returns the Conversation Controller associated with this SceneManager. */
@@ -81,8 +99,9 @@ public class SceneManager {
      * last frame.
      */
     public void update(float delta) {
+        updateCamera(delta);
         GameManager.mainViewport().apply();
-        batch.setProjectionMatrix(GameManager.mainCamera().combined);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
         Iterator<SceneEntity> entityIterator = sortedEntities.iterator();
@@ -105,6 +124,37 @@ public class SceneManager {
         batch.end();
     }
 
+    private void updateCamera(float delta) {
+        if (cameraPositionInterpolation != null) {
+            Vector2 newPosition = cameraPositionInterpolation.update(delta);
+            camera.position.set(newPosition.x, newPosition.y, camera.position.z);
+            if (cameraPositionInterpolation.isDone()) {
+                cameraPositionInterpolation = null;
+                complete(CompleteEvent.interpolation(this, camera, CompleteEvent.InterpolationEventType.POSITION));
+            }
+        }
+        if (cameraZoomInterpolation != null) {
+            camera.zoom = cameraZoomInterpolation.update(delta);
+            if (cameraZoomInterpolation.isDone()) {
+                cameraZoomInterpolation = null;
+                complete(CompleteEvent.interpolation(this, camera, CompleteEvent.InterpolationEventType.ZOOM));
+            }
+        }
+        camera.update();
+    }
+
+    public void setCameraPositionInterpolation(PositionInterpolation positionInterpolation) {
+        cameraPositionInterpolation = positionInterpolation;
+    }
+
+    public void setCameraZoomInterpolation(FloatInterpolation zoomInterpolation) {
+        cameraZoomInterpolation = zoomInterpolation;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
     /** Draws the screen fade currently in effect. DELTA TIME is time elapsed since last frame. */
     private void drawFade(float deltaTime) {
         if (fade != null) {
@@ -121,7 +171,7 @@ public class SceneManager {
             batch.setColor(Color.WHITE);
             if (alpha <= 0 || alpha >= 1) {
                 fade = null;
-                complete(CompleteEvent.fade(this, this));
+                complete(CompleteEvent.interpolation(this, this, CompleteEvent.InterpolationEventType.FADE));
             }
         }
     }
@@ -131,17 +181,19 @@ public class SceneManager {
         fadeColor = color;
     }
 
-    public Map<String, SceneCharacter> allCharacters() {
-        return allCharacters;
+    public static Map<String, CharacterDefinition> characterDefinitions() {
+        return characterDefinitions;
     }
 
    /** Adds the SceneCharacter with identifier IDENTIFIER to this scene. */
     public void addCharacter(String identifier) {
-        sceneCharacters.add(allCharacters.get(identifier.toLowerCase()));
+        SceneCharacter character = new SceneCharacter(this, characterDefinitions.get(identifier.toLowerCase()));
+        sceneCharacters.put(identifier.toLowerCase(), character);
+        character.addToScene(this);
     }
     /** Removes the SceneCharacter with identifier IDENTIFIER from the scene. */
     public void removeCharacter(String identifier) {
-        sceneCharacters.remove(allCharacters.get(identifier.toLowerCase()));
+        sceneCharacters.remove(identifier.toLowerCase());
     }
     /** Removes all SceneEntities from the scene and sets their visibility to false. */
     public void removeAllEntities() {
@@ -169,7 +221,7 @@ public class SceneManager {
 
     public void removeAllCharacters() {
         List<SceneCharacter> characters = new ArrayList<>();
-        for (SceneCharacter character : sceneCharacters) {
+        for (SceneCharacter character : sceneCharacters.values()) {
             characters.add(character);
         }
         for (SceneCharacter character : characters) {
@@ -178,22 +230,30 @@ public class SceneManager {
         sceneCharacters.clear();
     }
 
-    /** Adds to the map of allCharacters a new character with identifier IDENTIFIER,
+    /** Adds to the map of characterDefinitions a new character with identifier IDENTIFIER,
      * initial name NAME, and speaking sound SPEAKING SOUND.
      */
     public static void createCharacter(String identifier, String name, String speakingSound) {
-        if (!allCharacters.containsKey(identifier.toLowerCase())) {
-            SceneCharacter newCharacter = new SceneCharacter(identifier.toLowerCase(), null, speakingSound);
-            newCharacter.setKnownName(name);
-            allCharacters.put(identifier.toLowerCase(), newCharacter);
+        if (!characterDefinitions.containsKey(identifier.toLowerCase())) {
+            CharacterDefinition newCharacter = new CharacterDefinition(identifier, name, speakingSound);
+            characterDefinitions.put(identifier.toLowerCase(), newCharacter);
         }
     }
 
+    /** Returns the SceneCharacter with the identifier IDENTIFIER, adding the character if they aren't yet in the scene. */
+    public SceneCharacter getOrAddCharacterByIdentifier(String identifier) {
+        SceneCharacter character = sceneCharacters.get(identifier.toLowerCase());
+        if (character == null) {
+            addCharacter(identifier);
+            character = sceneCharacters.get(identifier.toLowerCase());
+        }
+        return character;
+    }
     /** Returns the SceneCharacter with the identifier IDENTIFIER, or
      * outputs an error if no such character is in the scene.
      */
     public SceneCharacter getCharacterByIdentifier(String identifier) {
-        SceneCharacter character = allCharacters.get(identifier.toLowerCase());
+        SceneCharacter character = sceneCharacters.get(identifier.toLowerCase());
         if (character == null) {
             GameManager.error("No character of name " + identifier.toLowerCase());
         }
@@ -228,7 +288,7 @@ public class SceneManager {
      * applied to at least one image and false otherwise.
      */
     public boolean applyCharacterCommand(String instance, EntityAction<SceneCharacter> action) {
-            SceneCharacter character = getCharacterByIdentifier(instance);
+            SceneCharacter character = getOrAddCharacterByIdentifier(instance);
             if (character != null) {
                 action.apply(character);
                 return true;
@@ -242,7 +302,7 @@ public class SceneManager {
     public boolean applyEntityCommand(String instance, boolean isCharacter, EntityAction<SceneEntity> action) {
         SceneEntity entity;
         if (isCharacter) {
-            entity = getCharacterByIdentifier(instance);
+            entity = getOrAddCharacterByIdentifier(instance);
         } else {
             entity = getImage(instance);
         }

@@ -5,9 +5,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.scene.SceneEntity;
-import com.wizered67.game.conversations.scene.SceneImage;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
 
@@ -64,7 +62,7 @@ public class EntityPositionCommand implements ConversationCommand { //todo allow
      */
     @Override
     public void execute(ConversationController conversationController) {
-        final SceneManager manager = conversationController.sceneManager();
+        final SceneManager manager = conversationController.currentSceneManager();
         boolean result = manager.applyEntityCommand(identifier, isCharacter, new EntityAction<SceneEntity>() {
             @Override
             public void apply(SceneEntity entity) {
@@ -117,13 +115,15 @@ public class EntityPositionCommand implements ConversationCommand { //todo allow
      */
     @Override
     public void complete(CompleteEvent c) {
-        if (c.type == CompleteEvent.Type.POSITION_INTERPOLATION) {
+        if (c.type == CompleteEvent.Type.INTERPOLATION) {
             Object[] data = (Object[]) c.data;
-            SceneManager manager = (SceneManager) data[0];
-            Object entity = data[1];
-            SceneEntity thisEntity = isCharacter ? manager.getCharacterByIdentifier(identifier) : manager.getImage(identifier);
-            if (entity != null && entity.equals(thisEntity)) {
-                done = true;
+            if (data[2] == CompleteEvent.InterpolationEventType.POSITION) {
+                SceneManager manager = (SceneManager) data[0];
+                Object entity = data[1];
+                SceneEntity thisEntity = isCharacter ? manager.getOrAddCharacterByIdentifier(identifier) : manager.getImage(identifier);
+                if (entity != null && entity.equals(thisEntity)) {
+                    done = true;
+                }
             }
         }
     }

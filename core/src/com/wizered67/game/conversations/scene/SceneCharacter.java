@@ -28,8 +28,6 @@ public class SceneCharacter extends SceneEntity {
     private boolean wasFinished;
     /** Whether the character this SceneCharacter represents is currently speaking. */
     private boolean isSpeaking;
-    /** The name to be displayed for the character. */
-    private String knownName;
     /** The sound to be used when the character is speaking. */
     private String speakingSound;
     /** The default speaking sound for all characters. */
@@ -40,6 +38,12 @@ public class SceneCharacter extends SceneEntity {
         sprite = new Sprite();
         identifier = "";
     }
+
+    /** Creates a SceneCharacter based on the CharacterDefinition */
+    public SceneCharacter(SceneManager manager, CharacterDefinition characterDefinition) {
+        this(characterDefinition.getIdentifier(), manager, characterDefinition.getSpeakingSound());
+    }
+
     /** Creates a SceneCharacter with the default speaking sound. */
     public SceneCharacter(SceneManager m) {
         this("", m, DEFAULT_SPEAKING_SOUND);
@@ -60,6 +64,7 @@ public class SceneCharacter extends SceneEntity {
         }
         sprite = new Sprite();
         sprite.setAlpha(0);
+        removed = false;
         //sprite.setScale(2, 2);
     }
     /** Stores variables to save important information. */
@@ -68,7 +73,7 @@ public class SceneCharacter extends SceneEntity {
     }
     /** Reloads SceneCharacter. */
     public void reload() {
-        manager.allCharacters().put(identifier, this);
+        //manager.characterDefinitions().put(identifier, this); todo determine if this is needed
         currentAnimation = GameManager.assetManager().getAnimation(animationName);
         updateSprite();
     }
@@ -80,13 +85,9 @@ public class SceneCharacter extends SceneEntity {
     public void setSpeakingSound(String newSound) {
         speakingSound = newSound;
     }
-    /** Returns the display name of the character represented by this SceneCharacter. */
+
     public String getKnownName() {
-        return knownName;
-    }
-    /** Sets the display name of this character to NEWNAME. */
-    public void setKnownName(String newName) {
-        knownName = newName;
+        return SceneManager.characterDefinitions().get(identifier.toLowerCase()).getKnownName();
     }
 
     /** Switches this SceneCharacter's animation to the one named NAME. Returns true if animation is valid. */
@@ -100,9 +101,12 @@ public class SceneCharacter extends SceneEntity {
         if (currentAnimation == null) {
             GameManager.error("No animation found: " + name);
         }
+        //update(0);
+        /*
         if (!isVisible()) {
             return false;
         }
+        */
         return currentAnimation != null;
     }
     /** Returns the name of this SceneCharacter's current Animation. */
@@ -158,12 +162,8 @@ public class SceneCharacter extends SceneEntity {
     }
     /** Sets the SceneManager for this SceneCharacter to SM and adds the SceneCharacter to that scene. */
     public void addToScene(SceneManager sm) {
-        manager = sm;
-        manager.addCharacter(identifier);
-        inScene = true;
-        setDepth(manager, depth);
-        removed = false;
-        //setDepth(manager, 0);
+        //Sets depth and also adds to sorted list!
+        setDepth(sm, depth);
     }
     /** Removes this SceneCharacter from the SceneManager. */
     public void removeFromScene() {
@@ -172,7 +172,6 @@ public class SceneCharacter extends SceneEntity {
             manager = null;
         }
         removed = true;
-        inScene = false;
     }
     @Override
     public int hashCode() {
