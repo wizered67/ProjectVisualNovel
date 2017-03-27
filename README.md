@@ -1,17 +1,17 @@
 # ProjectVisualNovel (Fall 2016 - Present)
 
-##Overview
+## Overview
 The goal of this project is to create a branching dialogue system that can be used by game developers to add dialogue to [LibGDX] (https://libgdx.badlogicgames.com/) games. The original intent of the project was to be used to create **visual novels**, so the feature set is created with that in mind. However, the system should be flexible enough to be used for any type of dialogue, making it useful for other genres like RPGs or even just for cutscenes in games.   
 
 Visual novels are a type of video game that feature little gameplay and instead are made mostly of dialogue, with most interaction being in the form of making choices that influence the story in some way. Visual novels are less common for American gamers, but are extremely popular in Japan. This project was inspired by visual novels such as *Ace Attorney* and *Dangan Ronpa* and some of the ideas used in structuring the conversation files were based on *Ren'PY*, a Python engine for making visual novels. 
 
 I chose to make this project instead of using something like Ren'Py for several reasons. Writing the code myself allows me to have much more control and allows me to implement commands however I feel is most convenient. Commands that would be inconvenient or impossible in Ren'Py can be implemented more easily. Additionally, by making the system as flexible as possible, it can eaily be used for much more than visual novels. Ren'Py is great for visual novels, but doesn't necessarily have functionality for other types of games. And perhaps most importantly, I thought it would be good experience to try doing something like this myself. There's little point in reinventing the wheel, but learning to make a better wheel is still useful.
 
-##Demonstrations
+## Demonstrations
 This project was used by team members and I to make a [game during a Hackathon] (https://devpost.com/software/alice-wonder-presidential-prodigy)! Some new features were added just for the game, but the flexibility of this system made it easy and fast to do!
 
 *Note: Graphics are placeholder and not mine. They are just for demonstration purposes.*
-![gif](https://dl.dropboxusercontent.com/u/25507891/visualnovel3test.gif)
+![gif] (https://dl.dropboxusercontent.com/u/25507891/visualnovel3test.gif)
 
 The file containing the Conversation used in the example can be seen [here] (https://github.com/wizered67/ProjectVisualNovel/blob/master/android/assets/Conversations/demonstration.conv)
 
