@@ -100,6 +100,7 @@ public class SceneManager {
      */
     public void update(float delta) {
         updateCamera(delta);
+        GameManager.mainViewport().setCamera(camera); //this solved a bug
         GameManager.mainViewport().apply();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();

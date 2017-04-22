@@ -12,19 +12,23 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 public class Constants {
 	//Debug Settings
-	public final static boolean DEBUG = true;
+	public final static boolean DEBUG = false;
 
 	//Game Settings
 	public final static String GAME_NAME = "Visual Novel";
 	public final static int DEFAULT_WIDTH = 800;//1920;
 	public final static int DEFAULT_HEIGHT = 600;//1080;
+
+	public final static float VIRTUAL_WIDTH = 800; //400
+	public final static float VIRTUAL_HEIGHT = 600; //240
+
+	public final static float MAX_VIEWPORT_WORLD_WIDTH = 0;
+	public final static float MAX_VIEWPORT_WORLD_HEIGHT = 0;
+
 	public final static boolean FULLSCREEN = false;
 	public final static boolean RESIZABLE = true;
 	public final static int REGULAR_FONT_SIZE = Gdx.app.getType() == Application.ApplicationType.Android ? (12) : 24;
-	public final static float VIRTUAL_WIDTH = 800; //400
-	public final static float VIRTUAL_HEIGHT = 600; //240
-	//Tile Settings
-	public final static int TILE_SIZE = 32;
+
 	//Conversation Settings
 	public static void initTextboxSettings() {
 		TypingConfig.CHAR_LIMIT_PER_FRAME = 5;

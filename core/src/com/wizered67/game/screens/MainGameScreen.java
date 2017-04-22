@@ -1,9 +1,7 @@
 package com.wizered67.game.screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,14 +16,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.wizered67.game.Constants;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.inputs.Controllable;
@@ -109,7 +106,15 @@ public class MainGameScreen implements Screen, Controllable {
         //debugCamera.viewportHeight = Constants.toMeters(myViewport.getWorldHeight());//Constants.toMeters(height / myViewport.getScale());
         //debugCamera.update();
         //GUIManager.resize(width, height);
-        GameManager.mainViewport().update(width, height, true); //todo figure out if center camera is always correct
+        Camera viewportCamera = GameManager.mainViewport().getCamera();
+        Vector3 centerVector = new Vector3(viewportCamera.viewportWidth / 2, viewportCamera.viewportHeight / 2, viewportCamera.position.z);
+        Vector3 offset = viewportCamera.position.cpy().sub(centerVector);
+        GameManager.mainViewport().update(width, height, true);
+        //todo make sure cameras get updated when changing scene
+        //Centers the camera and then offsets it by the difference between the previous viewport center and the camera position
+        viewportCamera.position.add(offset);
+        viewportCamera.update();
+        //viewportCamera.position.
         GameManager.guiViewport().update(width, height);
         GameManager.guiManager().resize(width, height);
     }

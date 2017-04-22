@@ -32,7 +32,7 @@ public class DialogueElementsUI {
         mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.setDebug(Constants.DEBUG);
-
+        /*
         Texture texture = new Texture(Gdx.files.internal("Textures/testicon.png"));
         TextureRegionDrawable icon = new TextureRegionDrawable(new TextureRegion(texture));
         Drawable iconDown = icon.tint(Color.GRAY);
@@ -42,7 +42,7 @@ public class DialogueElementsUI {
         ImageButton saveButton = new ImageButton(style);
         mainTable.add(saveButton).height(Value.percentHeight(.1f, mainTable));
         mainTable.row();
-
+        */
         buttonTable = new Table();
         buttonTable.setDebug(Constants.DEBUG);
         mainTable.add(buttonTable).expandX().fillX().padBottom(Value.percentHeight(0.1f, mainTable));//.height(Value.percentHeight(0.5f, mainTable));

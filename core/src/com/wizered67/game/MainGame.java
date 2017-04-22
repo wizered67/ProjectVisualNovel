@@ -44,7 +44,8 @@ public class MainGame extends Game {
 
         mainCamera = new OrthographicCamera();
         mainCamera.setToOrtho(false);
-        mainViewport = new ExtendViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT);
+        mainViewport = new ExtendViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT,
+				Constants.MAX_VIEWPORT_WORLD_WIDTH, Constants.MAX_VIEWPORT_WORLD_HEIGHT);
         guiViewport = new ScreenViewport();
 
         guiManager = new GUIManager(new Stage(guiViewport));

@@ -30,7 +30,6 @@
         Each line in the init tag should be of the form VARIABLE_NAME INITIAL_VALUE. -->
         <init>
             work 0
-            test "burgers"
         </init>
 
         <!-- Play the sound in the Sounds directory with the identifier 'intense.wav'. -->
@@ -67,7 +66,6 @@
                 <position x="700" y="600"/>
             </camera>
         <setScene name="main"/>
-
         <!-- Change the current branch to the one named 'main branch' -->
         <changebranch branch="main branch"/>
     </branch>
@@ -77,7 +75,7 @@
         Notice how a command is embedded in the message with the syntax @c{think}. As assigned in
         the assigned tag, this sets the Detective's animation to the think animation and waits for
         it to complete before advancing to the rest of the message. -->
-        Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the @v{test} {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
+        Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
 
         <camera>
             <position x="600" interpolation="linear" time="0.5" wait="true"/>
@@ -99,14 +97,14 @@
             </image>
         </fade>
 
-        Librarian: Excuse me, @v{work} Detective, I heard you wanted to see me?
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation id="Detective" animation="Edgeworth_Static"/>
 
         <camera>
             <position x="0" wait="true" time="0.5" interpolation="fade"/>
         </camera>
 
-        Detective: And you @v{Lua_test} are...?
+        Detective: And you are...?
         <!-- The Librarian character is about to introduce themselves so now is a good time to set
         the name the player sees when they speak. -->
         <name id="Librarian" displayname="Librarian"/>
