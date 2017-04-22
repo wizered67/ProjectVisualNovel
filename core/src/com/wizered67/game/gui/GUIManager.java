@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
@@ -33,42 +34,46 @@ import com.wizered67.game.saving.SaveManager;
  * @author Adam Victor
  */
 public class GUIManager {
+
+    private DialogueElementsUI dialogueElementsUI;
+
+
     /** Main Table that all GUI elements are added to. */
-	private static Table table;
+	private Table dialogueElementsTable;
     /** Skin used by all GUI elements. */
-	private static Skin skin = new Skin();
+	private Skin skin = new Skin();
     /** Label for the main textbox. Displays text when spoken by characters. */
-	private static TypingLabel textboxLabel;
+	private TypingLabel textboxLabel;
     /** Label to display the name of the current speaker. */
-    private static Label speakerLabel;
+    private Label speakerLabel;
     /** Array containing TextButtons to be displayed when the player is offered a choice. */
-	private static TextButton[] choiceButtons;
+	private TextButton[] choiceButtons;
     /** The stage to which the GUI elements are added. Part of Scene2D. */
-	private static Stage stage;
-    /** Constant Vector2 containing textbox dimensions. */
-	private final static Vector2 TEXTBOX_SIZE = new Vector2(360, 50);
-    /** Constant Vector2 containing choice button dimensions. */
-    private final static Vector2 CHOICES_SIZE = new Vector2(300, 22);
+	private Stage stage;
     /** Constant denoting space between left side of the textbox and text. */
-    private final static int LEFT_PADDING = 10;
+    private final int LEFT_PADDING = 10;
     /** Message Window that updates the GUI elements as a Conversation proceeds. */
-    private static ConversationController conversationController;
+    private ConversationController conversationController;
     /** Default font used for text. */
-    private static BitmapFont defaultFont;
+    private BitmapFont defaultFont;
 
     //debug related variables
     /** Scrollpane used to contain debug choices -- ie loading conversations, etc. */
-    private static ScrollPane debugPane;
+    private ScrollPane debugPane;
     /** Contains choices for debug options. */
-    private static HorizontalGroup debugChoices;
+    private HorizontalGroup debugChoices;
     /** Whether the save input is showing. */
-    private static boolean saveInputShowing = false;
+    private boolean saveInputShowing = false;
     /** GUI List that shows all options for debug menu. */
-    private static List<String> debugSelector;
-
-    private static ScrollPane transcriptPane;
-    private static Label transcriptLabel;
-    private static float transcriptScrolling = 0;
+    private List<String> debugSelector;
+    /** Table used to contain elements for the transcript. */
+    private Table transcriptTable;
+    /** Scrollpane used to contain the transcript label. */
+    private ScrollPane transcriptPane;
+    /** Label used for displaying transcript text. */
+    private Label transcriptLabel;
+    /** Whether the transcript is scrolling, and in which direction. */
+    private float transcriptScrolling = 0;
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
@@ -77,52 +82,22 @@ public class GUIManager {
 		stage = st;
  		// Generate a 1x1 white texture and store it in the skin named "white".
  		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
- 		pixmap.setColor(Color.WHITE);
+ 		pixmap.setColor(1, 1, 1, 0.75f);
  		pixmap.fill();
 
- 		// Store the default libgdx font under the name "default".
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
-        parameter.size = Math.round(densityIndependentSize);
-		defaultFont = generator.generateFont(parameter); // font size 12 pixels
-        defaultFont.getData().markupEnabled = true;
+ 		initFont();
 
         skin.add("white", new Texture(pixmap));
-        skin.add("default", defaultFont);
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
-    	 table = new Table();
-    	 table.setFillParent(true);
-    	 stage.addActor(table);
-	     table.setDebug(true); // This is optional, but enables debug lines for tables.
-    	    // Add widgets to the table here.
-	     
-	     TextButtonStyle textButtonStyle = new TextButtonStyle();
-			textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-			textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
-			textButtonStyle.checked = skin.newDrawable("white", Color.LIGHT_GRAY);
-			textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-			textButtonStyle.font = skin.getFont("default");
-			skin.add("default", textButtonStyle);
 
-        choiceButtons = new TextButton[4];
-        for (int i = 0; i < choiceButtons.length; i += 1) {
-            TextButton tb = new TextButton("", skin);
-            tb.setUserObject(i);
-            tb.addListener(new ChangeListener() {
-                public void changed (ChangeEvent event, Actor actor) {
-                    System.out.println("Clicked button " + actor.getUserObject());
-                    conversationController.processChoice((Integer) actor.getUserObject());
-                    event.cancel();
-                    ((Button) actor).setProgrammaticChangeEvents(false);
-                    ((Button) actor).setChecked(false);
-                    ((Button) actor).setProgrammaticChangeEvents(true);
-                }
-            });
-            tb.setVisible(false);
-            choiceButtons[i] = tb;
-            stage.addActor(tb);
-        }
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
+        newDrawable.setLeftWidth(LEFT_PADDING);
+        newDrawable.setRightWidth(LEFT_PADDING);
+        newDrawable.setTopHeight(LEFT_PADDING / 2);
+        //newDrawable.setRightWidth(20);
+        labelStyle.background = newDrawable;
+        skin.add("default", labelStyle);
 
         Label.LabelStyle speakerLabelStyle = new Label.LabelStyle();
         speakerLabelStyle.font = skin.getFont("default");
@@ -131,70 +106,56 @@ public class GUIManager {
         //speakerDrawable.setRightWidth(5);
         //newDrawable.setRightWidth(20);
         speakerLabelStyle.background = speakerDrawable;
-        skin.add("speaker", speakerLabelStyle);
-        speakerLabel = new Label("Really long speaker name", skin, "speaker");
-        speakerLabel.toBack();
-        //speakerLabel.setStyle(speakerLabelStyle);
-        speakerLabel.setAlignment(Align.center);
-        stage.addActor(speakerLabel);
+        skin.add("speakerStyle", speakerLabelStyle);
 
-		Label.LabelStyle labelStyle = new Label.LabelStyle();
-		labelStyle.font = skin.getFont("default");
-		Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
-		newDrawable.setLeftWidth(LEFT_PADDING);
-        newDrawable.setLeftWidth(LEFT_PADDING);
-		//newDrawable.setRightWidth(20);
-		labelStyle.background = newDrawable;
-		skin.add("default", labelStyle);
-		textboxLabel = new TypingLabel("", skin);
-		textboxLabel.setAlignment(Align.topLeft);
-		textboxLabel.setStyle(labelStyle);
-        textboxLabel.setWrap(true);
-        textboxLabel.toFront();
-        stage.addActor(textboxLabel);
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
 
+        //todo init and add dialogue elements UI
+        dialogueElementsUI = new DialogueElementsUI(this, skin);
+        stage.addActor(dialogueElementsUI.getMainTable());
+        textboxLabel = dialogueElementsUI.getTextboxLabel();
+        speakerLabel = dialogueElementsUI.getSpeakerLabel();
+        choiceButtons = dialogueElementsUI.getChoiceButtons();
+        dialogueElementsTable = dialogueElementsUI.getMainTable();
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
-        //System.out.println(remainingTextNoTags);
-        //remainingText = "this is a new message just so you know.";
-		//textboxLabel.setText("TESTING A MESSAGE BRO");
-		//textboxLabel = new Label("this is a really long test message and I want to see if word wrap is doing anything? Test MessageCommand!", labelStyle);
 
-		//textboxLabel.setPosition(200, 400);
-		//textboxLabel.setSize(350, 60);
-		//textboxLabel.setFullVisible(false);
-		/*
-        TextTooltip.TextTooltipStyle textTooltipStyle = new TextTooltip.TextTooltipStyle();
-		textTooltipStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
-		textTooltipStyle.label = labelStyle;
-		textTooltipStyle.wrapWidth = 300;
-		skin.add("default", textTooltipStyle);
-		TextTooltip textTooltip = new TextTooltip("This [GREEN]is [WHITE]a tooltip! This is a tooltip! This is a tooltip! This is a tooltip! This is a tooltip! This is a tooltip!", skin);
-		//textTooltip.setAlways(true);
-		textTooltip.setInstant(true);
-		button.addListener(textTooltip);
-		*/
-		//Table tooltipTable = new Table(skin);
-		//tooltipTable.pad(10).background("default-round");
-		//tooltipTable.add(new TextButton("Fancy tooltip!", skin));
+
+
         addDebug();
         addTranscript();
 	}
     public GUIManager() {
         conversationController = new ConversationController();
     }
+
+    /** Initializes the font that will be used. */
+    private void initFont() {
+        // Store the default libgdx font under the name "default".
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        //float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
+        parameter.size = Constants.REGULAR_FONT_SIZE; //(int) (Constants.REGULAR_FONT_SIZE * Gdx.graphics.getHeight() / Constants.DEFAULT_HEIGHT);//Math.round(densityIndependentSize);
+        defaultFont = generator.generateFont(parameter); // font size 12 pixels
+        defaultFont.getData().markupEnabled = true;
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        skin.add("default", defaultFont);
+    }
+
     /** Returns the Stage used to display GUI elements. */
-	public static Stage getStage(){
+	public Stage getStage(){
 		return stage;
 	}
-	/** Returns the batch being used by the stage. */
-	public static Batch getBatch() {
-	    return stage.getBatch();
-    }
     /** Called every frame. Updates the ConversationController. DELTA TIME is the time
      * elapsed since the last frame.
      */
-	public static void update(float deltaTime){
+	public void update(float deltaTime){
         conversationController.update(deltaTime);
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) {
             toggleTranscript();
@@ -214,9 +175,9 @@ public class GUIManager {
         updateTranscript(); //todo remove, only do so when transcript is visible
 	}
 	/** Toggles whether the transcript is being shown. */
-	public static void toggleTranscript() {
-        transcriptPane.setVisible(!transcriptPane.isVisible());
-        conversationController.setPaused(transcriptPane.isVisible());
+	public void toggleTranscript() {
+        transcriptTable.setVisible(!transcriptTable.isVisible());
+        conversationController.setPaused(transcriptTable.isVisible());
         updateTranscript(); //todo fix. part of hacky solution to make update first time
         //transcriptPane.invalidate();
         transcriptPane.validate();
@@ -228,51 +189,44 @@ public class GUIManager {
 
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
-	public static void updateAndRenderStage(float deltaTime) {
+	public void updateAndRenderStage(float deltaTime) {
+        GameManager.guiViewport().apply(true);
         stage.act(Math.min(1 / 30f, deltaTime));
         stage.draw();
     }
     /** Resize all GUI elements when the screen is resized to dimensions
      * WIDTH by HEIGHT. Keeps GUI elements proportional to virtual size.
      */
-	public static void resize(int width, int height){
-		textboxLabel.setSize(TEXTBOX_SIZE.x * width / Constants.VIRTUAL_WIDTH,
-				TEXTBOX_SIZE.y * height / Constants.VIRTUAL_HEIGHT);
-		textboxLabel.setPosition((width - textboxLabel.getWidth()) / 2,
-				height / 16); //actor position is from bottom left of it
-        textboxLabel.invalidate();
-        //numLines = textboxLabel.getGlyphLayout().runs.size;
-        speakerLabel.setPosition(textboxLabel.getX(), textboxLabel.getY() + textboxLabel.getHeight());
-        speakerLabel.invalidate();
-
-        resizeChoices(width, height);
+	public void resize(int width, int height) {
+	    /*
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        //float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
+        parameter.size = (int) (Constants.REGULAR_FONT_SIZE * Gdx.graphics.getHeight() / Constants.VIRTUAL_HEIGHT);//Math.round(densityIndependentSize);
+        defaultFont = generator.generateFont(parameter); // font size 12 pixels
+        defaultFont.getData().markupEnabled = true;
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        skin.add("default", defaultFont);
+        */
+        dialogueElementsUI.resize(width, height);
 	}
-    /** Resizes the TextButtons used for choices. Keeps them evenly spaced apart. */
-    private static void resizeChoices(int width, int height) {
-        for (int i = 0; i < choiceButtons.length; i += 1) {
-            TextButton tb = choiceButtons[i];
-            tb.setSize(CHOICES_SIZE.x * width / Constants.VIRTUAL_WIDTH, CHOICES_SIZE.y * height / Constants.VIRTUAL_HEIGHT);
-            float textBoxTop = textboxLabel.getTop();
-            float gap = (height - textBoxTop - choiceButtons.length * tb.getHeight()) / (choiceButtons.length + 1);
-            float yPos = textBoxTop + (gap + tb.getHeight() / 2) * ((choiceButtons.length - i - 1) + 1);
-            tb.setPosition((width - tb.getWidth()) / 2, yPos);
-            tb.invalidate();
-        }
-    }
-    /** Returns the y position of the top of the textbox label. */
-    public static float getTextboxTop() {
-        return textboxLabel.getTop();
-    }
+
     /** Sets the visibility of the textbox and speaker label to SHOW. */
-    public static void setTextboxShowing(boolean show) {
+    public void setTextboxShowing(boolean show) {
         conversationController.setTextBoxShowing(show);
     }
     /** Returns the ConversationController. */
-    public static ConversationController conversationController() {
+    public ConversationController conversationController() {
         return conversationController;
     }
 
-    private static void addTranscript() {
+    private void addTranscript() {
+        transcriptTable = new Table();
+        transcriptTable.setDebug(Constants.DEBUG);
+        transcriptTable.setFillParent(true);
+        transcriptTable.setVisible(false);
+        transcriptTable.toFront();
+
         transcriptLabel = new Label("", skin);
         transcriptLabel.setWrap(true);
         transcriptLabel.setAlignment(Align.topLeft);
@@ -284,12 +238,13 @@ public class GUIManager {
         transcriptPane.setHeight(Gdx.graphics.getHeight() - 64);
         transcriptPane.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, Align.center);
         transcriptPane.toFront();
-        transcriptPane.setVisible(false);
-        stage.addActor(transcriptPane);
+        //transcriptPane.setVisible(false);
+        stage.addActor(transcriptTable);
+        transcriptTable.add(transcriptPane).expand().fill().pad(40);
     }
 
-    private static void updateTranscript() {
-        if (!transcriptPane.isVisible()) {
+    private void updateTranscript() {
+        if (!transcriptTable.isVisible()) {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -302,22 +257,22 @@ public class GUIManager {
         transcriptLabel.getPrefHeight(); //fixme part of hacky solution to get size correct for first time
     }
 
-    public static boolean isTranscriptVisible() {
-        return transcriptPane.isVisible();
+    public boolean isTranscriptVisible() {
+        return transcriptTable.isVisible();
     }
 
-    public static void scrollTranscript(int direction) {
+    public void scrollTranscript(int direction) {
         transcriptPane.fling(1, 0, -direction * 50);
         transcriptScrolling = direction * 0.005f * transcriptPane.getHeight();
         System.out.println("Velocity set to " + transcriptPane.getVelocityY());
     }
 
-    public static void stopTranscriptScrolling() {
+    public void stopTranscriptScrolling() {
         transcriptScrolling = 0;
         transcriptPane.setVelocityY(0);
     }
 
-    private static void addDebug() {
+    private void addDebug() {
         List.ListStyle listStyle = new List.ListStyle(skin.getFont("default"), Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
         listStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
         debugSelector = new List<>(listStyle);
@@ -408,21 +363,21 @@ public class GUIManager {
         stage.addActor(debugChoices);
     }
 
-    public static void toggleDebugDisplay() {
+    public void toggleDebugDisplay() {
         debugChoices.setVisible(!debugChoices.isVisible());
         if (!debugChoices.isVisible()) {
             debugPane.setVisible(false);
         }
     }
 
-    private static void debugChangePaneType(Array<String> content, DebugMode type) {
+    private void debugChangePaneType(Array<String> content, DebugMode type) {
         debugSelector.setItems(content);
         debugSelector.setSelectedIndex(-1);
         debugPane.setUserObject(type);
         debugPane.setVisible(true);
     }
 
-    private static void debugConversations() {
+    private void debugConversations() {
         Array<String> fileNames = new Array<>();
         FileHandle[] files = Gdx.files.local("Conversations/").list();
         for(FileHandle file: files) {
@@ -431,7 +386,7 @@ public class GUIManager {
         debugChangePaneType(fileNames, DebugMode.CONV);
     }
 
-    private static void debugBranches() {
+    private void debugBranches() {
         Conversation currentConv = conversationController.conversation();
         Array<String> branches = new Array<>();
         for (String branch : currentConv.getAllBranches()) {
@@ -440,7 +395,7 @@ public class GUIManager {
         debugChangePaneType(branches, DebugMode.BRANCH);
     }
 
-    private static void debugLoad() {
+    private void debugLoad() {
         Array<String> fileNames = new Array<>();
         FileHandle[] files = Gdx.files.local("Saves/").list();
         for(FileHandle file: files) {
@@ -449,7 +404,7 @@ public class GUIManager {
         debugChangePaneType(fileNames, DebugMode.LOAD);
     }
 
-    private static void debugConfirmChoice() {
+    private void debugConfirmChoice() {
         int index = debugSelector.getSelectedIndex();
         if (index < 0) {
             return;

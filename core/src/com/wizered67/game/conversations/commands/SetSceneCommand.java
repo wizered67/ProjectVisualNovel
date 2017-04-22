@@ -1,36 +1,27 @@
-package com.wizered67.game.conversations.commands.images;
+package com.wizered67.game.conversations.commands;
 
+import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.wizered67.game.conversations.commands.ConversationCommand;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.conversations.scene.SceneImage;
-import com.wizered67.game.conversations.scene.SceneManager;
 
 /**
- * Creates a new image. When executed it instantiates a new SceneImage
- * with the specified instance identifier and adds it to the SceneManager.
+ * ConversationCommand that changes the current scene to a different one.
  * @author Adam Victor
  */
-class ImageCreateCommand implements ConversationCommand {
-    /** The instance identifier the created image will have. Should be unique. */
-    private String instance;
+public class SetSceneCommand implements ConversationCommand {
+    /** Name of the scene to switch to. */
+    private String nextScene;
 
-    ImageCreateCommand() {}
-    ImageCreateCommand(String inst) {
-        instance = inst;
+    public SetSceneCommand(String sceneName) {
+        nextScene = sceneName;
     }
-
     /**
      * Executes the command on the CONVERSATION CONTROLLER.
      */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneManager manager = conversationController.currentSceneManager();
-        if (manager.getImage(instance) == null) {
-            manager.addImage(new SceneImage(instance));
-        }
-
+        conversationController.setScene(nextScene);
     }
 
     /**
@@ -48,6 +39,11 @@ class ImageCreateCommand implements ConversationCommand {
     @Override
     public void complete(CompleteEvent c) {
 
+    }
+
+    public static SetSceneCommand makeCommand(XmlReader.Element element) {
+        String name = element.getAttribute("name");
+        return new SetSceneCommand(name);
     }
 
     /**

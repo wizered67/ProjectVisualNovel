@@ -24,8 +24,6 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     protected boolean hasDepth;
     /** Whether this entity has been removed. */
     protected boolean removed = false;
-    /** Whether this entity has been added to the scene yet. */
-    protected boolean inScene = false;
     /** FloatInterpolation object used to control fading in and out. */
     protected FloatInterpolation fade;
     /** PositionInterpolation object used to control position change interpolation. */
@@ -88,7 +86,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     /** Ends the position interpolation and sends a CompleteEvent. */
     private void finishPositionInterpolation() {
         positionInterpolation = null;
-        manager.complete(CompleteEvent.positionInterpolation(manager, this));
+        manager.complete(CompleteEvent.interpolation(manager, this, CompleteEvent.InterpolationEventType.POSITION));
     }
 
     /** Returns whether the sprite should be drawn. By default it draws if visibility conditions
@@ -148,16 +146,12 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
      */
     //todo split into 2 methods? one changes variable and other updates.
     public void setDepth(SceneManager m, int newDepth) {
-        if (inScene) {
-            if (hasDepth) {
-                m.removeFromSorted(this);
-            }
-            depth = newDepth;
-            m.addToSorted(this);
-            hasDepth = true;
-        } else {
-            depth = newDepth;
+        if (hasDepth) {
+            m.removeFromSorted(this);
         }
+        depth = newDepth;
+        m.addToSorted(this);
+        hasDepth = true;
     }
 
     public int getDepth() {
@@ -179,7 +173,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
      */
     public void finishVisibility(boolean visible) {
         if (fade != null) {
-            manager.complete(CompleteEvent.fade(manager, this));
+            manager.complete(CompleteEvent.interpolation(manager, this, CompleteEvent.InterpolationEventType.FADE));
         }
         if (visible) {
             sprite.setAlpha(1);

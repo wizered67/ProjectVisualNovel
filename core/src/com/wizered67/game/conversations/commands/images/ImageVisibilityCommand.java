@@ -50,7 +50,7 @@ class ImageVisibilityCommand implements ConversationCommand {
     @Override
     public void execute(ConversationController conversationController) {
         done = !wait;
-        final SceneManager manager = conversationController.sceneManager();
+        final SceneManager manager = conversationController.currentSceneManager();
         boolean result = manager.applyImageCommand(instanceIdentifier, groupIdentifier, new EntityAction<SceneImage>() {
             @Override
             public void apply(SceneImage image) {
@@ -88,18 +88,20 @@ class ImageVisibilityCommand implements ConversationCommand {
         //if it is a fade end event, extract data about event to see if the ended Entity
         //matches the instance associated with the identifier of this command. If applied
         //to a group, this is completed as soon as the first one is done.
-        if (c.type == CompleteEvent.Type.FADE_END) {
+        if (c.type == CompleteEvent.Type.INTERPOLATION) {
             Object[] data = (Object[]) c.data;
-            SceneManager manager = (SceneManager) data[0];
-            Object entity = data[1];
-            if (instanceIdentifier != null && !instanceIdentifier.isEmpty()) {
-                SceneImage image = manager.getImage(instanceIdentifier);
-                if (image != null && image.equals(entity)) {
-                    done = true;
-                }
-            } else if (groupIdentifier != null && !groupIdentifier.isEmpty()) {
-                if (manager.getImagesByGroup(groupIdentifier).contains(entity)) {
-                    done = true;
+            if (data[2] == CompleteEvent.InterpolationEventType.FADE) {
+                SceneManager manager = (SceneManager) data[0];
+                Object entity = data[1];
+                if (instanceIdentifier != null && !instanceIdentifier.isEmpty()) {
+                    SceneImage image = manager.getImage(instanceIdentifier);
+                    if (image != null && image.equals(entity)) {
+                        done = true;
+                    }
+                } else if (groupIdentifier != null && !groupIdentifier.isEmpty()) {
+                    if (manager.getImagesByGroup(groupIdentifier).contains(entity)) {
+                        done = true;
+                    }
                 }
             }
         }

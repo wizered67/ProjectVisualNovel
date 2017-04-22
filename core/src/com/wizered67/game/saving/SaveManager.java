@@ -74,7 +74,7 @@ public class SaveManager {
     public static void save(FileHandle fileHandle) {
         SaveData data = new SaveData();
         data.musicManager = GameManager.musicManager();
-        ConversationController conversationController = GUIManager.conversationController();
+        ConversationController conversationController = GameManager.conversationController();
         data.conversationController = conversationController;
         data.assets = GameManager.assetManager();
         //LuaScriptManager sm = (LuaScriptManager) ConversationController.scriptManager("Lua");

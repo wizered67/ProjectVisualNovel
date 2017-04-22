@@ -26,10 +26,10 @@ public class ClearSceneCommand implements ConversationCommand {
     @Override
     public void execute(ConversationController conversationController) {
         if (clearCharacters) {
-            conversationController.sceneManager().removeAllCharacters();
+            conversationController.currentSceneManager().removeAllCharacters();
         }
         if (clearImages) {
-            conversationController.sceneManager().removeAllImages();
+            conversationController.currentSceneManager().removeAllImages();
         }
     }
 

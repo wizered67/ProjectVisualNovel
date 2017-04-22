@@ -2,9 +2,11 @@ package com.wizered67.game.conversations.commands;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
+import com.wizered67.game.conversations.scene.CharacterDefinition;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.scene.SceneManager;
 
 import java.io.IOException;
 
@@ -34,11 +36,10 @@ public class CharacterNameCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneCharacter c = conversationController.sceneManager().getCharacterByIdentifier(character);
-        if (c == null) {
-            return;
+        CharacterDefinition definition = SceneManager.characterDefinitions().get(character);
+        if (definition != null) {
+            definition.setKnownName(newName);
         }
-        c.setKnownName(newName);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override

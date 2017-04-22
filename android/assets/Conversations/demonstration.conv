@@ -30,7 +30,6 @@
         Each line in the init tag should be of the form VARIABLE_NAME INITIAL_VALUE. -->
         <init>
             work 0
-            test "burgers"
         </init>
 
         <!-- Play the sound in the Sounds directory with the identifier 'intense.wav'. -->
@@ -57,6 +56,16 @@
             <position x="650" y="300" depth="-5"/>
             <visibility visible="true"/>
         </image>
+
+        <setScene name="otherScene"/>
+            <bg id="testbackground.png"/>
+            <visible id="Detective" visible="true"/>
+            <position id="Detective" x="700" y="600"/>
+            <animation id="Detective" animation="Edgeworth_Static"/>
+            <camera>
+                <position x="700" y="600"/>
+            </camera>
+        <setScene name="main"/>
         <!-- Change the current branch to the one named 'main branch' -->
         <changebranch branch="main branch"/>
     </branch>
@@ -66,7 +75,12 @@
         Notice how a command is embedded in the message with the syntax @c{think}. As assigned in
         the assigned tag, this sets the Detective's animation to the think animation and waits for
         it to complete before advancing to the rest of the message. -->
-        Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the @v{test} {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
+        Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
+
+        <camera>
+            <position x="600" interpolation="linear" time="0.5" wait="true"/>
+            <zoom amount="0.8" interpolation="linear" time="0.5" wait="true"/>
+        </camera>
 
         <!-- Fade in the Librarian over 2 seconds, waiting for the fade to be done before moving on.
         Since no interpolation type is set, it defaults to linear. -->
@@ -83,15 +97,29 @@
             </image>
         </fade>
 
-        Librarian: Excuse me, @v{work} Detective, I heard you wanted to see me?
+        Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation id="Detective" animation="Edgeworth_Static"/>
 
-        Detective: And you @v{Lua_test} are...?
+        <camera>
+            <position x="0" wait="true" time="0.5" interpolation="fade"/>
+        </camera>
+
+        Detective: And you are...?
         <!-- The Librarian character is about to introduce themselves so now is a good time to set
         the name the player sees when they speak. -->
         <name id="Librarian" displayname="Librarian"/>
 
+        <camera>
+            <position x="600" wait="true" time="0"/>
+        </camera>
+
         Librarian: I'm the {JUMP}head librarian{ENDJUMP} here. It's a pleasure to meet you.
+
+        <fade exitTime="0.5" enterTime="0.5" color="RED" wait="true">
+            <setScene name="otherScene"/>
+        </fade>
+
+
         <!-- The exclamation point in front of the speaker here is not necessary, but means that the next command
         will be executed as soon as the text is fully displayed, WITHOUT requiring an additional player click. Try removing
         the exclamation point and see the difference! -->

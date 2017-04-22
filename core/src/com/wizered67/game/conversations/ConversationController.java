@@ -55,8 +55,11 @@ public class ConversationController implements Controllable {
     private String currentSpeakerSound;
     /** Whether choices are currently being shown to the player. */
     private boolean choiceShowing = false;
+
+    /** Mapping of names of scenes to corresponding SceneManager. */
+    private Map<String, SceneManager> allSceneManagers;
     /** Reference to the SceneManager that contains and updates all CharacterSprites. */
-    private SceneManager sceneManager;
+    private SceneManager currentSceneManager;
     /** A loader used to parse XML into a Conversation. */
     private transient ConversationLoader conversationLoader;
     /** The SceneCharacter of the current speaker. */
@@ -86,7 +89,9 @@ public class ConversationController implements Controllable {
         speakerLabel = speaker;
         choiceButtons = choices;
         choiceCommands = new List[choiceButtons.length];
-        sceneManager = new SceneManager(this);
+        currentSceneManager = new SceneManager(this);
+        allSceneManagers = new HashMap<>();
+        allSceneManagers.put("main", currentSceneManager);
         initScriptManagers();
         transcript = new Transcript();
         paused = false;
@@ -143,8 +148,15 @@ public class ConversationController implements Controllable {
         return currentConversation;
     }
     /** Returns the SceneManager being used update and draw CharacterSprites. */
-    public SceneManager sceneManager() {
-        return sceneManager;
+    public SceneManager currentSceneManager() {
+        return currentSceneManager;
+    }
+    /** Sets the current scene to the SceneManager mapped to the name SCENE NAME, creating a new scene if none exists. */
+    public void setScene(String sceneName) {
+        if (!allSceneManagers.containsKey(sceneName)) {
+            allSceneManagers.put(sceneName, new SceneManager(this));
+        }
+        currentSceneManager = allSceneManagers.get(sceneName);
     }
     /** Initializes all script managers. */
     private void initScriptManagers() {
@@ -200,7 +212,7 @@ public class ConversationController implements Controllable {
             }
             updateText(deltaTime);
         }
-        sceneManager.update(deltaTime);
+        currentSceneManager.update(deltaTime);
     }
     /**If there is currently a message being displayed, updates the text timer.
      * While text timer is high enough or if all text should be displayed at once, it
@@ -323,7 +335,13 @@ public class ConversationController implements Controllable {
     }
     /** Sets the current speaking character to the one represented by CHARACTER. */
     public void setSpeaker(SceneCharacter character) {
+        if (currentSpeaker != null) {
+            currentSpeaker.setSpeaking(false);
+        }
         currentSpeaker = character;
+        if (character != null) {
+            currentSpeaker.setSpeaking(true);
+        }
     }
     /** Updates the speakerLabel to TEXT. */
     private void setSpeakerName(String text){
@@ -332,8 +350,8 @@ public class ConversationController implements Controllable {
         } else {
             speakerLabel.setVisible(true);
             speakerLabel.setText(text + "  ");
-            speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
-            speakerLabel.invalidate();
+            //speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
+            //speakerLabel.invalidate();
         }
     }
 
@@ -460,15 +478,15 @@ public class ConversationController implements Controllable {
                     inputConfirm();
                     break;
                 case UP:
-                    if (GUIManager.isTranscriptVisible()) {
-                        GUIManager.scrollTranscript(-1);
+                    if (GameManager.guiManager().isTranscriptVisible()) {
+                        GameManager.guiManager().scrollTranscript(-1);
                     } else if (choiceShowing) {
                         changeChoice(-1);
                     }
                     break;
                 case DOWN:
-                    if (GUIManager.isTranscriptVisible()) {
-                        GUIManager.scrollTranscript(1);
+                    if (GameManager.guiManager().isTranscriptVisible()) {
+                        GameManager.guiManager().scrollTranscript(1);
                     } else if (choiceShowing) {
                         changeChoice(1);
                     }
@@ -479,10 +497,10 @@ public class ConversationController implements Controllable {
         } else { //released
             switch (control) {
                 case UP:
-                    GUIManager.stopTranscriptScrolling();
+                    GameManager.guiManager().stopTranscriptScrolling();
                     break;
                 case DOWN:
-                    GUIManager.stopTranscriptScrolling();
+                    GameManager.guiManager().stopTranscriptScrolling();
                     break;
             }
         }

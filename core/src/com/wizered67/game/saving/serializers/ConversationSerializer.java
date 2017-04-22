@@ -4,6 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.gui.GUIManager;
 
@@ -25,7 +26,7 @@ public class ConversationSerializer extends Serializer<Conversation> {
     public Conversation read (Kryo kryo, Input input, Class<Conversation> type) {
         String filename = input.readString();
         HashMap assignments = kryo.readObjectOrNull(input, HashMap.class);
-        Conversation conversation = GUIManager.conversationController().loadConversation(filename);
+        Conversation conversation = GameManager.conversationController().loadConversation(filename);
         conversation.setAssignments(assignments);
         return conversation;
     }

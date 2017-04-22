@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializerConfig;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
 
@@ -37,6 +38,6 @@ public class ConversationControllerSerializer extends FieldSerializer<Conversati
     }
     @Override
     public ConversationController create (Kryo kryo, Input input, Class type) {
-        return GUIManager.conversationController();
+        return GameManager.conversationController();
     }
 }

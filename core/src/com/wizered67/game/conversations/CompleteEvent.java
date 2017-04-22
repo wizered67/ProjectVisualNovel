@@ -20,12 +20,10 @@ public class CompleteEvent {
     private static final CompleteEvent CHOICE_COMPLETE_EVENT = new CompleteEvent(Type.CHOICE);
     /** A CompleteEvent for when an animation ends. */
     private static final CompleteEvent ANIMATION_END_EVENT = new CompleteEvent(Type.ANIMATION_END);
-    /** A CompleteEvent for when fading ends. */
-    private static final CompleteEvent FADE_END_EVENT = new CompleteEvent(Type.FADE_END);
     /** A CompleteEvent for when all current text has been displayed. */
     private static final CompleteEvent TEXT_END_EVENT = new CompleteEvent(Type.TEXT);
-    /** A CompleteEvent for when a position interpolation ends. */
-    private static final CompleteEvent POSITION_INTERPOLATION_END_EVENT = new CompleteEvent(Type.POSITION_INTERPOLATION);
+    /** A CompleteEvent for when any Interpolation ends. */
+    private static final CompleteEvent INTERPOLATION_END_EVENT = new CompleteEvent(Type.INTERPOLATION);
 
     public CompleteEvent(Type t) {
         this(t, null);
@@ -49,21 +47,20 @@ public class CompleteEvent {
         return ANIMATION_END_EVENT;
     }
 
-    public static CompleteEvent fade(SceneManager manager, Object entity) {
-        FADE_END_EVENT.data = new Object[] { manager, entity };
-        return FADE_END_EVENT;
-    }
-
     public static CompleteEvent text() {
         return TEXT_END_EVENT;
     }
 
-    public static CompleteEvent positionInterpolation(SceneManager manager, Object entity) {
-        POSITION_INTERPOLATION_END_EVENT.data = new Object[] { manager, entity };
-        return POSITION_INTERPOLATION_END_EVENT;
+    public static CompleteEvent interpolation(SceneManager manager, Object entity, InterpolationEventType interpolationEventType) {
+        INTERPOLATION_END_EVENT.data = new Object[] { manager, entity, interpolationEventType };
+        return INTERPOLATION_END_EVENT;
     }
 
     public enum Type {
-        INPUT, CHOICE, ANIMATION_END, FADE_END, TEXT, POSITION_INTERPOLATION
+        INPUT, CHOICE, ANIMATION_END, TEXT, INTERPOLATION
+    }
+
+    public enum InterpolationEventType {
+        POSITION, ZOOM, FADE
     }
 }

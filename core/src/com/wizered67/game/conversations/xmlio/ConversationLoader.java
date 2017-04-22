@@ -29,6 +29,7 @@ public class ConversationLoader {
     static {
         classMapping.put("assign", AssignCommand.class);
         classMapping.put("bg", BackgroundSetCommand.class);
+        classMapping.put("camera", CameraCommand.class);
         classMapping.put("changebranch", ChangeBranchCommand.class);
         classMapping.put("changeconv", ChangeConversationCommand.class);
         classMapping.put("animation", CharacterAnimationCommand.class);
@@ -48,8 +49,11 @@ public class ConversationLoader {
         classMapping.put("unloadGroup", LoadUnloadCommand.class);
         classMapping.put("text", MessageCommand.class);
         classMapping.put("music", PlayMusicCommand.class);
+        classMapping.put("resumemusic", PlayMusicCommand.class);
+        classMapping.put("pausemusic", PlayMusicCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
         classMapping.put("fade", ScreenFadeCommand.class);
+        classMapping.put("setScene", SetSceneCommand.class);
         classMapping.put("choices", ShowChoicesCommand.class);
         classMapping.put("if", VariableConditionCommand.class);
         classMapping.put("init", VariableInitializeCommand.class);

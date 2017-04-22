@@ -1,14 +1,17 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.inputs.MyInputProcessor;
 import com.wizered67.game.assets.Assets;
 
 public class GameManager {
 	public static MainGame game;
-	private static MyInputProcessor inputProcessor;
 	public static void init(MainGame g){
 		game = g;
 		/* //TODO remove this entirely
@@ -18,12 +21,8 @@ public class GameManager {
 
 	}
 
-	public static void setMainInputProcessor(MyInputProcessor ip) {
-		inputProcessor = ip;
-	}
-
 	public static MyInputProcessor getMainInputProcessor() {
-		return inputProcessor;
+		return game.mainInputProcessor;
 	}
 
 	public static Assets assetManager() {
@@ -32,6 +31,26 @@ public class GameManager {
 
 	public static SpriteBatch mainBatch() {
 		return game.mainBatch;
+	}
+
+	public static OrthographicCamera mainCamera() {
+		return game.mainCamera;
+	}
+
+	public static Viewport mainViewport() {
+		return game.mainViewport;
+	}
+
+	public static Viewport guiViewport() {
+		return game.guiViewport;
+	}
+
+	public static ConversationController conversationController() {
+		return game.conversationController;
+	}
+
+	public static GUIManager guiManager() {
+		return game.guiManager;
 	}
 
 	public static void error(String error) {

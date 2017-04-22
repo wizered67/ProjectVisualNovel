@@ -82,6 +82,7 @@ public class Assets {
     public Assets(AssetManager manager) {
         assetManager = manager;
         assetManager.getLogger().setLevel(Logger.DEBUG);
+
         assetIdentifiers = new HashMap<>();
         allAnimations = new HashMap<>();
         tagToClass = new HashMap<>();

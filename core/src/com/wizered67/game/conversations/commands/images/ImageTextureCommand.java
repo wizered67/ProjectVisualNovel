@@ -33,7 +33,7 @@ class ImageTextureCommand implements ConversationCommand {
      */
     @Override
     public void execute(ConversationController conversationController) {
-        SceneManager manager = conversationController.sceneManager();
+        SceneManager manager = conversationController.currentSceneManager();
         manager.applyImageCommand(instanceIdentifier, groupIdentifier, new EntityAction<SceneImage>() {
             @Override
             public void apply(SceneImage image) {
