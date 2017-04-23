@@ -87,7 +87,7 @@ public class SceneCharacter extends SceneEntity {
     }
 
     public String getKnownName() {
-        return SceneManager.characterDefinitions().get(identifier.toLowerCase()).getKnownName();
+        return SceneManager.getCharacterDefinition(identifier).getKnownName();
     }
 
     /** Switches this SceneCharacter's animation to the one named NAME. Returns true if animation is valid. */

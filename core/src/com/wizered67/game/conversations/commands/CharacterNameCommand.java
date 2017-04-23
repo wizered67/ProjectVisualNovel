@@ -36,7 +36,7 @@ public class CharacterNameCommand implements ConversationCommand {
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        CharacterDefinition definition = SceneManager.characterDefinitions().get(character);
+        CharacterDefinition definition = SceneManager.getCharacterDefinition(character);
         if (definition != null) {
             definition.setKnownName(newName);
         }

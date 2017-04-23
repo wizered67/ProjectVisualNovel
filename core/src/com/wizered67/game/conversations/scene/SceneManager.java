@@ -182,13 +182,13 @@ public class SceneManager {
         fadeColor = color;
     }
 
-    public static Map<String, CharacterDefinition> characterDefinitions() {
-        return characterDefinitions;
+    public static CharacterDefinition getCharacterDefinition(String identifier) {
+        return characterDefinitions.get(identifier.toLowerCase());
     }
 
    /** Adds the SceneCharacter with identifier IDENTIFIER to this scene. */
     public void addCharacter(String identifier) {
-        SceneCharacter character = new SceneCharacter(this, characterDefinitions.get(identifier.toLowerCase()));
+        SceneCharacter character = new SceneCharacter(this, getCharacterDefinition(identifier));
         sceneCharacters.put(identifier.toLowerCase(), character);
         character.addToScene(this);
     }
