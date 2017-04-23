@@ -228,6 +228,7 @@
     <xs:complexType name="positionType">
         <xs:attribute name="x" type="xs:float" use="optional"/>
         <xs:attribute name="y" type="xs:float" use="optional"/>
+        <xs:attribute name="characterTarget" type="characterType" use="optional"/>
         <xs:attribute type="interpolationType" name="interpolation" use="optional"/>
         <xs:attribute type="xs:float" name="time" use="optional"/>
         <xs:attribute type="xs:boolean" name="wait" use="optional"/>

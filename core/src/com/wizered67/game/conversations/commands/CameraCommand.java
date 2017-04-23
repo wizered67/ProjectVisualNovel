@@ -4,14 +4,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
 
 /**
- * Created by Adam on 3/17/2017.
+ * ConversationCommand for changing position and zoom of the camera, possibly using interpolations.
+ * @author Adam Victor
  */
 public class CameraCommand implements ConversationCommand {
     private PositionComponent positionComponent;
@@ -46,6 +49,21 @@ public class CameraCommand implements ConversationCommand {
                     end.y += positionComponent.position.y;
                 } else {
                     end.y = positionComponent.position.y;
+                }
+            }
+            if (positionComponent.characterTarget != null) {
+                SceneCharacter character = conversationController.currentSceneManager().getCharacterByIdentifier(positionComponent.characterTarget);
+                if (character != null) {
+                    end = character.getPosition().cpy();
+                    //Use x and y specified as offset from centering on character position.
+                    if (positionComponent.xSpecified) {
+                        end.x += positionComponent.position.x;
+                    }
+                    if (positionComponent.ySpecified) {
+                        end.y += positionComponent.position.y;
+                    }
+                } else {
+                    GameManager.error("Character " + positionComponent.characterTarget + " is not in the scene currently.");
                 }
             }
             PositionInterpolation positionInterpolation =
@@ -132,10 +150,11 @@ public class CameraCommand implements ConversationCommand {
         boolean relative = element.getBooleanAttribute("relative", false);
         float x = (xString != null) ? Float.parseFloat(xString) : 0;
         float y = (yString != null) ? Float.parseFloat(yString) : 0;
+        String characterTarget = element.getAttribute("characterTarget", null);
         String interpolationType = element.getAttribute("interpolation", "linear");
         float time = element.getFloatAttribute("time", 0);
         boolean wait = element.getBooleanAttribute("wait", false);
-        return new PositionComponent(new Vector2(x, y), xString != null, yString != null, interpolationType, time, wait, relative);
+        return new PositionComponent(new Vector2(x, y), xString != null, yString != null, characterTarget, interpolationType, time, wait, relative);
     }
 
     private static ZoomComponent makeZoomComponent(XmlReader.Element element) {
@@ -148,6 +167,7 @@ public class CameraCommand implements ConversationCommand {
     }
 
     private static class PositionComponent {
+        String characterTarget;
         Vector2 position;
         boolean xSpecified;
         boolean ySpecified;
@@ -156,11 +176,12 @@ public class CameraCommand implements ConversationCommand {
         boolean wait;
         boolean relative;
 
-        private PositionComponent(Vector2 position, boolean xSpecified, boolean ySpecified,
+        private PositionComponent(Vector2 position, boolean xSpecified, boolean ySpecified, String characterTarget,
                                   String type, float time, boolean wait, boolean relative) {
             this.position = position;
             this.xSpecified = xSpecified;
             this.ySpecified = ySpecified;
+            this.characterTarget = characterTarget;
             this.type = type;
             this.time = time;
             this.wait = wait;

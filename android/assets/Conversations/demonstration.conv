@@ -101,7 +101,7 @@
         <animation id="Detective" animation="Edgeworth_Static"/>
 
         <camera>
-            <position x="0" wait="true" time="0.5" interpolation="fade"/>
+            <position x="100" y="100" characterTarget="Detective" wait="true" time="0.5" interpolation="fade"/>
         </camera>
 
         Detective: And you are...?
