@@ -54,7 +54,12 @@ public class CameraCommand implements ConversationCommand {
             if (positionComponent.characterTarget != null) {
                 SceneCharacter character = conversationController.currentSceneManager().getCharacterByIdentifier(positionComponent.characterTarget);
                 if (character != null) {
-                    end = character.getPosition().cpy();
+                    Vector2 spriteOffset = new Vector2(0, 0);
+                    if (character.getSprite() != null) {
+                        spriteOffset.x = character.getSprite().getWidth() / 2;
+                        spriteOffset.y = character.getSprite().getHeight() / 2;
+                    }
+                    end = character.getPosition().cpy().add(spriteOffset);
                     //Use x and y specified as offset from centering on character position.
                     if (positionComponent.xSpecified) {
                         end.x += positionComponent.position.x;
