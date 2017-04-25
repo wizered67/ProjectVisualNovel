@@ -181,6 +181,8 @@
 
     <xs:complexType name="bgType">
         <xs:attribute name="id" type="textureResource" use="required"/>
+        <xs:attribute name="x" type="xs:float" use="optional"/>
+        <xs:attribute name="y" type="xs:float" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="setSceneType">

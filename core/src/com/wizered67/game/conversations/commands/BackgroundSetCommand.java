@@ -15,10 +15,16 @@ public class BackgroundSetCommand implements ConversationCommand {
     private static final String BACKGROUND_IDENTIFIER = "bg";
     /** Identifier of the Texture to set as the background. */
     private String imageIdentifier;
+    /** X location to show background at. */
+    private float xPosition;
+    /** Y location to show background at. */
+    private float yPosition;
 
     /** Creates a BackgroundSetCommand that sets background to the texture with identifier ID. */
-    public BackgroundSetCommand(String id) {
+    public BackgroundSetCommand(String id, float xPos, float yPos) {
         imageIdentifier = id;
+        xPosition = xPos;
+        yPosition = yPos;
     }
     /**
      * Executes the command on the CONVERSATION CONTROLLER.
@@ -32,7 +38,7 @@ public class BackgroundSetCommand implements ConversationCommand {
             manager.addImage(bgImage);
             bgImage.addToScene(manager);
         }
-        bgImage.setPosition(0, 0);
+        bgImage.setPosition(xPosition, yPosition);
         bgImage.setDepth(manager, -99999);
         bgImage.finishVisibility(true);
         bgImage.setTexture(imageIdentifier);
@@ -53,7 +59,9 @@ public class BackgroundSetCommand implements ConversationCommand {
     /** Static method to create a new command from XML Element ELEMENT. */
     public static BackgroundSetCommand makeCommand(XmlReader.Element element) {
         String filename = element.getAttribute("id");
-        return new BackgroundSetCommand(filename);
+        float xPos = element.getFloatAttribute("x", 0);
+        float yPos = element.getFloatAttribute("y", 0);
+        return new BackgroundSetCommand(filename, xPos, yPos);
     }
     /**
      * Outputs XML to the XML WRITER for this command.
