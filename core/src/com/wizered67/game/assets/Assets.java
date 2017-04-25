@@ -314,7 +314,7 @@ public class Assets {
             return;
         }
         for (AssetDescriptor descriptor : group) {
-            unload(descriptor.fileName);
+            unloadRaw(descriptor.fileName);
         }
     }
 
