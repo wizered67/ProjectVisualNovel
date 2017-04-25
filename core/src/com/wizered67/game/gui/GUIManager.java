@@ -414,9 +414,11 @@ public class GUIManager {
             case CONV:
                 conversationController.loadConversation(selection);
                 conversationController.setBranch("default");
+                conversationController.nextCommand();
                 break;
             case BRANCH:
                 conversationController.setBranch(selection);
+                conversationController.nextCommand();
                 break;
             case LOAD:
                 SaveManager.load(Gdx.files.internal("Saves/" + selection));

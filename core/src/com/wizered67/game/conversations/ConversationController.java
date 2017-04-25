@@ -290,7 +290,7 @@ public class ConversationController implements Controllable {
     }
 
     /** If there are more commands, execute the next one. */
-    private void nextCommand() {
+    public void nextCommand() {
         ConversationCommand command = currentBranch.remove();
         command.execute(this);
         //System.out.println("Executed command: " + command.toString());
