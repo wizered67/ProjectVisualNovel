@@ -22,6 +22,10 @@ public class CameraCommand implements ConversationCommand {
     private boolean positionDone;
     private boolean zoomDone;
 
+    public CameraCommand() {
+
+    }
+
     public CameraCommand(PositionComponent positionComponent, ZoomComponent zoomComponent) {
         this.positionComponent = positionComponent;
         this.zoomComponent = zoomComponent;

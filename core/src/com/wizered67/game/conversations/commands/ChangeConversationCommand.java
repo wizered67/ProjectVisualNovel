@@ -12,15 +12,24 @@ import com.wizered67.game.conversations.ConversationController;
  * @author Adam Victor
  */
 public class ChangeConversationCommand implements ConversationCommand {
+    /** The identifier of the conversation to switch to (including .conv) */
     private String newConversation;
-    public ChangeConversationCommand(String conv) {
+    /** The branch to switch to in the new conversation, or 'default' if not specified. */
+    private String newBranch;
+
+    public ChangeConversationCommand() {
+
+    }
+
+    public ChangeConversationCommand(String conv, String branch) {
         newConversation = conv;
+        newBranch = branch;
     }
 
     @Override
     public void execute(ConversationController conversationController) {
         conversationController.loadConversation(newConversation);
-        conversationController.setBranch("default");
+        conversationController.setBranch(newBranch);
     }
 
     @Override
@@ -35,10 +44,11 @@ public class ChangeConversationCommand implements ConversationCommand {
 
     public static ChangeConversationCommand makeCommand(XmlReader.Element element) {
         String newConv = element.getAttribute("conv", null);
+        String newBranch = element.getAttribute("branch", "default");
         if (newConv == null) {
             throw new GdxRuntimeException("No new conversation specified for new conversation command.");
         }
-        return new ChangeConversationCommand(newConv);
+        return new ChangeConversationCommand(newConv, newBranch);
     }
 
     @Override

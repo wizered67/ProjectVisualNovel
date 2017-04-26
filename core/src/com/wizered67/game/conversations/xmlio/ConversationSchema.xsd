@@ -191,6 +191,7 @@
 
     <xs:complexType name="changeConversationType">
         <xs:attribute name="conv" type="conversationType" use="required"/>
+        <xs:attribute name="branch" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="clearType">
