@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.scene.CharacterDefinition;
+import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.gui.GUIManager;
 import org.luaj.vm2.LuaValue;
 
@@ -31,7 +33,7 @@ public class LuaGameMethods {
         GameManager.guiManager().toggleTranscript();
     }
 
-    public static void getInput(final String variableName) {
+    public static void getNameInput(final String variableName) {
         ConversationController.scriptManager("Lua").setValue(variableName, LuaValue.NIL);
         Input.TextInputListener inputListener = new Input.TextInputListener() {
             @Override
@@ -41,9 +43,16 @@ public class LuaGameMethods {
 
             @Override
             public void canceled() {
-                ConversationController.scriptManager("Lua").setValue(variableName, -1);
+                getNameInput(variableName);
             }
         };
-        Gdx.input.getTextInput(inputListener, "Test input", "", "");
+        Gdx.input.getTextInput(inputListener, "Enter your name", "", "");
+    }
+
+    public static void setCharacterName(String character, String name) {
+        CharacterDefinition definition = SceneManager.getCharacterDefinition(character);
+        if (definition != null) {
+            definition.setKnownName(name);
+        }
     }
 }

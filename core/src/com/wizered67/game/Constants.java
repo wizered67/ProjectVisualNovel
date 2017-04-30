@@ -27,7 +27,7 @@ public class Constants {
 
 	public final static boolean FULLSCREEN = false;
 	public final static boolean RESIZABLE = true;
-	public final static int REGULAR_FONT_SIZE = Gdx.app.getType() == Application.ApplicationType.Android ? (12) : 24;
+	public final static int REGULAR_FONT_SIZE = Gdx.app.getType() == Application.ApplicationType.Android ? (36) : 24;
 
 	//Conversation Settings
 	public static void initTextboxSettings() {
