@@ -143,12 +143,8 @@
             How long have you been working for the library?:
                 <!-- When an if statement is the first command after a choice option, it is considered to be the condition for displaying that
                 choice! The if tag does not execute as normal. For example, in this case, this choice "How long..." will only be shown
-                if 'work' is less than 2. If it is greater than or equal to 2, the choice will simply not appear.
-                A few notes on syntax: notice that there are { } around the condition. This is to ensure that the condition is separated from
-                text commands and is necessary. Also notice that it is surrounded by CDATA (a shortcut for doing this in IntelliJ is
-                typing CD and hitting enter). CDATA means that the text is used as raw text and not XML. This is necessary in this case because
-                otherwie using '<' would imply the start of a tag and result in a syntax error. -->
-                <if><![CDATA[ {work < 2} ]]></if>
+                if 'work' is less than 2. If it is greater than or equal to 2, the choice will simply not appear. -->
+            <if cond="work ~= 2"/>
                 <!-- Another position interpolation example, this time using bounce interpolation over 5 seconds. See the difference! -->
                 <position id="Detective" x="100" y="600" interpolation="bounce" time="5" wait="true"/>
                 <changebranch branch="work"/>
@@ -185,7 +181,7 @@
         Detective: Oh... I guess it's not.
         <!-- An if command that checks if work is equal to 2. If so, it executes the commands inside the 'if' tag. Otherwise it moves on.
         Notice how the condition of if statements must be surrounded by { }. -->
-        <if> {work == 2}
+        <if cond="work == 2">
             Librarian: I already answered your pointless question! Now stop bothering me!
         </if>
 
