@@ -51,6 +51,7 @@
                 <xs:element type="clearType" name="clearScene" maxOccurs="unbounded"/>
                 <xs:element type="cameraType" name="camera" maxOccurs="unbounded"/>
                 <xs:element type="setSceneType" name="setScene" maxOccurs="unbounded"/>
+                <xs:element type="whileType" name="while" maxOccurs="unbounded"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
@@ -178,6 +179,15 @@
     <xs:complexType name="waitUntilType" mixed="true">
         <xs:attribute type="languages" name="language" use="optional"/>
         <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="whileType" mixed="true">
+        <xs:sequence minOccurs="0">
+            <xs:group ref="commands" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="languages" name="language" use="optional"/>
+        <xs:attribute type="xs:boolean" name="isfile" use="optional"/>
+        <xs:attribute type="xs:string" name="cond" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="bgType">

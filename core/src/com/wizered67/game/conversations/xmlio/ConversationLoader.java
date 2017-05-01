@@ -56,10 +56,11 @@ public class ConversationLoader {
         classMapping.put("setScene", SetSceneCommand.class);
         classMapping.put("choices", ShowChoicesCommand.class);
         classMapping.put("if", VariableConditionCommand.class);
+        classMapping.put("image", ModifyImageCommandCreator.class);
         classMapping.put("init", VariableInitializeCommand.class);
         classMapping.put("waitForLoading", WaitForLoadingCommand.class);
         classMapping.put("waitUntil", WaitUntilVariableCommand.class);
-        classMapping.put("image", ModifyImageCommandCreator.class);
+        classMapping.put("while", VariableWhileCommand.class);
     }
 
     /** Returns the Conversation created by parsing the XML file
