@@ -9,16 +9,14 @@ import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.inputs.MyInputProcessor;
 import com.wizered67.game.assets.Assets;
+import com.wizered67.game.scripting.LuaGameMethods;
 
 public class GameManager {
 	public static MainGame game;
+	public static LuaGameMethods utils;
 	public static void init(MainGame g){
 		game = g;
-		/* //TODO remove this entirely
-		GroovyTest groovy = new GroovyTest();
-		groovy.init();
-		*/
-
+		utils = new LuaGameMethods();
 	}
 
 	public static MyInputProcessor getMainInputProcessor() {

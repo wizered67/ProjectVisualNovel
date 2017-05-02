@@ -15,41 +15,31 @@ import org.luaj.vm2.LuaValue;
  * @author Adam Victor
  */
 public class LuaGameMethods {
-    public static int randomRange(int lowerBound, int upperBound) {
+    public int randomRange(int lowerBound, int upperBound) {
         return MathUtils.random(lowerBound, upperBound);
     }
 
-    public static void printAll(int[] nums) {
-        for (int i : nums) {
-            System.out.println(i);
-        }
+    public void getTextInput(final String variableName, String title) {
+        getTextInput(variableName, title, "", "");
     }
 
-    public static void addToTranscript(String speaker, String phrase) {
-        GameManager.conversationController().getTranscript().addMessage(speaker, phrase);
-    }
-
-    public static void openTranscript() {
-        GameManager.guiManager().toggleTranscript();
-    }
-
-    public static void getNameInput(final String variableName) {
+    public void getTextInput(final String variableName, String title, String text, String hint) {
         ConversationController.scriptManager("Lua").setValue(variableName, LuaValue.NIL);
         Input.TextInputListener inputListener = new Input.TextInputListener() {
             @Override
-            public void input(String text) {
-                ConversationController.scriptManager("Lua").setValue(variableName, text);
+            public void input(String result) {
+                ConversationController.scriptManager("Lua").setValue(variableName, result);
             }
 
             @Override
             public void canceled() {
-                getNameInput(variableName);
+                ConversationController.scriptManager("Lua").setValue(variableName, "");
             }
         };
-        Gdx.input.getTextInput(inputListener, "Enter your name", "", "");
+        Gdx.input.getTextInput(inputListener, title, text, hint);
     }
 
-    public static void setCharacterName(String character, String name) {
+    public void setCharacterName(String character, String name) {
         CharacterDefinition definition = SceneManager.getCharacterDefinition(character);
         if (definition != null) {
             definition.setKnownName(name);

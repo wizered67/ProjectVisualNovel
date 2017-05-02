@@ -19,6 +19,7 @@ import com.wizered67.game.saving.SaveManager;
 import com.wizered67.game.screens.LoadingScreen;
 import com.wizered67.game.screens.MainGameScreen;
 import com.wizered67.game.assets.Assets;
+import com.wizered67.game.scripting.LuaGameMethods;
 
 public class MainGame extends Game {
 	MainGameScreen gameScreen;
@@ -32,6 +33,7 @@ public class MainGame extends Game {
     ConversationController conversationController;
     MyInputProcessor mainInputProcessor;
     InputMultiplexer inputMultiplexer;
+
 	@Override
 	public void create() {
 		GameManager.init(this);

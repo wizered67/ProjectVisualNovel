@@ -35,10 +35,8 @@ public class LuaScriptManager implements ScriptManager {
 
     private void setDefaultJavaMethods() {
         globals.load(new LuajavaGdxReflection());
-        LuaGameMethods luaGameMethods = new LuaGameMethods();
-        Gdx.app.log("Test", "Trying to set game methods class.");
-        globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.scripting.LuaGameMethods")));
-        System.out.println("Got game methods class.");
+        //LuaGameMethods luaGameMethods = new LuaGameMethods();
+        globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.GameManager")));
     }
 
     /** Returns the name of the language used for this ScriptManager. */
