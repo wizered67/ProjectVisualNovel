@@ -2,6 +2,7 @@ package com.wizered67.game.saving;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -55,6 +56,7 @@ public class SaveManager {
         kryo.addDefaultSerializer(Sprite.class, SpriteSerializer.class);
         kryo.addDefaultSerializer(SceneEntity.class, SceneEntitySerializer.class);
         kryo.addDefaultSerializer(Assets.class, AssetsSerializer.class);
+        kryo.addDefaultSerializer(OrthographicCamera.class, OrthographicCameraSerializer.class);
 
         kryo.setReferences(true);
         Log.set(Log.LEVEL_TRACE);

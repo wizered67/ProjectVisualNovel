@@ -31,9 +31,12 @@ public class ScreenFadeCommand implements ConversationCommand {
     private boolean done;
     private List<ConversationCommand> commands;
 
+    public ScreenFadeCommand() {
+
+    }
+
     public ScreenFadeCommand(List<ConversationCommand> commands, Color color, float exitTime, String exitType, float enterTime, String enterType, boolean wait) {
         this.commands = commands;
-        this.commands.add(new FadeInCommand());
         this.color = color.cpy();
         this.exitTime = exitTime;
         this.exitType = exitType;
@@ -41,6 +44,7 @@ public class ScreenFadeCommand implements ConversationCommand {
         this.enterType = enterType;
         this.wait = wait;
         done = !wait;
+        this.commands.add(new FadeInCommand(wait, enterType, enterTime, this.color));
     }
 
     /**
@@ -109,42 +113,5 @@ public class ScreenFadeCommand implements ConversationCommand {
     @Override
     public void writeXml(XmlWriter xmlWriter) {
 
-    }
-
-    private class FadeInCommand implements ConversationCommand {
-        private boolean isDone;
-        private FadeInCommand() {
-
-        }
-
-        @Override
-        public void execute(ConversationController conversationController) {
-            isDone = !wait;
-            conversationController.currentSceneManager().setFade(new FloatInterpolation(enterType, 1, 0, enterTime), color);
-        }
-
-        @Override
-        public boolean waitToProceed() {
-            return !isDone;
-        }
-
-        @Override
-        public void complete(CompleteEvent c) {
-            if (c.type == CompleteEvent.Type.INTERPOLATION) {
-                Object[] data = (Object[]) c.data;
-                if (data[2] == CompleteEvent.InterpolationEventType.FADE) {
-                    SceneManager manager = (SceneManager) data[0];
-                    Object entity = data[1];
-                    if (manager == entity) {
-                        isDone = true;
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void writeXml(XmlWriter xmlWriter) {
-
-        }
     }
 }
