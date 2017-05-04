@@ -61,6 +61,6 @@ public class CompleteEvent {
     }
 
     public enum InterpolationEventType {
-        POSITION, ZOOM, FADE
+        POSITION, ZOOM, FADE, SHAKE
     }
 }

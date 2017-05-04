@@ -18,7 +18,6 @@ public abstract class UpdatedInterpolation<T> {
     protected float totalTime;
     protected T initialValue;
     protected T endValue;
-    /** Direction of the fade, positive for going from 0->1 and negative for 1->0.*/
     private transient static Map<String, Interpolation> interpolationTypes;
 
     public UpdatedInterpolation() {}

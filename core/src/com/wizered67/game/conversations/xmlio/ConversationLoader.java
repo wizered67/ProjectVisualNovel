@@ -51,6 +51,7 @@ public class ConversationLoader {
         classMapping.put("music", PlayMusicCommand.class);
         classMapping.put("resumemusic", PlayMusicCommand.class);
         classMapping.put("pausemusic", PlayMusicCommand.class);
+        classMapping.put("screenshake", ScreenShakeCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
         classMapping.put("fade", ScreenFadeCommand.class);
         classMapping.put("setScene", SetSceneCommand.class);

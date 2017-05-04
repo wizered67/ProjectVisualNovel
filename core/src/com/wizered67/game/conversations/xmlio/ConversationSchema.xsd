@@ -15,6 +15,10 @@
 
     </xs:element>
 
+    <xs:complexType name="branchType" mixed="true">
+        <xs:group ref="commands" minOccurs="0"/>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
 
     <xs:group name="commands">
         <xs:sequence>
@@ -41,6 +45,7 @@
                 <xs:element type="changeConversationType" name="changeconv" maxOccurs="unbounded"/>
                 <xs:element type="imageType" name="image" maxOccurs="unbounded"/>
                 <xs:element type="fadeType" name="fade" maxOccurs="unbounded"/>
+                <xs:element type="screenShakeType" name="screenshake" maxOccurs="unbounded"/>
                 <xs:element type="emptyType" name="exit" maxOccurs="unbounded"/>
                 <xs:element type="waitUntilType" name="waitUntil" maxOccurs="unbounded"/>
                 <xs:element type="resourceType" name="load" maxOccurs="unbounded"/>
@@ -118,11 +123,6 @@
     <xs:complexType name="setdirectionType">
         <xs:attribute type="characterType" name="id" use="required"/>
         <xs:attribute type="xs:integer" name="direction" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="branchType" mixed="true">
-        <xs:group ref="commands"/>
-        <xs:attribute type="xs:string" name="name" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="setpositionType">
@@ -267,6 +267,13 @@
         <xs:attribute name="exitType" type="interpolationType" use="optional"/>
         <xs:attribute name="enterType" type="interpolationType" use="optional"/>
         <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="screenShakeType">
+        <xs:attribute name="time" type="xs:float" use="required"/>
+        <xs:attribute name="interpolation" type="interpolationType" use="optional"/>
+        <xs:attribute name="wait" type="xs:boolean" use="optional"/>
+        <xs:attribute name="magnitude" type="xs:float" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="cameraType">

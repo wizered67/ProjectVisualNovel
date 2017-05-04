@@ -1,11 +1,15 @@
 package com.wizered67.game.conversations.scene;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
@@ -50,7 +54,8 @@ public class SceneManager {
     private PositionInterpolation cameraPositionInterpolation;
     /** Used to update Camera's zoom according to the interpolation. */
     private FloatInterpolation cameraZoomInterpolation;
-
+    /** Used to update the screenshake effect. */
+    private static ScreenShakeEffect screenShakeEffect;
 
     /** No argument constructor. Needed for serialization.*/
     public SceneManager() {
@@ -100,6 +105,17 @@ public class SceneManager {
      */
     public void update(float delta) {
         updateCamera(delta);
+        Vector3 screenShakeOffset = new Vector3(0, 0, 0);
+        if (screenShakeEffect != null) {
+            if (!conversationController.isPaused()) {
+                screenShakeOffset = screenShakeEffect.update(delta);
+            } else {
+                screenShakeOffset = screenShakeEffect.update(0);
+            }
+            camera.position.add(screenShakeOffset);
+            camera.update();
+        }
+
         GameManager.mainViewport().setCamera(camera); //this solved a bug
         GameManager.mainViewport().apply();
         batch.setProjectionMatrix(camera.combined);
@@ -123,6 +139,15 @@ public class SceneManager {
         batch.begin();
         drawFade(delta);
         batch.end();
+
+        if (screenShakeEffect != null) {
+            camera.position.sub(screenShakeOffset);
+            camera.update();
+            if (screenShakeEffect.isDone()) {
+                screenShakeEffect = null;
+                complete(CompleteEvent.interpolation(this, this, CompleteEvent.InterpolationEventType.SHAKE));
+            }
+        }
     }
 
     private void updateCamera(float delta) {
@@ -170,16 +195,21 @@ public class SceneManager {
             batch.setColor(fadeColor);
             batch.draw(fadeTexture, 0, 0, GameManager.mainCamera().viewportWidth, GameManager.mainCamera().viewportHeight);
             batch.setColor(Color.WHITE);
-            if (alpha <= 0 || alpha >= 1) {
+            if (fade.isDone()) { //todo verify this is correct, previously checked if under 0 or above 1
                 fade = null;
                 complete(CompleteEvent.interpolation(this, this, CompleteEvent.InterpolationEventType.FADE));
             }
         }
     }
-    /** Used to set the SceneManager's current fade. */
-    public void setFade(FloatInterpolation fade, Color color) {
-        this.fade = fade;
+    /** Sets all SceneManagers' current fade. */
+    public void setFade(FloatInterpolation newFade, Color color) {
+        fade = newFade;
         fadeColor = color;
+    }
+
+    /** Sets all SceneManagers' current screenshake. */
+    public void setScreenShakeEffect(ScreenShakeEffect effect) {
+        screenShakeEffect = effect;
     }
 
     public static CharacterDefinition getCharacterDefinition(String identifier) {

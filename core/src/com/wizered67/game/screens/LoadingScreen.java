@@ -28,7 +28,7 @@ public class LoadingScreen implements Screen {
         testStage = new Stage();
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
         testStage.addActor(table);
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);

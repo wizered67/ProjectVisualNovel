@@ -7,6 +7,7 @@
             think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
             confront <animation id="Detective" animation="Edgeworth_Confront"/>
             delay <delay time="1" skippable="true"/>
+            shake <screenshake time="0.5" magnitude="6" interpolation="linear" wait="true"/>
         </assign>
         <!-- Sets the background to the image in the Texture's directory with identifier 'testbackground.png'.
          Backgrounds are just an image with the id 'bg' so they can be modified later. -->
@@ -195,7 +196,7 @@
         Librarian: N...No. I've never seen him before. It's not like I hang out with chefs very often.
 
         Detective: Chefs? I don't recall mentioning that the victim was a chef.
-        @c{confront} Just how did you know that?
+        @c{confront}@c{shake}Just how did you know that?
 
         Librarian: I... uh...@c{delay} saw his chef's hat.
 
