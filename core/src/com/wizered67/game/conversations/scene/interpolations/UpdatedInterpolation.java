@@ -13,11 +13,17 @@ import java.util.Map;
  * @author Adam Victor
  */
 public abstract class UpdatedInterpolation<T> {
+    /** The total time this interpolation has been updated. */
     protected float progress;
+    /** The type of interpolation to use. */
     protected String interpolationType;
+    /** The time to spend doing this interpolation in total. */
     protected float totalTime;
+    /** The initial value to start with. */
     protected T initialValue;
+    /** The value to end with. */
     protected T endValue;
+    /** Mapping between Strings with interpolation names and the Interpolation class used for it. */
     private transient static Map<String, Interpolation> interpolationTypes;
 
     public UpdatedInterpolation() {}
@@ -28,7 +34,7 @@ public abstract class UpdatedInterpolation<T> {
         interpolationType = type;
         totalTime = length;
     }
-
+    /** Update progress and apply the interpolation, returning the result. */
     protected float updateInterpolation(float delta) {
         progress = MathUtils.clamp(progress + delta / totalTime, 0, 1);
         Interpolation interpolation = interpolationTypes.get(interpolationType);
@@ -37,7 +43,7 @@ public abstract class UpdatedInterpolation<T> {
     /** Updates the interpolation and returns the interpolated version. */
     public abstract T update(float delta);
 
-
+    /** Whether this interpolation has been completed. */
     public boolean isDone() {
         return progress >= 1;
     }

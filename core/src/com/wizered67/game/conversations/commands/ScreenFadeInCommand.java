@@ -7,18 +7,27 @@ import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 
-class FadeInCommand implements ConversationCommand {
+/** ConversationCommand used to apply fading in back to the scene. Originally a private inner class of ScreenFadeCommand
+ * but changed for serialization purposes.
+ * @author Adam Victor
+ */
+class ScreenFadeInCommand implements ConversationCommand {
+    /** Whether the fade in is done. */
     private boolean isDone;
+    /** The name of the type of interpolation to use for fading in. */
     private String enterType;
+    /** How long to spend in seconds fading in. */
     private float enterTime;
+    /** The color to use for fading in. */
     private Color color;
+    /** Whether to wait for the fade to complete before doing other commands. */
     private boolean wait;
 
-    FadeInCommand() {
+    ScreenFadeInCommand() {
 
     }
 
-    FadeInCommand(boolean wait, String enterType, float enterTime, Color color) {
+    ScreenFadeInCommand(boolean wait, String enterType, float enterTime, Color color) {
         this.wait = wait;
         this.enterTime = enterTime;
         this.enterType = enterType;

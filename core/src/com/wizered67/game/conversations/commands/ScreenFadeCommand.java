@@ -44,7 +44,7 @@ public class ScreenFadeCommand implements ConversationCommand {
         this.enterType = enterType;
         this.wait = wait;
         done = !wait;
-        this.commands.add(new FadeInCommand(wait, enterType, enterTime, this.color));
+        this.commands.add(new ScreenFadeInCommand(wait, enterType, enterTime, this.color));
     }
 
     /**
