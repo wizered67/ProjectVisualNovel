@@ -273,7 +273,8 @@
         <xs:attribute name="time" type="xs:float" use="required"/>
         <xs:attribute name="interpolation" type="interpolationType" use="optional"/>
         <xs:attribute name="wait" type="xs:boolean" use="optional"/>
-        <xs:attribute name="magnitude" type="xs:float" use="required"/>
+        <xs:attribute name="xMagnitude" type="xs:float" use="required"/>
+        <xs:attribute name="yMagnitude" type="xs:float" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="cameraType">

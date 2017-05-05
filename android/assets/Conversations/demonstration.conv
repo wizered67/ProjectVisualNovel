@@ -7,7 +7,7 @@
             think <animation id="Detective" animation="Edgeworth_Edgeworth" wait="true"/>
             confront <animation id="Detective" animation="Edgeworth_Confront"/>
             delay <delay time="1" skippable="true"/>
-            shake <screenshake time="0.5" magnitude="6" interpolation="linear" wait="true"/>
+            shake <screenshake time="0.5" xMagnitude="6" yMagnitude="6" interpolation="linear" wait="true"/>
         </assign>
         <!-- Sets the background to the image in the Texture's directory with identifier 'testbackground.png'.
          Backgrounds are just an image with the id 'bg' so they can be modified later. -->
@@ -82,7 +82,7 @@
             <position x="600" interpolation="linear" time="0.5" wait="true"/>
             <zoom amount="0.8" interpolation="linear" time="0.5" wait="true"/>
         </camera>
-
+        
         <!-- Fade in the Librarian over 2 seconds, waiting for the fade to be done before moving on.
         Since no interpolation type is set, it defaults to linear. -->
         <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>

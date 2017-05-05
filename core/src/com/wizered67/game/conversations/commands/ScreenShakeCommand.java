@@ -1,5 +1,6 @@
 package com.wizered67.game.conversations.commands;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.CompleteEvent;
@@ -15,7 +16,7 @@ public class ScreenShakeCommand implements ConversationCommand {
     /** The type of interpolation to be used for dampening the screen shake. */
     private String interpolation;
     /** The magnitude of the screenshake (the screen can shake at most between -magnitude and magnitude pixels). */
-    private float magnitude;
+    private Vector2 magnitude;
     /** How long the screenshake will last. */
     private float duration;
     /** Whether to wait for the screenshake to be completed before starting the next command. */
@@ -25,7 +26,7 @@ public class ScreenShakeCommand implements ConversationCommand {
 
     public ScreenShakeCommand() {}
 
-    public ScreenShakeCommand(String interpolation, float magnitude, float duration, boolean wait) {
+    public ScreenShakeCommand(String interpolation, Vector2 magnitude, float duration, boolean wait) {
         this.interpolation = interpolation;
         this.magnitude = magnitude;
         this.duration = duration;
@@ -71,8 +72,9 @@ public class ScreenShakeCommand implements ConversationCommand {
         float time = element.getFloatAttribute("time");
         String interpolation = element.getAttribute("interpolation", "linear");
         boolean wait = element.getBooleanAttribute("wait", false);
-        float magnitude = element.getFloatAttribute("magnitude");
-        return new ScreenShakeCommand(interpolation, magnitude, time, wait);
+        float magnitudeX = element.getFloatAttribute("xMagnitude", 0);
+        float magnitudeY = element.getFloatAttribute("yMagnitude", 0);
+        return new ScreenShakeCommand(interpolation, new Vector2(magnitudeX, magnitudeY), time, wait);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.wizered67.game.conversations.scene;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 
@@ -10,7 +11,7 @@ import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
  */
 public class ScreenShakeEffect {
     /** Magnitude of the shake, the maximum number of pixels in any direction the screen can shake. */
-    private float magnitude;
+    private Vector2 magnitude;
     /** The interpolation to be used for dampening. Goes from 1 to 0 as the shake slows. */
     private FloatInterpolation damperInterpolation;
     /** Vector3 used to store the result. Final and reused to avoid garbage collection. */
@@ -20,7 +21,7 @@ public class ScreenShakeEffect {
 
     }
 
-    public ScreenShakeEffect(String type, float magnitude, float length) {
+    public ScreenShakeEffect(String type, Vector2 magnitude, float length) {
         damperInterpolation = new FloatInterpolation(type, 1, 0, length);
         this.magnitude = magnitude;
     }
@@ -31,7 +32,7 @@ public class ScreenShakeEffect {
         float damper = damperInterpolation.update(deltaTime);
         float rx = MathUtils.random(-1f, 1f);
         float ry = MathUtils.random(-1f, 1f);
-        resultVector.set(rx * magnitude * damper, ry * magnitude * damper, 0);
+        resultVector.set(rx * magnitude.x * damper, ry * magnitude.y * damper, 0);
         return resultVector;
     }
     /** Returns whether the screenshake is done. */
