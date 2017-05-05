@@ -22,6 +22,8 @@ public class PlayMusicCommand implements ConversationCommand {
     private Type type;
     /** The volume to play the sound at, between 0 and 1. */
     private float volume;
+    /** MusicManager index to play the music on. */
+    private int index;
 
     /** No arguments constructor. Used for serialization. */
     public PlayMusicCommand() {
@@ -29,38 +31,41 @@ public class PlayMusicCommand implements ConversationCommand {
         loops = false;
         type = Type.PLAY;
         volume = 1;
+        index = 0;
     }
     /** Creates a PlayMusicCommand that plays the music with identifier M and
      * sets its loop status to L when executed.
      */
-    public PlayMusicCommand(String m, boolean l, float v) {
-        music = m;
-        loops = l;
-        volume = v;
+    public PlayMusicCommand(String musicName, boolean loops, float volume, int index) {
+        music = musicName;
+        this.loops = loops;
+        this.volume = volume;
+        this.index = index;
         type = Type.PLAY;
     }
 
     /** Creates a PlayMusicCommand that pauses or resumes music when executed.
      * T is an enum corresponding to type.
      */
-    public PlayMusicCommand(Type t) { //pause/resume command, 1 for pause, 2 for resume
+    public PlayMusicCommand(Type t, int index) { //pause/resume command, 1 for pause, 2 for resume
         type = t;
+        this.index = index;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
         if (type == Type.PAUSE) {
-            GameManager.musicManager().pauseMusic();
+            GameManager.musicManager().pauseMusic(index);
             return;
         } else if (type == Type.RESUME) {
-            GameManager.musicManager().resumeMusic();
+            GameManager.musicManager().resumeMusic(index);
             return;
         }
         if (music.equals("")) {
-            GameManager.musicManager().stopMusic();
+            GameManager.musicManager().stopMusic(index);
             return;
         }
-        GameManager.musicManager().playMusic(music, loops, volume);
+        GameManager.musicManager().playMusic(music, loops, volume, index);
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -93,16 +98,17 @@ public class PlayMusicCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static PlayMusicCommand makeCommand(XmlReader.Element element) {
+        int index = element.getIntAttribute("index", 0);
         if (element.getName().equals("pausemusic")) {
-            return new PlayMusicCommand(Type.PAUSE);
+            return new PlayMusicCommand(Type.PAUSE, index);
         }
         if (element.getName().equals("resumemusic")) {
-            return new PlayMusicCommand(Type.RESUME);
+            return new PlayMusicCommand(Type.RESUME, index);
         }
         String id = element.getAttribute("id");
         boolean loop = element.getBooleanAttribute("loop", false);
         float volume = element.getFloatAttribute("volume", 1);
-        return new PlayMusicCommand(id, loop, volume);
+        return new PlayMusicCommand(id, loop, volume, index);
     }
     /** The type of action this command does ie playing, pausing, or resuming music. */
     private enum Type {

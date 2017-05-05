@@ -82,7 +82,6 @@
             <position x="600" interpolation="linear" time="0.5" wait="true"/>
             <zoom amount="0.8" interpolation="linear" time="0.5" wait="true"/>
         </camera>
-        
         <!-- Fade in the Librarian over 2 seconds, waiting for the fade to be done before moving on.
         Since no interpolation type is set, it defaults to linear. -->
         <visible id="Librarian" visible="true" fadeTime="2" wait="true"/>
@@ -100,7 +99,6 @@
 
         Librarian: Excuse me, Detective, I heard you wanted to see me?
         <animation id="Detective" animation="Edgeworth_Static"/>
-
         <camera>
             <position characterTarget="Detective" wait="true" time="0.5" interpolation="fade"/>
         </camera>
@@ -109,13 +107,11 @@
         <!-- The Librarian character is about to introduce themselves so now is a good time to set
         the name the player sees when they speak. -->
         <name id="Librarian" displayname="Librarian"/>
-
         <camera>
             <position x="600" wait="true" time="0"/>
         </camera>
 
         Librarian: I'm the {JUMP}head librarian{ENDJUMP} here. It's a pleasure to meet you.
-
         <fade exitTime="0.5" enterTime="0.5" color="RED" wait="true">
             <setScene name="otherScene"/>
         </fade>

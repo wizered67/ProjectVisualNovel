@@ -32,8 +32,8 @@
                 <xs:element type="sequenceType" name="sequence" maxOccurs="unbounded"/>
                 <xs:element type="debugType" name="debug" maxOccurs="unbounded"/>
                 <xs:element type="playmusicType" name="music" maxOccurs="unbounded"/>
-                <xs:element type="xs:string" name="pausemusic" maxOccurs="unbounded"/>
-                <xs:element type="xs:string" name="resumemusic" maxOccurs="unbounded"/>
+                <xs:element type="pauseMusicType" name="pausemusic" maxOccurs="unbounded"/>
+                <xs:element type="resumeMusicType" name="resumemusic" maxOccurs="unbounded"/>
                 <xs:element type="playsoundType" name="sound" maxOccurs="unbounded"/>
                 <xs:element type="choicesType" name="choices" maxOccurs="unbounded"/>
                 <xs:element type="assignType" name="assign" maxOccurs="unbounded"/>
@@ -92,6 +92,15 @@
         <xs:attribute type="musicResource" name="id" use="required"/>
         <xs:attribute type="xs:boolean" name="loop" use="required"/>
         <xs:attribute type="xs:float" name="volume" use="optional"/>
+        <xs:attribute type="xs:integer" name="index" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="resumeMusicType">
+        <xs:attribute type="xs:integer" name="index" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="pauseMusicType">
+        <xs:attribute type="xs:integer" name="index" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="playsoundType">
