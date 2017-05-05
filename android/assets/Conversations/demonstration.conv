@@ -22,7 +22,7 @@
         <!-- Initialize the position, animation, and direction of the Librarian character, but does not set it to be visible yet. -->
         <position id="Librarian" x="600" y="160"/>
         <animation id="Librarian" animation="Edgeworth_Static"/>
-        <direction id="Librarian" direction="-1"/>
+        <scale id="Librarian" xScale="-1"/>
         <!-- Sets the displayname of the Librarian to '???' because the player doesn't know who they are yet. -->
         <name id="Librarian" displayname="???"/>
 

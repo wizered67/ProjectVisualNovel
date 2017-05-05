@@ -29,6 +29,7 @@
                 <xs:element type="setnameType" name="name" maxOccurs="unbounded"/>
                 <xs:element type="setpositionType" name="position" maxOccurs="unbounded"/>
                 <xs:element type="setvisibleType" name="visible" maxOccurs="unbounded"/>
+                <xs:element type="scaleType" name="scale" maxOccurs="unbounded"/>
                 <xs:element type="sequenceType" name="sequence" maxOccurs="unbounded"/>
                 <xs:element type="debugType" name="debug" maxOccurs="unbounded"/>
                 <xs:element type="playmusicType" name="music" maxOccurs="unbounded"/>
@@ -145,6 +146,12 @@
         <xs:attribute type="xs:boolean" name="relative" use="optional" default="false"/>
     </xs:complexType>
 
+    <xs:complexType name="scaleType">
+        <xs:attribute type="characterType" name="id" use="required"/>
+        <xs:attribute type="xs:float" name="xScale" use="optional"/>
+        <xs:attribute type="xs:float" name="yScale" use="optional"/>
+    </xs:complexType>
+
     <xs:complexType name="delayType">
         <xs:attribute type="xs:float" name="time" use="required"/>
         <xs:attribute type="xs:boolean" name="skippable" use="optional"/>
@@ -232,11 +239,17 @@
             <xs:element name="texture" type="imageTexture" minOccurs="0" maxOccurs="1"/>
             <xs:element name="position" type="positionDepthType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="visibility" type="visibleType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="scale" type="imageScaleType" minOccurs="0" maxOccurs="1"/>
         </xs:all>
     </xs:group>
 
     <xs:complexType name="imageTexture">
         <xs:attribute name="id" type="textureResource" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="imageScaleType">
+        <xs:attribute type="xs:float" name="xScale" use="optional"/>
+        <xs:attribute type="xs:float" name="yScale" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="positionDepthType">

@@ -33,7 +33,6 @@ public class ConversationLoader {
         classMapping.put("changebranch", ChangeBranchCommand.class);
         classMapping.put("changeconv", ChangeConversationCommand.class);
         classMapping.put("animation", CharacterAnimationCommand.class);
-        classMapping.put("direction", CharacterDirectionCommand.class);
         classMapping.put("name", CharacterNameCommand.class);
         classMapping.put("position", EntityPositionCommand.class);
         classMapping.put("visible", CharacterVisibleCommand.class);
@@ -52,6 +51,7 @@ public class ConversationLoader {
         classMapping.put("resumemusic", PlayMusicCommand.class);
         classMapping.put("pausemusic", PlayMusicCommand.class);
         classMapping.put("screenshake", ScreenShakeCommand.class);
+        classMapping.put("scale", EntityScaleCommand.class);
         classMapping.put("sound", PlaySoundCommand.class);
         classMapping.put("fade", ScreenFadeCommand.class);
         classMapping.put("setScene", SetSceneCommand.class);

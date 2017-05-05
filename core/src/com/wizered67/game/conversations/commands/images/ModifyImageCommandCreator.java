@@ -3,6 +3,7 @@ package com.wizered67.game.conversations.commands.images;
 import com.badlogic.gdx.utils.XmlReader;
 import com.wizered67.game.conversations.commands.CommandSequence;
 import com.wizered67.game.conversations.commands.EntityPositionCommand;
+import com.wizered67.game.conversations.commands.EntityScaleCommand;
 
 
 /**
@@ -35,6 +36,8 @@ public class ModifyImageCommandCreator {
                 result.addCommand(ImageVisibilityCommand.makeCommand(instance, group, child));
             } else if (child.getName().equals("group")) {
                 result.addCommand(ImageGroupChangeCommand.makeCommand(instance, group, child));
+            } else if (child.getName().equals("scale")) {
+                result.addCommand(EntityScaleCommand.makeCommand(instance, child));
             }
         }
         return result;

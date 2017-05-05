@@ -11,17 +11,17 @@ import com.badlogic.gdx.audio.Music;
 public class MusicManager {
     /** The maximum number of music instances that can be playing at the same time. */
     private final static int MAX_MUSIC = 5;
-    /** The Music object currently being played. */
+    /** The Music objects currently being played. */
     private transient Music[] currentMusic;
-    /** The name of the music currently being played. Used to tell if music has changed. */
+    /** The name of the musics currently being played. Used to tell if musics has changed. */
     private String[] currentMusicName;
-    /** Whether the music being played has been paused. */
+    /** Whether the musics being played has been paused. */
     private boolean[] paused;
-    /** Whether the music is looping. */
+    /** Whether the musics are looping. */
     private boolean[] looping;
-    /** Volume of the music. */
+    /** Volumes of the musics. */
     private float[] volumes;
-    /** Initialize MusicManager with no music being played. */
+    /** Initialize MusicManager with no musics being played. */
     public MusicManager() {
         currentMusic = new Music[MAX_MUSIC];
         currentMusicName = new String[MAX_MUSIC];
@@ -31,7 +31,8 @@ public class MusicManager {
     }
 
     /** Plays the music with identifier NAME. If it was already playing but paused, resume it.
-     * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
+     * If different music was playing before on the same index, stop it. Iff LOOPS,
+     * the music will continue to loop.
      */
     public void playMusic(String id, boolean loops, float volume, int index) {
         if (GameManager.assetManager().isLoaded(id)) {
@@ -43,7 +44,8 @@ public class MusicManager {
     }
 
     /** Plays the Music object MUSIC named NAME. If it was already playing but paused, resume it.
-     * If different music was playing before, stop it. Iff LOOPS, the music will continue to loop.
+     * If different music was playing before on the same index, stop it.
+     * Iff LOOPS, the music will continue to loop.
      */
     public void playMusic(Music music, String name, boolean loops, float volume, int index) {
         if (currentMusicName[index] != null && currentMusicName[index].equals(name)) {
@@ -60,7 +62,8 @@ public class MusicManager {
         setVolume(volume, index);
         music.play();
     }
-    /** Stops the music currently being played and resets currentMusic and currentMusicName. */
+    /** Stops the music currently being played at INDEX
+     * and resets corresponding currentMusic and currentMusicName. */
     public void stopMusic(int index) {
         if (currentMusic[index] != null) {
             currentMusic[index].stop();
@@ -68,38 +71,38 @@ public class MusicManager {
             currentMusic[index] = null;
         }
     }
-    /** Resume the music currently being played. */
+    /** Resume the music currently being played at INDEX. */
     public void resumeMusic(int index) {
         if (currentMusic[index] != null) {
             currentMusic[index].play();
         }
     }
-    /** Pause the music currently being played. */
+    /** Pause the music currently being played at INDEX. */
     public void pauseMusic(int index) {
         if (currentMusic[index] != null) {
             currentMusic[index].pause();
             paused[index] = true;
         }
     }
-    /** Sets whether the music should loop. */
+    /** Sets whether the music at index INDEX should loop. */
     public void setLooping(boolean loop, int index) {
         if (currentMusic[index] != null) {
             currentMusic[index].setLooping(loop);
             looping[index] = loop;
         }
     }
-    /** Sets the volumes of the music playing. */
+    /** Sets the volume of the music playing at INDEX. */
     public void setVolume(float volume, int index) {
         if (currentMusic[index] != null) {
             currentMusic[index].setVolume(volume);
             volumes[index] = volume;
         }
     }
-    /** Returns the name of the music playing. */
+    /** Returns the name of the music playing at INDEX. */
     public String getCurrentMusicName(int index) {
         return currentMusicName[index];
     }
-    /** Returns a Music object for the music playing. */
+    /** Returns a Music object for the music playing at INDEX. */
     public Music getCurrentMusic(int index) {
         return currentMusic[index];
     }
