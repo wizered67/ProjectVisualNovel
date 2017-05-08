@@ -233,6 +233,10 @@ public class ConversationController implements Controllable {
             setSpeakerName(currentSpeaker.getKnownName());
         }
 
+        if (currentSpeaker != null && currentCommand != null) { //has not exited
+            speakerLabel.setVisible(!currentSpeaker.getKnownName().isEmpty());
+        }
+
         if (currentCommand != null && currentCommand instanceof MessageCommand) {
             MessageCommand messageCommand = (MessageCommand) currentCommand;
 
@@ -346,13 +350,8 @@ public class ConversationController implements Controllable {
     }
     /** Updates the speakerLabel to TEXT. */
     private void setSpeakerName(String text){
-        if (text.isEmpty()) {
-            speakerLabel.setVisible(false);
-        } else {
-            speakerLabel.setVisible(true);
+        if (!text.isEmpty()) {
             speakerLabel.setText(text + "  ");
-            //speakerLabel.setSize(speakerLabel.getPrefWidth(), speakerLabel.getPrefHeight());
-            //speakerLabel.invalidate();
         }
     }
 
