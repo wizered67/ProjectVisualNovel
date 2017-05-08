@@ -412,9 +412,10 @@ public class GUIManager {
         String selection = debugSelector.getItems().get(debugSelector.getSelectedIndex());
         switch ((DebugMode) debugPane.getUserObject()) {
             case CONV:
+                conversationController.exit();
                 conversationController.loadConversation(selection);
-                conversationController.setBranch("default");
-                conversationController.nextCommand();
+                //conversationController.setBranch("default");
+                //conversationController.nextCommand();
                 break;
             case BRANCH:
                 conversationController.setBranch(selection);

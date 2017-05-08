@@ -312,6 +312,7 @@ public class ConversationController implements Controllable {
         currentCommand = null;
         setTextBoxShowing(false);
         setChoiceShowing(false);
+        currentBranch.clear();
     }
     /** Adds the ConversationCommands in COMMANDS to the
      * front of the queue of commands to be executed for this branch.
