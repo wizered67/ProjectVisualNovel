@@ -2,6 +2,7 @@ package com.wizered67.game.assets;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.GameManager;
 
@@ -27,19 +28,19 @@ public class AnimationData {
         return atlasName + "_" + animationName;
     }
 
-    public Animation createAnimation() {
+    public Animation<TextureRegion> createAnimation() {
         if (!GameManager.assetManager().isLoaded(atlasName)) {
             GameManager.error("Atlas " + atlasName + " was not loaded yet.");
             return null;
         }
         TextureAtlas atlas = GameManager.assetManager().get(atlasName);
         Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
-        return new Animation(frameDuration, region, playMode);
+        return new Animation<TextureRegion>(frameDuration, region, playMode);
     }
 
-    public Animation createAnimation(TextureAtlas atlas) {
+    public Animation<TextureRegion> createAnimation(TextureAtlas atlas) {
         Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
-        return new Animation(frameDuration, region, playMode);
+        return new Animation<TextureRegion>(frameDuration, region, playMode);
     }
 
     @Override

@@ -16,16 +16,7 @@ import com.wizered67.game.GameManager;
 public class SceneCharacter extends SceneEntity {
     /** The unique identifier of this character. Specified in resources.xml. */
     private String identifier;
-    /** Animation object containing all frames of animation. */
-    private transient Animation<TextureRegion> currentAnimation;
-    /** The name of the current animation. Used to tell if the animation is being changed. */
-    private String animationName;
-    /** Whether the Animation should loop. */
-    private boolean looping;
-    /** The stateTime used by Animation object to determine which frame should be displayed. */
-    private float stateTime;
-    /** Whether the animation being displayed has been finished. */
-    private boolean wasFinished;
+
     /** Whether the character this SceneCharacter represents is currently speaking. */
     private boolean isSpeaking;
     /** The sound to be used when the character is speaking. */
@@ -50,13 +41,11 @@ public class SceneCharacter extends SceneEntity {
     }
     /** Creates a SceneCharacter with id ID and speaking sound SOUND. */
     public SceneCharacter(String id, SceneManager m, String sound) {
+        super();
         identifier = id;
         manager = m;
-        looping = false;
-        stateTime = 0;
         wasFinished = false;
         isSpeaking = false;
-        animationName = "";
         if (sound != null) {
             speakingSound = sound;
         } else {
@@ -71,12 +60,6 @@ public class SceneCharacter extends SceneEntity {
     public void save() {
 
     }
-    /** Reloads SceneCharacter. */
-    public void reload() {
-        //manager.characterDefinitions().put(identifier, this); todo determine if this is needed
-        currentAnimation = GameManager.assetManager().getAnimation(animationName);
-        updateSprite();
-    }
     /** Returns the name of this SceneCharacter's speaking sound. */
     public String getSpeakingSound() {
         return speakingSound;
@@ -90,76 +73,11 @@ public class SceneCharacter extends SceneEntity {
         return SceneManager.getCharacterDefinition(identifier).getKnownName();
     }
 
-    /** Switches this SceneCharacter's animation to the one named NAME. Returns true if animation is valid. */
-    public boolean setCurrentAnimation(String name) {
-        if (!animationName.equalsIgnoreCase(name)) {
-            stateTime = 0;
-            animationName = name;
-        }
-        currentAnimation = GameManager.assetManager().getAnimation(name);
-        wasFinished = false;
-        if (currentAnimation == null) {
-            GameManager.error("No animation found: " + name);
-        }
-        //update(0);
-        /*
-        if (!isVisible()) {
-            return false;
-        }
-        */
-        return currentAnimation != null;
-    }
-    /** Returns the name of this SceneCharacter's current Animation. */
-    public String getAnimationName() {
-        return animationName;
-    }
-
-    /** Updates the stateTime of the current Animation by DELTA STATE TIME and
-     * updates the sprite to the Animation's current sprite. If the Animation is
-     * completed it alerts the SceneManager. Also updates fading in or out the sprite.
-     */
-    @Override
-    public void update(float deltaStateTime) {
-        super.update(deltaStateTime);
-        if (currentAnimation != null) { //todo decide if should check visibility first
-            stateTime += deltaStateTime;
-            updateSprite();
-            //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
-            if (currentAnimation.isAnimationFinished(stateTime) && !wasFinished) {
-                manager.complete(CompleteEvent.animationEnd(animationName));
-                wasFinished = true;
-            }
-        }
-    }
-    /** Updates the sprite to the correct animation frame. */
-    private void updateSprite() {
-        if (currentAnimation != null) {
-            TextureRegion currentTexture = currentAnimation.getKeyFrame(stateTime, looping);
-            sprite.setTexture(currentTexture.getTexture());
-            sprite.setRegion(currentTexture);
-            sprite.setSize(sprite.getRegionWidth(), sprite.getRegionHeight());
-            sprite.setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-            //sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
-            sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
-        }
-    }
-    /** Sets this SceneCharacter's current sprite to the TextureRegion TEXTURE. */
-    public void setCurrentSprite(TextureRegion texture) {
-        TextureRegion currentTexture = texture;
-        sprite.setTexture(currentTexture.getTexture());
-        sprite.setRegion(currentTexture);
-        //sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth(), currentSprite.getRegionHeight());
-        sprite.setOrigin(sprite.getWidth() / 2, 0);
-    }
     /** Sets speaking status to SPEAKING. */
     public void setSpeaking(boolean speaking) {
         isSpeaking = speaking;
     }
-    /** Sets the direction of the sprite to DIRECTION. */
-    public void setDirection(int direction) {
-        sprite.setScale(Math.abs(sprite.getScaleX()) * direction, sprite.getScaleY());
-        //scale.x = Math.abs(scale.x) * direction;
-    }
+
     /** Sets the SceneManager for this SceneCharacter to SM and adds the SceneCharacter to that scene. */
     public void addToScene(SceneManager sm) {
         //Sets depth and also adds to sorted list!

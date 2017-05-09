@@ -244,7 +244,7 @@
     </xs:group>
 
     <xs:complexType name="imageTexture">
-        <xs:attribute name="id" type="textureResource" use="required"/>
+        <xs:attribute name="id" type="animationResource" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="imageScaleType">

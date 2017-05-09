@@ -37,7 +37,7 @@ class ImageTextureCommand implements ConversationCommand {
         manager.applyImageCommand(instanceIdentifier, groupIdentifier, new EntityAction<SceneImage>() {
             @Override
             public void apply(SceneImage image) {
-                image.setTexture(newTexture);
+                image.setCurrentAnimation(newTexture);
             }
         });
     }

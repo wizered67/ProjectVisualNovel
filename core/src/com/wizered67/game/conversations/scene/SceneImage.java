@@ -21,15 +21,15 @@ public class SceneImage extends SceneEntity {
     private String instanceIdentifier;
     /** Identifier specified in commands to refer to group of images. */
     private String groupIdentifier;
-    /** The name of the texture used with this. */
-    private String textureName;
     /** Used to assign a unique id to each instance in the case that an instance identifier is not specified. */
     private static int nextInstance;
     static {
         nextInstance = 0;
     }
     /** Empty constructor used for serialization. */
-    public SceneImage() {}
+    public SceneImage() {
+        super();
+    }
 
     /** Creates a SceneImage with the instance identifier INSTANCE. If INSTANCE is empty,
      * a unique identifier is given based on the value of nextInstance. Creates a Sprite but
@@ -37,6 +37,7 @@ public class SceneImage extends SceneEntity {
      * methods must be called, usually through commands.
      */
     public SceneImage(String instance) {
+        super();
         removed = false;
         if (!instance.isEmpty()) {
             instanceIdentifier = instance;
@@ -48,29 +49,6 @@ public class SceneImage extends SceneEntity {
         sprite.setAlpha(0);
         fade = null;
         hasDepth = false;
-    }
-
-    @Override
-    public void reload() {
-        System.out.println("Reload called!");
-        setTexture(textureName);
-    }
-
-    public void setTexture(String texture) {
-        textureName = texture;
-        if (!GameManager.assetManager().isLoaded(texture)) {
-            GameManager.error("Texture " + texture + " was not yet loaded.");
-            return;
-        }
-        //sprite.setTexture();
-        //sprite.setRegion(GameManager.assetManager().get(texture, Texture.class));
-        Texture t = GameManager.assetManager().get(texture, Texture.class);
-        t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        sprite.setTexture(t);
-        sprite.setRegion(t);
-        sprite.setSize(t.getWidth(), t.getHeight());
-        sprite.setOrigin(t.getWidth() / 2, t.getHeight() / 2);
-        //sprite = new Sprite(GameManager.assetManager().get(texture, Texture.class));
     }
 
     public void addToScene(SceneManager m) {
@@ -95,10 +73,6 @@ public class SceneImage extends SceneEntity {
 
     public String getGroup() {
         return groupIdentifier;
-    }
-
-    public String getTextureName() {
-        return textureName;
     }
 
     public String getInstanceIdentifier() {

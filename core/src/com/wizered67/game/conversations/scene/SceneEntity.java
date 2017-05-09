@@ -1,8 +1,11 @@
 package com.wizered67.game.conversations.scene;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
@@ -28,8 +31,29 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     protected FloatInterpolation fade;
     /** PositionInterpolation object used to control position change interpolation. */
     protected PositionInterpolation positionInterpolation;
+
+    /** Animation object containing all frames of animation. */
+    protected transient Animation<TextureRegion> currentAnimation;
+    /** The name of the current animation. Used to tell if the animation is being changed. */
+    protected String animationName;
+    /** Whether the Animation should loop. */
+    protected boolean looping;
+    /** The stateTime used by Animation object to determine which frame should be displayed. */
+    protected float stateTime;
+    /** Whether the animation being displayed has been finished. */
+    protected boolean wasFinished;
+
+    public SceneEntity() {
+        looping = false;
+        stateTime = 0;
+        animationName = "";
+    }
+
     /** Method called to restore state after saved variables are reloaded. */
-    public abstract void reload();
+    public void reload() {
+        currentAnimation = GameManager.assetManager().getAnimation(animationName);
+        updateSprite();
+    }
 
     /** Called before serialization to make sure important values are stored into variables to be serialized. */
     public void save() {
@@ -42,6 +66,7 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
     public void update(float deltaTime) {
         updateFade(deltaTime);
         updatePosition(deltaTime);
+        updateAnimations(deltaTime);
     }
 
     public void draw(Batch batch) {
@@ -83,6 +108,20 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
             }
         }
     }
+
+    /** Updates the entity's animation and sets the sprite to the current frame. */
+    protected void updateAnimations(float deltaTime) {
+        if (currentAnimation != null) { //todo decide if should check visibility first
+            stateTime += deltaTime;
+            updateSprite();
+            //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
+            if (currentAnimation.isAnimationFinished(stateTime) && !wasFinished) {
+                manager.complete(CompleteEvent.animationEnd(animationName));
+                wasFinished = true;
+            }
+        }
+    }
+
     /** Ends the position interpolation and sends a CompleteEvent. */
     private void finishPositionInterpolation() {
         positionInterpolation = null;
@@ -182,6 +221,51 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
             removeFromScene();
         }
         fade = null;
+    }
+
+    /** Switches this SceneCharacter's animation to the one named NAME. Returns true if animation is valid. */
+    public boolean setCurrentAnimation(String name) {
+        if (!animationName.equalsIgnoreCase(name)) {
+            stateTime = 0;
+            animationName = name;
+        }
+        currentAnimation = GameManager.assetManager().getAnimation(name);
+        wasFinished = false;
+        if (currentAnimation == null) {
+            GameManager.error("No animation found: " + name);
+        }
+        //update(0);
+        /*
+        if (!isVisible()) {
+            return false;
+        }
+        */
+        return currentAnimation != null;
+    }
+    /** Returns the name of this SceneCharacter's current Animation. */
+    public String getAnimationName() {
+        return animationName;
+    }
+
+    /** Updates the sprite to the correct animation frame. */
+    protected void updateSprite() {
+        if (currentAnimation != null) {
+            TextureRegion currentTexture = currentAnimation.getKeyFrame(stateTime, looping);
+            sprite.setTexture(currentTexture.getTexture());
+            sprite.setRegion(currentTexture);
+            sprite.setSize(sprite.getRegionWidth(), sprite.getRegionHeight());
+            sprite.setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+            //sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth() * scale.x, currentSprite.getRegionHeight() * scale.y);
+            sprite.setOrigin(Math.abs(sprite.getWidth()) / 2, 0);
+        }
+    }
+    /** Sets this SceneCharacter's current sprite to the TextureRegion TEXTURE. */
+    public void setCurrentSprite(TextureRegion texture) {
+        TextureRegion currentTexture = texture;
+        sprite.setTexture(currentTexture.getTexture());
+        sprite.setRegion(currentTexture);
+        //sprite.setBounds(position.x, position.y, currentSprite.getRegionWidth(), currentSprite.getRegionHeight());
+        sprite.setOrigin(sprite.getWidth() / 2, 0);
     }
 
     public void setSprite(Sprite s) {

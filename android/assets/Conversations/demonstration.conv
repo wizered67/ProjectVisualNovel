@@ -44,7 +44,7 @@
         before moving on. -->
         <image instance="test">
             <group>test</group>
-            <texture id="icon"/>
+            <texture id="Edgeworth_Edgeworth"/>
             <position x="50" y="240"/>
             <visibility visible="true" fadeTime="1" wait="true" fadeType="linear"/>
         </image>

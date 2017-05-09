@@ -41,7 +41,7 @@ public class BackgroundSetCommand implements ConversationCommand {
         bgImage.setPosition(xPosition, yPosition);
         bgImage.setDepth(manager, -99999);
         bgImage.finishVisibility(true);
-        bgImage.setTexture(imageIdentifier);
+        bgImage.setCurrentAnimation(imageIdentifier);
     }
     /**
      * Whether to wait before proceeding to the next command in the branch. */

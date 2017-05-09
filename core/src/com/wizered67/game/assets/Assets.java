@@ -131,6 +131,15 @@ public class Assets {
     }
     /** Returns the Animation with identifier IDENTIFIER. */
     public Animation<TextureRegion> getAnimation(String identifier) {
+        if (!allAnimations.containsKey(identifier)) {
+            if (assetIdentifiers.containsKey(identifier)) { //actually a Texture
+                Texture texture = get(identifier, Texture.class);
+                texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+                Animation<TextureRegion> animation = new Animation<>(1, new TextureRegion(texture));
+                allAnimations.put(identifier, animation);
+                return animation;
+            }
+        }
         return allAnimations.get(identifier);
     }
     /** Maps all identifiers to Asset Descriptors, loads characters, and creates asset groups. */

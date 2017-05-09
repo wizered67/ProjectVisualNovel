@@ -20,13 +20,12 @@ public class TextureAtlasAnimationLoader extends SynchronousAssetLoader<Animatio
         super(resolver);
     }
 
-    TextureAtlasData data;
+    private TextureAtlasData data;
 
     @Override
     public AnimationTextureAtlas load (AssetManager assetManager, String fileName, FileHandle file, AnimationTextureAtlasParameter parameter) {
         for (Page page : data.getPages()) {
-            Texture texture = assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
-            page.texture = texture;
+            page.texture = assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
         }
 
         AnimationTextureAtlas atlas = new AnimationTextureAtlas(data);
