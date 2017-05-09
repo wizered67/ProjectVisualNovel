@@ -187,7 +187,10 @@ public class LuaScriptManager implements ScriptManager {
         HashMap<String, Object> map = new HashMap<String, Object>();
         for (LuaValue key : globals.keys()) {
             if (!defaultKeys.contains(key)) {
-                map.put(key.toString(), globals.get(key));
+                LuaValue value = globals.get(key);
+                if (value != LuaValue.NIL) {
+                    map.put(key.toString(), value);
+                }
             }
         }
         return map;
