@@ -1,0 +1,5 @@
+<resources>
+    <resource name="intense.wav" identifier="intense.wav"/>
+    <resource name="talksoundmale.wav" identifier="talksoundmale.wav"/>
+    <resource name="talksoundfemale.wav" identifier="talksoundfemale.wav"/>
+</resources>

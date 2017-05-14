@@ -1,0 +1,13 @@
+<groups>
+    <group name="common">
+        <load>testbackground.png</load>
+        <load>Edgeworth</load>
+        <load>icon</load>
+        <load>icon2</load>
+        <load>discussion.mp3</load>
+        <load>intense.wav</load>
+        <load>talksoundmale.wav</load>
+        <load>talksoundfemale.wav</load>
+        <load>demonstration.conv</load>
+    </group>
+</groups>

@@ -1,0 +1,4 @@
+<characters>
+    <character id="Detective" name="Detective" sound="talksoundmale.wav"/>
+    <character id="Librarian" name="???" sound="talksoundmale.wav"/>
+</characters>

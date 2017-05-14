@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.inputs.MyInputProcessor;
@@ -61,7 +62,7 @@ public class MainGame extends Game {
 			@Override
 			public void finishLoading() {
 				GameManager.game.setScreen(gameScreen);
-				conversationController.setConv(GameManager.assetManager().getConversation("demonstration.conv"));
+				conversationController.setConv(GameManager.assetManager().get("demonstration.conv", Conversation.class));
 				conversationController.setBranch("default");
 			}
 		}));

@@ -4,40 +4,39 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.wizered67.game.GameManager;
 
 /**
  * Stores the information necessary to create a specific Animation of a TextureAtlas.
  * @author Adam Victor
  */
 public class AnimationData {
-    private String atlasName;
+    private String atlasIdentifierName;
     private String animationName;
     private float frameDuration;
     private Animation.PlayMode playMode;
 
     public AnimationData() {}
-    public AnimationData(String atlas, String animation, float duration, Animation.PlayMode mode) {
-        atlasName = atlas;
+    public AnimationData(String atlasIdentifier, String animation, float duration, Animation.PlayMode mode) {
+        atlasIdentifierName = atlasIdentifier;
         animationName = animation;
         frameDuration = duration;
         playMode = mode;
     }
 
     public String getAtlasAnimation() {
-        return atlasName + "_" + animationName;
+        return atlasIdentifierName + "_" + animationName;
     }
-
+    /*
     public Animation<TextureRegion> createAnimation() {
-        if (!GameManager.assetManager().isLoaded(atlasName)) {
-            GameManager.error("Atlas " + atlasName + " was not loaded yet.");
+        if (!GameManager.assetManager().isLoaded(atlasIdentifierName)) {
+            GameManager.error("Atlas " + atlasIdentifierName + " was not loaded yet.");
             return null;
         }
-        TextureAtlas atlas = GameManager.assetManager().get(atlasName);
+        TextureAtlas atlas = GameManager.assetManager().get(atlasIdentifierName);
         Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
         return new Animation<TextureRegion>(frameDuration, region, playMode);
     }
-
+    */
     public Animation<TextureRegion> createAnimation(TextureAtlas atlas) {
         Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
         return new Animation<TextureRegion>(frameDuration, region, playMode);
@@ -49,7 +48,7 @@ public class AnimationData {
             return false;
         } else {
             AnimationData otherData = (AnimationData) other;
-            return otherData.atlasName.equals(atlasName) && otherData.animationName.equals(animationName);
+            return otherData.atlasIdentifierName.equals(atlasIdentifierName) && otherData.animationName.equals(animationName);
         }
     }
 

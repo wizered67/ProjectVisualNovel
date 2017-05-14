@@ -1,0 +1,5 @@
+<resources>
+    <resource name="testbackground.png" identifier="testbackground.png"/>
+    <resource name="testicon.png" identifier="icon"/>
+    <resource name="testicon2.png" identifier="icon2"/>
+</resources>

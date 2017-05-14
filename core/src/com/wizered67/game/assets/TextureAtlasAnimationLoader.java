@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData.Page;
 import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.GameManager;
 
+import java.util.List;
+
 
 public class TextureAtlasAnimationLoader extends SynchronousAssetLoader<AnimationTextureAtlas, TextureAtlasAnimationLoader.AnimationTextureAtlasParameter> {
     public TextureAtlasAnimationLoader (FileHandleResolver resolver) {
@@ -28,9 +30,8 @@ public class TextureAtlasAnimationLoader extends SynchronousAssetLoader<Animatio
             page.texture = assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
         }
 
-        AnimationTextureAtlas atlas = new AnimationTextureAtlas(data);
-        atlas.setFilepath(fileName);
-        GameManager.assetManager().loadAnimation(fileName, atlas);
+        AnimationTextureAtlas atlas = new AnimationTextureAtlas(data, parameter.animationDataList);
+        GameManager.assetManager().loadAnimations(atlas, parameter.animationDataList);
         return atlas;
     }
 
@@ -59,12 +60,14 @@ public class TextureAtlasAnimationLoader extends SynchronousAssetLoader<Animatio
     static public class AnimationTextureAtlasParameter extends AssetLoaderParameters<AnimationTextureAtlas> {
         /** whether to flip the texture atlas vertically **/
         public boolean flip = false;
-
-        public AnimationTextureAtlasParameter () {
+        List<AnimationData> animationDataList;
+        public AnimationTextureAtlasParameter (List<AnimationData> data) {
+            animationDataList = data;
         }
 
-        public AnimationTextureAtlasParameter (boolean flip) {
+        public AnimationTextureAtlasParameter (boolean flip, List<AnimationData> data) {
             this.flip = flip;
+            animationDataList = data;
         }
     }
 }

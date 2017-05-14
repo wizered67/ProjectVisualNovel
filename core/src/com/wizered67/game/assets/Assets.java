@@ -10,6 +10,7 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,6 +18,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.wizered67.game.assets.parameters.ParametersLoader;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.xmlio.ConversationAssetLoader;
@@ -39,41 +43,30 @@ import java.util.regex.Pattern;
  * @author Adam Victor
  */
 public class Assets {
-    /** XML Reader used for reading XML but separating text into its own elements. */
-    private MixedXmlReader xmlReader;
+    /** XML Reader used for reading XML. */
+    private XmlReader xmlReader;
     /** AssetManager used for loading and getting resources.
      * When its methods are called through this, first map identifier to filename. */
     private AssetManager assetManager;
     /** Mapping between asset identifiers and the filenames they can be accessed with. */
     private Map<String, AssetDescriptor> assetIdentifiers;
-    /** Mapping between XML tag and Class of resources in that tag. */
-    private Map<String, Class> tagToClass;
-    /** Mapping between animation file path and set of AnimationData associated with that atlas. */
-    private Map<String, Set<AnimationData>> atlasFileToAnimationData;
     /** Map between animation names and the Animation object that corresponds to it. */
     private Map<String, Animation<TextureRegion>> allAnimations;
     /** Map between names of asset groups and the set of assets they contain.
      * Used to load/unload many resources with one call. */
     private Map<String, Set<AssetDescriptor>> assetGroups;
-    /** The root Element of the loaded XML file. */
-    private Element root;
+    /** Used to load parameters from XML. */
+    private ParametersLoader parametersLoader;
+
     private final String RESOURCE_XML = "Resources.xml";
 
-    private static final String ANIMATIONS_DIRECTORY = "Animations";
-    private static final String MUSIC_DIRECTORY = "Music";
-    private static final String SOUNDS_DIRECTORY = "Sounds";
-    private static final String TEXTURES_DIRECTORY = "Textures";
-    private static final String CONVERSATION_DIRECTORY = "Conversations";
-    private static final String CONVERSATION_EXTENSION = ".conv";
+    private final String RESOURCE_DIRECTORIES_FILE = "ResourceDirectories.xml";
+    private final String CHARACTERS_FILE = "CharacterDefinitions.xml";
+    private final String LOADING_FILE = "LoadingGroups.xml";
 
-    private static final String ANIMATION_FILES_TAG = "animation_files";
+
     private static final String ANIMATIONS_TAG = "animations";
-    private static final String MUSIC_TAG = "music";
-    private static final String SOUNDS_TAG = "sounds";
-    private static final String CHARACTERS_TAG = "characters";
-    private static final String TEXTURES_TAG = "textures";
-    private static final String GROUPS_TAG = "groups";
-    private static final Pattern RESOURCE_PATTERN = Pattern.compile("\\s*(.+)\\s+\"(.+)\"\\s*");
+
     /** If no AssetManager is specified, make a new one and load to it. */
     public Assets() {
         this(new AssetManager());
@@ -85,48 +78,24 @@ public class Assets {
 
         assetIdentifiers = new HashMap<>();
         allAnimations = new HashMap<>();
-        tagToClass = new HashMap<>();
         assetGroups = new HashMap<>();
-        atlasFileToAnimationData = new HashMap<>();
-        initTagsToClass();
+        parametersLoader = new ParametersLoader();
+
         initResources();
         assetManager.setLoader(Conversation.class, new ConversationAssetLoader(new InternalFileHandleResolver()));
         assetManager.setLoader(AnimationTextureAtlas.class, new TextureAtlasAnimationLoader(new InternalFileHandleResolver()));
     }
-    /** Sets all mappings between tags and classes needed for loading. */
-    private void initTagsToClass() {
-        tagToClass.put(ANIMATION_FILES_TAG, AnimationTextureAtlas.class);
-        tagToClass.put(MUSIC_TAG, Music.class);
-        tagToClass.put(SOUNDS_TAG, Sound.class);
-        tagToClass.put(TEXTURES_TAG, Texture.class);
-    }
-    public void loadAnimation(String atlasFilename) {
-        Set<AnimationData> allData = atlasFileToAnimationData.get(atlasFilename);
-        if (allData == null) {
-            return;
-        }
-        for (AnimationData data : allData) {
-            allAnimations.put(data.getAtlasAnimation(), data.createAnimation());
+
+    /** Called when an AnimationTextureAtlas is loaded to create all its animations and put into the allAnimations map. */
+    public void loadAnimations(TextureAtlas atlas, List<AnimationData> animationsDataList) {
+        for (AnimationData animationData : animationsDataList) {
+            allAnimations.put(animationData.getAtlasAnimation(), animationData.createAnimation(atlas));
         }
     }
-    public void loadAnimation(String atlasFilename, TextureAtlas atlas) {
-        Set<AnimationData> allData = atlasFileToAnimationData.get(atlasFilename);
-        if (allData == null) {
-            return;
-        }
-        for (AnimationData data : allData) {
-            if (allAnimations.get(data.getAtlasAnimation()) == null) {
-                allAnimations.put(data.getAtlasAnimation(), data.createAnimation(atlas));
-            }
-        }
-    }
-    public void unloadAnimations(String atlasFilename) {
-        Set<AnimationData> allData = atlasFileToAnimationData.get(atlasFilename);
-        if (allData == null) {
-            return;
-        }
-        for (AnimationData data : allData) {
-            allAnimations.put(data.getAtlasAnimation(), null);
+    /** Called when an AnimationTextureAtlas is disposed to remove all its animations. */
+    public void unloadAnimations(List<AnimationData> animationDataList) {
+        for (AnimationData animationData : animationDataList) {
+            allAnimations.put(animationData.getAtlasAnimation(), null);
         }
     }
     /** Returns the Animation with identifier IDENTIFIER. */
@@ -144,85 +113,57 @@ public class Assets {
     }
     /** Maps all identifiers to Asset Descriptors, loads characters, and creates asset groups. */
     public void initResources() {
-        xmlReader = new MixedXmlReader();
+        xmlReader = new XmlReader();
         try {
-            root = xmlReader.parse(Gdx.files.internal(RESOURCE_XML));
-            mapTextures(root);
-            mapAnimationFiles(root);
-            createAnimationData(root);
-            mapMusic(root);
-            mapSounds(root);
-            loadCharacters(root);
-            createGroups(root);
+            Element directoriesRoot = xmlReader.parse(Gdx.files.internal(RESOURCE_DIRECTORIES_FILE));
+            loadAllResourceDefinitions(directoriesRoot);
+            loadCharacters(xmlReader.parse(Gdx.files.internal(CHARACTERS_FILE)));
+            createGroups(xmlReader.parse(Gdx.files.internal(LOADING_FILE)));
         } catch (IOException io) {
             io.printStackTrace();
         }
     }
-    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
-     * in the child of ROOT named TEXTURES_TAG. */
-    @SuppressWarnings("unchecked")
-    private void mapTextures(Element root) {
-        Map<String, AssetDescriptor> resources = getResources(root, TEXTURES_TAG, TEXTURES_DIRECTORY);
-        assetIdentifiers.putAll(resources);
-    }
-    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
-     * in the child of ROOT named ANIMATION_FILES_TAG. */
-    @SuppressWarnings("unchecked")
-    private void mapAnimationFiles(Element root) {
-        Map<String, AssetDescriptor> resources = getResources(root, ANIMATION_FILES_TAG, ANIMATIONS_DIRECTORY);
-        assetIdentifiers.putAll(resources);
-    }
 
-    /** Must be called once animation files are loaded. Goes through each one and creates Animation
-     * objects with the data based off of the data from the children of the element named ANIMATIONS_TAG.
-     */
-    public void createAnimationData(Element root) {
-        Element anims = root.getChildByName(ANIMATIONS_TAG);
-        for (int c = 0; c < anims.getChildCount(); c += 1) {
-            Element animationData = anims.getChild(c);
-            String atlasAnimation = animationData.getAttribute("id");
-            float duration = animationData.getFloatAttribute("frameDuration");
-            String mode = animationData.getAttribute("playMode", "NORMAL");
-            int index = atlasAnimation.indexOf('_');
-            if (index <= 0) {
-                GameManager.error("Malformed animation name '" + atlasAnimation + "'.");
+    private void loadAllResourceDefinitions(Element directoriesRoot) {
+        for (int i = 0; i < directoriesRoot.getChildCount(); i++) {
+            String classString = directoriesRoot.getChild(i).getAttribute("type", "java.lang.Object");
+            String directoryName = directoriesRoot.getChild(i).getAttribute("name");
+            try {
+                Class clss = ClassReflection.forName(classString);
+                Element resourcesRoot = xmlReader.parse(Gdx.files.internal(directoryName + "/" + RESOURCE_XML));
+                loadResourceDefinitions(directoryName, resourcesRoot, clss);
+            } catch (ReflectionException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            String atlasName = atlasAnimation.substring(0, index);
-            String animationName = atlasAnimation.substring(index + 1);
-            String atlasFilename = assetIdentifiers.get(atlasName).fileName;
-            Set<AnimationData> dataSet = atlasFileToAnimationData.get(atlasFilename);
-            if (dataSet == null) {
-                dataSet = new HashSet<>();
-                atlasFileToAnimationData.put(atlasFilename, dataSet);
-            }
-            dataSet.add(new AnimationData(atlasName, animationName, duration, Animation.PlayMode.valueOf(mode)));
-            //TextureAtlas atlas = get(atlasName);
-            //Array<TextureAtlas.AtlasRegion> region = atlas.findRegions(animationName);
-            //Animation animation = new Animation(duration, region, Animation.PlayMode.valueOf(mode));
-            //allAnimations.put(atlasAnimation, animation);
         }
     }
-    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
-     * in the child of ROOT named MUSIC_TAG. */
-    @SuppressWarnings("unchecked")
-    private void mapMusic(Element root) {
-        Map<String, AssetDescriptor> resources = getResources(root, MUSIC_TAG, MUSIC_DIRECTORY);
-        assetIdentifiers.putAll(resources);
-    }
-    /** Adds to assetIdentifiers the mapping between asset identifiers and filenames found
-     * in the child of ROOT named SOUND_TAG. */
-    @SuppressWarnings("unchecked")
-    private void mapSounds(Element root) {
-        Map<String, AssetDescriptor> resources = getResources(root, SOUNDS_TAG, SOUNDS_DIRECTORY);
-        assetIdentifiers.putAll(resources);
+
+    private void loadResourceDefinitions(String directory, Element resourcesRoot, Class type) {
+        for (int i = 0; i < resourcesRoot.getChildCount(); i++) {
+            Element resourceElement = resourcesRoot.getChild(i);
+            String name = resourceElement.getAttribute("name");
+            String filename = directory + "/" + name;
+            if (!Gdx.files.internal(filename).exists()) {
+                GameManager.error("No such file '" + filename + "'.");
+                continue;
+            }
+            String identifier = resourceElement.getAttribute("identifier", name);
+            if (assetIdentifiers.containsKey(identifier)) {
+                identifierError(identifier);
+                continue;
+            }
+            AssetLoaderParameters parameters = parametersLoader.getParameters(type, resourceElement, identifier);
+            assetIdentifiers.put(identifier, new AssetDescriptor(filename, type, parameters));
+        }
     }
 
     /** Loads, creates, and adds to all SceneManager's map of all characters, the characters containing
      * in the child of ROOT named CHARACTERS_TAG. */
     private void loadCharacters(Element root) {
-        Element characters = root.getChildByName(CHARACTERS_TAG);
-        for (int c = 0; c < characters.getChildCount(); c += 1) {
-            Element character = characters.getChild(c);
+        for (int c = 0; c < root.getChildCount(); c += 1) {
+            Element character = root.getChild(c);
             String id = character.getAttribute("id");
             String name = character.getAttribute("name");
             String sound = character.getAttribute("sound", SceneCharacter.DEFAULT_SPEAKING_SOUND);
@@ -231,8 +172,7 @@ public class Assets {
     }
 
     /** Creates groups by mapping group names to the set of AssetDescriptors of resources in the group. */
-    private void createGroups(XmlReader.Element root) {
-        XmlReader.Element groups = root.getChildByName(GROUPS_TAG);
+    private void createGroups(XmlReader.Element groups) {
         for (int c = 0; c < groups.getChildCount(); c += 1) {
             XmlReader.Element group = groups.getChild(c);
             String groupName = group.getAttribute("name");
@@ -241,12 +181,8 @@ public class Assets {
                 XmlReader.Element asset = group.getChild(a);
                 if (asset.getName().equals("load")) { //todo use constant for name?
                     //has to get text element because using Mixed XML Reader
-                    String identifier = asset.getChildByName("text").getText();
+                    String identifier = asset.getText();
                     AssetDescriptor descriptor = assetIdentifiers.get(identifier);
-                    if (identifier.endsWith(CONVERSATION_EXTENSION)) {
-                        descriptor = new AssetDescriptor(CONVERSATION_DIRECTORY + "/" + identifier, Conversation.class);
-                    }
-
                     if (descriptor == null) {
                         GameManager.error("No such resource with name " + identifier);
                     }
@@ -257,47 +193,7 @@ public class Assets {
         }
     }
 
-    /** Get all resources from the XMLElement ROOT's child with the name TYPE. Looks
-     * for the resources in the directory DIRECTORY. Returns an array containing both
-     * a map of all identifier, filename pairs found and a list of all resources to load
-     * immediately.
-     */
-    private Map<String, AssetDescriptor> getResources(Element root, String type, String directory) {
-        Map<String, AssetDescriptor> resources = new HashMap<>();
-        Element files = root.getChildByName(type);
-        for (int i = 0; i < files.getChildCount(); i += 1) {
-            Element child = files.getChild(i);
-            if (child.getName().equals("text")) {
-                String text = child.getText();
-                text = text.replaceAll("\\r", "");
-                String[] lines = text.split("\\n");
-                for (String line : lines) {
-                    line = line.trim();
-                    Matcher matcher = RESOURCE_PATTERN.matcher(line);
-                    String identifier, filename;
-                    if (matcher.matches()) {
-                        identifier = matcher.group(1);
-                        filename = matcher.group(2);
-                    } else {
-                        line = line.replaceAll("\"", "");
-                        identifier = line;
-                        filename = line;
-                    }
-                    if (resources.containsKey(identifier)) {
-                        identifierError(identifier);
-                    }
-                    String fullPath = directory + "/" + filename;
-                    if (!Gdx.files.internal(fullPath).exists()) {
-                        GameManager.error("No such file '" + fullPath + "'.");
-                        continue;
-                    }
-                    //assetIdentifiers.put(identifier, directory + "/" + filename);
-                    resources.put(identifier, new AssetDescriptor(fullPath, tagToClass.get(type)));
-                }
-            }
-        }
-        return resources;
-    }
+
     /** Display an error if the identifier is already in use. */
     private static void identifierError(String id) {
         GameManager.error("Identifier '" + id + "' is already in use.");
@@ -327,19 +223,6 @@ public class Assets {
         }
     }
 
-    /** Load and unload Conversations through the asset manager. */
-    public synchronized void loadConversation(String conversation) {
-        assetManager.load(CONVERSATION_DIRECTORY + "/" + conversation, Conversation.class);
-    }
-
-    public synchronized void unloadConversation(String conversation) {
-        assetManager.unload(CONVERSATION_DIRECTORY + "/" + conversation);
-    }
-
-    public synchronized Conversation getConversation(String conversation) {
-        return assetManager.get(CONVERSATION_DIRECTORY + "/" + conversation, Conversation.class);
-    }
-
     /** Tells the AssetManager to load the file of type TYPE with filename FILENAME. In effect, calls the
      * regular AssetManager load method without first mapping an identifier to a filename.
      */
@@ -364,9 +247,6 @@ public class Assets {
      */
 
     public synchronized <T> T get(String identifier) {
-        if (identifier.endsWith(".conv")) {
-            return (T) getConversation(identifier);
-        }
         return assetManager.get(assetIdentifiers.get(identifier).fileName);
     }
 
@@ -376,9 +256,6 @@ public class Assets {
 
 
     public synchronized void unload(String identifier) {
-        if (identifier.endsWith(".conv")) {
-            unloadConversation(identifier);
-        }
         assetManager.unload(assetIdentifiers.get(identifier).fileName);
     }
 
@@ -393,16 +270,10 @@ public class Assets {
     }
 
     public synchronized void load(String identifier) {
-        if (identifier.endsWith(".conv")) {
-            loadConversation(identifier);
-        }
         assetManager.load(assetIdentifiers.get(identifier));
     }
 
     public synchronized <T> void load(String identifier, Class<T> type) {
-        if (type == Conversation.class) {
-            loadConversation(identifier);
-        }
         assetManager.load(assetIdentifiers.get(identifier).fileName, type);
     }
 
