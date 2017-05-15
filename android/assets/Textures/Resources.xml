@@ -1,5 +1,31 @@
 <resources>
-    <resource name="testbackground.png" identifier="testbackground.png"/>
-    <resource name="testicon.png" identifier="icon"/>
-    <resource name="testicon2.png" identifier="icon2"/>
+    <resource name="testbackground.png" identifier="testbackground.png">
+        <texture>
+            <genMipMaps>false</genMipMaps>
+            <minFilter>Nearest</minFilter>
+            <magFilter>Nearest</magFilter>
+            <wrapU>ClampToEdge</wrapU>
+            <wrapV>ClampToEdge</wrapV>
+        </texture>
+    </resource>
+
+    <resource name="testicon.png" identifier="icon">
+        <texture>
+            <genMipMaps>false</genMipMaps>
+            <minFilter>Nearest</minFilter>
+            <magFilter>Nearest</magFilter>
+            <wrapU>ClampToEdge</wrapU>
+            <wrapV>ClampToEdge</wrapV>
+        </texture>
+    </resource>
+
+    <resource name="testicon2.png" identifier="icon2">
+        <texture>
+            <genMipMaps>false</genMipMaps>
+            <minFilter>Nearest</minFilter>
+            <magFilter>Nearest</magFilter>
+            <wrapU>ClampToEdge</wrapU>
+            <wrapV>ClampToEdge</wrapV>
+        </texture>
+    </resource>
 </resources>

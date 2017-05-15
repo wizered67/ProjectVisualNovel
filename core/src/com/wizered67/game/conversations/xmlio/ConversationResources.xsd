@@ -7,13 +7,16 @@
 			<xs:enumeration value="Edgeworth"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="animationResource">
+	<xs:simpleType name="graphicResource">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="Edgeworth_Edgeworth"/>
 			<xs:enumeration value="Edgeworth_Static"/>
 			<xs:enumeration value="Edgeworth_Accuse"/>
 			<xs:enumeration value="Edgeworth_Confront"/>
 			<xs:enumeration value="Edgeworth_Point"/>
+			<xs:enumeration value="icon"/>
+			<xs:enumeration value="testbackground.png"/>
+			<xs:enumeration value="icon2"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="textureResource">

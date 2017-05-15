@@ -1,10 +1,13 @@
 package com.wizered67.game.assets.parameters;
 
 import com.badlogic.gdx.assets.AssetLoaderParameters;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.wizered67.game.assets.AnimationData;
 import com.wizered67.game.assets.AnimationTextureAtlas;
 import com.wizered67.game.assets.TextureAtlasAnimationLoader;
+import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,10 @@ public class ParametersLoader {
     public AssetLoaderParameters getParameters(Class type, Element resourceElement, String identifier) {
         if (type == AnimationTextureAtlas.class) {
             return makeAnimationParameters(resourceElement, identifier);
+        } else if (type == Music.class) {
+            return makeMusicParameters(resourceElement, identifier);
+        } else if (type == Texture.class) {
+            return makeTextureParameters(resourceElement, identifier);
         } else {
             return null;
         }
@@ -40,5 +47,33 @@ public class ParametersLoader {
             }
         }
         return new TextureAtlasAnimationLoader.AnimationTextureAtlasParameter(flip, dataList);
+    }
+
+    private AssetLoaderParameters makeMusicParameters(Element resourceElement, String identifier) {
+        if (resourceElement.getChildCount() <= 0) {
+            return null;
+        }
+        Element musicElement = resourceElement.getChild(0);
+        float volume = musicElement.getFloat("volume", 1);
+        return new MusicParameters(volume);
+    }
+
+    private AssetLoaderParameters makeTextureParameters(Element resourceElement, String identifier) {
+        if (resourceElement.getChildCount() <= 0) {
+            return null;
+        }
+        Element textureElement = resourceElement.getChild(0);
+        boolean genMipMaps = textureElement.getBoolean("genMipMaps", false);
+        String minFilterName = textureElement.get("minFilter", "Nearest");
+        String magFilterName = textureElement.get("magFilter", "Nearest");
+        String wrapUName = textureElement.get("wrapU", "ClampToEdge");
+        String wrapVName = textureElement.get("wrapV", "ClampToEdge");
+        TextureLoader.TextureParameter parameter = new TextureLoader.TextureParameter();
+        parameter.genMipMaps = genMipMaps;
+        parameter.minFilter = Texture.TextureFilter.valueOf(minFilterName);
+        parameter.magFilter = Texture.TextureFilter.valueOf(magFilterName);
+        parameter.wrapU = Texture.TextureWrap.valueOf(wrapUName);
+        parameter.wrapV = Texture.TextureWrap.valueOf(wrapVName);
+        return parameter;
     }
 }

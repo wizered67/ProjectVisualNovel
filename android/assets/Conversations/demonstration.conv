@@ -36,7 +36,7 @@
         <!-- Play the sound in the Sounds directory with the identifier 'intense.wav'. -->
         <sound id="intense.wav"/>
         <!-- Play the music in the Music directory with the identifier 'discussion.mp3'. -->
-        <music id="discussion.mp3" loop="false"/>
+        <music id="discussion.mp3" loop="false" volume="1"/>
 
         <!-- Create an image with the instance identifier 'test'. Then, add it to a group named 'test', creating
         the group if it didn't yet exist, set its texture to the texture in the Textures folder with identifier 'icon',
@@ -44,7 +44,7 @@
         before moving on. -->
         <image instance="test">
             <group>test</group>
-            <texture id="Edgeworth_Edgeworth"/>
+            <graphic id="Edgeworth_Edgeworth"/>
             <position x="50" y="240"/>
             <visibility visible="true" fadeTime="1" wait="true" fadeType="linear"/>
         </image>
@@ -53,7 +53,7 @@
         with higher depths. Set this image to be visible immediately without any fade. -->
         <image instance="test2">
             <group>test</group>
-            <texture id="icon"/>
+            <graphic id="icon"/>
             <position x="650" y="300" depth="-5"/>
             <visibility visible="true"/>
         </image>

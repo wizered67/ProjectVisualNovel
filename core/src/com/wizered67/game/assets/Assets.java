@@ -86,6 +86,11 @@ public class Assets {
         assetManager.setLoader(AnimationTextureAtlas.class, new TextureAtlasAnimationLoader(new InternalFileHandleResolver()));
     }
 
+    /** Returns the parameters used to load an asset, also useful for getting data to use later. */
+    public AssetLoaderParameters getParameters(String identifier) {
+        return assetIdentifiers.get(identifier).params;
+    }
+
     /** Called when an AnimationTextureAtlas is loaded to create all its animations and put into the allAnimations map. */
     public void loadAnimations(TextureAtlas atlas, List<AnimationData> animationsDataList) {
         for (AnimationData animationData : animationsDataList) {
@@ -103,7 +108,6 @@ public class Assets {
         if (!allAnimations.containsKey(identifier)) {
             if (assetIdentifiers.containsKey(identifier)) { //actually a Texture
                 Texture texture = get(identifier, Texture.class);
-                texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
                 Animation<TextureRegion> animation = new Animation<>(1, new TextureRegion(texture));
                 allAnimations.put(identifier, animation);
                 return animation;
@@ -180,7 +184,6 @@ public class Assets {
             for (int a = 0; a < group.getChildCount(); a += 1) {
                 XmlReader.Element asset = group.getChild(a);
                 if (asset.getName().equals("load")) { //todo use constant for name?
-                    //has to get text element because using Mixed XML Reader
                     String identifier = asset.getText();
                     AssetDescriptor descriptor = assetIdentifiers.get(identifier);
                     if (descriptor == null) {

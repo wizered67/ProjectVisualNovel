@@ -1,6 +1,8 @@
 package com.wizered67.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
+import com.wizered67.game.assets.parameters.MusicParameters;
 
 
 /**
@@ -94,7 +96,8 @@ public class MusicManager {
     /** Sets the volume of the music playing at INDEX. */
     public void setVolume(float volume, int index) {
         if (currentMusic[index] != null) {
-            currentMusic[index].setVolume(volume);
+            float globalVolume = ((MusicParameters)GameManager.assetManager().getParameters(currentMusicName[index])).volume;
+            currentMusic[index].setVolume(volume * globalVolume);
             volumes[index] = volume;
         }
     }

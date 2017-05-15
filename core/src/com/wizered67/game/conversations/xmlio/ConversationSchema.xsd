@@ -24,8 +24,7 @@
         <xs:sequence>
             <xs:choice maxOccurs="unbounded">
                 <xs:element type="changebranchType" name="changebranch" maxOccurs="unbounded"/>
-                <xs:element type="setanimationType" name="animation" maxOccurs="unbounded"/>
-                <xs:element type="setdirectionType" name="direction" maxOccurs="unbounded"/>
+                <xs:element type="setgraphicType" name="animation" maxOccurs="unbounded"/>
                 <xs:element type="setnameType" name="name" maxOccurs="unbounded"/>
                 <xs:element type="setpositionType" name="position" maxOccurs="unbounded"/>
                 <xs:element type="setvisibleType" name="visible" maxOccurs="unbounded"/>
@@ -120,19 +119,14 @@
             <xs:attribute type="xs:string" name="branch" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="setanimationType">
+    <xs:complexType name="setgraphicType">
             <xs:attribute type="characterType" name="id" use="required"/>
-            <xs:attribute type="animationResource" name="animation" use="required"/>
+            <xs:attribute type="graphicResource" name="animation" use="required"/>
             <xs:attribute type="xs:boolean" name="wait" default="false"/>
     </xs:complexType>
 
     <xs:complexType name="assignType" mixed="true">
         <xs:group ref="commands"/>
-    </xs:complexType>
-
-    <xs:complexType name="setdirectionType">
-        <xs:attribute type="characterType" name="id" use="required"/>
-        <xs:attribute type="xs:integer" name="direction" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="setpositionType">
@@ -208,7 +202,7 @@
     </xs:complexType>
 
     <xs:complexType name="bgType">
-        <xs:attribute name="id" type="textureResource" use="required"/>
+        <xs:attribute name="id" type="graphicResource" use="required"/>
         <xs:attribute name="x" type="xs:float" use="optional"/>
         <xs:attribute name="y" type="xs:float" use="optional"/>
     </xs:complexType>
@@ -236,15 +230,15 @@
     <xs:group name="imageProperties">
         <xs:all>
             <xs:element name="group" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="texture" type="imageTexture" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="graphic" type="imageGraphic" minOccurs="0" maxOccurs="1"/>
             <xs:element name="position" type="positionDepthType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="visibility" type="visibleType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="scale" type="imageScaleType" minOccurs="0" maxOccurs="1"/>
         </xs:all>
     </xs:group>
 
-    <xs:complexType name="imageTexture">
-        <xs:attribute name="id" type="animationResource" use="required"/>
+    <xs:complexType name="imageGraphic">
+        <xs:attribute name="id" type="graphicResource" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="imageScaleType">
