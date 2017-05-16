@@ -8,9 +8,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,20 +22,17 @@ import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.xmlio.ConversationAssetLoader;
 import com.wizered67.game.conversations.scene.SceneManager;
-import com.wizered67.game.conversations.xmlio.MixedXmlReader;
 import com.wizered67.game.GameManager;
 
 import static com.badlogic.gdx.utils.XmlReader.Element;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
  * Manages resources by adapting an AssetManager and using identifiers, not filenames, for resources.
- * When created, loads identifier-filename mapping from RESOURCE_XML. Also used for loading animations,
+ * When created, loads identifier-filename mapping from RESOURCE_CONFIG_XML. Also used for loading animations,
  * asset groups, and characters.
  * @author Adam Victor
  */
@@ -58,7 +52,7 @@ public class Assets {
     /** Used to load parameters from XML. */
     private ParametersLoader parametersLoader;
 
-    private final String RESOURCE_XML = "Resources.xml";
+    private final String RESOURCE_CONFIG_XML = "Resources.xml";
 
     private final String RESOURCE_DIRECTORIES_FILE = "ResourceDirectories.xml";
     private final String CHARACTERS_FILE = "CharacterDefinitions.xml";
@@ -134,7 +128,7 @@ public class Assets {
             String directoryName = directoriesRoot.getChild(i).getAttribute("name");
             try {
                 Class clss = ClassReflection.forName(classString);
-                Element resourcesRoot = xmlReader.parse(Gdx.files.internal(directoryName + "/" + RESOURCE_XML));
+                Element resourcesRoot = xmlReader.parse(Gdx.files.internal(directoryName + "/" + RESOURCE_CONFIG_XML));
                 loadResourceDefinitions(directoryName, resourcesRoot, clss);
             } catch (ReflectionException e) {
                 e.printStackTrace();

@@ -36,7 +36,7 @@ public class ParametersLoader {
         }
         List<AnimationData> dataList = new ArrayList<>();
         Element animationsElement = resourceElement.getChild(0);
-        boolean flip = animationsElement.getBoolean("flip", false);
+        boolean flip = animationsElement.getBooleanAttribute("flip", false);
         for (int i = 0; i < animationsElement.getChildCount(); i++) {
             Element child = animationsElement.getChild(i);
             if (child.getName().equals("animation")) {
@@ -54,7 +54,7 @@ public class ParametersLoader {
             return null;
         }
         Element musicElement = resourceElement.getChild(0);
-        float volume = musicElement.getFloat("volume", 1);
+        float volume = musicElement.getFloatAttribute("volume", 1);
         return new MusicParameters(volume);
     }
 
@@ -63,11 +63,11 @@ public class ParametersLoader {
             return null;
         }
         Element textureElement = resourceElement.getChild(0);
-        boolean genMipMaps = textureElement.getBoolean("genMipMaps", false);
-        String minFilterName = textureElement.get("minFilter", "Nearest");
-        String magFilterName = textureElement.get("magFilter", "Nearest");
-        String wrapUName = textureElement.get("wrapU", "ClampToEdge");
-        String wrapVName = textureElement.get("wrapV", "ClampToEdge");
+        boolean genMipMaps = textureElement.getBooleanAttribute("genMipMaps", false);
+        String minFilterName = textureElement.getAttribute("minFilter", "Nearest");
+        String magFilterName = textureElement.getAttribute("magFilter", "Nearest");
+        String wrapUName = textureElement.getAttribute("wrapU", "ClampToEdge");
+        String wrapVName = textureElement.getAttribute("wrapV", "ClampToEdge");
         TextureLoader.TextureParameter parameter = new TextureLoader.TextureParameter();
         parameter.genMipMaps = genMipMaps;
         parameter.minFilter = Texture.TextureFilter.valueOf(minFilterName);
