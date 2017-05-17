@@ -1,0 +1,125 @@
+<xs:schema targetNamespace="urn:resourceConfig"
+           xmlns="urn:resourceConfig"
+           attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="ConversationResources.xsd"/>
+
+    <xs:element name="directories">
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="directory" type="directoryType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="directoryType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="exclude" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="characters">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="character" type="characterConfigType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="characterConfigType">
+        <xs:attribute name="id" type="characterType" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="sound" type="soundResource" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="groups">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="group" type="groupConfigType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="groupConfigType">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="load" type="resourceType"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="resources">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="resource" type="resourceConfigType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="resourceConfigType">
+        <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element name="animations" type="animationsConfigType"/>
+            <xs:element name="texture" type="textureConfigType"/>
+            <xs:element name="music" type="musicConfigType"/>
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="identifier" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="animationsConfigType">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="animation" type="animationConfigType"/>
+        </xs:sequence>
+        <xs:attribute name="flip" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="animationConfigType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="frameDuration" type="xs:float" use="required"/>
+        <xs:attribute name="playMode" type="animationPlayModeType" use="optional"/>
+    </xs:complexType>
+    
+    <xs:complexType name="textureConfigType">
+        <xs:attribute name="genMipMaps" type="xs:boolean" use="required"/>
+        <xs:attribute name="minFilter" type="textureFilterType" use="required"/>
+        <xs:attribute name="magFilter" type="textureFilterType" use="required"/>
+        <xs:attribute name="wrapU" type="textureWrapMode" use="required"/>
+        <xs:attribute name="wrapV" type="textureWrapMode" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="musicConfigType">
+        <xs:attribute name="volume" type="xs:float" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="animationPlayModeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NORMAL"/>
+            <xs:enumeration value="LOOP"/>
+            <xs:enumeration value="LOOP_PINGPONG"/>
+            <xs:enumeration value="LOOP_RANDOM"/>
+            <xs:enumeration value="LOOP_REVERSED"/>
+            <xs:enumeration value="REVERSED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="textureFilterType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Nearest"/>
+            <xs:enumeration value="Linear"/>
+            <xs:enumeration value="MipMap"/>
+            <xs:enumeration value="MipMapNearestNearest"/>
+            <xs:enumeration value="MipMapLinearNearest"/>
+            <xs:enumeration value="MipMapNearestLinear"/>
+            <xs:enumeration value="MipMapLinearLinear"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="textureWrapMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ClampToEdge"/>
+            <xs:enumeration value="Repeat"/>
+            <xs:enumeration value="MirroredRepeat"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

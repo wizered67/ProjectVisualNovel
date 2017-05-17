@@ -1,4 +1,4 @@
-<directories>
+<directories xmlns="urn:resourceConfig">
     <directory name="Music" type="com.badlogic.gdx.audio.Music"/>
     <directory name="Animations" type="com.wizered67.game.assets.AnimationTextureAtlas">
         <exclude>.png</exclude>
