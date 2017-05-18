@@ -122,6 +122,20 @@ public class Assets {
         }
     }
 
+    /** Load and unload Conversations through the asset manager. */
+    @Deprecated
+    public synchronized void loadConversation(String conversation) {
+        assetManager.load(conversation, Conversation.class);
+    }
+    @Deprecated
+    public synchronized void unloadConversation(String conversation) {
+        assetManager.unload(conversation);
+    }
+    @Deprecated
+    public synchronized Conversation getConversation(String conversation) {
+        return assetManager.get( conversation, Conversation.class);
+    }
+
     private void loadAllResourceDefinitions(Element directoriesRoot) {
         for (int i = 0; i < directoriesRoot.getChildCount(); i++) {
             String classString = directoriesRoot.getChild(i).getAttribute("type", "java.lang.Object");
