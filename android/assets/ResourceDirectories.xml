@@ -1,4 +1,4 @@
-<directories xmlns="urn:resourceConfig">
+<directories xmlns="urn:resourceConfig" schemaDest="../../core/src/com/wizered67/game/conversations/xmlio/ConversationResources.xsd">
     <directory name="Music" type="com.badlogic.gdx.audio.Music"/>
     <directory name="Animations" type="com.wizered67.game.assets.AnimationTextureAtlas">
         <exclude>.png</exclude>

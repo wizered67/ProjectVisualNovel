@@ -1,12 +1,11 @@
-<resources>
-    <resource name="Edgeworth.pack" identifier="Edgeworth">
-        <animations>
-            <flip>false</flip>
-            <animation id="Static" frameDuration="1" playMode="NORMAL"/>
-            <animation id="Accuse" frameDuration="0.05"/>
-            <animation id="Confront" frameDuration="1"/>
-            <animation id="Edgeworth" frameDuration="0.3"/>
-            <animation id="Point" frameDuration="0.2"/>
-        </animations>
-    </resource>
+<resources xmlns="urn:resourceConfig">
+	<resource name="Edgeworth.pack" identifier="Edgeworth">
+		<animations flip="false">
+			<animation id="Edgeworth" frameDuration="0.3" playMode="NORMAL"/>
+			<animation id="Accuse" frameDuration="1" playMode="NORMAL"/>
+			<animation id="Point" frameDuration="1" playMode="NORMAL"/>
+			<animation id="Static" frameDuration="1" playMode="NORMAL"/>
+			<animation id="Confront" frameDuration="1" playMode="NORMAL"/>
+		</animations>
+	</resource>
 </resources>

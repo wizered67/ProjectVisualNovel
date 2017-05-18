@@ -1,31 +1,11 @@
-<resources>
-    <resource name="testbackground.png" identifier="testbackground.png">
-        <texture>
-            <genMipMaps>false</genMipMaps>
-            <minFilter>Nearest</minFilter>
-            <magFilter>Nearest</magFilter>
-            <wrapU>ClampToEdge</wrapU>
-            <wrapV>ClampToEdge</wrapV>
-        </texture>
-    </resource>
-
-    <resource name="testicon.png" identifier="icon">
-        <texture>
-            <genMipMaps>false</genMipMaps>
-            <minFilter>Nearest</minFilter>
-            <magFilter>Nearest</magFilter>
-            <wrapU>ClampToEdge</wrapU>
-            <wrapV>ClampToEdge</wrapV>
-        </texture>
-    </resource>
-
-    <resource name="testicon2.png" identifier="icon2">
-        <texture>
-            <genMipMaps>false</genMipMaps>
-            <minFilter>Nearest</minFilter>
-            <magFilter>Nearest</magFilter>
-            <wrapU>ClampToEdge</wrapU>
-            <wrapV>ClampToEdge</wrapV>
-        </texture>
-    </resource>
+<resources xmlns="urn:resourceConfig">
+	<resource name="testbackground.png" identifier="testbackground.png">
+		<texture genMipMaps="false" minFilter="Nearest" magFilter="Nearest" wrapU="ClampToEdge" wrapV="ClampToEdge"/>
+	</resource>
+	<resource name="testicon.png" identifier="icon">
+		<texture genMipMaps="false" minFilter="Nearest" magFilter="Nearest" wrapU="ClampToEdge" wrapV="ClampToEdge"/>
+	</resource>
+	<resource name="testicon2.png" identifier="testicon2.png">
+		<texture genMipMaps="false" minFilter="Nearest" magFilter="Nearest" wrapU="ClampToEdge" wrapV="ClampToEdge"/>
+	</resource>
 </resources>

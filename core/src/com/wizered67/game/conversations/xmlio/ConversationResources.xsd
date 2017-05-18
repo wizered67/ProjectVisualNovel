@@ -2,34 +2,20 @@
 	<xs:simpleType name="anyType">
 		<xs:restriction base="xs:string"/>
 	</xs:simpleType>
-	<xs:simpleType name="animationAtlasResource">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Edgeworth"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="graphicResource">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Edgeworth_Edgeworth"/>
-			<xs:enumeration value="Edgeworth_Static"/>
-			<xs:enumeration value="Edgeworth_Accuse"/>
-			<xs:enumeration value="Edgeworth_Confront"/>
-			<xs:enumeration value="Edgeworth_Point"/>
-			<xs:enumeration value="icon"/>
-			<xs:enumeration value="testbackground.png"/>
-			<xs:enumeration value="icon2"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="textureResource">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="icon"/>
-			<xs:enumeration value="testbackground.png"/>
-			<xs:enumeration value="icon2"/>
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:simpleType name="musicResource">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value=""/>
 			<xs:enumeration value="discussion.mp3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="conversationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="demonstration.conv"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="characterType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Librarian"/>
+			<xs:enumeration value="Detective"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="soundResource">
@@ -39,16 +25,21 @@
 			<xs:enumeration value="talksoundmale.wav"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="characterType">
+	<xs:simpleType name="graphicResource">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="Librarian"/>
-			<xs:enumeration value="Detective"/>
-			<xs:enumeration value="Buddy"/>
+			<xs:enumeration value="Edgeworth_Edgeworth"/>
+			<xs:enumeration value="Edgeworth_Static"/>
+			<xs:enumeration value="icon"/>
+			<xs:enumeration value="Edgeworth_Accuse"/>
+			<xs:enumeration value="testicon2.png"/>
+			<xs:enumeration value="Edgeworth_Confront"/>
+			<xs:enumeration value="testbackground.png"/>
+			<xs:enumeration value="Edgeworth_Point"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="conversationType">
+	<xs:simpleType name="resourceGroupType">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="demonstration.conv"/>
+			<xs:enumeration value="common"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="resourceType">
@@ -58,15 +49,10 @@
 			<xs:enumeration value="talksoundfemale.wav"/>
 			<xs:enumeration value="discussion.mp3"/>
 			<xs:enumeration value="demonstration.conv"/>
+			<xs:enumeration value="testicon2.png"/>
 			<xs:enumeration value="testbackground.png"/>
 			<xs:enumeration value="intense.wav"/>
-			<xs:enumeration value="icon2"/>
 			<xs:enumeration value="talksoundmale.wav"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="resourceGroupType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="common"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

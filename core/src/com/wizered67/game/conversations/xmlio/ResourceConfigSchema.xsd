@@ -9,6 +9,7 @@
             <xs:sequence minOccurs="1" maxOccurs="unbounded">
                 <xs:element name="directory" type="directoryType"/>
             </xs:sequence>
+            <xs:attribute name="schemaDest" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 
@@ -29,7 +30,7 @@
     </xs:element>
 
     <xs:complexType name="characterConfigType">
-        <xs:attribute name="id" type="characterType" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="sound" type="soundResource" use="required"/>
     </xs:complexType>

@@ -44,7 +44,7 @@
         before moving on. -->
         <image instance="test">
             <group>test</group>
-            <graphic id="Edgeworth_Edgeworth"/>
+            <graphic id="testicon2.png"/>
             <position x="50" y="240"/>
             <visibility visible="true" fadeTime="1" wait="true" fadeType="linear"/>
         </image>

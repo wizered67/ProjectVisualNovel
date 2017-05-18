@@ -28,7 +28,7 @@ public class ModifyImageCommandCreator {
         }
         for (int c = 0; c < element.getChildCount(); c += 1) {
             XmlReader.Element child = element.getChild(c);
-            if (child.getName().equals("texture")) {
+            if (child.getName().equals("graphic")) {
                 result.addCommand(ImageTextureCommand.makeCommand(instance, group, child));
             } else if (child.getName().equals("position")) {
                 result.addCommand(EntityPositionCommand.makeCommand(instance, child));
