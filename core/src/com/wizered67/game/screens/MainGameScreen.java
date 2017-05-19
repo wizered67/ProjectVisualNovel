@@ -4,46 +4,27 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.wizered67.game.Constants;
-import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.inputs.Controllable;
-import com.wizered67.game.inputs.MyInputProcessor;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.wizered67.game.inputs.ControlInputAdapter;
+import com.wizered67.game.inputs.Controls;
 
 /**
  * Main Game Screen for initializing and updating GUIManager.
  * @author Adam Victor
  */
-public class MainGameScreen implements Screen, Controllable {
+public class MainGameScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private ShapeRenderer shapes;
+    private InputMultiplexer inputMultiplexer;
 
     public MainGameScreen() {
         initRendering();
-        GameManager.getMainInputProcessor().register(this);
-
+        initInput();
     }
 
     private void initRendering() {
@@ -69,10 +50,17 @@ public class MainGameScreen implements Screen, Controllable {
         shapes = new ShapeRenderer();
     }
 
+    private void initInput() {
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(GameManager.guiManager().getStage());
+        inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.conversationController()));
+        inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.guiManager()));
+    }
+
 
     @Override
     public void show() {
-
+        GameManager.getInputMultiplexer().addProcessor(inputMultiplexer);
     }
 
     public void render(float delta) {
@@ -81,7 +69,6 @@ public class MainGameScreen implements Screen, Controllable {
 
         updateCameras(delta);
         updateGUI(delta);
-        updateInput();
     }
 
     private void updateCameras(float delta) {
@@ -92,10 +79,6 @@ public class MainGameScreen implements Screen, Controllable {
         //hudViewport.apply(true);
         GameManager.mainViewport().apply();
         GameManager.guiManager().update(delta);
-    }
-
-    public void updateInput() {
-        GameManager.getMainInputProcessor().update();
     }
 
     @Override
@@ -131,7 +114,7 @@ public class MainGameScreen implements Screen, Controllable {
 
     @Override
     public void hide() {
-
+        GameManager.getInputMultiplexer().removeProcessor(inputMultiplexer);
     }
 
     @Override
@@ -142,23 +125,5 @@ public class MainGameScreen implements Screen, Controllable {
         batch.dispose();
         shapes.dispose();
         */
-    }
-
-    /**
-     * A touch event at position SCREENX, SCREENY involving pointer POINTER, and
-     * mouse button BUTTON. PRESSED is whether it was pressed (true) or released (false).
-     */
-    @Override
-    public void touchEvent(int screenX, int screenY, int pointer, int button, boolean pressed) {
-
-    }
-
-    /**
-     * A key event involving key KEY mapped to ControlType CONTROL.
-     * PRESSED is whether it was pressed (true) or released (false).
-     */
-    @Override
-    public void keyEvent(MyInputProcessor.ControlType control, int key, boolean pressed) {
-
     }
 }

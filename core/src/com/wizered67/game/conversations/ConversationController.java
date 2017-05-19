@@ -13,7 +13,7 @@ import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.gui.GUIManager;
 import com.wizered67.game.inputs.Controllable;
-import com.wizered67.game.inputs.MyInputProcessor.ControlType;
+import com.wizered67.game.inputs.Controls.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
 import com.wizered67.game.scripting.LuaScriptManager;
 import com.wizered67.game.scripting.ScriptManager;
@@ -95,7 +95,6 @@ public class ConversationController implements Controllable {
         initScriptManagers();
         transcript = new Transcript();
         paused = false;
-        GameManager.getMainInputProcessor().register(this);
     }
 
     public ConversationLoader loader() {
@@ -463,46 +462,54 @@ public class ConversationController implements Controllable {
     /** Handles a touch (or click) on the screen and passes an Input CompleteEvent to the current
      * ConversationCommand. If someone is currently speaking, instead set displayAll to true
      * first. */
-    @Override
-    public void touchEvent(int screenX, int screenY, int pointer, int button, boolean pressed) {
-        if (button == Input.Buttons.LEFT && pressed) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT) {
             inputConfirm();
+            return true;
         }
+        return false;
     }
+
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
     /** Handles a key event by calling methods depending on the ControlType. */
-    @Override
-    public void keyEvent(ControlType control, int key, boolean pressed) {
-        if (pressed) {
-            switch (control) {
-                case CONFIRM:
-                    inputConfirm();
-                    break;
-                case UP:
-                    if (GameManager.guiManager().isTranscriptVisible()) {
-                        GameManager.guiManager().scrollTranscript(-1);
-                    } else if (choiceShowing) {
-                        changeChoice(-1);
-                    }
-                    break;
-                case DOWN:
-                    if (GameManager.guiManager().isTranscriptVisible()) {
-                        GameManager.guiManager().scrollTranscript(1);
-                    } else if (choiceShowing) {
-                        changeChoice(1);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        } else { //released
-            switch (control) {
-                case UP:
-                    GameManager.guiManager().stopTranscriptScrolling();
-                    break;
-                case DOWN:
-                    GameManager.guiManager().stopTranscriptScrolling();
-                    break;
-            }
+    public boolean keyDown(ControlType control, int key) {
+        switch (control) {
+            case CONFIRM:
+                inputConfirm();
+                return true;
+            case UP:
+                if (GameManager.guiManager().isTranscriptVisible()) {
+                    GameManager.guiManager().scrollTranscript(-1);
+                } else if (choiceShowing) {
+                    changeChoice(-1);
+                }
+                return true;
+            case DOWN:
+                if (GameManager.guiManager().isTranscriptVisible()) {
+                    GameManager.guiManager().scrollTranscript(1);
+                } else if (choiceShowing) {
+                    changeChoice(1);
+                }
+                return true;
+            default:
+                return false;
         }
     }
+
+    public boolean keyUp(ControlType control, int key) {
+        switch (control) {
+            case UP:
+                GameManager.guiManager().stopTranscriptScrolling();
+                return true;
+            case DOWN:
+                GameManager.guiManager().stopTranscriptScrolling();
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

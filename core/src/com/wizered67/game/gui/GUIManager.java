@@ -27,13 +27,15 @@ import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
+import com.wizered67.game.inputs.Controllable;
+import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.saving.SaveManager;
 
 /** Contains GUI elements and the ConversationController which the GUI elements are passed into.
  * Fixes GUI elements if screen is resized.
  * @author Adam Victor
  */
-public class GUIManager {
+public class GUIManager implements Controllable {
 
     private DialogueElementsUI dialogueElementsUI;
 
@@ -425,6 +427,40 @@ public class GUIManager {
                 SaveManager.load(Gdx.files.internal("Saves/" + selection));
                 break;
         }
+    }
+
+    /**
+     * A touch down event at position SCREENX, SCREENY involving pointer POINTER, and
+     * mouse button BUTTON.
+     */
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    /**
+     * A touch up event at position SCREENX, SCREENY involving pointer POINTER, and
+     * mouse button BUTTON.
+     */
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    /**
+     * A key down involving key KEY mapped to ControlType CONTROL.
+     */
+    @Override
+    public boolean keyDown(Controls.ControlType control, int key) {
+        return false;
+    }
+
+    /**
+     * A key up involving key KEY mapped to ControlType CONTROL.
+     */
+    @Override
+    public boolean keyUp(Controls.ControlType control, int key) {
+        return false;
     }
 
     private enum DebugMode {

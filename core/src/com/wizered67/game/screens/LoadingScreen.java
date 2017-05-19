@@ -8,9 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.wizered67.game.GameManager;
 
 /**
@@ -19,17 +17,17 @@ import com.wizered67.game.GameManager;
  * @author Adam Victor
  */
 public class LoadingScreen implements Screen {
-    private Stage testStage;
+    private Stage stage;
     private ProgressBar bar;
     private LoadResult loadResult;
 
     public LoadingScreen(LoadResult loadResult) {
         this.loadResult = loadResult;
-        testStage = new Stage();
+        stage = new Stage();
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(false);
-        testStage.addActor(table);
+        stage.addActor(table);
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -44,7 +42,10 @@ public class LoadingScreen implements Screen {
         table.add(bar);
     }
 
-
+    public void reset(LoadResult result) {
+        loadResult = result;
+        bar.setValue(0);
+    }
 
     @Override
     public void show() {
@@ -56,8 +57,8 @@ public class LoadingScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bar.setValue(GameManager.assetManager().getProgress());
-        testStage.act(delta);
-        testStage.draw();
+        stage.act(delta);
+        stage.draw();
         if (GameManager.assetManager().update()) {
             loadResult.finishLoading();
         }
@@ -87,7 +88,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     public interface LoadResult {

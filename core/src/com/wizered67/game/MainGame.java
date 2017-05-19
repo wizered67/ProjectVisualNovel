@@ -3,24 +3,20 @@ package com.wizered67.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
-import com.wizered67.game.inputs.MyInputProcessor;
+import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.saving.SaveManager;
 import com.wizered67.game.screens.LoadingScreen;
 import com.wizered67.game.screens.MainGameScreen;
 import com.wizered67.game.assets.Assets;
-import com.wizered67.game.scripting.LuaGameMethods;
 
 public class MainGame extends Game {
 	MainGameScreen gameScreen;
@@ -32,7 +28,7 @@ public class MainGame extends Game {
     Viewport guiViewport;
     GUIManager guiManager;
     ConversationController conversationController;
-    MyInputProcessor mainInputProcessor;
+	Controls controls;
     InputMultiplexer inputMultiplexer;
 
 	@Override
@@ -53,8 +49,6 @@ public class MainGame extends Game {
 
         guiManager = new GUIManager(new Stage(guiViewport));
         conversationController = guiManager.conversationController();
-		inputMultiplexer.addProcessor(0, guiManager.getStage());
-		Gdx.input.setInputProcessor(inputMultiplexer);
 		SaveManager.init();
 		GameManager.assetManager().loadGroup("common");
 		gameScreen = new MainGameScreen();
@@ -69,8 +63,9 @@ public class MainGame extends Game {
 	}
 
 	private void initInput() {
-		mainInputProcessor = new MyInputProcessor();
+		controls = new Controls();
 		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(mainInputProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		Gdx.input.setCatchBackKey(true);
 	}
 }
