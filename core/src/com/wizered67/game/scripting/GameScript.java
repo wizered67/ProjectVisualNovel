@@ -14,4 +14,6 @@ public abstract class GameScript {
     public boolean isFile;
     /** Executes the contents of this script and returns the result. */
     public abstract Object execute();
+    /** Executes the contents of this script with arguments passed as an array and returns the result. */
+    public abstract Object execute(Object... arguments);
 }

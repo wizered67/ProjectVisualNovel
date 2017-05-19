@@ -2,7 +2,9 @@ package com.wizered67.game.scripting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 /**
  * Stores loaded scripts in Lua to be executed later. Implements GameScript interface.
@@ -23,6 +25,18 @@ public class LuaScript extends GameScript {
     @Override
     public Object execute() {
         return loadedScript.call();
+    }
+
+    @Override
+    public Object execute(Object... arguments) {
+        LuaValue[] luaValueArray = new LuaValue[arguments.length];
+        for (int i = 0; i < arguments.length; i++) {
+            luaValueArray[i] = CoerceJavaToLua.coerce(arguments);
+        }
+        //LuaValue.varargsOf()
+        //LuaTable argumentList = LuaValue.listOf(luaValueArray);
+        return loadedScript.invoke(luaValueArray);
+        //return loadedScript.call(argumentList);
     }
 
     //TODO: execute functions with arguments.

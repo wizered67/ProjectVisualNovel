@@ -42,6 +42,7 @@ public class MainGame extends Game {
 		initInput();
 
 		assetManager = new Assets();
+		assetManager.initResources();
         musicManager = new MusicManager();
         mainBatch = new SpriteBatch();
 

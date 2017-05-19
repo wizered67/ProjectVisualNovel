@@ -7,8 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.CompleteEvent;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
+import com.wizered67.game.scripting.GameScript;
+import com.wizered67.game.scripting.ScriptManager;
 
 /**
  * Abstract superclass of all entities drawn and updated in a scene, including CharacterSprites and SceneImages.
@@ -114,11 +117,19 @@ public abstract class SceneEntity implements Comparable<SceneEntity> {
         if (currentAnimation != null) { //todo decide if should check visibility first
             stateTime += deltaTime;
             updateSprite();
+            callAnimationScript();
             //sprite.setCenter(sprite.getWidth() * scale / 2, 0);
             if (currentAnimation.isAnimationFinished(stateTime) && !wasFinished) {
                 manager.complete(CompleteEvent.animationEnd(animationName));
                 wasFinished = true;
             }
+        }
+    }
+
+    private void callAnimationScript() {
+        GameScript animationScript = GameManager.assetManager().getAnimationScript(animationName);
+        if (animationScript != null) {
+            animationScript.execute(sprite, stateTime, currentAnimation.getKeyFrameIndex(stateTime));
         }
     }
 

@@ -23,6 +23,7 @@ import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.xmlio.ConversationAssetLoader;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.GameManager;
+import com.wizered67.game.scripting.GameScript;
 
 import static com.badlogic.gdx.utils.XmlReader.Element;
 
@@ -52,6 +53,8 @@ public class Assets {
     /** Used to load parameters from XML. */
     private ParametersLoader parametersLoader;
 
+    private Map<String, GameScript> animationScripts;
+
     private final String RESOURCE_CONFIG_XML = "Resources.xml";
 
     private final String RESOURCE_DIRECTORIES_FILE = "ResourceDirectories.xml";
@@ -75,7 +78,8 @@ public class Assets {
         assetGroups = new HashMap<>();
         parametersLoader = new ParametersLoader();
 
-        initResources();
+        animationScripts = new HashMap<>();
+
         assetManager.setLoader(Conversation.class, new ConversationAssetLoader(new InternalFileHandleResolver()));
         assetManager.setLoader(AnimationTextureAtlas.class, new TextureAtlasAnimationLoader(new InternalFileHandleResolver()));
     }
@@ -109,6 +113,16 @@ public class Assets {
         }
         return allAnimations.get(identifier);
     }
+
+    public void addAnimationScript(String id, GameScript script) {
+        animationScripts.put(id, script);
+    }
+
+    public GameScript getAnimationScript(String id) {
+        return animationScripts.get(id);
+    }
+
+
     /** Maps all identifiers to Asset Descriptors, loads characters, and creates asset groups. */
     public void initResources() {
         xmlReader = new XmlReader();

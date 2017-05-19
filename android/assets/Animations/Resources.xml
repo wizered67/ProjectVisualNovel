@@ -1,7 +1,17 @@
 <resources xmlns="urn:resourceConfig">
 	<resource name="Edgeworth.pack" identifier="Edgeworth">
 		<animations flip="false">
-			<animation id="Edgeworth" frameDuration="0.3" playMode="NORMAL"/>
+			<animation id="Edgeworth" frameDuration="0.3" playMode="NORMAL">
+				<script>
+					arguments = ...
+					sprite = arguments[1]
+					sprite:setRotation((arguments[2] * 100) % 360)
+					if arguments[3] > 4 then sprite:setAlpha(0.5) end
+					print(arguments[1])
+					print(arguments[2])
+					print(arguments[3])
+				</script>
+			</animation>
 			<animation id="Accuse" frameDuration="1" playMode="NORMAL"/>
 			<animation id="Point" frameDuration="1" playMode="NORMAL"/>
 			<animation id="Static" frameDuration="1" playMode="NORMAL"/>

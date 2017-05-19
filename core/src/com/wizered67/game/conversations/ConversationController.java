@@ -75,6 +75,10 @@ public class ConversationController implements Controllable {
     /** Whether the conversation controller is paused. When paused, commands don't update. The scene will render but not update. */
     private boolean paused;
 
+    static {
+        initScriptManagers();
+    }
+
     public ConversationController() {
         initScriptManagers();
     }
@@ -92,7 +96,6 @@ public class ConversationController implements Controllable {
         currentSceneManager = new SceneManager(this);
         allSceneManagers = new HashMap<>();
         allSceneManagers.put("main", currentSceneManager);
-        initScriptManagers();
         transcript = new Transcript();
         paused = false;
         GameManager.getMainInputProcessor().register(this);
@@ -159,7 +162,7 @@ public class ConversationController implements Controllable {
         currentSceneManager = allSceneManagers.get(sceneName);
     }
     /** Initializes all script managers. */
-    private void initScriptManagers() {
+    private static void initScriptManagers() {
         scriptManagers = new HashMap<>();
         scriptManagers.put("Lua", new LuaScriptManager());
         //scriptManagers.put("Groovy", new GroovyScriptManager());

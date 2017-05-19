@@ -4,10 +4,13 @@ import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.assets.AnimationData;
 import com.wizered67.game.assets.AnimationTextureAtlas;
 import com.wizered67.game.assets.TextureAtlasAnimationLoader;
 import com.badlogic.gdx.audio.Music;
+import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.scripting.GameScript;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +47,14 @@ public class ParametersLoader {
                 float frameDuration = child.getFloatAttribute("frameDuration", 0);
                 String playMode = child.getAttribute("playMode", "NORMAL");
                 dataList.add(new AnimationData(identifier, animationId, frameDuration, Animation.PlayMode.valueOf(playMode)));
+                if (child.getChildCount() > 0) {
+                    Element scriptChild = child.getChild(0);
+                    String language = scriptChild.getAttribute("language", ConversationController.defaultScriptingLanguage());
+                    boolean isFile = scriptChild.getBooleanAttribute("isFile", false);
+                    String script = scriptChild.getText();
+                    GameScript gameScript = ConversationController.scriptManager(language).load(script, isFile);
+                    GameManager.assetManager().addAnimationScript(identifier + "_" + animationId, gameScript);
+                }
             }
         }
         return new TextureAtlasAnimationLoader.AnimationTextureAtlasParameter(flip, dataList);
