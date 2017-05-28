@@ -59,6 +59,8 @@ public class GUIManager implements Controllable {
     /** Default font used for text. */
     private BitmapFont defaultFont;
 
+    private TextInputUI textInputUI;
+
     //debug related variables
     /** Scrollpane used to contain debug choices -- ie loading conversations, etc. */
     private ScrollPane debugPane;
@@ -118,6 +120,14 @@ public class GUIManager implements Controllable {
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
 
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.cursor = textButtonStyle.over;
+        textFieldStyle.selection = textButtonStyle.over;
+        textFieldStyle.background = speakerDrawable;
+        textFieldStyle.font = skin.getFont("default");
+        textFieldStyle.fontColor = Color.BLACK;
+        skin.add("default", textFieldStyle);
+
         //todo init and add dialogue elements UI
         dialogueElementsUI = new DialogueElementsUI(this, skin);
         stage.addActor(dialogueElementsUI.getMainTable());
@@ -128,7 +138,8 @@ public class GUIManager implements Controllable {
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
 
-
+        textInputUI = new TextInputUI(this, skin);
+        stage.addActor(textInputUI.getMainTable());
 
         addDebug();
         addTranscript();
@@ -159,10 +170,10 @@ public class GUIManager implements Controllable {
      */
 	public void update(float deltaTime){
         conversationController.update(deltaTime);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT) && !textInputUI.isVisible()) {
             toggleTranscript();
         }
-        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && !textInputUI.isVisible()) {
             toggleDebugDisplay();
             conversationController.setPaused(debugChoices.isVisible());
         }
@@ -220,6 +231,10 @@ public class GUIManager implements Controllable {
     /** Returns the ConversationController. */
     public ConversationController conversationController() {
         return conversationController;
+    }
+
+    public TextInputUI getTextInputUI() {
+        return textInputUI;
     }
 
     private void addTranscript() {

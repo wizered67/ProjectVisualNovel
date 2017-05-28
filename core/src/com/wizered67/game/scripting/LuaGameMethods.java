@@ -20,10 +20,10 @@ public class LuaGameMethods {
     }
 
     public void getTextInput(final String variableName, String title) {
-        getTextInput(variableName, title, "", "");
+        getTextInput(variableName, title, "");
     }
 
-    public void getTextInput(final String variableName, String title, String text, String hint) {
+    public void getTextInput(final String variableName, String title, String text) {
         ConversationController.scriptManager("Lua").setValue(variableName, LuaValue.NIL);
         Input.TextInputListener inputListener = new Input.TextInputListener() {
             @Override
@@ -36,7 +36,8 @@ public class LuaGameMethods {
                 ConversationController.scriptManager("Lua").setValue(variableName, "");
             }
         };
-        Gdx.input.getTextInput(inputListener, title, text, hint);
+        //Gdx.input.getTextInput(inputListener, title, text, hint);
+        GameManager.guiManager().getTextInputUI().display(title, text, inputListener);
     }
 
     public void setCharacterName(String character, String name) {
