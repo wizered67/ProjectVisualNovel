@@ -2,6 +2,7 @@ package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,8 +20,16 @@ public class GameManager {
 		utils = new LuaGameMethods();
 	}
 
-	public static InputMultiplexer getInputMultiplexer() {
-		return game.inputMultiplexer;
+	public static void addInputProcessor(InputProcessor processor) {
+		game.inputMultiplexer.addProcessor(processor);
+	}
+
+	public static void addInputProcessor(InputProcessor processor, int index) {
+		game.inputMultiplexer.addProcessor(index, processor);
+	}
+
+	public static void removeInputProcessor(InputProcessor processor) {
+		game.inputMultiplexer.removeProcessor(processor);
 	}
 
 	public static Controls getControls() {

@@ -31,22 +31,6 @@ public class MainGameScreen implements Screen {
         font = new BitmapFont(false);
         font.setColor(Color.WHITE);
         batch = GameManager.mainBatch();
-        //camera.zoom = cameraZoom;
-        //myViewport = new CustomExtendViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, mapWidthInPixels, mapHeightInPixels, camera);
-        //myViewport.setScreenSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //myViewport.apply();
-        /*
-        hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.
-                getHeight());
-        hudCamera.setToOrtho(false); //was true prior to scene2D
-        hudCamera.zoom = 1;
-        hudViewport = new ScreenViewport(hudCamera);
-
-        //myViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        hudViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //debugCamera.setToOrtho(false, Constants.toMeters(myViewport.getWorldWidth()), Constants.toMeters(myViewport.getWorldHeight()));
-        //debugCamera.zoom = camera.zoom;
-        */
         shapes = new ShapeRenderer();
     }
 
@@ -60,7 +44,7 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void show() {
-        GameManager.getInputMultiplexer().addProcessor(inputMultiplexer);
+        GameManager.addInputProcessor(inputMultiplexer);
     }
 
     public void render(float delta) {
@@ -114,7 +98,7 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void hide() {
-        GameManager.getInputMultiplexer().removeProcessor(inputMultiplexer);
+        GameManager.removeInputProcessor(inputMultiplexer);
     }
 
     @Override
