@@ -79,7 +79,7 @@
         Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
 
         <while cond=" playerName == nil or not game.utils:isValidTextInput(playerName) ">
-            <script>game.utils:getTextInput("playerName", "What is your name?", "text")</script>
+            <script>game.utils:getTextInput("playerName", "What is your name?", "", "Name")</script>
             <waitUntil cond="playerName ~= nil"/>
         </while>
         Detective: Hello @v{playerName}.
