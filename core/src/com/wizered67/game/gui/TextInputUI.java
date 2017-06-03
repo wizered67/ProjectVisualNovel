@@ -69,9 +69,10 @@ public class TextInputUI {
         mainTable.setVisible(false);
     }
 
-    public void display(String title, String defaultText, Input.TextInputListener callback) {
+    public void display(String title, String defaultText, String hint, Input.TextInputListener callback) {
         titleLabel.setText(title);
         textField.setText(defaultText);
+        textField.setMessageText(hint);
         this.callback = callback;
         mainTable.setVisible(true);
     }
