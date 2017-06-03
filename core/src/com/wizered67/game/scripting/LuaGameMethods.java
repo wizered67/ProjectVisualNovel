@@ -40,6 +40,10 @@ public class LuaGameMethods {
         GameManager.guiManager().getTextInputUI().display(title, text, inputListener);
     }
 
+    public boolean isValidTextInput(String input) {
+        return !input.trim().isEmpty();
+    }
+
     public void setCharacterName(String character, String name) {
         CharacterDefinition definition = SceneManager.getCharacterDefinition(character);
         if (definition != null) {
