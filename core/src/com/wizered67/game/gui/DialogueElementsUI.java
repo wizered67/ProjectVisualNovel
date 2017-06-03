@@ -69,12 +69,12 @@ public class DialogueElementsUI {
             choiceButtons[i] = tb;
         }
 
-        textboxLabel = new TypingLabel("", skin);
+        textboxLabel = new TypingLabel("", skin, "dialogue-label");
         textboxLabel.setAlignment(Align.topLeft);
         textboxLabel.setWrap(true);
         textboxLabel.toFront();
 
-        speakerLabel = new Label("", skin, "speakerStyle");
+        speakerLabel = new Label("", skin);//, "speakerStyle");
         speakerLabel.toBack();
         speakerLabel.setAlignment(Align.center);
 

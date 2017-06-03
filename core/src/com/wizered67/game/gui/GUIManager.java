@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -43,7 +44,7 @@ public class GUIManager implements Controllable {
     /** Main Table that all GUI elements are added to. */
 	private Table dialogueElementsTable;
     /** Skin used by all GUI elements. */
-	private Skin skin = new Skin();
+	private Skin skin;
     /** Label for the main textbox. Displays text when spoken by characters. */
 	private TypingLabel textboxLabel;
     /** Label to display the name of the current speaker. */
@@ -89,8 +90,10 @@ public class GUIManager implements Controllable {
  		pixmap.setColor(1, 1, 1, 0.75f);
  		pixmap.fill();
 
- 		initFont();
-
+ 		skin = new Skin(new TextureAtlas(Gdx.files.internal("Skins/uiskin.atlas")));
+        initFont();
+        skin.load(Gdx.files.internal("Skins/uiskin.json"));
+ 		/*
         skin.add("white", new Texture(pixmap));
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -127,6 +130,7 @@ public class GUIManager implements Controllable {
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.BLACK;
         skin.add("default", textFieldStyle);
+        */
 
         //todo init and add dialogue elements UI
         dialogueElementsUI = new DialogueElementsUI(this, skin);
@@ -158,7 +162,7 @@ public class GUIManager implements Controllable {
         defaultFont = generator.generateFont(parameter); // font size 12 pixels
         defaultFont.getData().markupEnabled = true;
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
-        skin.add("default", defaultFont);
+        skin.add("default-font", defaultFont);
     }
 
     /** Returns the Stage used to display GUI elements. */
@@ -248,8 +252,8 @@ public class GUIManager implements Controllable {
         transcriptLabel.setWrap(true);
         transcriptLabel.setAlignment(Align.topLeft);
         transcriptLabel.setWidth(Gdx.graphics.getWidth() - 64);
-        ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
-        transcriptPane = new ScrollPane(transcriptLabel, scrollPaneStyle);
+       // ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
+        transcriptPane = new ScrollPane(transcriptLabel, skin);
         transcriptPane.setOverscroll(false, false);
         transcriptPane.setWidth(transcriptLabel.getWidth());
         transcriptPane.setHeight(Gdx.graphics.getHeight() - 64);
@@ -290,9 +294,9 @@ public class GUIManager implements Controllable {
     }
 
     private void addDebug() {
-        List.ListStyle listStyle = new List.ListStyle(skin.getFont("default"), Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
-        listStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
-        debugSelector = new List<>(listStyle);
+        //List.ListStyle listStyle = new List.ListStyle(skin.getFont("default-font"), Color.GRAY, Color.WHITE, skin.newDrawable("white", Color.LIGHT_GRAY));
+        //listStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
+        debugSelector = new List<>(skin);
         //debugSelector.setItems("demonstration", "test conversation");
         //debugSelector.setSelectedIndex(-1);
         ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
