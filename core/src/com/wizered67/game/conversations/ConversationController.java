@@ -350,7 +350,7 @@ public class ConversationController implements Controllable {
     /** Updates the speakerLabel to TEXT. */
     private void setSpeakerName(String text){
         if (!text.isEmpty()) {
-            speakerLabel.setText(text + "  ");
+            speakerLabel.setText(text);
         }
     }
 

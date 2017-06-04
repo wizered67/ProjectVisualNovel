@@ -86,13 +86,15 @@ public class GUIManager implements Controllable {
     public GUIManager(Stage st) {
 		stage = st;
  		// Generate a 1x1 white texture and store it in the skin named "white".
- 		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
- 		pixmap.setColor(1, 1, 1, 0.75f);
- 		pixmap.fill();
 
  		skin = new Skin(new TextureAtlas(Gdx.files.internal("Skins/uiskin.atlas")));
         initFont();
         skin.load(Gdx.files.internal("Skins/uiskin.json"));
+        Drawable dialogueDrawable = skin.getDrawable("dialogue-drawable");
+        dialogueDrawable.setLeftWidth(LEFT_PADDING);
+        dialogueDrawable.setRightWidth(LEFT_PADDING);
+        dialogueDrawable.setTopHeight(LEFT_PADDING);
+        dialogueDrawable.setBottomHeight(LEFT_PADDING);
  		/*
         skin.add("white", new Texture(pixmap));
 

@@ -49,7 +49,7 @@ public class DialogueElementsUI {
         mainTable.row();
         choiceButtons = new TextButton[4];
         for (int i = 0; i < choiceButtons.length; i += 1) {
-            TextButton tb = new TextButton("", skin);
+            TextButton tb = new TextButton("", skin, "choice-button");
             tb.setUserObject(i);
             tb.addListener(new ChangeListener() {
                 public void changed (ChangeEvent event, Actor actor) {
@@ -74,7 +74,7 @@ public class DialogueElementsUI {
         textboxLabel.setWrap(true);
         textboxLabel.toFront();
 
-        speakerLabel = new Label("", skin);//, "speakerStyle");
+        speakerLabel = new Label("", skin, "speaker-label");
         speakerLabel.toBack();
         speakerLabel.setAlignment(Align.center);
 
