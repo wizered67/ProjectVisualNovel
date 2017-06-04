@@ -4,19 +4,12 @@ package com.wizered67.game.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -90,7 +83,7 @@ public class GUIManager implements Controllable {
  		skin = new Skin(new TextureAtlas(Gdx.files.internal("Skins/uiskin.atlas")));
         initFont();
         skin.load(Gdx.files.internal("Skins/uiskin.json"));
-        Drawable dialogueDrawable = skin.getDrawable("dialogue-drawable");
+        Drawable dialogueDrawable = skin.getDrawable("dialogue-drawable-offset");
         dialogueDrawable.setLeftWidth(LEFT_PADDING);
         dialogueDrawable.setRightWidth(LEFT_PADDING);
         dialogueDrawable.setTopHeight(LEFT_PADDING);
@@ -250,7 +243,7 @@ public class GUIManager implements Controllable {
         transcriptTable.setVisible(false);
         transcriptTable.toFront();
 
-        transcriptLabel = new Label("", skin);
+        transcriptLabel = new Label("", skin, "dialogue-label");
         transcriptLabel.setWrap(true);
         transcriptLabel.setAlignment(Align.topLeft);
         transcriptLabel.setWidth(Gdx.graphics.getWidth() - 64);

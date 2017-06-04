@@ -1,9 +1,4 @@
 {
-com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	default-font: {
-		file: font-export.fnt
-	}
-}
 com.badlogic.gdx.graphics.Color: {
 	black: {
 		r: 0
@@ -71,6 +66,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 		name: white
 		color: light-grey
 	}
+	dialogue-drawable-offset: {
+		name: white
+		color: dark-grey-clear
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -110,7 +109,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	dialogue-label: {
 		font: default-font
 		fontColor: white
-		background: dialogue-drawable
+		background: dialogue-drawable-offset
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
@@ -171,9 +170,9 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: default-font
 		fontColor: white
-		up: dark-grey-drawable
-		down: light-grey-drawable
-		over: light-grey-drawable
+		up: dialogue-drawable
+		down: speaker-drawable
+		over: speaker-drawable
 	}
 	toggle: {
 		font: default-font
@@ -181,6 +180,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		downFontColor: red
 		up: default-round
 		down: default-round-down
+		over: default-round-down
 		checked: default-round-down
 	}
 	choice-button: {
@@ -191,9 +191,9 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		checkedFontColor: white
 		checkedOverFontColor: white
 		disabledFontColor: white
-		up: dark-grey-drawable
-		down: light-grey-drawable
-		over: light-grey-drawable
+		up: dialogue-drawable
+		down: speaker-drawable
+		over: speaker-drawable
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {

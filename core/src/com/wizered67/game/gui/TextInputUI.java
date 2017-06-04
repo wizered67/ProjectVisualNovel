@@ -42,7 +42,7 @@ public class TextInputUI {
                 if (callback != null) {
                     callback.input(textField.getText());
                 }
-                mainTable.setVisible(false);
+                hide();
             }
         });
         TextButton cancel = new TextButton("Cancel", skin);
@@ -56,7 +56,7 @@ public class TextInputUI {
                 if (callback != null) {
                     callback.canceled();
                 }
-                mainTable.setVisible(false);
+                hide();
             }
         });
         Value padding = Value.percentWidth(0.02f, mainTable);
@@ -66,7 +66,7 @@ public class TextInputUI {
         inputTable.row();
         inputTable.add(submit).padLeft(padding).padTop(padding).padBottom(padding);
         inputTable.add(cancel).padRight(padding).padTop(padding).padBottom(padding);
-        mainTable.setVisible(false);
+        hide();
     }
 
     public void display(String title, String defaultText, String hint, Input.TextInputListener callback) {
@@ -82,6 +82,9 @@ public class TextInputUI {
     }
 
     public void hide() {
+        if (guiManager.getStage().getKeyboardFocus() == textField) {
+            guiManager.getStage().setKeyboardFocus(null);
+        }
         mainTable.setVisible(false);
     }
 
