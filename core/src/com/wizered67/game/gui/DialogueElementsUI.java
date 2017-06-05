@@ -18,7 +18,8 @@ import com.wizered67.game.inputs.Controls;
  * @author Adam Victor
  */
 public class DialogueElementsUI implements UIComponent {
-    public static String ID = "DialogueElementsUI";
+    public static final String ID = "DialogueElementsUI";
+    public static final int NUM_CHOICES = 4;
     private GUIManager guiManager;
     private Table mainTable;
     private Table buttonTable;
@@ -36,7 +37,7 @@ public class DialogueElementsUI implements UIComponent {
         buttonTable.setDebug(Constants.DEBUG);
         mainTable.add(buttonTable).expandX().fillX().padBottom(Value.percentHeight(0.1f, mainTable));//.height(Value.percentHeight(0.5f, mainTable));
         mainTable.row();
-        choiceButtons = new TextButton[4];
+        choiceButtons = new TextButton[NUM_CHOICES];
         for (int i = 0; i < choiceButtons.length; i += 1) {
             TextButton tb = new TextButton("", skin, "choice-button");
             tb.setUserObject(i);

@@ -18,7 +18,7 @@ import com.wizered67.game.inputs.Controls;
  * @author Adam Victor
  */
 public class TextInputUI implements UIComponent {
-    public static String ID = "TextInputUI";
+    public static final String ID = "TextInputUI";
     private GUIManager guiManager;
     private Table inputTable;
     private Table mainTable;

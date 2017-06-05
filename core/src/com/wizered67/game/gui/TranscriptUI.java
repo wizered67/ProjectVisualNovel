@@ -16,7 +16,7 @@ import com.wizered67.game.inputs.Controls;
  * @author Adam Victor
  */
 public class TranscriptUI implements UIComponent {
-    public static String ID = "TranscriptUI";
+    public static final String ID = "TranscriptUI";
     private GUIManager guiManager;
     private Transcript transcript;
     private Skin skin;

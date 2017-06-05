@@ -4,11 +4,7 @@ package com.wizered67.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.rafaskoberg.gdx.typinglabel.TypingConfig;
-import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 public class Constants {
 	//Debug Settings

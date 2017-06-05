@@ -40,6 +40,7 @@ public class Controls {
         RIGHT(Input.Keys.D, Input.Keys.RIGHT),
         CONFIRM(Input.Keys.C, Input.Keys.SPACE),
         TRANSCRIPT(Input.Keys.SHIFT_LEFT, Input.Keys.SHIFT_RIGHT),
+        DEBUG(Input.Keys.ENTER),
         OTHER();
         int[] keys;
         /*
