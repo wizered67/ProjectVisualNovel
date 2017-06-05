@@ -1,25 +1,24 @@
 package com.wizered67.game.gui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
-import com.wizered67.game.GameManager;
+import com.wizered67.game.inputs.Controls;
 
 /**
  * Creates and contains elements necessary for the main dialogue UI, including textboxes and choice buttons.
  * @author Adam Victor
  */
-public class DialogueElementsUI {
+public class DialogueElementsUI implements UIComponent {
+    public static String ID = "DialogueElementsUI";
     private GUIManager guiManager;
     private Table mainTable;
     private Table buttonTable;
@@ -32,17 +31,7 @@ public class DialogueElementsUI {
         mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.setDebug(Constants.DEBUG);
-        /*
-        Texture texture = new Texture(Gdx.files.internal("Textures/testicon.png"));
-        TextureRegionDrawable icon = new TextureRegionDrawable(new TextureRegion(texture));
-        Drawable iconDown = icon.tint(Color.GRAY);
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.imageUp = icon;
-        style.imageOver = iconDown;
-        ImageButton saveButton = new ImageButton(style);
-        mainTable.add(saveButton).height(Value.percentHeight(.1f, mainTable));
-        mainTable.row();
-        */
+
         buttonTable = new Table();
         buttonTable.setDebug(Constants.DEBUG);
         mainTable.add(buttonTable).expandX().fillX().padBottom(Value.percentHeight(0.1f, mainTable));//.height(Value.percentHeight(0.5f, mainTable));
@@ -85,13 +74,9 @@ public class DialogueElementsUI {
                 .padLeft(20).padRight(20).padBottom(20).colspan(10);
 
     }
-
-    public Table getMainTable() {
+    @Override
+    public Table getMainActor() {
         return mainTable;
-    }
-
-    public void act(float delta) {
-
     }
 
     public TypingLabel getTextboxLabel() {
@@ -113,6 +98,74 @@ public class DialogueElementsUI {
         buttonTable.invalidate();
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof DialogueElementsUI)) {
+            return false;
+        } else {
+            return ((DialogueElementsUI) other).getId().equals(getId());
+        }
+    }
+
+    @Override
+    public String getId() {
+        return ID;
+    }
+
+    @Override
+    public int getPriority() {
+        return 1;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return mainTable.isVisible();
+    }
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean keyDown(Controls.ControlType control, int key) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(Controls.ControlType control, int key) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
 }
 
 /*

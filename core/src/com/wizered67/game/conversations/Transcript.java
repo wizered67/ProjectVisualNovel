@@ -12,9 +12,12 @@ public class Transcript {
     private final static int MAX_STORED = 25;
     /** The list of stored messages/speakers. */
     private LinkedList<TranscriptMessage> transcriptMessages;
+    /** Whether the transcript has new messages that haven't yet been shown. */
+    private boolean dirty;
 
     public Transcript() {
         transcriptMessages = new LinkedList<>();
+        dirty = false;
     }
 
     /** Add a new TranscriptMessage with speaker SPEAKER and text MESSAGE to the end of
@@ -25,6 +28,15 @@ public class Transcript {
         while (transcriptMessages.size() > MAX_STORED) {
             transcriptMessages.removeFirst();
         }
+        dirty = true;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean value) {
+        dirty = value;
     }
 
     public LinkedList<TranscriptMessage> getTranscriptMessages() {

@@ -18,4 +18,13 @@ public interface Controllable {
 
     /** A key up involving key KEY mapped to ControlType CONTROL. */
     boolean keyUp(Controls.ControlType control, int key);
+
+    /** Event called when mouse is moved. */
+    boolean mouseMoved(int screenX, int screenY);
+    /** Event called when mouse wheel is scrolled. */
+    boolean scrolled(int amount);
+    /** Event called when mouse is dragged. */
+    boolean touchDragged(int screenX, int screenY, int pointer);
+    /** Event called when a character is typed. */
+    boolean keyTyped(char character);
 }

@@ -6,19 +6,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
-import com.wizered67.game.conversations.commands.*;
-import com.wizered67.game.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.GameManager;
+import com.wizered67.game.conversations.commands.ConversationCommand;
+import com.wizered67.game.conversations.commands.MessageCommand;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.scene.SceneManager;
-import com.wizered67.game.GameManager;
-import com.wizered67.game.gui.GUIManager;
+import com.wizered67.game.conversations.xmlio.ConversationLoader;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
 import com.wizered67.game.scripting.LuaScriptManager;
 import com.wizered67.game.scripting.ScriptManager;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Updates all of the GUI elements and the SceneManager by
@@ -481,35 +484,45 @@ public class ConversationController implements Controllable {
                 inputConfirm();
                 return true;
             case UP:
-                if (GameManager.guiManager().isTranscriptVisible()) {
-                    GameManager.guiManager().scrollTranscript(-1);
-                } else if (choiceShowing) {
+                if (choiceShowing) {
                     changeChoice(-1);
+                    return true;
                 }
-                return true;
+                break;
             case DOWN:
-                if (GameManager.guiManager().isTranscriptVisible()) {
-                    GameManager.guiManager().scrollTranscript(1);
-                } else if (choiceShowing) {
+               if (choiceShowing) {
                     changeChoice(1);
-                }
-                return true;
+                    return true;
+               }
+               break;
             default:
                 return false;
         }
+        return false;
     }
 
     public boolean keyUp(ControlType control, int key) {
-        switch (control) {
-            case UP:
-                GameManager.guiManager().stopTranscriptScrolling();
-                return true;
-            case DOWN:
-                GameManager.guiManager().stopTranscriptScrolling();
-                return true;
-            default:
-                return false;
-        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 
 }

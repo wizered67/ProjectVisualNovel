@@ -1,13 +1,12 @@
 package com.wizered67.game.scripting;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.scene.CharacterDefinition;
 import com.wizered67.game.conversations.scene.SceneManager;
-import com.wizered67.game.gui.GUIManager;
+import com.wizered67.game.gui.TextInputUI;
 import org.luaj.vm2.LuaValue;
 
 /**
@@ -36,8 +35,12 @@ public class LuaGameMethods {
                 ConversationController.scriptManager("Lua").setValue(variableName, "");
             }
         };
-        //Gdx.input.getTextInput(inputListener, title, text, hint);
-        GameManager.guiManager().getTextInputUI().display(title, defaultText, hint, inputListener);
+        TextInputUI textInputUI = (TextInputUI) GameManager.guiManager().getUIComponent(TextInputUI.ID);
+        if (textInputUI == null) {
+            GameManager.error("No text input UI set.");
+            return;
+        }
+        textInputUI.display(title, defaultText, hint, inputListener);
     }
 
     public boolean isValidTextInput(String input) {

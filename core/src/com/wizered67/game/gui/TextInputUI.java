@@ -1,18 +1,24 @@
 package com.wizered67.game.gui;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.wizered67.game.inputs.Controls;
 
 /**
- * Created by Adam on 5/27/2017.
+ * UI used for getting text input from the player and processing it.
+ * @author Adam Victor
  */
-public class TextInputUI {
+public class TextInputUI implements UIComponent {
+    public static String ID = "TextInputUI";
     private GUIManager guiManager;
     private Table inputTable;
     private Table mainTable;
@@ -77,8 +83,38 @@ public class TextInputUI {
         mainTable.setVisible(true);
     }
 
+    @Override
+    public int getPriority() {
+        return 5;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof TextInputUI)) {
+            return false;
+        } else {
+            return ((TextInputUI) other).getId().equals(getId());
+        }
+    }
+
+    @Override
     public boolean isVisible() {
         return mainTable.isVisible();
+    }
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
+
+    @Override
+    public void resize(int newWidth, int newHeight) {
+
+    }
+
+    @Override
+    public String getId() {
+        return ID;
     }
 
     public void hide() {
@@ -87,8 +123,48 @@ public class TextInputUI {
         }
         mainTable.setVisible(false);
     }
-
-    public Table getMainTable() {
+    @Override
+    public Table getMainActor() {
         return mainTable;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean keyDown(Controls.ControlType control, int key) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(Controls.ControlType control, int key) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 }

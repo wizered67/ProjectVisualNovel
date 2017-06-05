@@ -1,16 +1,17 @@
 package com.wizered67.game.screens;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Vector3;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.inputs.ControlInputAdapter;
-import com.wizered67.game.inputs.Controls;
 
 /**
  * Main Game Screen for initializing and updating GUIManager.
@@ -37,8 +38,8 @@ public class MainGameScreen implements Screen {
     private void initInput() {
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(GameManager.guiManager().getStage());
-        inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.conversationController()));
         inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.guiManager()));
+        inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.conversationController()));
     }
 
 

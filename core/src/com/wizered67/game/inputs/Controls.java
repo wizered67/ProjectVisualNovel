@@ -3,8 +3,6 @@ package com.wizered67.game.inputs;
 import com.badlogic.gdx.Input;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Adam on 5/18/2017.
@@ -36,16 +34,20 @@ public class Controls {
      * the default keys mapped to that control.
      */
     public enum ControlType {
-        UP(new int[] {Input.Keys.W, Input.Keys.UP}),
-        DOWN(new int[] {Input.Keys.S, Input.Keys.DOWN}),
-        LEFT(new int[] {Input.Keys.A, Input.Keys.LEFT}),
-        RIGHT(new int[] {Input.Keys.D, Input.Keys.RIGHT}),
-        CONFIRM(new int[] {Input.Keys.C, Input.Keys.SPACE}),
-        OTHER(new int[] {});
+        UP(Input.Keys.W, Input.Keys.UP),
+        DOWN(Input.Keys.S, Input.Keys.DOWN),
+        LEFT(Input.Keys.A, Input.Keys.LEFT),
+        RIGHT(Input.Keys.D, Input.Keys.RIGHT),
+        CONFIRM(Input.Keys.C, Input.Keys.SPACE),
+        TRANSCRIPT(Input.Keys.SHIFT_LEFT, Input.Keys.SHIFT_RIGHT),
+        OTHER();
         int[] keys;
+        /*
         ControlType(int[] k) {
             keys = k;
         }
+        */
+        ControlType(int... k) {keys = k; }
     }
 
 }

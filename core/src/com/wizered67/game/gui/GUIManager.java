@@ -9,21 +9,29 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.conversations.Transcript;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.saving.SaveManager;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /** Contains GUI elements and the ConversationController which the GUI elements are passed into.
  * Fixes GUI elements if screen is resized.
@@ -31,8 +39,8 @@ import com.wizered67.game.saving.SaveManager;
  */
 public class GUIManager implements Controllable {
 
-    private DialogueElementsUI dialogueElementsUI;
-
+    private HashMap<String, UIComponent> idToUIComponent;
+    private TreeSet<UIComponent> sortedUIComponents;
 
     /** Main Table that all GUI elements are added to. */
 	private Table dialogueElementsTable;
@@ -47,13 +55,11 @@ public class GUIManager implements Controllable {
     /** The stage to which the GUI elements are added. Part of Scene2D. */
 	private Stage stage;
     /** Constant denoting space between left side of the textbox and text. */
-    private final int LEFT_PADDING = 10;
+    private final int TEXTBOX_LEFT_PADDING = 10;
     /** Message Window that updates the GUI elements as a Conversation proceeds. */
     private ConversationController conversationController;
     /** Default font used for text. */
     private BitmapFont defaultFont;
-
-    private TextInputUI textInputUI;
 
     //debug related variables
     /** Scrollpane used to contain debug choices -- ie loading conversations, etc. */
@@ -70,33 +76,44 @@ public class GUIManager implements Controllable {
     private ScrollPane transcriptPane;
     /** Label used for displaying transcript text. */
     private Label transcriptLabel;
-    /** Whether the transcript is scrolling, and in which direction. */
-    private float transcriptScrolling = 0;
+
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
      */
     public GUIManager(Stage st) {
 		stage = st;
- 		// Generate a 1x1 white texture and store it in the skin named "white".
+
+		idToUIComponent = new HashMap<>();
+		sortedUIComponents = new TreeSet<>(new Comparator<UIComponent>() {
+            @Override
+            public int compare(UIComponent o1, UIComponent o2) {
+                int p1 = o1.getPriority();
+                int p2 = o2.getPriority();
+                //negative for reverse order. Highest should be first.
+                return -((p1 < p2) ? -1 : ((p1 == p2) ? 0 : 1));
+            }
+        });
 
  		skin = new Skin(new TextureAtlas(Gdx.files.internal("Skins/uiskin.atlas")));
+ 		// A bit of a workaround here. We want to use the generated font but also need to define a font in uiskin for testing.
+        // Make sure to remove the font from uiskin once the skin is done. This will override the skin to add a font.
         initFont();
         skin.load(Gdx.files.internal("Skins/uiskin.json"));
         Drawable dialogueDrawable = skin.getDrawable("dialogue-drawable-offset");
-        dialogueDrawable.setLeftWidth(LEFT_PADDING);
-        dialogueDrawable.setRightWidth(LEFT_PADDING);
-        dialogueDrawable.setTopHeight(LEFT_PADDING);
-        dialogueDrawable.setBottomHeight(LEFT_PADDING);
+        dialogueDrawable.setLeftWidth(TEXTBOX_LEFT_PADDING);
+        dialogueDrawable.setRightWidth(TEXTBOX_LEFT_PADDING);
+        dialogueDrawable.setTopHeight(TEXTBOX_LEFT_PADDING / 2);
+        dialogueDrawable.setBottomHeight(TEXTBOX_LEFT_PADDING / 2);
  		/*
         skin.add("white", new Texture(pixmap));
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         Drawable newDrawable = skin.newDrawable("white", Color.DARK_GRAY);
-        newDrawable.setLeftWidth(LEFT_PADDING);
-        newDrawable.setRightWidth(LEFT_PADDING);
-        newDrawable.setTopHeight(LEFT_PADDING / 2);
+        newDrawable.setLeftWidth(TEXTBOX_LEFT_PADDING);
+        newDrawable.setRightWidth(TEXTBOX_LEFT_PADDING);
+        newDrawable.setTopHeight(TEXTBOX_LEFT_PADDING / 2);
         //newDrawable.setRightWidth(20);
         labelStyle.background = newDrawable;
         skin.add("default", labelStyle);
@@ -128,20 +145,22 @@ public class GUIManager implements Controllable {
         */
 
         //todo init and add dialogue elements UI
-        dialogueElementsUI = new DialogueElementsUI(this, skin);
-        stage.addActor(dialogueElementsUI.getMainTable());
+        DialogueElementsUI dialogueElementsUI = new DialogueElementsUI(this, skin);
+        addUIComponent(dialogueElementsUI);
         textboxLabel = dialogueElementsUI.getTextboxLabel();
         speakerLabel = dialogueElementsUI.getSpeakerLabel();
         choiceButtons = dialogueElementsUI.getChoiceButtons();
-        dialogueElementsTable = dialogueElementsUI.getMainTable();
+        dialogueElementsTable = dialogueElementsUI.getMainActor();
         conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
         setTextboxShowing(false);
 
-        textInputUI = new TextInputUI(this, skin);
-        stage.addActor(textInputUI.getMainTable());
+        TextInputUI textInputUI = new TextInputUI(this, skin);
+        addUIComponent(textInputUI);
+
+        TranscriptUI transcriptUI = new TranscriptUI(this, skin, conversationController.getTranscript());
+        addUIComponent(transcriptUI);
 
         addDebug();
-        addTranscript();
 	}
     public GUIManager() {
         conversationController = new ConversationController();
@@ -169,35 +188,15 @@ public class GUIManager implements Controllable {
      */
 	public void update(float deltaTime){
         conversationController.update(deltaTime);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT) && !textInputUI.isVisible()) {
-            toggleTranscript();
+        for (UIComponent uiComponent : sortedUIComponents) {
+            uiComponent.update(deltaTime);
         }
-        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && !textInputUI.isVisible()) {
+
+        if (Constants.DEBUG && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && !isComponentVisible(TextInputUI.ID)) {
             toggleDebugDisplay();
             conversationController.setPaused(debugChoices.isVisible());
         }
-        if (transcriptPane.isVisible()) {
-            if (transcriptScrolling != 0) {
-                float velocity = transcriptPane.getVelocityY();
-                transcriptPane.fling(1, 0, velocity);
-                transcriptPane.setVelocityY(velocity + 4 * Math.signum(velocity));
-            }
-            //transcriptPane.setScrollY(transcriptPane.getScrollY() + transcriptScrolling);
-        }
-        updateTranscript(); //todo remove, only do so when transcript is visible
 	}
-	/** Toggles whether the transcript is being shown. */
-	public void toggleTranscript() {
-        transcriptTable.setVisible(!transcriptTable.isVisible());
-        conversationController.setPaused(transcriptTable.isVisible());
-        updateTranscript(); //todo fix. part of hacky solution to make update first time
-        //transcriptPane.invalidate();
-        transcriptPane.validate();
-        transcriptPane.setScrollPercentY(1f);
-        transcriptPane.updateVisualScroll();
-        transcriptPane.setVelocityY(0);
-        stage.setScrollFocus(transcriptPane);
-    }
 
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
@@ -220,8 +219,29 @@ public class GUIManager implements Controllable {
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
         skin.add("default", defaultFont);
         */
-        dialogueElementsUI.resize(width, height);
+	    for (UIComponent uiComponent : sortedUIComponents) {
+	        uiComponent.resize(width, height);
+        }
+        //dialogueElementsUI.resize(width, height);
 	}
+
+	public void addUIComponent(UIComponent uiComponent) {
+	    sortedUIComponents.add(uiComponent);
+	    idToUIComponent.put(uiComponent.getId(), uiComponent);
+	    Actor mainActor = uiComponent.getMainActor();
+	    if (mainActor != null) {
+	        stage.addActor(mainActor);
+        }
+    }
+
+    public UIComponent getUIComponent(String id) {
+	    return idToUIComponent.get(id);
+    }
+
+    public boolean isComponentVisible(String id) {
+	    UIComponent uiComponent = getUIComponent(id);
+	    return uiComponent != null && uiComponent.isVisible();
+    }
 
     /** Sets the visibility of the textbox and speaker label to SHOW. */
     public void setTextboxShowing(boolean show) {
@@ -232,60 +252,8 @@ public class GUIManager implements Controllable {
         return conversationController;
     }
 
-    public TextInputUI getTextInputUI() {
-        return textInputUI;
-    }
-
-    private void addTranscript() {
-        transcriptTable = new Table();
-        transcriptTable.setDebug(Constants.DEBUG);
-        transcriptTable.setFillParent(true);
-        transcriptTable.setVisible(false);
-        transcriptTable.toFront();
-
-        transcriptLabel = new Label("", skin, "dialogue-label");
-        transcriptLabel.setWrap(true);
-        transcriptLabel.setAlignment(Align.topLeft);
-        transcriptLabel.setWidth(Gdx.graphics.getWidth() - 64);
-       // ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
-        transcriptPane = new ScrollPane(transcriptLabel, skin);
-        transcriptPane.setOverscroll(false, false);
-        transcriptPane.setWidth(transcriptLabel.getWidth());
-        transcriptPane.setHeight(Gdx.graphics.getHeight() - 64);
-        transcriptPane.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, Align.center);
-        transcriptPane.toFront();
-        //transcriptPane.setVisible(false);
-        stage.addActor(transcriptTable);
-        transcriptTable.add(transcriptPane).expand().fill().pad(40);
-    }
-
-    private void updateTranscript() {
-        if (!transcriptTable.isVisible()) {
-            return;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Transcript.TranscriptMessage message : conversationController.getTranscript().getTranscriptMessages()) {
-            stringBuilder.append("[CYAN]").append(message.getSpeaker()).append(": [WHITE]\n");
-            stringBuilder.append(message.getMessage()).append("\n\n");
-        }
-        transcriptLabel.setText(stringBuilder);
-        transcriptLabel.invalidate();
-        transcriptLabel.getPrefHeight(); //fixme part of hacky solution to get size correct for first time
-    }
-
     public boolean isTranscriptVisible() {
         return transcriptTable.isVisible();
-    }
-
-    public void scrollTranscript(int direction) {
-        transcriptPane.fling(1, 0, -direction * 50);
-        transcriptScrolling = direction * 0.005f * transcriptPane.getHeight();
-        System.out.println("Velocity set to " + transcriptPane.getVelocityY());
-    }
-
-    public void stopTranscriptScrolling() {
-        transcriptScrolling = 0;
-        transcriptPane.setVelocityY(0);
     }
 
     private void addDebug() {
@@ -449,6 +417,10 @@ public class GUIManager implements Controllable {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.touchDown(screenX, screenY, pointer, button);
+            if (handled) return true;
+        }
         return false;
     }
 
@@ -458,6 +430,10 @@ public class GUIManager implements Controllable {
      */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.touchUp(screenX, screenY, pointer, button);
+            if (handled) return true;
+        }
         return false;
     }
 
@@ -466,6 +442,10 @@ public class GUIManager implements Controllable {
      */
     @Override
     public boolean keyDown(Controls.ControlType control, int key) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.keyDown(control, key);
+            if (handled) return true;
+        }
         return false;
     }
 
@@ -474,6 +454,46 @@ public class GUIManager implements Controllable {
      */
     @Override
     public boolean keyUp(Controls.ControlType control, int key) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.keyUp(control, key);
+            if (handled) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.mouseMoved(screenX, screenY);
+            if (handled) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.scrolled(amount);
+            if (handled) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.touchDragged(screenX, screenY, pointer);
+            if (handled) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        for (UIComponent uiComponent : sortedUIComponents) {
+            boolean handled = uiComponent.keyTyped(character);
+            if (handled) return true;
+        }
         return false;
     }
 
