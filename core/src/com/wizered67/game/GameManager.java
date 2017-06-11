@@ -1,15 +1,14 @@
 package com.wizered67.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.wizered67.game.conversations.ConversationController;
-import com.wizered67.game.gui.GUIManager;
-import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.assets.Assets;
+import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.gui.Skins;
+import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.scripting.LuaGameMethods;
 
 public class GameManager {
@@ -60,8 +59,8 @@ public class GameManager {
 		return game.conversationController;
 	}
 
-	public static GUIManager guiManager() {
-		return game.guiManager;
+	public static Skins skins() {
+		return game.skins;
 	}
 
 	public static void error(String error) {

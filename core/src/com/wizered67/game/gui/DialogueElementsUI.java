@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.inputs.Controls;
 
 /**
@@ -20,6 +21,7 @@ import com.wizered67.game.inputs.Controls;
 public class DialogueElementsUI implements UIComponent {
     public static final String ID = "DialogueElementsUI";
     public static final int NUM_CHOICES = 4;
+    private ConversationController conversationController;
     private GUIManager guiManager;
     private Table mainTable;
     private Table buttonTable;
@@ -27,7 +29,8 @@ public class DialogueElementsUI implements UIComponent {
     private Label speakerLabel;
     private TextButton[] choiceButtons;
 
-    public DialogueElementsUI(GUIManager manager, Skin skin) {
+    public DialogueElementsUI(GUIManager manager, Skin skin, ConversationController convController) {
+        this.conversationController = convController;
         guiManager = manager;
         mainTable = new Table();
         mainTable.setFillParent(true);
@@ -44,7 +47,7 @@ public class DialogueElementsUI implements UIComponent {
             tb.addListener(new ChangeListener() {
                 public void changed (ChangeEvent event, Actor actor) {
                     System.out.println("Clicked button " + actor.getUserObject());
-                    guiManager.conversationController().processChoice((Integer) actor.getUserObject());
+                    conversationController.processChoice((Integer) actor.getUserObject());
                     event.cancel();
                     ((Button) actor).setProgrammaticChangeEvents(false);
                     ((Button) actor).setChecked(false);

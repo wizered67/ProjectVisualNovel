@@ -9,14 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.wizered67.game.assets.Assets;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.gui.GUIManager;
+import com.wizered67.game.gui.Skins;
 import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.saving.SaveManager;
 import com.wizered67.game.screens.LoadingScreen;
 import com.wizered67.game.screens.MainGameScreen;
-import com.wizered67.game.assets.Assets;
 
 public class MainGame extends Game {
 	MainGameScreen gameScreen;
@@ -30,6 +31,7 @@ public class MainGame extends Game {
     ConversationController conversationController;
 	Controls controls;
     InputMultiplexer inputMultiplexer;
+    Skins skins;
 
 	@Override
 	public void create() {
@@ -47,8 +49,10 @@ public class MainGame extends Game {
 				Constants.MAX_VIEWPORT_WORLD_WIDTH, Constants.MAX_VIEWPORT_WORLD_HEIGHT);
         guiViewport = new ScreenViewport();
 
-        guiManager = new GUIManager(new Stage(guiViewport));
-        conversationController = guiManager.conversationController();
+		skins = new Skins();
+
+        //guiManager = new GUIManager(new Stage(guiViewport));
+        conversationController = new ConversationController(new Stage(guiViewport));//guiManager.conversationController();
 		SaveManager.init();
 		GameManager.assetManager().loadGroup("common");
 		gameScreen = new MainGameScreen();

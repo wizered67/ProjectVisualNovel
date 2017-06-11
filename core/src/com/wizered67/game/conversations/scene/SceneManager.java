@@ -1,24 +1,27 @@
 package com.wizered67.game.conversations.scene;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.wizered67.game.conversations.commands.EntityAction;
+import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.commands.EntityAction;
 import com.wizered67.game.conversations.scene.interpolations.FloatInterpolation;
 import com.wizered67.game.conversations.scene.interpolations.PositionInterpolation;
-import com.wizered67.game.gui.GUIManager;
-import com.wizered67.game.GameManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a Scene with a set of entities, in effect characters and images, that are updated
@@ -134,7 +137,7 @@ public class SceneManager {
             }
         }
         batch.end();
-        GameManager.guiManager().updateAndRenderStage(delta); //todo reevaluate how updating works...
+        conversationController().guiManager().updateAndRenderStage(delta); //todo reevaluate how updating works...
 
         batch.begin();
         drawFade(delta);

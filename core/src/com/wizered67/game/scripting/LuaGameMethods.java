@@ -35,7 +35,7 @@ public class LuaGameMethods {
                 ConversationController.scriptManager("Lua").setValue(variableName, "");
             }
         };
-        TextInputUI textInputUI = (TextInputUI) GameManager.guiManager().getUIComponent(TextInputUI.ID);
+        TextInputUI textInputUI = (TextInputUI) GameManager.conversationController().guiManager().getUIComponent(TextInputUI.ID);
         if (textInputUI == null) {
             GameManager.error("No text input UI set.");
             return;

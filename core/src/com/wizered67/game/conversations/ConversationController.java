@@ -2,6 +2,7 @@ package com.wizered67.game.conversations;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
@@ -12,6 +13,9 @@ import com.wizered67.game.conversations.commands.MessageCommand;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.scene.SceneManager;
 import com.wizered67.game.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.gui.DialogueElementsUI;
+import com.wizered67.game.gui.GUIManager;
+import com.wizered67.game.gui.GUIManagerFactory;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
@@ -29,6 +33,10 @@ import java.util.Map;
  * @author Adam Victor
  */
 public class ConversationController implements Controllable {
+
+    /** GUIManager used for containing stage and rendering elements necessary for conversations. */
+    private transient GUIManager guiManager;
+
     /** Label for the main textbox. Displays text when spoken by characters.
      * A reference to the one in GUIManager.*/
     private transient TypingLabel textboxLabel;
@@ -78,26 +86,31 @@ public class ConversationController implements Controllable {
     /** Whether the conversation controller is paused. When paused, commands don't update. The scene will render but not update. */
     private boolean paused;
 
-    public ConversationController() {
-        initScriptManagers();
-    }
-    /** Initializes the ConversationController with the GUI elements passed in from GUIManager.
+    /** Initializes the ConversationController and creates a GUI Manager.
      * Also loads and begins a default conversation for testing purposes. */
     @SuppressWarnings("unchecked")
-    public ConversationController(TypingLabel textbox, Label speaker, TextButton[] choices) {
-        conversationLoader = new ConversationLoader();
-        textboxLabel = textbox;
-        textboxLabel.setTypingListener(new ConversationTypingListener(this));
-        Constants.initTextboxSettings();
-        speakerLabel = speaker;
-        choiceButtons = choices;
-        choiceCommands = new List[choiceButtons.length];
+    public ConversationController(Stage stage) {
+        transcript = new Transcript();
         currentSceneManager = new SceneManager(this);
         allSceneManagers = new HashMap<>();
         allSceneManagers.put("main", currentSceneManager);
         initScriptManagers();
-        transcript = new Transcript();
         paused = false;
+
+        this.guiManager = GUIManagerFactory.makeConversationGUIManager(stage, this);
+        conversationLoader = new ConversationLoader();
+        DialogueElementsUI dialogueElementsUI = (DialogueElementsUI) guiManager.getUIComponent(DialogueElementsUI.ID);
+        textboxLabel = dialogueElementsUI.getTextboxLabel();
+        textboxLabel.setTypingListener(new ConversationTypingListener(this));
+        Constants.initTextboxSettings();
+        speakerLabel = dialogueElementsUI.getSpeakerLabel();
+        choiceButtons = dialogueElementsUI.getChoiceButtons();
+        choiceCommands = new List[choiceButtons.length];
+        setTextBoxShowing(false);
+    }
+
+    public GUIManager guiManager() {
+        return guiManager;
     }
 
     public ConversationLoader loader() {

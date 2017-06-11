@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.wizered67.game.Constants;
 import com.wizered67.game.conversations.Conversation;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.saving.SaveManager;
 
@@ -27,14 +28,16 @@ import com.wizered67.game.saving.SaveManager;
  */
 public class DebugMenuUI implements UIComponent {
     public static final String ID = "DebugMenuUI";
+    private ConversationController conversationController;
     private GUIManager guiManager;
     private Table mainTable;
     private ScrollPane debugPane;
     private HorizontalGroup debugChoices;
     private List<String> debugSelector;
     private boolean saveInputShowing = false;
-    public DebugMenuUI(GUIManager guiManager, Skin skin) {
+    public DebugMenuUI(GUIManager guiManager, Skin skin, ConversationController conversationController) {
         this.guiManager = guiManager;
+        this.conversationController = conversationController;
         mainTable = new Table();
         mainTable.setFillParent(true);
         //mainTable.setDebug(true);
@@ -137,7 +140,7 @@ public class DebugMenuUI implements UIComponent {
         if (!debugChoices.isVisible()) {
             debugPane.setVisible(false);
         }
-        guiManager.conversationController().setPaused(debugChoices.isVisible());
+        conversationController.setPaused(debugChoices.isVisible());
     }
 
     private void debugChangePaneType(Array<String> content, DebugMode type) {
@@ -157,7 +160,7 @@ public class DebugMenuUI implements UIComponent {
     }
 
     private void debugBranches() {
-        Conversation currentConv = guiManager.conversationController().conversation();
+        Conversation currentConv = conversationController.conversation();
         Array<String> branches = new Array<>();
         for (String branch : currentConv.getAllBranches()) {
             branches.add(branch);
@@ -182,12 +185,12 @@ public class DebugMenuUI implements UIComponent {
         String selection = debugSelector.getItems().get(debugSelector.getSelectedIndex());
         switch ((DebugMode) debugPane.getUserObject()) {
             case CONV:
-                guiManager.conversationController().exit();
-                guiManager.conversationController().loadConversation(selection);
+                conversationController.exit();
+                conversationController.loadConversation(selection);
                 break;
             case BRANCH:
-                guiManager.conversationController().setBranch(selection);
-                guiManager.conversationController().nextCommand();
+                conversationController.setBranch(selection);
+                conversationController.nextCommand();
                 break;
             case LOAD:
                 SaveManager.load(Gdx.files.internal("Saves/" + selection));

@@ -1,20 +1,9 @@
 package com.wizered67.game.gui;
 
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.rafaskoberg.gdx.typinglabel.TypingLabel;
-import com.wizered67.game.Constants;
 import com.wizered67.game.GameManager;
-import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls;
 
@@ -30,31 +19,17 @@ public class GUIManager implements Controllable {
 
     private HashMap<String, UIComponent> idToUIComponent;
     private TreeSet<UIComponent> sortedUIComponents;
-
-    /** Skin used by all GUI elements. */
-	private Skin skin;
-    /** Label for the main textbox. Displays text when spoken by characters. */
-	private TypingLabel textboxLabel;
-    /** Label to display the name of the current speaker. */
-    private Label speakerLabel;
-    /** Array containing TextButtons to be displayed when the player is offered a choice. */
-	private TextButton[] choiceButtons;
     /** The stage to which the GUI elements are added. Part of Scene2D. */
 	private Stage stage;
-    /** Constant denoting space between left side of the textbox and text. */
-    private final int TEXTBOX_LEFT_PADDING = 10;
-    /** Message Window that updates the GUI elements as a Conversation proceeds. */
-    private ConversationController conversationController;
-    /** Default font used for text. */
-    private BitmapFont defaultFont;
+	private Skin skin;
 
 
     /** Initializes all of the GUI elements and adds them to the Stage ST. Also
      * initializes ConversationController with the elements it will update.
      */
-    public GUIManager(Stage st) {
+    public GUIManager(Stage st, Skin skin) {
 		stage = st;
-
+        this.skin = skin;
 		idToUIComponent = new HashMap<>();
 		sortedUIComponents = new TreeSet<>(new Comparator<UIComponent>() {
             @Override
@@ -65,50 +40,13 @@ public class GUIManager implements Controllable {
                 return -((p1 < p2) ? -1 : ((p1 == p2) ? 0 : 1));
             }
         });
-
- 		skin = new Skin(new TextureAtlas(Gdx.files.internal("Skins/uiskin.atlas")));
- 		// A bit of a workaround here. We want to use the generated font but also need to define a font in uiskin for testing.
-        // Make sure to remove the font from uiskin once the skin is done. This will override the skin to add a font.
-        initFont();
-        skin.load(Gdx.files.internal("Skins/uiskin.json"));
-        Drawable dialogueDrawable = skin.getDrawable("dialogue-drawable-offset");
-        dialogueDrawable.setLeftWidth(TEXTBOX_LEFT_PADDING);
-        dialogueDrawable.setRightWidth(TEXTBOX_LEFT_PADDING);
-        dialogueDrawable.setTopHeight(TEXTBOX_LEFT_PADDING / 2);
-        dialogueDrawable.setBottomHeight(TEXTBOX_LEFT_PADDING / 2);
-
-        DialogueElementsUI dialogueElementsUI = new DialogueElementsUI(this, skin);
-        addUIComponent(dialogueElementsUI);
-        textboxLabel = dialogueElementsUI.getTextboxLabel();
-        speakerLabel = dialogueElementsUI.getSpeakerLabel();
-        choiceButtons = dialogueElementsUI.getChoiceButtons();
-        conversationController = new ConversationController(textboxLabel, speakerLabel, choiceButtons);
-        setTextboxShowing(false);
-
-        TextInputUI textInputUI = new TextInputUI(this, skin);
-        addUIComponent(textInputUI);
-
-        TranscriptUI transcriptUI = new TranscriptUI(this, skin, conversationController.getTranscript());
-        addUIComponent(transcriptUI);
-
-        DebugMenuUI debugMenuUI = new DebugMenuUI(this, skin);
-        addUIComponent(debugMenuUI);
 	}
     public GUIManager() {
-        conversationController = new ConversationController();
+
     }
 
-    /** Initializes the font that will be used. */
-    private void initFont() {
-        // Store the default libgdx font under the name "default".
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        //float densityIndependentSize = Constants.REGULAR_FONT_SIZE * Gdx.graphics.getDensity();
-        parameter.size = Constants.REGULAR_FONT_SIZE; //(int) (Constants.REGULAR_FONT_SIZE * Gdx.graphics.getHeight() / Constants.DEFAULT_HEIGHT);//Math.round(densityIndependentSize);
-        defaultFont = generator.generateFont(parameter); // font size 12 pixels
-        defaultFont.getData().markupEnabled = true;
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-        skin.add("default-font", defaultFont);
+    public Skin getSkin() {
+        return skin;
     }
 
     /** Returns the Stage used to display GUI elements. */
@@ -119,7 +57,7 @@ public class GUIManager implements Controllable {
      * elapsed since the last frame.
      */
 	public void update(float deltaTime){
-        conversationController.update(deltaTime);
+        //conversationController.update(deltaTime);
         for (UIComponent uiComponent : sortedUIComponents) {
             uiComponent.update(deltaTime);
         }
@@ -128,6 +66,7 @@ public class GUIManager implements Controllable {
 	/** Called every frame. Updates and draws the stage, needed for UI elements. DELTA TIME is
      * the time elapsed since the last frame. */
 	public void updateAndRenderStage(float deltaTime) {
+	    update(deltaTime);
         GameManager.guiViewport().apply(true);
         stage.act(Math.min(1 / 30f, deltaTime));
         stage.draw();
@@ -157,15 +96,6 @@ public class GUIManager implements Controllable {
     public boolean isComponentVisible(String id) {
 	    UIComponent uiComponent = getUIComponent(id);
 	    return uiComponent != null && uiComponent.isVisible();
-    }
-
-    /** Sets the visibility of the textbox and speaker label to SHOW. */
-    public void setTextboxShowing(boolean show) {
-        conversationController.setTextBoxShowing(show);
-    }
-    /** Returns the ConversationController. */
-    public ConversationController conversationController() {
-        return conversationController;
     }
 
     /**

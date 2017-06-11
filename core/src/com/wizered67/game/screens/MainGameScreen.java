@@ -37,8 +37,8 @@ public class MainGameScreen implements Screen {
 
     private void initInput() {
         inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(GameManager.guiManager().getStage());
-        inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.guiManager()));
+        inputMultiplexer.addProcessor(GameManager.conversationController().guiManager().getStage());
+        inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.conversationController().guiManager()));
         inputMultiplexer.addProcessor(new ControlInputAdapter(GameManager.conversationController()));
     }
 
@@ -53,17 +53,18 @@ public class MainGameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         updateCameras(delta);
-        updateGUI(delta);
+        updateAndRenderConversation(delta);
     }
 
     private void updateCameras(float delta) {
 
     }
 
-    private void updateGUI(float delta){
+    private void updateAndRenderConversation(float delta){
         //hudViewport.apply(true);
         GameManager.mainViewport().apply();
-        GameManager.guiManager().update(delta);
+        GameManager.conversationController().update(delta);
+        //GameManager.guiManager().update(delta);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class MainGameScreen implements Screen {
         viewportCamera.update();
         //viewportCamera.position.
         GameManager.guiViewport().update(width, height);
-        GameManager.guiManager().resize(width, height);
+        GameManager.conversationController().guiManager().resize(width, height);
     }
 
     @Override

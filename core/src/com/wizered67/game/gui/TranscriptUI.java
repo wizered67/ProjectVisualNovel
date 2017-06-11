@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
 import com.wizered67.game.inputs.Controls;
 
@@ -17,6 +18,7 @@ import com.wizered67.game.inputs.Controls;
  */
 public class TranscriptUI implements UIComponent {
     public static final String ID = "TranscriptUI";
+    private ConversationController conversationController;
     private GUIManager guiManager;
     private Transcript transcript;
     private Skin skin;
@@ -26,10 +28,11 @@ public class TranscriptUI implements UIComponent {
     /** Whether the transcript is scrolling, and in which direction. */
     private float transcriptScrolling = 0;
 
-    public TranscriptUI(GUIManager guiManager, Skin skin, Transcript transcript) {
+    public TranscriptUI(GUIManager guiManager, Skin skin, ConversationController conversationController) {
+        this.conversationController = conversationController;
         this.guiManager = guiManager;
         this.skin = skin;
-        this.transcript = transcript;
+        this.transcript = conversationController.getTranscript();
         mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.setVisible(false);
@@ -79,7 +82,7 @@ public class TranscriptUI implements UIComponent {
 
     private void toggleTranscript() {
         mainTable.setVisible(!isVisible());
-        guiManager.conversationController().setPaused(isVisible());
+        conversationController.setPaused(isVisible());
         update(0); //todo fix. part of hacky solution to make update first time
         //transcriptPane.invalidate();
         transcriptScrolling = 0;

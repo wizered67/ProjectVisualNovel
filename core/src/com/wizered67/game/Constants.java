@@ -8,7 +8,7 @@ import com.rafaskoberg.gdx.typinglabel.TypingConfig;
 
 public class Constants {
 	//Debug Settings
-	public final static boolean DEBUG = false;
+	public final static boolean DEBUG = true;
 
 	//Game Settings
 	public final static String GAME_NAME = "Visual Novel";
