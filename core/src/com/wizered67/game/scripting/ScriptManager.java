@@ -33,13 +33,13 @@ public interface ScriptManager {
     /** Returns the value of variable VAR in a language specific object type. */
     Object getLanguageValue(String var);
 
-    /** Returns the value of executing expression EXPR in a language specific object type.
+    /** Returns the value of executing expression EXPR and coercing to Java.
      * Caches the script created.
      */
-    Object getExpressionValue(String expr);
-    /** Returns the value of executing expression EXPR in a language specific object type.
+    <T> T getExpressionValue(String expr, Class<T> type);
+    /** Returns the value of executing expression EXPR coercing to Java.
      * If cache, stores the script result for later use. */
-    Object getExpressionValue(String expr, boolean cache);
+    <T> T getExpressionValue(String expr, Class<T> type, boolean cache);
 
     /** Returns the value of variable VAR as a Java integer. */
     int getIntegerValue(String var);

@@ -1,6 +1,5 @@
 package com.wizered67.game.scripting;
 
-import com.badlogic.gdx.Gdx;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
@@ -104,21 +103,23 @@ public class LuaScriptManager implements ScriptManager {
     }
 
     /**
-     * Returns the value of executing expression EXPR in a language specific object type.
+     * Returns the value of executing expression EXPR and coercing to Java.
      * Caches the script created.
      */
     @Override
-    public Object getExpressionValue(String expr) {
-        return getExpressionValue(expr, true);
+    public <T> T getExpressionValue(String expr, Class<T> type) {
+        return getExpressionValue(expr, type, true);
     }
 
     /**
-     * Returns the value of executing expression EXPR in a language specific object type.
+     * Returns the value of executing expression EXPR coercing to Java.
+     * If cache, stores the script result for later use.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public Object getExpressionValue(String expr, boolean cache) {
+    public <T> T getExpressionValue(String expr, Class<T> type, boolean cache) {
         if (savedScripts.containsKey(expr)) {
-            return savedScripts.get(expr).execute();
+            return (T)CoerceLuaToJava.coerce((LuaValue) savedScripts.get(expr).execute(), type);
         }
         GameScript script;
         if (!expr.matches(".*return .*")) {
@@ -129,7 +130,7 @@ public class LuaScriptManager implements ScriptManager {
         if (cache) {
             savedScripts.put(expr, script);
         }
-        return script.execute();
+        return (T)CoerceLuaToJava.coerce((LuaValue) script.execute(), type);
     }
 
     /** Returns the value of VAR as type TYPE. */
