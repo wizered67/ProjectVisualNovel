@@ -4,6 +4,9 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
+import com.wizered67.game.conversations.xmlio.EmbeddedVariableElement;
+import com.wizered67.game.conversations.xmlio.LazyCommandParameter;
+import com.wizered67.game.conversations.xmlio.LazyConstantCommandParameter;
 
 import java.io.IOException;
 
@@ -13,19 +16,19 @@ import java.io.IOException;
  */
 public class DebugCommand implements ConversationCommand {
     /** The debug message to show. */
-    private String message;
+    private LazyCommandParameter<String> message;
     /** No arguments constructor. */
     public DebugCommand() {
-        message = "";
+        message = new LazyConstantCommandParameter<>("");
     }
     /** Creates a new DebugCommand that prints out M when executed. */
-    public DebugCommand(String m) {
+    public DebugCommand(LazyCommandParameter<String> m) {
         message = m;
     }
     /** Executes the command on the CONVERSATION CONTROLLER. */
     @Override
     public void execute(ConversationController conversationController) {
-        System.out.println(message);
+        System.out.println(message.evaluate(conversationController));
     }
     /** Whether to wait before proceeding to the next command in the branch. */
     @Override
@@ -51,7 +54,8 @@ public class DebugCommand implements ConversationCommand {
     }
     /** Static method to create a new command from XML Element ELEMENT. */
     public static DebugCommand makeCommand(XmlReader.Element element) {
-        String text = element.getAttribute("message");
+        EmbeddedVariableElement embeddedVariableElement = new EmbeddedVariableElement(element);
+        LazyCommandParameter<String> text = embeddedVariableElement.getAttribute("message");
         return new DebugCommand(text);
     }
 }

@@ -77,13 +77,18 @@
         the assigned tag, this sets the Detective's animation to the think animation and waits for
         it to complete before advancing to the rest of the message. -->
         Detective: The {COLOR=ORANGE}body{CLEARCOLOR} {FAST}was found in{NORMAL} the {SLOWER}{COLOR=CYAN}library{CLEARCOLOR}{NORMAL}.... Now why would that be?@c{think} Unless...
-
+        
+        <debug message="test"/>
+        
         <while cond=" playerName == nil or not game.utils:isValidTextInput(playerName) ">
             <script>game.utils:getTextInput("playerName", "What is your name?", "", "Name")</script>
             <waitUntil cond="playerName ~= nil"/>
         </while>
         Detective: Hello @v{playerName}.
 
+        <debug message="{playerName}"/>
+
+        
         <camera>
             <position x="600" interpolation="linear" time="0.5" wait="true"/>
             <zoom amount="0.8" interpolation="linear" time="0.5" wait="true"/>

@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
  */
 public class EmbeddedVariableElement {
     //todo need new pattern for specifying language since it can take expressions
-    private static final Pattern EMBEDDED_VARIABLE_PATTERN_WITH_LANGUAGE = Pattern.compile("\\{(\\S+?)_(\\S+?)\\}");
-    private static final Pattern EMBEDDED_VARIABLE_PATTERN_NO_LANGUAGE = Pattern.compile("\\{(\\S+?)\\}");
+    private static final Pattern EMBEDDED_VARIABLE_PATTERN_WITH_LANGUAGE = Pattern.compile("\\((\\S+?)\\)\\{(.+?)}");
+    private static final Pattern EMBEDDED_VARIABLE_PATTERN_NO_LANGUAGE = Pattern.compile("\\{(.+?)}");
 
     private static final StringToTConverter<String> STRING_TO_STRING_CONVERTER = new StringToTConverter<String>() {
         @Override
