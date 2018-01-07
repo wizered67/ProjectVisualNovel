@@ -1,6 +1,5 @@
 package com.wizered67.game.conversations.commands;
 
-import com.badlogic.gdx.utils.XmlWriter;
 import com.wizered67.game.conversations.CompleteEvent;
 import com.wizered67.game.conversations.ConversationController;
 
@@ -17,8 +16,6 @@ public interface ConversationCommand {
     /** Checks whether the CompleteEvent C completes this command,
      * and if so acts accordingly. */
     void complete(CompleteEvent c);
-    /** Outputs XML to the XML WRITER for this command. */
-    void writeXml(XmlWriter xmlWriter);
     /** All ConversationCommands also have a static makeCommand method
      * which converts from XML to a ConversationCommand.
      */

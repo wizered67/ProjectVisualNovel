@@ -7,9 +7,9 @@ import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
-import com.wizered67.game.gui.GUIManager;
 
 /** Extends AsynchronousAssetLoader in order to load a Conversation asynchronously. */
 public class ConversationAssetLoader extends AsynchronousAssetLoader<Conversation, ConversationAssetLoader.ConvParameter> {
@@ -27,7 +27,11 @@ public class ConversationAssetLoader extends AsynchronousAssetLoader<Conversatio
 
     @Override
     public void loadAsync (AssetManager manager, String fileName, FileHandle file, ConvParameter parameter) {
-        result = GameManager.conversationController().loader().loadConversation(file);
+        try {
+            result = GameManager.conversationController().loader().loadConversation(file);
+        } catch (ConversationParsingException e) {
+            throw new GdxRuntimeException("Could not load conversation " + fileName);
+        }
     }
 
     @Override

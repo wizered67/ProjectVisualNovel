@@ -6,19 +6,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import com.wizered67.game.Constants;
-import com.wizered67.game.conversations.commands.*;
-import com.wizered67.game.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.GameManager;
+import com.wizered67.game.conversations.commands.ConversationCommand;
+import com.wizered67.game.conversations.commands.impl.base.MessageCommand;
 import com.wizered67.game.conversations.scene.SceneCharacter;
 import com.wizered67.game.conversations.scene.SceneManager;
-import com.wizered67.game.GameManager;
-import com.wizered67.game.gui.GUIManager;
+import com.wizered67.game.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.conversations.xmlio.ConversationLoaderImpl;
+import com.wizered67.game.conversations.xmlio.ConversationParsingException;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
 import com.wizered67.game.scripting.LuaScriptManager;
 import com.wizered67.game.scripting.ScriptManager;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Updates all of the GUI elements and the SceneManager by
@@ -82,7 +87,7 @@ public class ConversationController implements Controllable {
      * Also loads and begins a default conversation for testing purposes. */
     @SuppressWarnings("unchecked")
     public ConversationController(TypingLabel textbox, Label speaker, TextButton[] choices) {
-        conversationLoader = new ConversationLoader();
+        conversationLoader = new ConversationLoaderImpl();
         textboxLabel = textbox;
         textboxLabel.setTypingListener(new ConversationTypingListener(this));
         Constants.initTextboxSettings();
@@ -176,7 +181,7 @@ public class ConversationController implements Controllable {
         return scriptManagers;
     }
     /** Loads the Conversation with filename FILENAME. */
-    public Conversation loadConversation(String fileName) {
+    public Conversation loadConversation(String fileName) throws ConversationParsingException {
         currentConversation = conversationLoader.loadConversation(fileName);
         return currentConversation;
     }

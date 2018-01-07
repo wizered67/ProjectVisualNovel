@@ -1,7 +1,14 @@
 import com.badlogic.gdx.Gdx;
-import com.wizered67.game.conversations.Commands.*;
 import com.wizered67.game.conversations.Conversation;
+import com.wizered67.game.conversations.commands.ConversationCommand;
+import com.wizered67.game.conversations.commands.impl.base.ChangeBranchCommand;
+import com.wizered67.game.conversations.commands.impl.base.DebugCommand;
+import com.wizered67.game.conversations.commands.impl.base.MessageCommand;
+import com.wizered67.game.conversations.commands.impl.base.ShowChoicesCommand;
+import com.wizered67.game.conversations.commands.impl.scripting.VariableConditionCommand;
 import com.wizered67.game.conversations.xmlio.ConversationLoader;
+import com.wizered67.game.conversations.xmlio.ConversationLoaderImpl;
+import com.wizered67.game.conversations.xmlio.ConversationParsingException;
 import com.wizered67.game.gui.GUIManager;
 import junitx.util.PrivateAccessor;
 import org.junit.BeforeClass;
@@ -21,9 +28,13 @@ public class UnitTests {
 
     @BeforeClass
     public static void load() {
-        ConversationLoader loader = new ConversationLoader();
+        ConversationLoader loader = new ConversationLoaderImpl();
         GUIManager guiManager = new GUIManager();
-        test1 = loader.loadConversation(Gdx.files.internal("test1.conv"));
+        try {
+            test1 = loader.loadConversation(Gdx.files.internal("test1.conv"));
+        } catch (ConversationParsingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -154,14 +165,14 @@ public class UnitTests {
     }
 
     public void testMessageRegex(String input, String speaker, String text) {
-        Matcher matcher = MessageCommand.speakerMessagePattern.matcher(input);
+        Matcher matcher = MessageCommand.SPEAKER_MESSAGE_PATTERN.matcher(input);
         assertTrue("Did not match for: " + input, matcher.matches());
         assertEquals(speaker, matcher.group(1).trim());
         assertEquals(text, matcher.group(2).trim());
     }
 
     public void testMessageRegex(String input, boolean shouldMatch) {
-        Matcher matcher = MessageCommand.speakerMessagePattern.matcher(input);
+        Matcher matcher = MessageCommand.SPEAKER_MESSAGE_PATTERN.matcher(input);
         assertEquals(shouldMatch, matcher.matches());
     }
     @Test
@@ -171,7 +182,7 @@ public class UnitTests {
     }
 
     public void testVariableRegex(String input, String language, String name) {
-        Matcher matcher = MessageCommand.scriptVariablePattern.matcher(input);
+        Matcher matcher = MessageCommand.SCRIPT_VARIABLE_PATTERN.matcher(input);
         assertTrue("Did not match for: " + input, matcher.matches());
         assertEquals(language, matcher.group(1).trim());
         assertEquals(name, matcher.group(2).trim());

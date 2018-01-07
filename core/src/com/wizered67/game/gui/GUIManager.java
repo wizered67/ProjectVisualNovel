@@ -8,14 +8,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -27,6 +32,7 @@ import com.wizered67.game.GameManager;
 import com.wizered67.game.conversations.Conversation;
 import com.wizered67.game.conversations.ConversationController;
 import com.wizered67.game.conversations.Transcript;
+import com.wizered67.game.conversations.xmlio.ConversationParsingException;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls;
 import com.wizered67.game.saving.SaveManager;
@@ -430,7 +436,12 @@ public class GUIManager implements Controllable {
         switch ((DebugMode) debugPane.getUserObject()) {
             case CONV:
                 conversationController.exit();
-                conversationController.loadConversation(selection);
+                try {
+                    conversationController.loadConversation(selection);
+                } catch (ConversationParsingException e) {
+                    e.printStackTrace();
+                }
+
                 //conversationController.setBranch("default");
                 //conversationController.nextCommand();
                 break;
