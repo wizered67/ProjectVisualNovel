@@ -17,8 +17,8 @@ import com.wizered67.game.conversations.xmlio.ConversationParsingException;
 import com.wizered67.game.inputs.Controllable;
 import com.wizered67.game.inputs.Controls.ControlType;
 import com.wizered67.game.saving.serializers.GUIState;
-import com.wizered67.game.scripting.LuaScriptManager;
 import com.wizered67.game.scripting.ScriptManager;
+import com.wizered67.game.scripting.lua.LuaScriptManager;
 
 import java.util.HashMap;
 import java.util.LinkedList;

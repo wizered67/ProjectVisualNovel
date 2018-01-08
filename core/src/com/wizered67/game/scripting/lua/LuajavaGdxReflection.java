@@ -1,4 +1,4 @@
-package com.wizered67.game.scripting;
+package com.wizered67.game.scripting.lua;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;

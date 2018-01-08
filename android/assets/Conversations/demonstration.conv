@@ -26,7 +26,7 @@
         <!-- Sets the displayname of the Librarian to '???' because the player doesn't know who they are yet. -->
         <name id="Librarian" displayname="???"/>
 
-        <!-- Init tags are used to set variable values, only execute if the variable was previously undefined!
+        <!-- Init tags are used to set variable values, but only execute if the variable was previously undefined!
         For example, this tag is equivalent to "if work == nil then work = 0 end"
         Each line in the init tag should be of the form VARIABLE_NAME INITIAL_VALUE. -->
         <init>

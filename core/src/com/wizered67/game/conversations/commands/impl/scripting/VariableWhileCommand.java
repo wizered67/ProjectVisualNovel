@@ -24,10 +24,7 @@ public class VariableWhileCommand implements ConversationCommand {
 
     public VariableWhileCommand(List<ConversationCommand> commands, String conditionScript, boolean isFile, String language) {
         scriptManager = ConversationController.scriptManager(language);
-        if (!isFile && scriptManager.requiresReturn() && !conditionScript.matches(".*return .*")) {
-            conditionScript = "return " + conditionScript;
-        }
-        condition = scriptManager.load(conditionScript, isFile);
+        condition = scriptManager.loadConditionScript(conditionScript, isFile);
         repeatCommands = commands;
         repeatCommands.add(this);
     }

@@ -40,10 +40,7 @@ public class VariableConditionCommand implements ConversationCommand {
     public VariableConditionCommand(String conditionScript, boolean file, String lang,
                                     List<ConversationCommand> result, List<ConversationCommand> elseResult) {
         scriptManager = ConversationController.scriptManager(lang);
-        if (!file && scriptManager.requiresReturn() && !conditionScript.matches(".*return .*")) {
-            conditionScript = "return " + conditionScript;
-        }
-        condition = scriptManager.load(conditionScript, file);
+        condition = scriptManager.loadConditionScript(conditionScript, file);
         conditionCommands = result;
         elseCommands = elseResult;
     }

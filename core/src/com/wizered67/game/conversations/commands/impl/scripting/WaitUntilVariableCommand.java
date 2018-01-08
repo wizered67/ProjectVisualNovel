@@ -29,10 +29,7 @@ public class WaitUntilVariableCommand implements ConversationCommand {
      */
     public WaitUntilVariableCommand(String conditionScript, boolean file, String lang) {
         scriptManager = ConversationController.scriptManager(lang);
-        if (!file && scriptManager.requiresReturn() && !conditionScript.matches(".*return .*")) {
-            conditionScript = "return " + conditionScript;
-        }
-        condition = scriptManager.load(conditionScript, file);
+        condition = scriptManager.loadConditionScript(conditionScript, file);
     }
     /** Whether the condition in the script passed in has been met. */
     public boolean conditionMet() {

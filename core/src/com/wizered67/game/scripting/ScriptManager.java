@@ -12,8 +12,10 @@ public interface ScriptManager {
     /** Loads and returns the GameScript SCRIPT. If ISFILE it loads it from the filed named SCRIPT. */
     GameScript load(String script, boolean isFile);
 
-    /** Whether 'return' is required when getting the value of an expression in this language. */
-    boolean requiresReturn();
+    /** Loads and returns the GameScript SCRIPT as a condition script.
+     * If ISFILE it loads it from the filed named SCRIPT. The script may be modified
+     * to make it work as a condition. */
+    GameScript loadConditionScript(String script, boolean isFile);
 
     /** Returns the boolean value of Object O, where O is assumed to be some
      * type specific to the scripting language. */

@@ -1,6 +1,7 @@
-package com.wizered67.game.scripting;
+package com.wizered67.game.scripting.lua;
 
-import com.badlogic.gdx.Gdx;
+import com.wizered67.game.scripting.GameScript;
+import com.wizered67.game.scripting.ScriptManager;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * A ScriptManager that loads Lua scripts.
@@ -18,6 +20,7 @@ import java.util.Set;
  */
 public class LuaScriptManager implements ScriptManager {
     static final String SCRIPT_DIRECTORY = "Scripts/";
+    private final static Pattern CONTAINS_RETURN_PATTERN = Pattern.compile(".*return .*");
     /** Globals used for loading and executing Lua scripts. */
     Globals globals;
     private HashMap<String, GameScript> savedScripts;
@@ -34,7 +37,7 @@ public class LuaScriptManager implements ScriptManager {
     }
 
     private void setDefaultJavaMethods() {
-        globals.load(new LuajavaGdxReflection());
+        globals.load(new com.wizered67.game.scripting.lua.LuajavaGdxReflection());
         //LuaGameMethods luaGameMethods = new LuaGameMethods();
         globals.set("game", globals.get("luajava").get("bindClass").call(LuaValue.valueOf("com.wizered67.game.GameManager")));
     }
@@ -55,11 +58,16 @@ public class LuaScriptManager implements ScriptManager {
     }
 
     /**
-     * Whether 'return' is required when getting the value of an expression in this language.
+     * Loads and returns the GameScript SCRIPT as a condition script.
+     * If ISFILE it loads it from the filed named SCRIPT. The script may be modified
+     * to make it work as a condition.
      */
     @Override
-    public boolean requiresReturn() {
-        return true;
+    public GameScript loadConditionScript(String script, boolean isFile) {
+        if (!isFile && !CONTAINS_RETURN_PATTERN.matcher(script).matches()) {
+            script = "return " + script;
+        }
+        return load(script, isFile);
     }
 
     /** Returns the boolean value of Object O, where O is assumed to be some
