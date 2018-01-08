@@ -301,19 +301,13 @@ public class ConversationController implements Controllable {
     public void nextCommand() {
         ConversationCommand command = currentBranch.remove();
         command.execute(this);
-        //System.out.println("Executed command: " + command.toString());
         currentCommand = command;
     }
     /** Sets the current branch to a copy of the list of ConversationCommands
      * corresponding to the branch in Conversation named BRANCH. */
-    @SuppressWarnings("unchecked")
     public void setBranch(String branchName) {
         LinkedList<ConversationCommand> branch = currentConversation.getBranch(branchName);
-        Object b = branch.clone();
-        if (b instanceof LinkedList) {
-            //exit();
-            currentBranch = (LinkedList<ConversationCommand>) b;
-        }
+        currentBranch = new LinkedList<>(branch);
     }
     /** Exits the current conversation. Clears command queue, choices, and text. */
     public void exit() {
