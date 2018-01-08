@@ -132,17 +132,12 @@ public class UnitTests {
     @SuppressWarnings("unchecked")
     public List<ConversationCommand> getConditionCommands(VariableConditionCommand command) {
         try {
-            return (List<ConversationCommand>) PrivateAccessor.getField(command, "commands");
+            return (List<ConversationCommand>) PrivateAccessor.getField(command, "conditionCommands");
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Test
-    public void regexTests() {
-        testMessageRegex();
-        testVariableRegex();
-    }
     @Test
     public void testMessageRegex() {
         String test = "speaker: text";
@@ -174,17 +169,5 @@ public class UnitTests {
     public void testMessageRegex(String input, boolean shouldMatch) {
         Matcher matcher = MessageCommand.SPEAKER_MESSAGE_PATTERN.matcher(input);
         assertEquals(shouldMatch, matcher.matches());
-    }
-    @Test
-    public void testVariableRegex() {
-        String test = "@v{language_name}";
-        testVariableRegex(test, "language", "name");
-    }
-
-    public void testVariableRegex(String input, String language, String name) {
-        Matcher matcher = MessageCommand.SCRIPT_VARIABLE_PATTERN.matcher(input);
-        assertTrue("Did not match for: " + input, matcher.matches());
-        assertEquals(language, matcher.group(1).trim());
-        assertEquals(name, matcher.group(2).trim());
     }
 }

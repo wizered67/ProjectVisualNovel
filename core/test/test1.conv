@@ -39,19 +39,19 @@
     <branch name="branchthree">
         <choices>
             choice one:
-            <if language="Lua">{return x == 5}</if>
+            <if cond="return x == 5"/>
                 <debug message="test"/>
                 c1: text seventeen
             choice two:
                 <debug message="test"/>
-                <if language="Lua"> {return x == 7}
+                <if cond="return x == 7">
                     <debug message="test"/>
                 </if>
                 <debug message="test"/>
             choice three:
                 !c1: text eighteen
         </choices>
-        <if language="Lua"> {return x == 6}
+        <if cond="return x == 6">
             c1: text nineteen
             !: text twenty
             <debug message="test"/>
