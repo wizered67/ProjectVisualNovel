@@ -26,8 +26,8 @@ public class Conversation {
     /** Creates a new Conversation and initialize BRANCHES to an empty map. */
     public Conversation(String filename) {
         name = filename;
-        branches = new HashMap<String, LinkedList<ConversationCommand>>();
-        assignments = new HashMap<String, ConversationCommand>();
+        branches = new HashMap<>();
+        assignments = new HashMap<>();
     }
     /** Adds a new BRANCH to BRANCHES with name NAME. */
     public void addBranch(String name, LinkedList<ConversationCommand> branch) {

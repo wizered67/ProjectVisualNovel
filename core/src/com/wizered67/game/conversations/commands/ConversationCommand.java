@@ -16,7 +16,4 @@ public interface ConversationCommand {
     /** Checks whether the CompleteEvent C completes this command,
      * and if so acts accordingly. */
     void complete(CompleteEvent c);
-    /** All ConversationCommands also have a static makeCommand method
-     * which converts from XML to a ConversationCommand.
-     */
 }
