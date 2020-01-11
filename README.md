@@ -1,4 +1,4 @@
-# ProjectVisualNovel (Fall 2016 - Present)
+# ProjectVisualNovel (Fall 2016 - 2018)
 
 ## Overview
 The goal of this project is to create a branching dialogue system that can be used by game developers to add dialogue to [LibGDX](https://libgdx.badlogicgames.com/) games. The original intent of the project was to be used to create **visual novels**, so the feature set is created with that in mind. However, the system should be flexible enough to be used for any type of dialogue, making it useful for other genres like RPGs or even just for cutscenes in games.   
